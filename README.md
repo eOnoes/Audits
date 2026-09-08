@@ -2,7 +2,7 @@
 
 > **AUDIT-ONLY DOCTRINE — READ FIRST:** This repository is for read-only audits only. Do not branch, build, edit, commit, push, run workflows, call providers/models, or incur API/compute charges. Inspect the supplied packet and report findings only. Any unavailable evidence is a blocker or limitation, never a reason to improvise.
 
-This repository is a sanitized handoff point for external AI audits of Onoes projects. Every audit starts from the root `AUDIT_REQUEST.md`, which is the systematic request and wiki-report contract. Copy it into each active audit packet and fill only the bracketed/project-specific fields.
+This repository is a sanitized handoff point for external AI audits of Onoes projects. Start with [`EXTERNAL_AUDIT_AGENT_INSTRUCTIONS.md`](EXTERNAL_AUDIT_AGENT_INSTRUCTIONS.md) for the agent workflow. Every audit starts from the root `AUDIT_REQUEST.md`, which is the systematic request and wiki-report contract. Copy it into each active audit packet and fill only the project-specific fields.
 
 ## Non-negotiable rules
 
