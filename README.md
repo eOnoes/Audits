@@ -15,17 +15,20 @@ This repository is a sanitized handoff point for external AI audits of Onoes pro
 
 ## Packet layout
 
+The canonical tree and handoff rules are documented in [`DEMO/README.md`](DEMO/README.md). Every packet must follow that layout:
+
 ```text
-active/<project>-<audit-id>/
-├── AUDIT_PROMPT.md      # top lines repeat the audit-only doctrine
+<project>-<audit-id>/
+├── AUDIT_REQUEST.md
 ├── SCOPE.md
 ├── source/
 ├── tests/
 ├── receipts/
+├── reports/
 └── MANIFEST.sha256
 ```
 
-Auditors must return the exact verdict format in `AUDIT_PROMPT.md`. A report is evidence, not formal acceptance.
+Auditors must return the exact verdict format in `AUDIT_REQUEST.md`. A report is evidence, not formal acceptance.
 
 ## GitHub cost clarification
 
