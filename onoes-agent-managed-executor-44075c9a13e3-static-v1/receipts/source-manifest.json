@@ -1,0 +1,505 @@
+{
+  "schemaVersion": "onoes-static-audit-source/v1",
+  "auditId": "onoes-agent-managed-executor-44075c9a13e3-static-v1",
+  "sourceRevision": "44075c9a13e3c2f408c069b8933cc215db78cbea",
+  "evidenceClass": "STATIC_SOURCE",
+  "commitMembership": "PUBLISHER_REPORTED_NOT_GIT_BUNDLE_VERIFIED",
+  "members": [
+    {
+      "path": "source/package.json",
+      "originalPath": "product/companion-v1/package.json",
+      "gitBlobOid": "5970c78b2dd5017a238feb300ded474bc515fb85",
+      "byteLength": 9141,
+      "sha256": "364839055af775da8360084063ecacaf93eb93f121f49b9596857849b502dbdb",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-artifact-read-hold.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-artifact-read-hold.cs",
+      "gitBlobOid": "d18d2a34b77c4cfa34fa116cb22f9b52828522f0",
+      "byteLength": 6724,
+      "sha256": "389ed8c13b113beeab37e7c9f68d579856ef15aeefda6e03a10f5f03fdc6066d",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-managed-import.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-managed-import.cs",
+      "gitBlobOid": "c323408c2e92317a67178ec3517debdf8f7521b8",
+      "byteLength": 11403,
+      "sha256": "d1be1cb783b1e86b75ccefb92a53f206fa827f5e9bec756322321080a93a8814",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-managed-io-protocol.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-managed-io-protocol.cs",
+      "gitBlobOid": "3359a969f3cd3708289a76761aba4a47d213f573",
+      "byteLength": 7970,
+      "sha256": "4134a22bb133c4b79a4e227b6b89dcb0acf26aeba23366422c3e3a0e699ce63b",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-managed-root-provisioning.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-managed-root-provisioning.cs",
+      "gitBlobOid": "429509d33e031e4a1f97fa2467b2ef58c4ac62e0",
+      "byteLength": 6906,
+      "sha256": "13382d54043469defb21b969f84a2cbbfdc85f452882295f5c8540cbe53a25e4",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-managed-root-registration.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-managed-root-registration.cs",
+      "gitBlobOid": "31c16a0601234039ffeeb72b7da550bedc99defb",
+      "byteLength": 6305,
+      "sha256": "7ac56eb48df1c3a0c4dc0788bf190bbd47ed7505ad5530e3080aebb8bdff935f",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-managed-workspace.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-managed-workspace.cs",
+      "gitBlobOid": "524553eb7c10533639a99b094888d7219430b63b",
+      "byteLength": 23282,
+      "sha256": "7fbffaf516cda51a3f07bbfad900fe7bc0a2d5d851988fb1f398a0f1f4c4571c",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/native/windows-worker-job.cs",
+      "originalPath": "product/companion-v1/src/build-only/native/windows-worker-job.cs",
+      "gitBlobOid": "e0b6eed91a5fbb93e3d91df69a5317738aef4dc0",
+      "byteLength": 15223,
+      "sha256": "17873716286722ea3ddd68e8e44831da6864c050b5c13e1dbb1cc37b9bcc23dd",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-builder-effect-journal.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-builder-effect-journal.ts",
+      "gitBlobOid": "525bf1d4506af3b9345a74992ab8c4165c852f0a",
+      "byteLength": 11785,
+      "sha256": "76126b7592d29520079126714ecb144558c07bc0a024cc7d8f77551b62e7bbd2",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-builder-recovery-store.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-builder-recovery-store.ts",
+      "gitBlobOid": "b45c263c2a800aff5f995fedfed4120eaff1d3af",
+      "byteLength": 19285,
+      "sha256": "d8913a3549ad48386494ec1fb814b5fd9d2c02be5e2d0d169d29555cb198eaa2",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-builder-approval.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-builder-approval.ts",
+      "gitBlobOid": "449eb874a7895cdcc8bc921d1e62cdfe705f139b",
+      "byteLength": 12553,
+      "sha256": "725876a4e5b4d5adba2fae778cfb41d4badad45beb616196be73137988c8d4cb",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-builder-executor.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-builder-executor.ts",
+      "gitBlobOid": "1dc98df2d5650f5049c538140fed3a2942c41d93",
+      "byteLength": 25351,
+      "sha256": "df2d0c7a8f99dcbd53188f15c0038f64652ec7310fbda75fe463502cbd26ecdd",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-import-session.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-import-session.ts",
+      "gitBlobOid": "83a6a8dc8d190f384952b8a2ff6e5615756bc32e",
+      "byteLength": 3196,
+      "sha256": "6d5fd8487168203fb73c2b26d44103658b9a91297c968aad4459cc2c0bb8768e",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-import.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-import.ts",
+      "gitBlobOid": "9212bed2f4d3c472f3f1b234973bfc1cc9515eaf",
+      "byteLength": 6655,
+      "sha256": "2507a739abdafa1e9d3ff0336925569e0e8ada30df9d51bc0fdebdb75d7c128a",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-native-io.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-native-io.ts",
+      "gitBlobOid": "2899ba52ed7d6c160fbac95942bb0a4fff59b027",
+      "byteLength": 20362,
+      "sha256": "b73241b52de2f7c68035a2a84490bf215e246fd7822aa693996e957ca4f95b64",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-verification-artifacts.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-verification-artifacts.ts",
+      "gitBlobOid": "2528da8f53b9e2d8511711f1d3b34a2a3d012d99",
+      "byteLength": 6223,
+      "sha256": "c534a10c2755f23fdb714132bf0430b2362633bba95711be2250768341aded32",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-verification-catalog.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-verification-catalog.ts",
+      "gitBlobOid": "5e601b49022a85f4125d162a73034da4dbf50da5",
+      "byteLength": 5555,
+      "sha256": "62533033dcce7e424ad70ddb4b194a1b136da691ad189dd6173e4f68aa21cde1",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-verification-evidence.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-verification-evidence.ts",
+      "gitBlobOid": "e07c759502e7f04454237c11b64e9bbc30dc285f",
+      "byteLength": 8560,
+      "sha256": "b5de0714c10e9efeec40bce858e1a4656df54a73694d2e6b1a3f4327770765ed",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-verification-launch-contract.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-verification-launch-contract.ts",
+      "gitBlobOid": "36548f553b4de58bf3683f54c53fee7fb61f70bd",
+      "byteLength": 5874,
+      "sha256": "18b436fa17bfa4ed69e87c12b9f3b5010b466215eb8d5a26cb0ae8213a7f48a8",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-managed-workspace-store.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-managed-workspace-store.ts",
+      "gitBlobOid": "d510d698db005f91ba0a0e31f215ccb9a4fc9a3c",
+      "byteLength": 12947,
+      "sha256": "f87add544d16b42be36f3391c5ade56989dac82d89c4202e6d7ae2aa1d3c32eb",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-workspace-policy-store.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-workspace-policy-store.ts",
+      "gitBlobOid": "257e0ab8dc016d0de58baf7d657d8ce6522b6a7d",
+      "byteLength": 25159,
+      "sha256": "11ed229fc29224e6e84e8cad59040eeb2a860eccdd8da4951fe8d42bf09dabcc",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/build-only/windows-workspace-policy.ts",
+      "originalPath": "product/companion-v1/src/build-only/windows-workspace-policy.ts",
+      "gitBlobOid": "ee7e1041cf1fc589bd333f036baba3efde07b3c9",
+      "byteLength": 5455,
+      "sha256": "69ece4866729b3d2f900ea25cec4fd7c5506e6008d48772d684f1b8dfd86d672",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/attestation.ts",
+      "originalPath": "product/companion-v1/src/builder/attestation.ts",
+      "gitBlobOid": "07801c5f0a3304265efc9db49e946a15be700446",
+      "byteLength": 551,
+      "sha256": "fb955fb015886a87fb37e47dce2e3b92c9af4d9ca0bcdde5e56521d2d189d0fb",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/content-policy.ts",
+      "originalPath": "product/companion-v1/src/builder/content-policy.ts",
+      "gitBlobOid": "f477690f29df21612dfd42cd111030604506a7e1",
+      "byteLength": 1565,
+      "sha256": "0ca6216c627d8c71c3ecafface75b3571331b1c7b5eaed0396ae62160645edb9",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/filesystem.ts",
+      "originalPath": "product/companion-v1/src/builder/filesystem.ts",
+      "gitBlobOid": "58875a74d126643bcc48a9350c77a9ca7ed13ad2",
+      "byteLength": 5619,
+      "sha256": "cf7786e7b45244ddf58baad2c3a3881b99278eb297fa585e35375a7bdd957ceb",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/patch-executor.ts",
+      "originalPath": "product/companion-v1/src/builder/patch-executor.ts",
+      "gitBlobOid": "9a0de448a92dbcbd571944ea62a9ed0a6f21c5c4",
+      "byteLength": 20061,
+      "sha256": "baf5fc9baf9c802bf6cc38b25ee95938f0264dedd79d5da4e135d3e8c0a535d8",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/path-policy.ts",
+      "originalPath": "product/companion-v1/src/builder/path-policy.ts",
+      "gitBlobOid": "c0bc446361dd7da414b1d6c59f5c942fa2db6fd6",
+      "byteLength": 3935,
+      "sha256": "5056847b2591258720fceca412c39d193d4996b960a8e657ddf62ea68e68a788",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/schemas.ts",
+      "originalPath": "product/companion-v1/src/builder/schemas.ts",
+      "gitBlobOid": "863ed4b968b26325b0fc106f5a0a469209c70692",
+      "byteLength": 6188,
+      "sha256": "171c110be8bf05681210c6fe452903db7efe2a36ca7f6a8bd188c7886a61d102",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/builder/types.ts",
+      "originalPath": "product/companion-v1/src/builder/types.ts",
+      "gitBlobOid": "b9520f5effcf37dc75f9d305cf08c290f7d56ab7",
+      "byteLength": 4520,
+      "sha256": "8c16c07a6242ffe9fc1d3ab20800c8568b38e46eb5dbe88cc668bc857c07e404",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/compatibility/canonical-json.ts",
+      "originalPath": "product/companion-v1/src/compatibility/canonical-json.ts",
+      "gitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "byteLength": 4581,
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/index.ts",
+      "originalPath": "product/companion-v1/src/kernel/index.ts",
+      "gitBlobOid": "4883349f31b5388aef214c0bc0303a278ee31e50",
+      "byteLength": 200,
+      "sha256": "4067b4f1840bdcade12ca8f6e825ba761ad33a52418f4aa58c1d892379af6aea",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/lease-authority.ts",
+      "originalPath": "product/companion-v1/src/kernel/lease-authority.ts",
+      "gitBlobOid": "e58f5893a09fcf2dd2ae91f144cc6c25a87baf14",
+      "byteLength": 6350,
+      "sha256": "fb0494dc9860233b35f2b87f6acc6f6a1e865a743912295318dee5e1228372b0",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/policy.ts",
+      "originalPath": "product/companion-v1/src/kernel/policy.ts",
+      "gitBlobOid": "5f515b2b974744291bf47b2df35fbb47c600e7a4",
+      "byteLength": 9047,
+      "sha256": "56bec7f001799ac87ba328f1b3425bdd4f9d157a8e08fb2e951fa39e726da4d9",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/prompt-budget.ts",
+      "originalPath": "product/companion-v1/src/kernel/prompt-budget.ts",
+      "gitBlobOid": "d96b18fdccf29df673815053a422877e2fccd5d6",
+      "byteLength": 1038,
+      "sha256": "6d0b95c8e717969dda605313415b38c8af72c6a3c3670bfa49b7644370a90829",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/runtime-identity.ts",
+      "originalPath": "product/companion-v1/src/kernel/runtime-identity.ts",
+      "gitBlobOid": "904cf58c7cee291c8495b092487c3df7ca40201d",
+      "byteLength": 4415,
+      "sha256": "4a040cce24be5b3e2db4f657fa5158a267478d9ca70cb510d20223d9a8d52b8f",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/schemas.ts",
+      "originalPath": "product/companion-v1/src/kernel/schemas.ts",
+      "gitBlobOid": "ad42f5bcf0b7a2146eb6bf8c9a5ae4073001ef24",
+      "byteLength": 9527,
+      "sha256": "a1bd1abed962044176106d21ccd13dbf7e5fc5a193eb048cecbfb6c7c3dfef21",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/kernel/types.ts",
+      "originalPath": "product/companion-v1/src/kernel/types.ts",
+      "gitBlobOid": "64613188b74154d04488f3809284c37e9b06ec45",
+      "byteLength": 6249,
+      "sha256": "c90db7edd3434cbe8f020dd6fc6ed6d7e91d208e28de5bc57410fad331c4ac84",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/profiles/types.ts",
+      "originalPath": "product/companion-v1/src/profiles/types.ts",
+      "gitBlobOid": "fcc524d9ccd2ebc6fa3e1d12e6a7ae62d2efc110",
+      "byteLength": 3885,
+      "sha256": "f6845a2cfbd2c662b31f3d9d1f073f7844f6c8cb22e8179484911f55bcd0f0dd",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/validation/deep-freeze.ts",
+      "originalPath": "product/companion-v1/src/validation/deep-freeze.ts",
+      "gitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "byteLength": 378,
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/validation/json-value.ts",
+      "originalPath": "product/companion-v1/src/validation/json-value.ts",
+      "gitBlobOid": "6fbc2c9f09fa3d4dbab9eaebaf8571e155e658ad",
+      "byteLength": 3176,
+      "sha256": "244f71b906df6eeb386d26fbe27b190f928332ffe11e08eacdb45847c58a8553",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "source/src/validation/schemas.ts",
+      "originalPath": "product/companion-v1/src/validation/schemas.ts",
+      "gitBlobOid": "aec0b6a65836bd137715a032f55e2238a8e7c5a1",
+      "byteLength": 1646,
+      "sha256": "0d2786874713f5d33e2851469a830fa99feb40596d736d19091e1dde4f6e50e2",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/probes/windows-artifact-read-hold.ps1",
+      "originalPath": "product/companion-v1/tests/probes/windows-artifact-read-hold.ps1",
+      "gitBlobOid": "c90a890ab60aeb67e1b76251f76e997fda55efdd",
+      "byteLength": 14643,
+      "sha256": "6d8f31e19b82f47c28bb2bd225e8ff6d443a9b7e3aaf80370ed1dc7069a4a43b",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-artifact-read-hold.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-artifact-read-hold.test.ts",
+      "gitBlobOid": "c118546c53f7bb30b808aa5d789c54629bf6f791",
+      "byteLength": 3250,
+      "sha256": "eb3962d885a5c77dd513e99ca71ddf1c3f172f4ab457ad2b29f9aaee52c19294",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-builder-effect-journal.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-builder-effect-journal.test.ts",
+      "gitBlobOid": "c04ee449efc8873f16be121f42afda5d6a8b0e99",
+      "byteLength": 29463,
+      "sha256": "b48317031a0e0688c0b2aad623bf3cfc7b93be1f082455c4545ab4190c5edf84",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-builder-recovery-crash.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-builder-recovery-crash.test.ts",
+      "gitBlobOid": "026b7b52f0d4939c07f03dd5c6e760823f3961ae",
+      "byteLength": 8428,
+      "sha256": "ac5ca0bc3bd65b7e858457fa95be8d2d4de034b7118a42ad39548355807f5f76",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-builder-recovery-store.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-builder-recovery-store.test.ts",
+      "gitBlobOid": "96d57d45bf0f0c2ce4543c48e6d31d1d905254e3",
+      "byteLength": 16288,
+      "sha256": "a34972f62243108e3efb911ea8f636b7acf105c26805824c96cb98f054c4ed7a",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-builder-approval.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-builder-approval.test.ts",
+      "gitBlobOid": "6b071179a32d271a65937d8cb9044361be1ac36f",
+      "byteLength": 20617,
+      "sha256": "39b524e4f0fa3023ae426660e6f9a735c22a60cfd6d02c831dc5903105ae2b38",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-builder-executor.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-builder-executor.test.ts",
+      "gitBlobOid": "32395df647a397167243e67e80845e595eb143c1",
+      "byteLength": 62762,
+      "sha256": "788ee63b8386fe4d53ffac07b93472432a58057556637887291b36c727f027a2",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-import-session.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-import-session.test.ts",
+      "gitBlobOid": "402ce73b72254be4f2e24061c72d49b38e253863",
+      "byteLength": 4180,
+      "sha256": "64a98dfd23cd39b1c66bfbc0a54656b959e5f5710de4be2e9a956183f42e356c",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-import.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-import.test.ts",
+      "gitBlobOid": "a8a6897d1fd6288d429e00818c86c2586d8643ac",
+      "byteLength": 8149,
+      "sha256": "a48f58d708633e5d65eae4253329704c7aac27870bd34c717d647e60a6eaa924",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-native-io.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-native-io.test.ts",
+      "gitBlobOid": "729324f8ea37cf74eba0bb06f6b8baf609d0c68f",
+      "byteLength": 8428,
+      "sha256": "85b50046e6938fafcbd7646376c4da002346004e6eb507b9c3b4bd2b695b9df4",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-verification-artifacts.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-verification-artifacts.test.ts",
+      "gitBlobOid": "c7214dd044add7cf6b00908dbe3ac9c73dcf9f2f",
+      "byteLength": 7172,
+      "sha256": "ae105357a69b63ffd1cdb07292acf8be4555c77a6918661e7e4264ca40a3c1c4",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-verification-catalog.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-verification-catalog.test.ts",
+      "gitBlobOid": "5994f211cf42022bc27a0ffa6936a078bdbdfc1f",
+      "byteLength": 5430,
+      "sha256": "9367fc97e3e85e1fa96624fd6c2087d9af2d47e8cb734b98c3ea4d6a0b4cdc7d",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-verification-evidence.test.ts",
+      "gitBlobOid": "a03c5f553ff1b888879e8a815d0378f45dd352e5",
+      "byteLength": 7023,
+      "sha256": "ccec1e27ba769b568e35760fd4e4d3d69fce1af5b8ea7fb352d0990e1c0661b2",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-verification-launch-contract.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-verification-launch-contract.test.ts",
+      "gitBlobOid": "d7fe80b3ef47766df20d33933c95cc3fca1a03f7",
+      "byteLength": 6468,
+      "sha256": "06f34b739dc5f99d2f15ab09450a6d3cb35f6a34f0fc4acec1d64ad080c14616",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-managed-workspace-store.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-managed-workspace-store.test.ts",
+      "gitBlobOid": "bd02ef65e7637b35d0db340ffdd34a8c37c033cf",
+      "byteLength": 12290,
+      "sha256": "7cf62330ff4d83ad5956c5ecd4ef07ad341826a47b7b9352d431757f40d455aa",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-workspace-effect-intent.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-workspace-effect-intent.test.ts",
+      "gitBlobOid": "76346b42e0324645c2a2313f7fc73c0e60d31045",
+      "byteLength": 13649,
+      "sha256": "3b9830830a196986e57597ccf392bea43178cfda9522ef7522a19810d9d0de13",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-workspace-policy-crash.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-workspace-policy-crash.test.ts",
+      "gitBlobOid": "b78c5c925130636801bec5a5fae4d083761a8212",
+      "byteLength": 8339,
+      "sha256": "f26550668fafdea80843c6df0c248fd0ccdba72e8b81fa00eb69ecf796810b76",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-workspace-policy-store.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-workspace-policy-store.test.ts",
+      "gitBlobOid": "2e7dd83ef70e3bbe1bc9d4175727cfd9fc7208b4",
+      "byteLength": 21892,
+      "sha256": "508458bfb006d9184df163c37e6bd4620ca8237c01f01d3bba54f29760874fe1",
+      "transformation": "none; exact raw Git blob bytes"
+    },
+    {
+      "path": "tests/unit/windows-workspace-policy.test.ts",
+      "originalPath": "product/companion-v1/tests/unit/windows-workspace-policy.test.ts",
+      "gitBlobOid": "edf2f669c56bec1cd50c1a58d63b2f9fffc4c687",
+      "byteLength": 7076,
+      "sha256": "5eb33272d13096dc4057a5e9bfa9296d4e69cc99701d280988b4106ba2a8962f",
+      "transformation": "none; exact raw Git blob bytes"
+    }
+  ],
+  "externalImports": [
+    "better-sqlite3",
+    "node:assert/strict",
+    "node:child_process",
+    "node:crypto",
+    "node:fs",
+    "node:fs/promises",
+    "node:os",
+    "node:path",
+    "node:perf_hooks",
+    "node:test",
+    "node:url",
+    "node:util",
+    "zod"
+  ],
+  "staticLocalImportEdges": 164
+}
