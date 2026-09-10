@@ -1,0 +1,22 @@
+{
+  "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+  "focused": {
+    "tests": 67,
+    "passed": 67,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 6019.2797
+  },
+  "fullSuite": {
+    "sourceBaseline": "aa4185f66f46219d2fdeab8b3fade9dd83a87d8c",
+    "tests": 1521,
+    "passed": 1519,
+    "failed": 0,
+    "skipped": 2,
+    "note": "Earlier real-book test delta, not final upload-test checkpoint. No full-suite rerun claimed at packet pin."
+  },
+  "platform": "win32",
+  "noProductionBootstrap": true,
+  "noLiveProvider": true,
+  "noIndependentExecution": true
+}
