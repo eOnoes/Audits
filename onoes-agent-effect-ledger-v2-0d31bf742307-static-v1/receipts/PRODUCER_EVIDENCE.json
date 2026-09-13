@@ -1,0 +1,43 @@
+{
+  "auditId": "onoes-agent-effect-ledger-v2-0d31bf742307-static-v1",
+  "sourceRevision": "0d31bf74230759482575340968f2340bb23d393e",
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "executionPhase": "pre-commit run of unchanged subject/test bytes",
+  "typecheck": "passed",
+  "compile": "passed after restricted-context EPERM; no OS permissions altered",
+  "focused": {
+    "tests": 39,
+    "pass": 39,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 2716.74,
+    "rawTap": "receipts/FOCUSED_V2.tap",
+    "sha256": "45085069ae1ba3d99d76603097f7dadcab7abe4432d567afeb3fb57317041afe"
+  },
+  "full": {
+    "tests": 1828,
+    "pass": 1826,
+    "fail": 0,
+    "skipped": 2,
+    "cancelled": 0,
+    "durationMs": 52591.2505,
+    "sha256": "8040823cbd7d32313a64eecc4db8c8212f7777fed9b2a28f672683020094309e",
+    "rawTapIncluded": false,
+    "skips": [
+      "Windows binary-symlink creation privilege unavailable",
+      "deliberately non-Windows-only inspector refusal case"
+    ]
+  },
+  "limits": [
+    "no independent execution",
+    "no guest or protected storage",
+    "driver seam is not physical index corruption",
+    "coherent forgery accepted by design; no authentication or anti-rollback",
+    "full product out of scope"
+  ],
+  "noSubjectExecutionDuringPackaging": true,
+  "noProvider": true,
+  "noRealApproval": true,
+  "noVm": true
+}

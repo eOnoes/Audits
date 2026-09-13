@@ -1,0 +1,10 @@
+{
+  "auditId": "onoes-agent-effect-ledger-v2-0d31bf742307-static-v1",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "reportPath": "onoes-agent-effect-ledger-v2-0d31bf742307-static-v1/reports/AUDIT_REPORT.md",
+  "receivingReviewerMayWriteGitHub": "report-only after workflow check",
+  "preparedLocally": true,
+  "independentReviewReceived": false,
+  "publicHistoryPersists": true
+}

@@ -1,0 +1,244 @@
+TAP version 13
+# Subtest: execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+ok 1 - execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+  ---
+  duration_ms: 92.792
+  type: 'test'
+  ...
+# Subtest: single namespace approval uniqueness spans workflows and execute/publish; keys cannot be appended
+ok 2 - single namespace approval uniqueness spans workflows and execute/publish; keys cannot be appended
+  ---
+  duration_ms: 36.154
+  type: 'test'
+  ...
+# Subtest: publication requires a passed completed parent and exact complete subject, never bare result digest
+ok 3 - publication requires a passed completed parent and exact complete subject, never bare result digest
+  ---
+  duration_ms: 56.8191
+  type: 'test'
+  ...
+# Subtest: terminal quarantine remains absorbing and blocks a fresh workflow after restart
+ok 4 - terminal quarantine remains absorbing and blocks a fresh workflow after restart
+  ---
+  duration_ms: 33.0156
+  type: 'test'
+  ...
+# Subtest: pure state graph rejects skipped effects, contradictory results and restoration of execution
+ok 5 - pure state graph rejects skipped effects, contradictory results and restoration of execution
+  ---
+  duration_ms: 40.7256
+  type: 'test'
+  ...
+# Subtest: caller mutation, getters, forged history and divergent event replay fail without extra state
+ok 6 - caller mutation, getters, forged history and divergent event replay fail without extra state
+  ---
+  duration_ms: 26.8443
+  type: 'test'
+  ...
+# Subtest: expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+ok 7 - expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+  ---
+  duration_ms: 33.4272
+  type: 'test'
+  ...
+# Subtest: reached expiry before transfer refuses delivery marker and permits cancellation only
+ok 8 - reached expiry before transfer refuses delivery marker and permits cancellation only
+  ---
+  duration_ms: 25.4331
+  type: 'test'
+  ...
+# Subtest: reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 9 - reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 27.7531
+  type: 'test'
+  ...
+# Subtest: possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 10 - possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 29.5088
+  type: 'test'
+  ...
+# Subtest: terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 11 - terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 28.6277
+  type: 'test'
+  ...
+# Subtest: post-commit read-back fault retains record and poisons rather than compensating
+ok 12 - post-commit read-back fault retains record and poisons rather than compensating
+  ---
+  duration_ms: 33.5107
+  type: 'test'
+  ...
+# Subtest: malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+ok 13 - malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+  ---
+  duration_ms: 33.7705
+  type: 'test'
+  ...
+# Subtest: missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+ok 14 - missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+  ---
+  duration_ms: 22.2372
+  type: 'test'
+  ...
+# Subtest: maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+ok 15 - maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+  ---
+  duration_ms: 257.9589
+  type: 'test'
+  ...
+# Subtest: abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+ok 16 - abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+  ---
+  duration_ms: 148.7231
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+ok 17 - two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+  ---
+  duration_ms: 106.9013
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+ok 18 - two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+  ---
+  duration_ms: 110.0255
+  type: 'test'
+  ...
+# Subtest: held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+ok 19 - held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+  ---
+  duration_ms: 836.6792
+  type: 'test'
+  ...
+# Subtest: v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+ok 20 - v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+  ---
+  duration_ms: 28.0306
+  type: 'test'
+  ...
+# Subtest: overriding public read cannot substitute post-COMMIT integrity read-back
+ok 21 - overriding public read cannot substitute post-COMMIT integrity read-back
+  ---
+  duration_ms: 32.5831
+  type: 'test'
+  ...
+# Subtest: legacy v1 schema is refused without migration, adoption or rewriting
+ok 22 - legacy v1 schema is refused without migration, adoption or rewriting
+  ---
+  duration_ms: 19.378
+  type: 'test'
+  ...
+# Subtest: oversized passive input and event-count overflow deny without writing
+ok 23 - oversized passive input and event-count overflow deny without writing
+  ---
+  duration_ms: 27.02
+  type: 'test'
+  ...
+# Subtest: verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+ok 24 - verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+  ---
+  duration_ms: 75.2508
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row approval duplication on every access path
+ok 25 - application scan independently rejects cross-row approval duplication on every access path
+  ---
+  duration_ms: 33.9317
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workflow duplication on every access path
+ok 26 - application scan independently rejects cross-row workflow duplication on every access path
+  ---
+  duration_ms: 26.8348
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workspace duplication on every access path
+ok 27 - application scan independently rejects cross-row workspace duplication on every access path
+  ---
+  duration_ms: 22.6548
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row operation duplication on every access path
+ok 28 - application scan independently rejects cross-row operation duplication on every access path
+  ---
+  duration_ms: 18.6466
+  type: 'test'
+  ...
+# Subtest: coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+ok 29 - coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+  ---
+  duration_ms: 27.7482
+  type: 'test'
+  ...
+# Subtest: publication restoration releases once-at-a-time workspace exclusion, never approval identity
+ok 30 - publication restoration releases once-at-a-time workspace exclusion, never approval identity
+  ---
+  duration_ms: 42.1614
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: synchronous=NORMAL
+ok 31 - current connection rejects durability drift: synchronous=NORMAL
+  ---
+  duration_ms: 16.0307
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: foreign_keys=OFF
+ok 32 - current connection rejects durability drift: foreign_keys=OFF
+  ---
+  duration_ms: 14.4241
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: trusted_schema=ON
+ok 33 - current connection rejects durability drift: trusted_schema=ON
+  ---
+  duration_ms: 14.7587
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: busy_timeout=0
+ok 34 - current connection rejects durability drift: busy_timeout=0
+  ---
+  duration_ms: 14.2534
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: ignore_check_constraints=ON
+ok 35 - current connection rejects durability drift: ignore_check_constraints=ON
+  ---
+  duration_ms: 15.095
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: journal_mode=DELETE
+ok 36 - current connection rejects durability drift: journal_mode=DELETE
+  ---
+  duration_ms: 129.6661
+  type: 'test'
+  ...
+# Subtest: attached database denies discovery without inspecting its content
+ok 37 - attached database denies discovery without inspecting its content
+  ---
+  duration_ms: 14.3101
+  type: 'test'
+  ...
+# Subtest: forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+ok 38 - forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+  ---
+  duration_ms: 25.526
+  type: 'test'
+  ...
+# Subtest: expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+ok 39 - expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+  ---
+  duration_ms: 35.4705
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2716.74

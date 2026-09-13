@@ -1,0 +1,11 @@
+{
+  "localImports": "All direct local imports of the two subject modules and focused tests/helpers are supplied. Map each SOURCE_IDENTITIES.productPath to one hypothetical product root for import reasoning only.",
+  "external": [
+    "Node 24.14.0 Windows x64 ABI137",
+    "better-sqlite3 12.11.1",
+    "zod 4.4.3",
+    "TypeScript 5.9.3"
+  ],
+  "installedContext": "Only historical better-sqlite3 transaction.js and LICENSE supplied; not a dependency distribution or authenticity proof.",
+  "excluded": "No package.json, runtime, native binaries, installed dependency tree, installer, VM or wider application. Extract not runnable as laid out; no reconstruction for execution."
+}
