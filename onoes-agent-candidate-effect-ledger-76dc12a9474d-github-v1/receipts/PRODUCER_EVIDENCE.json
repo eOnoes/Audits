@@ -1,0 +1,48 @@
+{
+  "classification": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "sourceRevision": "76dc12a9474d626efcf1944c86f4ffd131bfef2f",
+  "executionDuringPackaging": false,
+  "noVmExecution": true,
+  "noRealApproval": true,
+  "noProvider": true,
+  "noProductionConsumer": true,
+  "focused": {
+    "phase": "fresh-compile-and-execution-after-pinned-commit",
+    "tests": 18,
+    "pass": 18,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 1185.3941,
+    "rawTap": "receipts/FOCUSED_TESTS.tap",
+    "sha256": "119918dea2ae0fc98c45f8dd153f1b80d067f88360a59d2a7fcb96b7d64c0f35",
+    "commands": [
+      "node node_modules/typescript/bin/tsc -p tsconfig.test.json",
+      "node --test --test-reporter=tap .test-dist/tests/unit/windows-candidate-effect-ledger.test.js"
+    ]
+  },
+  "widerFullRun": {
+    "phase": "pre-commit-run-of-unchanged-source-test-bytes",
+    "tests": 1788,
+    "pass": 1786,
+    "fail": 0,
+    "skipped": 2,
+    "cancelled": 0,
+    "durationMs": 50186.5381,
+    "rawTapIncluded": false,
+    "sha256": "6e70f4ecc1e540cc62bf101fcb485ce1f37ddb148417e942d16b2b3386087278",
+    "command": "node --test --test-concurrency=4 --test-reporter=tap .test-dist/tests/**/*.test.js scripts/tests/candidate-review-http.test.mjs scripts/tests/candidate-crash.test.mjs",
+    "exclusions": "Wider product tests are not supplied or audited by this packet.",
+    "skips": [
+      "Windows binary-symlink creation privilege unavailable",
+      "Deliberately non-Windows-only inspector-refusal case"
+    ]
+  },
+  "limitations": [
+    "ordinary-user synthetic SQLite; no protected installation",
+    "process exit is not power-loss",
+    "observations are trusted-host claims, not authentic invocation evidence",
+    "18 tests are producer execution, not independent review execution",
+    "full release stages and pending consumers remain open"
+  ]
+}

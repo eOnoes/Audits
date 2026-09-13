@@ -1,0 +1,18 @@
+{
+  "auditId": "onoes-agent-candidate-effect-ledger-76dc12a9474d-github-v1",
+  "sourceRevision": "76dc12a9474d626efcf1944c86f4ffd131bfef2f",
+  "originalAuditId": "onoes-agent-candidate-effect-ledger-76dc12a9474d-static-v1",
+  "originalManifestSha256": "5eccf4913c02552879e10d1c55c60fea0b2860c1ebb80a988769b6d63f393a04",
+  "unchangedProductBlobCount": 11,
+  "unchangedSubjectBytes": true,
+  "changed": [
+    "packet paths",
+    "request and scope metadata",
+    "receipt path mappings",
+    "manifest"
+  ],
+  "subjectExecutedDuringRepackaging": false,
+  "publicHistoryPersists": true,
+  "receivingReviewerMayWriteGitHub": false,
+  "independentReviewReceived": false
+}

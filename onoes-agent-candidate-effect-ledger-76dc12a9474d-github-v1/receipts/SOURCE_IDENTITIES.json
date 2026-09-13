@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "onoes-static-source-identities/v1",
+  "auditId": "onoes-agent-candidate-effect-ledger-76dc12a9474d-github-v1",
+  "sourceRevision": "76dc12a9474d626efcf1944c86f4ffd131bfef2f",
+  "sourceRevisionEvidence": "publisher-local-git-not-independent-bundle",
+  "normalization": "none-raw-git-blob-bytes",
+  "memberCount": 11,
+  "members": [
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_DISPATCH_LEDGER_DECISIONS.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_DISPATCH_LEDGER_DECISIONS.md",
+      "gitBlobOid": "d4e176e23765575b249949b695ec91006f6bca7c",
+      "sha256": "185452e5a6c288236e4fbc6d748008affcb5001bb0e75b5f8d84201de373b83d",
+      "byteLength": 10410
+    },
+    {
+      "productPath": "package-lock.json",
+      "packetPath": "source/package-lock.json",
+      "gitBlobOid": "e7226a428c03ab0f2ffe412cd735a09a9c1ff080",
+      "sha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24",
+      "byteLength": 18577
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "packetPath": "source/src/build-only/windows-candidate-effect-ledger.ts",
+      "gitBlobOid": "bcf7a4532d2b854f328a14256294dc61afda4189",
+      "sha256": "deb9829a31b09c189d0cbbb7e64fb31076b1a81213779a2d790284b35f56af46",
+      "byteLength": 12745
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "packetPath": "source/src/build-only/windows-candidate-effect-state.ts",
+      "gitBlobOid": "9213f7dbd4b16081b1a9848fad98b0f65f166923",
+      "sha256": "cde3f75a21cce123a7ba665ce4bf4fd320c4836c9d363438ad5014d1a18c145f",
+      "byteLength": 8833
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "packetPath": "source/src/compatibility/canonical-json.ts",
+      "gitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteLength": 4581
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "packetPath": "source/src/validation/deep-freeze.ts",
+      "gitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteLength": 378
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-crash.ts",
+      "packetPath": "tests/tests/helpers/candidate-effect-crash.ts",
+      "gitBlobOid": "de7340f80d212086cfadad13c193498746ae1467",
+      "sha256": "dba9f04794cc3545d85a5137e8bcea4a7cd23d5e95fd6ed3ac729203ccfc7f41",
+      "byteLength": 764
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-racer.ts",
+      "packetPath": "tests/tests/helpers/candidate-effect-racer.ts",
+      "gitBlobOid": "2c9de26b67bfa7c5b5e105a6c9d7a0fa1cbf5fa5",
+      "sha256": "34c193f079eccee539cb8ee4cc409c0a662f7b78e2e4b8cc80dc25563bc360f1",
+      "byteLength": 1136
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-effect-ledger.test.ts",
+      "gitBlobOid": "30e14f68ba31ce2a344650c4b71d6fde3075fd2f",
+      "sha256": "0f25b81d5a46fc9de3ddc086fc59b3220fdfac224ca793ac9ed5366938c39a31",
+      "byteLength": 20204
+    },
+    {
+      "productPath": "tsconfig.json",
+      "packetPath": "source/tsconfig.json",
+      "gitBlobOid": "0e4f41fae7583e14588a57b04bbacf9f87ed9b1e",
+      "sha256": "8c822198f0ad6733d8630470a5e12c41e9607a54b38ec8266a9818c27cb2065e",
+      "byteLength": 638
+    },
+    {
+      "productPath": "tsconfig.test.json",
+      "packetPath": "source/tsconfig.test.json",
+      "gitBlobOid": "7c0f33a1a2c8a677ed9e7fea74be04849b787c2a",
+      "sha256": "241e1941692ccede2c4a2a9f39cfc5fa6ce8de46aa1bf1c94361d0242a648295",
+      "byteLength": 154
+    }
+  ]
+}

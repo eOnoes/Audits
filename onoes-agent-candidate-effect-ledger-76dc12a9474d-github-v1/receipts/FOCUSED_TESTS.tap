@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+ok 1 - execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+  ---
+  duration_ms: 73.717
+  type: 'test'
+  ...
+# Subtest: single namespace approval uniqueness spans workflows and execute/publish; keys cannot be appended
+ok 2 - single namespace approval uniqueness spans workflows and execute/publish; keys cannot be appended
+  ---
+  duration_ms: 39.0311
+  type: 'test'
+  ...
+# Subtest: publication requires a passed completed parent and exact complete subject, never bare result digest
+ok 3 - publication requires a passed completed parent and exact complete subject, never bare result digest
+  ---
+  duration_ms: 57.789
+  type: 'test'
+  ...
+# Subtest: terminal quarantine remains absorbing and blocks a fresh workflow after restart
+ok 4 - terminal quarantine remains absorbing and blocks a fresh workflow after restart
+  ---
+  duration_ms: 30.161
+  type: 'test'
+  ...
+# Subtest: pure state graph rejects skipped effects, contradictory results and restoration of execution
+ok 5 - pure state graph rejects skipped effects, contradictory results and restoration of execution
+  ---
+  duration_ms: 41.6822
+  type: 'test'
+  ...
+# Subtest: caller mutation, getters, forged history and divergent event replay fail without extra state
+ok 6 - caller mutation, getters, forged history and divergent event replay fail without extra state
+  ---
+  duration_ms: 26.1521
+  type: 'test'
+  ...
+# Subtest: expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+ok 7 - expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+  ---
+  duration_ms: 35.4627
+  type: 'test'
+  ...
+# Subtest: reached expiry before transfer refuses delivery marker and permits cancellation only
+ok 8 - reached expiry before transfer refuses delivery marker and permits cancellation only
+  ---
+  duration_ms: 26.9073
+  type: 'test'
+  ...
+# Subtest: reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 9 - reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 26.7212
+  type: 'test'
+  ...
+# Subtest: possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 10 - possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 29.8168
+  type: 'test'
+  ...
+# Subtest: terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 11 - terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 29.9713
+  type: 'test'
+  ...
+# Subtest: post-commit read-back fault retains record and poisons rather than compensating
+ok 12 - post-commit read-back fault retains record and poisons rather than compensating
+  ---
+  duration_ms: 31.5782
+  type: 'test'
+  ...
+# Subtest: malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+ok 13 - malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+  ---
+  duration_ms: 32.4068
+  type: 'test'
+  ...
+# Subtest: missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+ok 14 - missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+  ---
+  duration_ms: 16.2511
+  type: 'test'
+  ...
+# Subtest: maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+ok 15 - maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+  ---
+  duration_ms: 246.9908
+  type: 'test'
+  ...
+# Subtest: abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+ok 16 - abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+  ---
+  duration_ms: 134.7349
+  type: 'test'
+  ...
+# Subtest: two independent worker connections race identical approval: one reservation only
+ok 17 - two independent worker connections race identical approval: one reservation only
+  ---
+  duration_ms: 108.9284
+  type: 'test'
+  ...
+# Subtest: two independent worker connections race same workspace: one reservation only
+ok 18 - two independent worker connections race same workspace: one reservation only
+  ---
+  duration_ms: 93.6727
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1185.3941

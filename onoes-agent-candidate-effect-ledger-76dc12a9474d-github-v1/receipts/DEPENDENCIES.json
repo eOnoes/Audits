@@ -1,0 +1,279 @@
+{
+  "method": "typescript-lexical-imports-plus-explicit-worker-url-edges-not-runtime-closure",
+  "imports": [
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "node:crypto",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "better-sqlite3",
+      "suppliedPath": null,
+      "status": "external-not-supplied"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "suppliedPath": "src/compatibility/canonical-json.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "suppliedPath": "src/validation/deep-freeze.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "./windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "./windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "zod",
+      "suppliedPath": null,
+      "status": "external-not-supplied"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "node:util",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "suppliedPath": "src/compatibility/canonical-json.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "suppliedPath": "src/validation/deep-freeze.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "src/compatibility/canonical-json.ts",
+      "specifier": "node:crypto",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "better-sqlite3",
+      "suppliedPath": null,
+      "status": "external-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "node:worker_threads",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "better-sqlite3",
+      "suppliedPath": null,
+      "status": "external-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:assert/strict",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:crypto",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:child_process",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:url",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:fs",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:os",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:path",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:worker_threads",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:test",
+      "status": "node-builtin-not-supplied",
+      "suppliedPath": null
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "better-sqlite3",
+      "suppliedPath": null,
+      "status": "external-not-supplied"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "suppliedPath": "src/compatibility/canonical-json.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "suppliedPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "included-typescript-source"
+    }
+  ],
+  "dynamicFileEdges": [
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "sourceCounterpart": "tests/helpers/candidate-effect-crash.ts",
+      "status": "included-source-not-compiled-bytes"
+    },
+    {
+      "importer": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "sourceCounterpart": "tests/helpers/candidate-effect-racer.ts",
+      "status": "included-source-not-compiled-bytes"
+    }
+  ],
+  "dependencyPins": [
+    {
+      "name": "better-sqlite3",
+      "version": "12.11.1",
+      "integrity": "sha512-dq9AtApgg5PGFtBzPFSBl3HZQjHok5gaQCM6zh2Yk0aSmDCs1CbnVI8/HgASQkNKsWFpseIO9beg5xxpYhbIfA==",
+      "resolved": "https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-12.11.1.tgz",
+      "installedVersionMatchesLock": true,
+      "tarballVerified": false,
+      "packageSupplied": false
+    },
+    {
+      "name": "zod",
+      "version": "4.4.3",
+      "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==",
+      "resolved": "https://registry.npmjs.org/zod/-/zod-4.4.3.tgz",
+      "installedVersionMatchesLock": true,
+      "tarballVerified": false,
+      "packageSupplied": false
+    },
+    {
+      "name": "typescript",
+      "version": "5.9.3",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+      "installedVersionMatchesLock": true,
+      "tarballVerified": false,
+      "packageSupplied": false
+    },
+    {
+      "name": "@types/better-sqlite3",
+      "version": "7.6.13",
+      "integrity": "sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==",
+      "resolved": "https://registry.npmjs.org/@types/better-sqlite3/-/better-sqlite3-7.6.13.tgz",
+      "installedVersionMatchesLock": true,
+      "tarballVerified": false,
+      "packageSupplied": false
+    },
+    {
+      "name": "@types/node",
+      "version": "24.13.3",
+      "integrity": "sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==",
+      "resolved": "https://registry.npmjs.org/@types/node/-/node-24.13.3.tgz",
+      "installedVersionMatchesLock": true,
+      "tarballVerified": false,
+      "packageSupplied": false
+    }
+  ],
+  "suppliedInstalledContext": [
+    {
+      "packetPath": "source/context/better-sqlite3/lib/methods/transaction.js",
+      "byteLength": 2792,
+      "sha256": "bc8624a3ef689d8f78e5669020ad121e17acbc93b1d5ee5afe26860b1084c66c",
+      "origin": "publisher-installed-better-sqlite3-context-not-product-git-blob",
+      "version": "12.11.1"
+    },
+    {
+      "packetPath": "source/context/better-sqlite3/LICENSE",
+      "byteLength": 1078,
+      "sha256": "09856b52897c91ab67e7456ef43067019f31dfd3b87fda72e655736b1ebdee55",
+      "origin": "publisher-installed-better-sqlite3-context-not-product-git-blob",
+      "version": "12.11.1"
+    }
+  ],
+  "node": {
+    "version": "24.14.0",
+    "platform": "win32",
+    "arch": "x64",
+    "abi": "137",
+    "binarySupplied": false
+  }
+}
