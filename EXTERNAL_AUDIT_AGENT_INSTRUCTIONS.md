@@ -1,6 +1,6 @@
 # External Audit Agent Instructions
 
-> **AUDIT-ONLY DOCTRINE — READ FIRST:** This is a read-only, no-cost audit workflow. Do not branch, build, edit, commit, push, run workflows, call providers/models, use hosted runners, deploy, or incur API/compute charges. Inspect the supplied packet and report findings only. Never request or expose secrets.
+> **AUDIT-ONLY DOCTRINE — READ FIRST:** Subject review is read-only and no-cost. Only the completed sanitized report may be written back to GitHub under the packet's exact output contract and REPORT_DELIVERY.md. No source changes, builds, workflows, providers, deployments or charges. Never request or expose secrets.
 
 This document is for Tripp, Cyony, Echo, or any AI helping Eddie conduct an external audit.
 
@@ -52,7 +52,7 @@ Use identical names and nesting for every agent. Do not invent a personal layout
 8. Inspect the inventory and run a secret scan. Do not assume a clean scan proves public safety.
 9. If Eddie needs an outside AI, publish the packet to the agreed GitHub path and verify the remote commit and URL.
 10. Give Eddie the exact tree URL, audit purpose, auditor/model, scope, cost controls, and expected report filename.
-11. When the audit is returned, place the sanitized Markdown report under `reports/`.
+11. Require the reviewer to add the sanitized Markdown report to `<packet-id>/reports/AUDIT_REPORT.md` on GitHub main, verify read-back and return its immutable link. Include the narrow write exception in the packet itself. If access is missing, require an explicit delivery-blocked status and complete Markdown for operator delivery.
 12. Close the packet when resolved. Remove it from the active tree if no further work is needed, remembering that Git history is permanent.
 
 ## Handoff to Eddie
@@ -64,15 +64,15 @@ Audit packet: https://github.com/eOnoes/Audits/tree/<branch-or-path>
 Purpose: <one sentence>
 Auditor: <Gemini, Grok, Claude, Codex, etc.>
 Scope: <exact files and question>
-Cost controls: read-only; no Actions; no builds; no provider/model calls from the repo
-Return: reports/<report-name>.md using the required sections in AUDIT_REQUEST.md
+Cost controls: subject read-only; report-only GitHub write exception; workflow check before writing; no Actions, builds or provider/model calls
+Return: add <packet-id>/reports/AUDIT_REPORT.md on GitHub main; verify read-back and return its immutable file link using AUDIT_REQUEST.md
 ```
 
 ## Rules for the receiving AI
 
 - Read `AUDIT_REQUEST.md` first.
 - Do not modify the packet or audited project.
-- Do not create branches, commits, pull requests, or pushes.
+- Do not create branches or pull requests. Only report-only commits/pushes or file API writes are permitted, under the exact packet contract and REPORT_DELIVERY.md; no overwrite of prior reports.
 - Do not run GitHub Actions, hosted jobs, builds, deployments, or paid inference.
 - Do not request or reveal secrets.
 - Inspect the stated revision only.

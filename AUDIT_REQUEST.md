@@ -1,6 +1,25 @@
 # UNIVERSAL AUDIT REQUEST
 
-> **AUDIT-ONLY DOCTRINE — READ FIRST:** This is a read-only, no-cost audit. Do not branch, build, edit, commit, push, run workflows, call providers/models, use hosted runners, deploy, or incur API/compute charges. Inspect the supplied packet and report findings only. Never request or expose secrets. Do not improvise when evidence is unavailable.
+> **AUDIT-ONLY DOCTRINE — READ FIRST:** Subject review is read-only and no-cost. The sole write exception is delivery of the completed sanitized report under the report-output contract below. No source changes, branches, builds, installs, workflows, provider/model calls, hosted runners, deployments or charges. Never request or expose secrets. Do not improvise when evidence is unavailable.
+
+## Required GitHub report output
+
+- Report repository: `eOnoes/Audits`
+- Report branch: `main`
+- Report path: `[PACKET-ID]/reports/AUDIT_REPORT.md` — publisher must fill this before handoff.
+- Allowed write: add only the completed sanitized Markdown report; report-only commit/push or GitHub file API write using existing authorized access is permitted.
+
+Inspect workflow files and activation state before writing. If Actions could run,
+or their status cannot be determined, obtain Eddie's specific approval first.
+Preserve earlier reports: use a new numbered addendum instead of overwriting.
+Never edit source, tests, receipts, requests or manifests; the report is a new
+output, not a frozen input member. No branches, PRs, force-pushes or deletions.
+Read back the committed report, compare its bytes and return its immutable GitHub
+link plus report commit in chat, distinct from the audited source commit.
+If write access is missing, return complete Markdown with
+`REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS` and the exact target path; never
+claim upload success or request secrets. See REPORT_DELIVERY.md at the repository
+root for producer checks; this section is the packet's self-contained write scope.
 
 ## Audit identity
 
@@ -19,7 +38,7 @@
 - Files/directories in scope:
 - Dependencies/evidence in scope:
 - Explicit exclusions:
-- Allowed actions: read, inspect, and bounded offline analysis only
+- Allowed actions: read, inspect, bounded offline analysis, and the report-only GitHub delivery above
 
 **Scope rule:** Audit only the named revision and packet. Do not expand the scope silently. If required evidence is missing, record a blocker or limitation.
 
@@ -28,9 +47,9 @@
 - No GitHub Actions or hosted runners.
 - No model/provider/API calls beyond the explicitly approved audit route; default is no external call from the repository.
 - No builds, deployments, package installs, downloads, or long-running jobs.
-- No branches, pull requests, commits, pushes, merges, resets, cleans, deletions, or file edits.
+- No branches, pull requests, merges, resets, cleans, deletions, or file edits except the report-only delivery above.
 - No credentials, tokens, private paths, private infrastructure details, or raw sensitive logs.
-- Ordinary public GitHub browsing/cloning is permitted; all other side effects are prohibited.
+- Ordinary public GitHub browsing/cloning and the scoped report delivery are permitted; all other side effects are prohibited.
 
 ## Audit questions
 
@@ -47,7 +66,7 @@
 - Inspect current source/docs before relying on receipts.
 - Preserve identifiers and hashes exactly as observed.
 - Separate observed facts, reproduced results, model judgment, and assumptions.
-- If running tests is safe and offline, report the exact command and result.
+- Under STATIC_SOURCE requests, do not run subject tests or helpers; report them as NOT RUN. Execution requires a separately authorized scope.
 - Do not treat a worker claim, benchmark, or model confidence as proof.
 - Redact sensitive values in the report; use `[REDACTED]`.
 
