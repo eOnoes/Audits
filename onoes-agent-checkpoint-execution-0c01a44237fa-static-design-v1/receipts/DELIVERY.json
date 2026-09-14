@@ -1,0 +1,14 @@
+{
+  "auditId": "onoes-agent-checkpoint-execution-0c01a44237fa-static-design-v1",
+  "sourceRevision": "0c01a44237fa17970e173fd99e2b9db55863e54e",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "reportPath": "onoes-agent-checkpoint-execution-0c01a44237fa-static-design-v1/reports/AUDIT_REPORT.md",
+  "allowedWrite": "Report repository eOnoes/Audits; branch main; exact path onoes-agent-checkpoint-execution-0c01a44237fa-static-design-v1/reports/AUDIT_REPORT.md. Add only the completed sanitized report after checking current workflow files and activation state. If Actions could run or status is unknown, stop before writing and ask for that specific Actions approval. No source/test/input/manifest edits, branches, PRs, force-pushes, deletions, subject builds/installs/execution, providers or charges. Preserve existing reports with the next numbered AUDIT_REPORT_ADDENDUM_N.md in the same reports directory. Read back committed report bytes and return a verified immutable GitHub link plus output commit, distinct from audited packet commit. Without write access return full Markdown and REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS for operator delivery; never request credentials.",
+  "preparedLocally": true,
+  "publicationAuthority": "separate selected-service and sanitized-scope approval required",
+  "published": false,
+  "publicHistoryPersists": true,
+  "templateCommit": "9c546c8e738418dc5273f7ca4bcb4ef14907bb8e",
+  "reviewer": "not-selected"
+}

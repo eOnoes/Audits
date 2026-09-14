@@ -1,0 +1,2507 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_ATOMIC_LEDGER_SNAPSHOT.md b/product/companion-v1/docs/handoff/ONOES_AGENT_ATOMIC_LEDGER_SNAPSHOT.md
+new file mode 100644
+index 0000000..1fcfd47
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_ATOMIC_LEDGER_SNAPSHOT.md
+@@ -0,0 +1,113 @@
++# Complete atomic v2 ledger snapshot
++
++Status: implemented and producer-tested; no production consumer or v3 storage.
++Baseline: `9af4f055b0e0f0dde22d6e337db9cc989752bd49` plus the delta pinned below.
++Evidence date: 2026-09-14 UTC.
++
++## Scope and meaning
++
++`SqliteCandidateEffectLedger.snapshot()` returns the complete immutable v2 record
++array in operation-ID order, including spent approvals, releasing terminals and
++quarantine. It uses the private scan, never public `read()` overrides or
++`listBlocked()`, remembered IDs, per-record transactions or pagination. It returns
++recorded state only: no permission, anchor, liveness, custody or freshness claim.
++
++The shared private read path now rechecks schema, connection durability and store
++metadata INSIDE the deferred read transaction before scanning records. The existing
++preflight remains outside, including denial of caller-held transactions. Thus all
++public reads and post-write private read-back receive this additional same-snapshot
++identity check. No v2 table/index/record/signed-byte format changed. Write admission
++and its existing preflight/IMMEDIATE transaction ordering are otherwise unchanged.
++This is not an atomic ledger-plus-external-anchor transaction.
++
++The existing SQL scan returns at most 1,001 rows as an overflow sentinel and bounds
++each record's encoded bytes to 32,768 before returning its body through the driver.
++Oversized/non-text bodies become NULL and fail validation; more than 1,000 rows
++fails rather than truncates. Each row is canonically parsed, rehashed, replayed and
++matched to its indexed columns/store/namespace; all cross-row operation, approval,
++workflow and blocker constraints and publication parentage are re-derived. A bad
++row makes the entire snapshot fail. This is a bounded local object read, not a
++new serialized transport or a promise of a 32-MiB JavaScript heap ceiling.
++
++There is no injected clock/callback, write, repair, pragma normalization, retention,
++refund or automatic retry in the snapshot API. Existing trusted connection/host
++assumptions remain. A SQLite snapshot is consistent at its read point, NOT proof
++that another writer cannot commit later. Protected exclusive ownership and fresh
++ledger/anchor joins remain necessary before any real effect or workspace release.
++
++## Integration and falsifiable evidence
++
++The checkpoint-sequencer and synthetic-execution fixtures now call this real
++snapshot API instead of selecting IDs and reading them one-by-one. Their anchor,
++ownership, delivery/run/stop and consent facts remain synthetic. No runtime,
++HTTP, VM, issuer, source transfer or publication consumer was enabled.
++
++15 new tests use real disposable SQLite files on Windows. They cover:
++
++- Complete deterministic history, immutable arrays/nested records, valid publication
++  parentage, no clock/write/public-read/filter calls and independent returned copies.
++- A second WAL connection committing cancellation AND another reservation between
++  the reader's pinned identity and operation SELECT. The first snapshot remains the
++  old state; the next sees both commits. The test asserts the reader transaction
++  is open and the second connection's commits finished before the row query.
++- Identity change after preflight/before the read snapshot (including empty stores)
++  denies; identity change plus row deletion during a pinned read preserves the old
++  consistent snapshot, while the next read denies mismatched identity.
++- 1,000 completed records compose with the synthetic checkpoint inventory digest;
++  a 1,001st fails without hidden truncation. This tests maximum operation count,
++  not an invented maximum-size legal history or a performance release threshold.
++- Whole-inventory rejection for malformed JSON, oversized body, BLOB body, digest
++  drift, blocker drift, store substitution and missing publication parent.
++- Nested transactions, ATTACH/temp schema, durability drift, closed connection and
++  read failure; failed reads release their own transaction without rolling back a
++  caller transaction, modifying rows or consulting the clock.
++- A negative control: coherent terminal deletion yields a changed complete digest
++  but a valid empty SQLite snapshot. Only a separately retained authentic checkpoint
++  can detect that missing history. This does NOT close B-03.
++
++The existing four cross-row duplicate-driver controls additionally exercise the
++new snapshot entry point (five checked access paths each). These substitute driver
++results from real rows; they do not claim physical SQLite index corruption.
++The interleaving tests use test-only driver hooks and a real second connection,
++not background processes, host power cuts or independent execution.
++
++## Executed producer receipts
++
++Windows x64, Node 24.14.0, installed locked dependencies. Typecheck
++`node node_modules/typescript/bin/tsc --noEmit` and fresh test emit
++`node node_modules/typescript/bin/tsc -p tsconfig.test.json`: exit 0.
++
++Focused four suites (snapshot, ledger, checkpoint sequencer, synthetic execution):
++**128 tests / 128 passed / 0 failed / 0 cancelled / 0 skipped**, 2921.6132 ms.
++Captured artifact `candidate-effect-snapshot-focused-20260914.tap`, SHA-256
++`25df68c1611c6733624a9bc9a4f1da86452b5399431850ef4782b9e1d0d11c4f`.
++
++Full established offline suite: **1925 tests / 1923 passed / 0 failed /
++0 cancelled / 2 skipped**, 49418.685 ms, exit 0.
++Command: `node --test --test-concurrency=4 --test-reporter=tap .test-dist/tests/**/*.test.js scripts/tests/candidate-review-http.test.mjs scripts/tests/candidate-crash.test.mjs`.
++Captured artifact `candidate-effect-snapshot-full-20260914.tap`, SHA-256
++`a20dfde35e2649783eabbe8d12338c883067f2f2c3a2555b515449ccc12d5287`.
++Skips are unchanged: Windows link-creation privilege unavailable for the symlinked
++binary case; intentionally non-Windows inspector refusal test skipped on Windows.
++All new snapshot cases executed. TAPs are local PowerShell capture artifacts, not
++independent execution or a claim of byte-identical pre-capture stdout.
++
++| Source/test | SHA-256 |
++| --- | --- |
++| src/build-only/windows-candidate-effect-ledger.ts | 3e0b35c0c49d622d3823cf358901865acff197510aa4c0c218888c654c0a8a38 |
++| tests/unit/windows-candidate-effect-snapshot.test.ts | 799fe4d6e401e0e70d239e4e6814c6bbb7548b767a32499b28f00dd0df3d02bd |
++| tests/unit/windows-candidate-effect-ledger.test.ts | 64f00176f354439b76b3b81ea8ebda09000306ff55a7ff40653e28b802b7f475 |
++| tests/unit/windows-candidate-checkpoint-sequencer.test.ts | 7e6150af627ee074fbc871dca400a58bdffcb33803b33e5c276a9d1eca330d32 |
++| tests/unit/windows-candidate-synthetic-execution.test.ts | 96484d44a70b670a33f7b8cc29756cea6bc258195d67a7938e9fe077e0d11eb8 |
++
++## Next boundary
++
++Prepare a narrow local review packet of CONTRACT_V3's proposed durable release
++join, synthetic checkpoint/execution composition and this additive ledger read
++boundary, with exact dependencies/deltas and current test artifacts. Obtain the
++selected service/sanitized scope approval before external transfer; historical
++public-packet approval does not cover this new source. Review must precede v3
++storage or real host composition. Physical protected storage/anchor/fencing,
++VM preflight, real approval/enrollment, original-file publication, install/upgrade/
++rollback, independent execution and W1-W5 acceptance remain open. This step made
++no OS, VM, provider, workflow-setting or public-audit changes.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+new file mode 100644
+index 0000000..605dc07
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+@@ -0,0 +1,231 @@
++# Candidate consumer successor — release and checkpoint protocol revision
++
++Status: PROPOSED DESIGN; bounded changed-boundary review required before v3 data
++implementation. This document version is not a ledger format implementation.
++V1/V2 drafts and public packets remain immutable historical review inputs.
++Current source baseline: 06cb638302a867006713af7702b77400b7d38d34.
++
++This supersedes only the conflicting choices in CONTRACT_V2. All full-scope,
++deny-first, separate approval, no automatic redispatch, physical fencing,
++three-actor review/verification and W1-W5 requirements remain. The operator-returned
++successor report (packet 9c546c8e738418dc5273f7ca4bcb4ef14907bb8e) is external
++STATIC_SOURCE evidence, not permission. See SUCCESSOR_REVIEW_DISPOSITION.
++
++## 1. SC-B-01: durable release plus fresh admission, not a local flag
++
++Do not implement the V2 draft's absorbing, releasing `stopped-without-result`.
++In the proposed NEW ledger domain, distinguish outcome recording from release:
++
++- `stopped-without-result` is a non-releasing outcome, with null result and
++  verification fields. It requires all the independently authenticated settlement
++  facts in CONTRACT_V2 section 1, including post-effect failures. It never implies
++  no effect. Quarantine stays absorbing and cannot enter this path.
++- Other safe outcomes (passed/failed execution, restored/completed publication,
++  and pre-contact cancellation) also remain workspace-blocking pending release.
++  A passed execution outcome alone cannot fund publication in this new domain.
++- A final absorbing `released` event binds the outcome, complete predecessor
++  record digest, bounded settlement-evidence digest and the exact anchor
++  checkpoint that witnessed that predecessor. It preserves the immutable outcome
++  and spent approval/workflow, and performs no effect. It cannot release quarantine.
++- The final record's outcome must still be inspected when validating publication
++  parentage: only a released, passed execution with an authentic result qualifies.
++  A released non-result, failed execution or restored publication never qualifies.
++
++The ordinary new-domain blocked column may become false only at `released`.
++That column is NECESSARY, NOT SUFFICIENT for admission. No SQL query, ledger
++receipt or record parser exports workspace permission. Every new reservation and
++physical fence release must independently establish, under the current fenced
++owner, that the complete durable ledger inventory equals an authenticated fresh
++anchor checkpoint, and validate the settlement proof against current custody.
++Missing or disputed facts return blocked/reconciliation, never an empty free set.
++The authoritative admission decision is this joined read, not `listBlocked()`.
++
++Non-circular ordering for release:
++
++1. Record the blocking outcome and exact settlement proof digest; append and
++   confirm its checkpoint A. Revalidate proof, owner, policy and relevant custody.
++2. Commit `released`, referring to predecessor checkpoint A (not its own digest).
++3. Append checkpoint B over the released record and complete post-commit inventory.
++4. Only an authenticated fresh joined view of B and that exact inventory, plus
++   independently checked current safe custody, may admit subsequent work.
++
++Acknowledgment B is not written back as another ledger event. This avoids an
++infinite acknowledgment-of-acknowledgment chain. The crash gap is closed by the
++mandatory fresh admission read, NOT by pretending the two stores commit atomically.
++After a step-2 crash, the local row can say released while admission remains blocked.
++After a lost step-3 response, a fresh authenticated read may establish B; a local
++memory flag cannot. A new owner must fence the old owner and reconcile first.
++Neither recovery case invokes a task, retries delivery, or spends another approval.
++
++New-domain parsers should enforce the structural predecessor/settlement bindings;
++only the protected host/anchor composition can establish their truth and freshness.
++Do not claim the record alone proves physical release. If a proposed v3 API cannot
++prevent consumers confusing its blocked column with admission, it is not ready.
++The execute path has at most five explicit events (delivery, launch, observed
++outcome, completed/failed outcome, release) after the reserved record; a non-result
++path is shorter. Pin every transition path against the existing six-event ceiling
++in the future schema tests rather than relying on this enumeration alone.
++
++V2 schemas, terminal behavior and quarantines remain unchanged. A synthetic v2
++sequencer must retain an uncertain pair's global fence even where v2's row is
++releasing; it must not add `released` or non-result recovery to v2. No real consumer
++of that synthetic model is authorized.
++
++## 2. SC-N-01/02/03: owner epochs and complete checkpoint semantics
++
++The independent anchor has a current-owner generation separate from historical
++checkpoint producer generations. The owner claim is an authenticated compare-and-
++swap on the previous owner epoch, durably recorded before any new-owner ledger
++write. Every append, discovery and reconciliation request is authenticated for
++that current epoch. Reject old generations, including delayed callbacks. This is
++not physical fencing by itself; owner acquisition also requires the actual old
++process/task boundary to be fenced and settled.
++
++Each immutable checkpoint payload binds installation, namespace, store, historical
++producer generation, operation, explicit event index (reserved=0), exact record
++digest, stable approval-identity digest, previous checkpoint digest and global
++sequence. Its inventory describes the complete POST-LEDGER-COMMIT state for that
++pair, not the state before the event and not other unwitnessed writes.
++
++Proposed inventory hash core (format pending changed-boundary review):
++
++`{ domain: "agent-candidate-inventory-root/v1", installationId, namespaceId,
++storeId, operationCount, entries }`
++
++Entries contain operationId, eventIndex, recordDigest, approvalIdentityDigest and
++last state. Sort by ascending lowercase canonical UUID (ASCII/code-unit identical),
++reject duplicate operations, approval identities and workflow/kind pairs, and
++check blocked-workspace exclusivity against the full parsed records. Each record
++digest covers its entire intent and history, not only the latest event. Empty
++inventory is the canonical empty array and count zero within this domain, never a
++zero digest or missing lookup. Canonical byte rules are the existing canonicalJson
++rules, not a new JSON implementation. Hash the bounded tuple inventory, not a
++single giant object containing every 32-KiB record. Use the 1,000-operation limit.
++
++The anchor records the authenticated producer's CLAIMED root. It cannot validate
++SQLite contents from a hash. A fresh honest reader recomputes the whole inventory
++and compares it against independently held authenticated history. That detects
++rollback/deletion/substitution under the stated trust model; it does not defeat
++a compromised authorized producer capable of forging both claimed histories.
++No retention, archive, rotation, row deletion or cross-version migration is
++implemented here. Any future such operation needs a separately reviewed continuity
++protocol preserving all spent approvals and the complete inventory commitment.
++
++All ledger mutation/read-back/anchor pairs are serialized across the enrolled
++store. No caller callback or await occurs inside a SQLite transaction. Reject
++concurrent requests rather than allocate an unbounded queue. Before the first
++mutation, require exact fresh matching inventories; after each mutation, append
++only its exact post-state. An inventory port must provide a complete consistent
++snapshot, including unexpected and terminal rows. Re-reading only remembered IDs
++or `listBlocked()` is not sufficient; v2 currently has no public all-record snapshot
++API. A synthetic fixture can model that port; production composition must implement
++and review it without weakening v2's private validated read-back.
++
++Unknown append outcome closes the owner for writes. New-owner reconciliation may
++make at most one explicit idempotent append attempt for the exact unresolved
++payload, after authenticated full discovery and old-owner fencing. The envelope
++uses the NEW reconciliation owner epoch; immutable historical payload bytes and
++producer epoch do not change. The anchor must validate that delegation and exact
++expected prior checkpoint, not accept ordinary old-owner writes. Exact duplicates
++acknowledge the existing sequence; conflicts, gaps, incomplete discovery or unknown
++retry outcomes retain the fence. Do not compensate with terminal writes. No
++automatic restart loop, repair, new store, new approval or forward effect follows.
++An anchor-ahead record is not automatically materialized in SQLite; preserve
++evidence and require explicit reconciliation design/authority.
++
++## 3. SC-N-04/05: delivery grammar and destination evidence
++
++Keep the existing run/stop channel and request limit unchanged. New delivery
++session inbound grammar, with one authenticated ready and at most one stopped:
++
++- ready -> stored -> (result | run-failed) -> stopped: at most four frames;
++- ready -> delivery-failed -> stopped: at most three frames;
++- stop from any acquired prefix -> stopped: no further forward frame;
++- timeout, malformed input, missing readiness or missing stopped: uncertainty,
++  not an invented response. Stop can be requested before readiness.
++
++Delivery-failed and stored are mutually exclusive. Failure is not successful
++storage and can never permit run. Duplicate kinds, result after delivery-failed,
++any frame after stopped, unsolicited/out-of-phase messages, and stale-generation
++frames deny. Four is the maximum on any valid inbound path, not the number of
++distinct kinds. The fixed bound must be derived and tested along with per-frame
++bytes/chunks, EOF and process-settlement rules in the new transport implementation.
++
++OCS1 exact wire bytes = manifest.byteLength + 44 * manifest.fileCount; maximum
++16,777,216 + 44 * 128 = 16,782,848 bytes. The manifest's separately bounded wire and
++bounded session control frames are additional protocol budgets, not hidden inside
++that OCS1 sum. Transfer byte ceilings are NOT measured transfer-time ceilings.
++
++Stored evidence binds request, manifest, operation and owner/guest generation,
++actual reread destination file count/lengths and content digests in manifest order,
++and a canonical destination inventory digest. Compute these from destination
++bytes after complete EOF under retained destination custody, and compare every
++member against the manifest. Do not echo source-declared hashes as read-back.
++Authenticated origin, protected destination and independently confirmed cleanup
++remain necessary; matching hashes or task-authored counts prove none of them.
++
++## 4. SC-N-06/09: authorization core and coexistence
++
++Avoid self-reference: first compute a versioned canonical intent CORE omitting
++only authorizationDigest. The separately signed envelope binds that core digest
++and its explicit consent, purpose, expiry, revocation and issuer fields. Compute
++authorizationDigest over the exact canonical envelope bytes, then construct the
++complete ledger intent and its digest. The signature covers an envelope core
++without its own signature. Reject unknown fields and alternative byte encodings.
++Concrete schemas/keys/issuer custody need their own scoped review before use.
++No existing v2 field or historical signed bytes change.
++
++Maintain the existing namespace/approvalId identity domain across versions. One
++authoritative enrollment must prohibit independent active v2/v3 stores from
++spending the same approval. A digest domain alone cannot do that. No activation
++of a second version, empty-store adoption, refund or forgotten quarantine serves
++as migration. Version coexistence requires reviewed shared consumption/retention.
++
++## 5. SC-N-07/08: bounded work, cleanup and pair lifetime
++
++Add explicit positive safe-integer `anchorAppendMs` and `anchorDiscoveryMs` to
++the proposed resource policy; bind both with all existing fields. No defaults,
++infinity, missing values, unsafe sums or synthetic-to-production sizing promotion.
++Each serialized pair has one monotonic deadline. Every anchor call consumes that
++deadline and the global overall remainder; re-entry does not reset either.
++Reconciliation has at most one discovery and one explicit idempotent append, with
++any required confirming discovery counted separately and reserved up front.
++
++For each phase, reserve its work ceiling, every planned checkpoint append and
++discovery on that phase's normal AND failure paths, applicable stop budget and
++settlement budget. Use the maximum feasible branch cost, not the sum of mutually
++exclusive branches. If the remainder cannot fund the selected bounded path, deny
++before starting that phase. Close an unresolved pair on budget exhaustion; no
++subsequent ledger mutation or growing waiter queue. Do not cancel and treat an
++unsettled promise as completed. Physical watchdogs/fences remain independently
++required for host stalls and process death.
++
++Verifier SUCCESS acceptance stays strictly before start + min(runMs,
++request.timeoutMs), with run and confirmed stop both inside that interval.
++Worst-case FAILURE cleanup is different: timeout at that deadline may start a
++stop attempt lasting stopMs. Reserve min(runMs, request.timeoutMs) + stopMs +
++settlementMs, plus explicit planned anchor costs, before the wrapper. This does
++not extend the success deadline or permit another run. An unconfirmable stop
++remains blocked even after all budgets elapse. Preserve the 30s acquisition,
++60s run and 10s stop caps; transfer/overall/parent-age/anchor production ceilings
++remain unselected measured release inputs. Preserve full 128-file source scope.
++
++## 6. Implementation order and falsifiable review boundary
++
++The report allows synthetic sequencing over unchanged v2, not v3 implementation.
++First pin real SQLite crash/reopen behavior and demonstrate why its releasing
++predicate cannot substitute for joined admission. Then implement injected-only
++pair sequencing with synthetic owner, complete inventory, anchor and policy ports;
++no real source, approval, VM, subprocess task or publication adapters. Validate
++single-attempt/replay rules and every audit-specified crash cut with exact call
++counts. Missing results after v2 possible-effect markers still quarantine.
++
++Before any v3 record implementation, review this revised release/admission join,
++checkpoint/reconciliation protocol, delivery grammar and budget arithmetic. Test
++all release cuts, lost versus absent acknowledgments, snapshot rollback and row
++deletion, old-owner retries, maximum inventories and clock/deadline failure. An
++extra release event alone is an insufficient fix and must fail the negative control.
++
++B-03 physical storage/freshness, authentic host/guest fencing, independent execution,
++operator acceptance and W1-W5 remain open. Neither this document nor passing test
++models closes those gates. No audit packet is regenerated or published by this edit.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_SUCCESSOR_REVIEW_DISPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_SUCCESSOR_REVIEW_DISPOSITION.md
+new file mode 100644
+index 0000000..fd13080
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_SUCCESSOR_REVIEW_DISPOSITION.md
+@@ -0,0 +1,70 @@
++# Successor review disposition — packet 9c546c8
++
++The operator supplied the complete Claude successor review, 65,101 bytes, SHA-256
++`a5854d629f48803888d6931560b5053c24419f66d95186a859b0502ba1c1d6ce`.
++Original bytes are retained privately. The public frozen input packet is
++`9c546c8e738418dc5273f7ca4bcb4ef14907bb8e`, publisher product
++`fdf413aa0c7b8ed0972e5633302d59b3eac04957`. Current baseline 06cb638 changes only
++Studio/package tests and their handoff/goal documentation, not audited boundaries.
++
++Reported verdict: NEEDS_CHANGES / NEEDS_REVIEW / PARTIAL. Two blockers and eleven
++nonblocking entries. Synthetic v2-only sequencer readiness YES; activation NO;
++v3 schema remains blocked pending changed-boundary review. The reviewer discloses
++authorship of the prior review. This is a useful follow-up, not a fresh independent
++second opinion. No report instruction authorizes effects.
++
++The observed manifest hash matches our frozen 4,044-byte manifest:
++`82b835ac303abcfbb46d21be7e5a673289638fa65a841dbb118f5c9196719475`.
++Expected-pin acknowledgment did not reach the reviewer; do not retroactively claim
++hash-first delivery. The reviewer reports 37 member/22 identity checks and four
++TAP artifacts verified; no subject tests executed. CC-N-07's missing-receipt gap
++is closed as packet evidence, not independent execution. Report arrival monitor
++is paused after local intake. GitHub report publication has not been claimed.
++
++| Finding | Disposition / next evidence |
++| --- | --- |
++| SC-B-01 | Accepted design gap. CONTRACT_V3 separates outcome/release and mandates fresh joined admission on restart. A release event alone cannot close a cross-store crash gap. Proposed correction still needs bounded review; unchanged v2 is not an activated consumer. |
++| B-03 | Open physical gate: protected storage, authenticated fresh anchor, anti-rollback and actual owner fencing. No mock closes it. |
++| SC-N-01 | Proposed anchor-enforced owner CAS/epoch and old-callback denial, separate from physical fencing. |
++| SC-N-02 | Proposed complete post-commit inventory domain, deterministic tuples/order, empty-root and count, no archive/migration shortcut. Anchor stores authenticated claims, not knowledge of SQLite bytes. |
++| SC-N-03 | Proposed bounded exact-payload reconciliation under a new-owner envelope; never rewrite historical generation and call it exact replay. |
++| SC-N-04 | Explicit delivery-failed alternative and grammar-derived four-frame maximum; exact OCS1 maximum 16,782,848 bytes plus separate manifest/control budgets. |
++| SC-N-05 | Destination reread digests and inventory under authentic custody, not count/hash echoes. |
++| SC-N-06 | Non-circular intent core -> envelope -> authorization digest -> complete intent; no existing signed bytes changed. |
++| SC-N-07 | Explicit anchor/discovery deadlines, per-pair/global reserve and bounded reconciliation, no unlimited queue. |
++| SC-N-08 | Accepted: success run/stop deadline differs from timeout cleanup reserve; add stopMs on worst-case failure plus settlement/anchor costs. |
++| SC-N-09 | Sole version-spanning enrollment/consumption required; unchanged digest domain does not enforce cross-store uniqueness. |
++| SC-N-10 | Record withdrawal of two prior reviewer claims; event sequence is not row count, absent/stale ack is not no-effect proof. |
++| SC-N-11 | Earlier findings retain individual disposition; formerly missing TAPs available/verified as artifacts, no new execution claim. |
++
++CONTRACT_V3 is a new local design artifact, not a rewritten frozen audit input.
++No v3 parser/store, physical adapter, approval envelope, issuer or real consumer is
++implemented by these changes. Physical operator work and full release scope remain.
++
++## Local executed boundary evidence
++
++At baseline 06cb638 plus this documentation/test delta, Windows x64 Node v24.14.0:
++
++- `node node_modules/typescript/bin/tsc --noEmit`: exit 0.
++- `node node_modules/typescript/bin/tsc -p tsconfig.test.json`: exit 0 under the
++  project owner's context. Initial sandbox emission failed EPERM on existing
++  generated outputs; it was not a passing compile. No ACL/ownership/OS adjustment.
++- `node --test --test-reporter=tap .test-dist/tests/unit/windows-candidate-release-boundary.test.js .test-dist/tests/unit/windows-candidate-effect-ledger.test.js`:
++  59 tests / 59 pass / 0 fail / 0 cancelled / 0 skipped, 2868.9276 ms.
++- PowerShell-captured TAP artifact `candidate-release-boundary-20260914.tap`,
++  SHA-256 `151806b29b078e04776853e796f90b31d7d4f92026f22ae75a3ef19d0dad7f67`.
++  It is retained in the local audit-preparation workspace, not claimed as an
++  independently executed report or byte-identical pre-capture stdout stream.
++- New test source SHA-256:
++  `5a9fa80a8a368bed249cd68730f533f54ab26195e8ec5b1a8fa97930ec28bff8`.
++
++Eight new cases plus the existing 51 ledger cases execute, without platform skips.
++The new cases affirmatively reproduce raw v2 reservation after releasing terminals,
++checkpoint-mismatch detection by a separately retained test oracle, terminal-row
++deletion invisible to `listBlocked`, and unchanged absorbing v2 quarantine. They
++are NEGATIVE controls documenting the need for composition, not an implemented
++release/admission fix. SQLite connections really close/reopen; no host reboot,
++power-cut, independent persistent anchor or authentic physical custody is tested.
++The synthetic inventory helper assumes no concurrent second writer and is not a
++production atomic snapshot API. No full offline-suite rerun is claimed for this
++test/documentation-only change; historical full receipts retain their own revisions.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_CHECKPOINT_SEQUENCER.md b/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_CHECKPOINT_SEQUENCER.md
+new file mode 100644
+index 0000000..31e361b
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_CHECKPOINT_SEQUENCER.md
+@@ -0,0 +1,111 @@
++# Synthetic checkpoint-pair sequencing over the unchanged v2 ledger
++
++Status: INJECTED-PORT IMPLEMENTATION, NOT A REAL CONSUMER OR ANCHOR.
++Baseline: 6daaa646feb410acb173005cccab03ac794a56ff, plus the source/test identities
++below. This advances the synthetic-only slice permitted by the operator-returned
++successor audit. It does not implement the proposed v3 state/release schema.
++
++## Implemented boundary
++
++`windows-candidate-checkpoint-sequencer.ts` composes explicit reserve/advance
++calls with complete inventory snapshots and injected discovery/compare-and-append.
++Before each write it requires matching current inventory and an observed checkpoint;
++after the write it requires the exact expected one-record delta, appends one exact
++checkpoint and rechecks inventory/ownership before returning metadata. No receipt
++grants permission or claims workspace release. No callbacks run inside SQLite
++transactions. There is no queue, automatic retry, compensation, repair or restart.
++
++The new formats explicitly use SYNTHETIC domains and authority:none. They are
++test contracts, not the reviewed/enrolled production anchor protocol. Empty
++genesis is explicit fixture setup; missing discovery never initializes an anchor.
++Complete inventory includes terminal/spent rows, verifies each v2 record, store
++pins, approval/workflow/workspace uniqueness and publication parentage, then hashes
++bounded sorted tuples. It does not serialize all full records into one canonical
++JSON tree. Global sequence and operation count are distinct and independently
++checked; the head's latest-operation/event/digest must match the inventory.
++
++Every asynchronous port has a monotonic call deadline within the pair deadline.
++Late fulfilled replies cannot win merely because a timer ran late. Cancellation,
++uncertain writes/append outcomes, clock regression, ownership failure and observed
++history drift close the instance. A pending append receives abort on timeout;
++late fulfillment cannot reopen it. Reentrant or concurrent calls reject before
++new contact. The shared latch is keyed to the SAME ledger object, including
++multiple wrappers over it; it is not a cross-process or physical lock.
++
++Exact replay performs bounded inventory/discovery reads, but zero ledger mutations,
++anchor appends or forward effects. “Zero ports on replay” must mean zero FORWARD
++effect ports, not omission of required freshness reads. Synthetic execution and
++separately approved publication are exercised as DATA records only. There is no
++delivery, run, stop, original write, approval issuer, source export, subprocess or
++VM adapter in this module. The synthetic-only mode literal documents intended use;
++it is not a sandbox preventing a malicious trusted host from injecting real code.
++
++## Evidence and limitations
++
++New source SHA-256:
++`1a85f5b2ba08856cdf4f2c8174c49906d4d5039319c24317a9f977478132c3d0`.
++New test SHA-256:
++`56de8888112f624c04509917a305fc73a134a43131e017ca3773f2fbf98a6ff1`.
++
++Windows x64, Node 24.14.0, installed dependencies; producer-local execution:
++
++- Typecheck (`node node_modules/typescript/bin/tsc --noEmit`): exit 0.
++- Test emit (`node node_modules/typescript/bin/tsc -p tsconfig.test.json`): exit 0.
++- Focused sequencer + release-boundary + ledger run: **88/88 pass**, 0 fail,
++  0 cancelled, 0 skipped, 2533.712 ms. Captured TAP
++  `candidate-checkpoint-focused-20260914.tap`, SHA-256
++  `8deb3ffe92690d886d4b3af9504e92e566766849d3762e0896e9c50ced9f6777`.
++- Full established offline run: **1877 tests / 1875 pass / 0 fail / 2 skipped**,
++  0 cancelled, 50247.8905 ms. Captured TAP `candidate-checkpoint-full-20260914.tap`,
++  SHA-256 `bc629da6dad0630fd9d57e9ed918961b3bb8244517c4c39b9749d5a49b841f93`.
++  Command: `node --test --test-concurrency=4 --test-reporter=tap .test-dist/tests/**/*.test.js scripts/tests/candidate-review-http.test.mjs scripts/tests/candidate-crash.test.mjs`.
++  The bootstrap creates only the existing gitignored data directory.
++- Skips: symlinked binary path case (Windows link-creation privilege unavailable)
++  and the deliberately non-Windows managed-inspector refusal case. No new
++  checkpoint or release-boundary case skipped. Do not infer physical link coverage.
++
++TAP files are PowerShell-captured local artifacts, not independent execution or
++claimed byte-identical pre-capture stdout. The earlier 23-case initial run is
++superseded for this source/test delta by the 29 new cases in the focused/full runs.
++
++Real synthetic SQLite files are closed/reopened; deliberate corruption is confined
++to disposable fixture databases. Tests cover missing anchor, exact data-only
++success, separate publication identity, terminal replay, mutation-response loss,
++append persisted/not-persisted response loss, a raw releasing terminal with missing
++ack, cancellation, late completion, reentrancy, revocation, deadline reserve,
++clock regression, unexpected rows and coherent rewrites/deletion/rollback against
++a separately retained fixture root. Maximum 1000-record inventory parses without
++the canonical JSON node-limit cliff. New getters/proxies invoke zero traps.
++
++Important assumptions remain explicit:
++
++1. The snapshot port must provide a COMPLETE ATOMIC validated view. The real v2
++   ledger still has no public all-record snapshot API; listBlocked/remembered IDs
++   are insufficient. The synchronous fixture has no concurrent second writer,
++   which is not a production atomicity proof. No v2 API was changed here.
++2. The anchor and current-owner/policy ports are trusted injected test seams.
++   Discovery's truth/freshness and checkpoint durability are not established by
++   parsed shapes or resolved promises. No host reboot, protected backend,
++   independent durable anchor, owner-CAS acquisition or authenticated channel ran.
++3. Separate ledger objects/processes can bypass the in-memory shared latch. Sole
++   enrollment and physical fencing are future host obligations. Re-instantiation
++   is not reconciliation; a new owner must fence and authenticate both histories.
++4. Append uncertainty blocks; this module supplies NO reconciliation write API.
++   The new-owner envelope and bounded exact historical-payload reconciliation in
++   CONTRACT_V3 still require their changed-boundary review and implementation.
++5. This pairs RECORDS, not real source delivery/launch/stop. Authentic custody,
++   all-related-work settlement and current safe workspace release remain absent.
++   Returning a terminal checkpoint never releases a physical fence.
++6. Byte caps and synthetic deadline caps are not enrolled production sizing. Host
++   synchronous stalls are not preempted; no JS timer proves process termination.
++
++## Next integration step
++
++Compose the injected execution/delivery phases around this pair primitive, with
++exact attempt latches and crash-cut call counts. Keep v2's no-result quarantine
++unchanged. Add the actual bounded complete-inventory port under its own source
++review instead of exposing a raw SQL/free-workspace bypass. Obtain the bounded
++CONTRACT_V3 release/anchor/delivery review before writing the v3 record schema.
++The full W1-W5 release objective, B-03 protection, physical VM preflight, issuer,
++independent execution and operator acceptance remain open. No external audit packet
++was regenerated or published, no workflow was enabled, and no OS setting changed.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_EXECUTION_COMPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_EXECUTION_COMPOSITION.md
+new file mode 100644
+index 0000000..68facfd
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_SYNTHETIC_EXECUTION_COMPOSITION.md
+@@ -0,0 +1,125 @@
++# Synthetic delivery/execution composition
++
++Status: INJECTED SYNTHETIC PORTS ONLY; no production consumer or v3 state schema.
++Baseline: dcdfc5e39fd5fe3c6c16d8faa01b119b0f021ecd plus the identities below.
++
++## What changed
++
++`SyntheticCandidateExecution` composes the existing v2 checkpoint sequencer with
++ready, deliver, run and stop test ports. An initial recorded reservation precedes
++readiness; a confirmed source-delivery marker precedes delivery; a matching stored
++acknowledgment and confirmed launch marker precede run. A genuine bounded
++verification result is recorded only after matching stop evidence and settled
++task-port promises. Exact v2 replay invokes no lifecycle port and cannot resume
++an abandoned partial attempt. Publication is NOT an execution port here.
++
++Input requires a genuine branded verification request, its complete canonical
++source manifest and an exact execute intent. Store/namespace, operation, request,
++policy and source identities match before contact. A new SYNTHETIC resource-domain
++digest binds the actual explicit ready/delivery/run/stop/checkpoint/overall limits;
++it is not a real enrolled resource policy or approval envelope. The checkpoint
++model now exposes immutable descriptive identity pins so a mismatched lifecycle
++owner is rejected at construction. This getter changes no record or checkpoint
++format. V2 ledger schema, state transitions and historical approvals are untouched.
++
++The single-use latch precedes injected clock/policy callbacks, not merely awaits.
++The same lifecycle-port object cannot be used by a second wrapper. These in-process
++latches are not process fencing, and separate port objects do not establish
++independent physical ownership. Ready observes an ALREADY acquired fixture; it is
++not permission or code to boot/acquire a VM.
++
++Stored metadata binds the operation/owner/guest/controller/request/manifest,
++complete counts and OCS1 byte length, and a destination inventory digest. The
++fixture computes that digest from reread owned destination copies, retains those
++copies through fixture verification, checks them again at run, then clears them
++on stop. Hash agreement is not protected destination custody or authenticated
++origin. In a real adapter, task-generated/echoed digests are insufficient.
++
++## Failure and cleanup semantics
++
++Every checkpoint response loss stops forward progress and permits no guessed
++checkpoint, compensating terminal or automatic retry. Lost terminal acknowledgment
++never releases a result even if the raw v2 row now says completed. An uncertain
++checkpoint remains the checkpoint model's closed state.
++
++Caller abort, malformed readiness/storage/result, expiry, revocation and deadline
++failure trigger at most one bounded stop attempt after lifecycle contact. Cleanup
++ignores caller cancellation but does not acquire fresh forward authority. It uses
++native monotonic time for its own bounded interval so failure of the injected
++workflow clock cannot prevent the stop attempt. The internal unbounded absolute
++sentinel is always clamped to the explicit finite stopMs; no unlimited policy value
++is accepted. Host synchronous stalls still cannot be preempted by JavaScript.
++
++Missing any required stop fact, an unsettled forward Promise or an uncertain stop
++withholds results and leaves durable reconciliation/blocker state. Returning a
++needs-reconciliation METADATA result does not claim the underlying work settled.
++Late completion cannot restart this one-shot coordinator. A genuinely failed
++verification remains failed; invalid/missing results are never invented as pass.
++After a possible-effect marker, the unchanged v2 schema still quarantines missing
++results even when synthetic stop evidence is valid. Before possible delivery,
++confirmed cleanup can record v2 cancellation. No v2 quarantine is reopened.
++
++Success requires run AND confirmed stop before the run deadline, without extending
++that deadline through cleanup time. Failure cleanup has its own bounded interval.
++Scope/policy validity is rechecked before forward contact and before disclosure;
++post-expiry terminal bookkeeping is not forward permission. Once outcome settlement
++starts, subsequent errors cannot issue a compensating terminal write. Output is
++content-free with authority:none and physicalCustodyEstablished:false.
++
++## Executed evidence
++
++Producer-local Windows x64 / Node 24.14.0; installed dependencies; typecheck and
++fresh test emit both exit 0. No subject source changes occurred after these pins:
++
++| File | SHA-256 |
++| --- | --- |
++| src/build-only/windows-candidate-synthetic-execution.ts | 93ea6ed00619b8d078a966f54aa73332e697e6516a2aae47225ccfe53f7be255 |
++| src/build-only/windows-candidate-checkpoint-sequencer.ts | 1ba5b080ef924255492c6feeb2d861614e3cb2cdd30ae73d5e2e949bcb94560f |
++| tests/unit/windows-candidate-synthetic-execution.test.ts | ae8d16230d125faaed540617915fa075d193b30b99d41b776ab49647a888f217 |
++
++Final focused run includes execution, checkpoint, release-boundary, ledger, source
++manifest/transfer and managed-verifier suites: **166/166 pass**, 0 fail/cancel/skip,
++2813.5377 ms. Captured TAP `candidate-synthetic-execution-focused-final-20260914.tap`,
++SHA-256 `84099d43d132cd09855d568c77f35fb1500cb3c7d4f5ac0a1d1580a891410e7d`.
++
++Full established offline run: **1910 tests / 1908 pass / 0 fail / 2 skipped**,
++0 cancelled, 48343.0387 ms. Captured TAP `candidate-synthetic-execution-full-20260914.tap`,
++SHA-256 `a1ca7379136509c4e1958470445508bdcc3ff75623e5318deae466bbc218d6b3`.
++Command: `node --test --test-concurrency=4 --test-reporter=tap .test-dist/tests/**/*.test.js scripts/tests/candidate-review-http.test.mjs scripts/tests/candidate-crash.test.mjs`.
++Skips remain the symlinked-binary case lacking Windows link-creation privilege and
++the deliberately non-Windows inspector refusal case. No new execution case skipped.
++Captured TAPs are local PowerShell artifacts, not independent execution or a claim
++of byte-identical pre-capture stdout. Initial/intermediate runs are not these final
++source/test receipts. Historical checkpoint-only receipts retain their old pins.
++
++The 33 new cases exercise actual OCS1 framing/receiving in memory, including all
++128 maximum-length paths and 16 MiB of synthetic source, BOM preservation,
++destination retention and drift, every normal checkpoint acknowledgment-loss cut,
++missing stop facts, pending/late delivery or stop, each phase's cancellation,
++resource/owner/store substitution, reentrancy, scope expiry, broken injected clock,
++late-stop denial, result identity/size and legitimate failed verification. SQLite
++files really close/reopen, but there is no process restart, power cut or VM test.
++
++## Remaining production work
++
++This is not a serialized session/channel implementation. Existing run/stop frame
++counts and 65,536-byte request limits are unchanged. The maximum request test uses
++an in-process genuine request object, NOT proof that the old transport can carry
++it. Versioned real framing, authentication, destination custody, independent stop
++and resource sizing remain separate review/implementation work.
++
++The test runner returns synthetic verification records after checking retained
++bytes; it does not execute an allowlisted compiler or prove genuine independent
++verification. No approval issuer, key, consent capture, real source reader,
++subprocess task, VM controller, original write, publication adapter or installer
++was activated. The full atomic inventory port remains injected; the test fixture
++has no concurrent writer during synchronous collection. Replace that assumption
++with a reviewed real snapshot API before host composition.
++
++Next: implement and test the bounded atomic ledger inventory read, then package
++the changed synthetic/CONTRACT_V3 boundaries for the appropriately scoped next
++review before implementing v3 storage or any real consumer. External transfer
++requires its own selected-service/sanitized-scope approval. B-03, physical fencing,
++VM preflight, real enrollment, independent execution, installer/operator acceptance
++and W1-W5 all remain open. No OS, provider, VM, public audit packet or workflow
++setting changed in this slice.
+diff --git a/product/companion-v1/src/build-only/windows-candidate-checkpoint-sequencer.ts b/product/companion-v1/src/build-only/windows-candidate-checkpoint-sequencer.ts
+new file mode 100644
+index 0000000..e401fc9
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-checkpoint-sequencer.ts
+@@ -0,0 +1,310 @@
++import { performance } from "node:perf_hooks";
++import { types } from "node:util";
++import { z } from "zod";
++import { canonicalJson, canonicalSha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { advanceCandidateEffectRecord, candidateEffectBlocked, candidateEffectState,
++  CANDIDATE_EFFECT_MAX_OPERATIONS, effectAdvanceSchema, effectIntentSchema, effectParse,
++  effectRecordSchema, effectUuid, validateCandidateEffectRecord } from "./windows-candidate-effect-state.js";
++import type { CandidateEffectRecord } from "./windows-candidate-effect-state.js";
++import type { SqliteCandidateEffectLedger } from "./windows-candidate-effect-ledger.js";
++
++// INJECTED SYNTHETIC MODEL ONLY. No effect port, real enrollment, issuer, owner
++// acquisition, backend, v3 record, repair, reconciliation write or runtime consumer.
++// Host ports must supply authentic current ownership and a COMPLETE ATOMIC ledger
++// snapshot. V2 listBlocked/read-by-remembered-IDs are NOT that snapshot API.
++// An in-memory lock, these hashes and a fulfilled Promise prove no physical custody.
++export const SYNTHETIC_CHECKPOINT_DOMAIN = "agent-candidate-synthetic-checkpoint/v1" as const;
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/);
++const pinsSchema = z.object({ installationId: effectUuid, namespaceId: effectUuid, storeId: effectUuid }).strict();
++export type SyntheticCheckpointPins = Readonly<z.infer<typeof pinsSchema>>;
++const coreSchema = pinsSchema.extend({
++  schemaVersion: z.literal(SYNTHETIC_CHECKPOINT_DOMAIN), authority: z.literal("none"),
++  producerGeneration: effectUuid, sequence: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
++  previousCheckpointDigest: digest.nullable(), operationId: effectUuid.nullable(),
++  eventIndex: z.number().int().min(0).max(6).nullable(), recordDigest: digest.nullable(),
++  approvalIdentityDigest: digest.nullable(), inventoryRootDigest: digest,
++  operationCount: z.number().int().min(0).max(CANDIDATE_EFFECT_MAX_OPERATIONS),
++}).strict();
++const checkpointSchema = coreSchema.extend({ checkpointDigest: digest }).strict();
++export type SyntheticCheckpoint = Readonly<z.infer<typeof checkpointSchema>>;
++const viewSchema = z.object({ currentOwnerGeneration: effectUuid, checkpoint: checkpointSchema }).strict();
++const receiptSchema = z.object({ kind: z.literal("recorded-state-not-effect-permission"),
++  disposition: z.enum(["recorded", "replayed"]), storeId: effectUuid, record: effectRecordSchema }).strict();
++
++type Reason = "input-invalid" | "busy" | "closed" | "cancelled" | "deadline" | "clock-invalid"
++  | "owner-invalid" | "history-mismatch" | "port-failed" | "mutation-unconfirmed";
++export class SyntheticCheckpointError extends Error {
++  constructor(readonly reason: Reason) { super(`candidate-checkpoint-${reason}`); this.name = "SyntheticCheckpointError"; }
++}
++function fail(reason: Reason): never { throw new SyntheticCheckpointError(reason); }
++function parse<T>(schema: z.ZodType<T>, value: unknown, reason: Reason = "history-mismatch"): T {
++  try { return effectParse(schema, value); } catch { return fail(reason); }
++}
++
++/** Snapshot one supplied array, rejecting proxy/accessor/extra-key vectors before
++ * indexing. The trusted port, NOT this function, establishes complete atomic reads. */
++export function syntheticCheckpointInventory(value: unknown, pinValue: SyntheticCheckpointPins) {
++  const pins = parse(pinsSchema, pinValue, "input-invalid");
++  if (types.isProxy(value) || !Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) fail("history-mismatch");
++  const size = Object.getOwnPropertyDescriptor(value, "length")?.value as unknown;
++  if (typeof size !== "number" || !Number.isInteger(size) || size < 0 || size > CANDIDATE_EFFECT_MAX_OPERATIONS) fail("history-mismatch");
++  const keys = Reflect.ownKeys(value);
++  if (keys.length !== size + 1) fail("history-mismatch");
++  const records: CandidateEffectRecord[] = [];
++  const ids = new Set<string>(), approvals = new Set<string>(), workflows = new Set<string>(), blockers = new Set<string>();
++  for (let i = 0; i < size; ++i) {
++    const descriptor = Object.getOwnPropertyDescriptor(value, String(i));
++    if (!descriptor || !("value" in descriptor) || !descriptor.enumerable) fail("history-mismatch");
++    let record: CandidateEffectRecord;
++    try { record = validateCandidateEffectRecord(descriptor.value); } catch { return fail("history-mismatch"); }
++    const { operationId, namespaceId, storeId, workflowId, kind, workspaceDigest } = record.intent;
++    const workflow = `${workflowId}:${kind}`, blocked = candidateEffectBlocked(record);
++    if (namespaceId !== pins.namespaceId || storeId !== pins.storeId || ids.has(operationId)
++      || approvals.has(record.approvalIdentityDigest) || workflows.has(workflow)
++      || (blocked && blockers.has(workspaceDigest))) fail("history-mismatch");
++    ids.add(operationId); approvals.add(record.approvalIdentityDigest); workflows.add(workflow);
++    if (blocked) blockers.add(workspaceDigest);
++    records.push(record);
++  }
++  records.sort((a, b) => a.intent.operationId < b.intent.operationId ? -1 : a.intent.operationId > b.intent.operationId ? 1 : 0);
++  // Re-derive publication parentage, not merely individual record shape. Equal
++  // common intent fields are checked by removing only phase-specific identities.
++  for (const record of records) {
++    if (record.intent.kind !== "publish") continue;
++    const publication = record.intent;
++    const parent = records.find(r => r.intent.operationId === publication.executionOperationId);
++    const observation = parent?.events.find(e => e.state === "result-and-stop-observed");
++    if (!parent || parent.intent.kind !== "execute" || candidateEffectState(parent) !== "completed"
++      || observation?.verificationPassed !== true || observation.resultDigest !== publication.resultDigest
++      || record.reservedAt < parent.events.at(-1)!.recordedAt) fail("history-mismatch");
++    // expiresAt and approval/operation identities are independently new per phase.
++    const common = (intent: CandidateEffectRecord["intent"]) => {
++      const copy = { ...intent } as Record<string, unknown>;
++      for (const key of ["kind", "operationId", "approvalId", "expiresAt", "executionOperationId", "resultDigest"]) delete copy[key];
++      return canonicalJson(copy);
++    };
++    if (common(parent.intent) !== common(publication)) fail("history-mismatch");
++  }
++  const entries = records.map(r => ({ operationId: r.intent.operationId, eventIndex: r.events.length,
++    recordDigest: canonicalSha256Digest(r), approvalIdentityDigest: r.approvalIdentityDigest, state: candidateEffectState(r) }));
++  const inventoryRootDigest = canonicalSha256Digest({ domain: "agent-candidate-synthetic-inventory/v1", ...pins,
++    operationCount: records.length, entries });
++  return deepFreeze({ records, entries, inventoryRootDigest, operationCount: records.length });
++}
++
++function checkpoint(value: unknown, pins: SyntheticCheckpointPins): SyntheticCheckpoint {
++  const parsed = parse(checkpointSchema, value), { checkpointDigest, ...core } = parsed;
++  if (Object.keys(pins).some(key => parsed[key as keyof SyntheticCheckpointPins] !== pins[key as keyof SyntheticCheckpointPins])
++    || canonicalSha256Digest(core) !== checkpointDigest) fail("history-mismatch");
++  if (parsed.sequence === 0
++    ? parsed.previousCheckpointDigest !== null || parsed.operationId !== null || parsed.eventIndex !== null
++      || parsed.recordDigest !== null || parsed.approvalIdentityDigest !== null || parsed.operationCount !== 0
++    : parsed.previousCheckpointDigest === null || parsed.operationId === null || parsed.eventIndex === null
++      || parsed.recordDigest === null || parsed.approvalIdentityDigest === null || parsed.operationCount === 0) fail("history-mismatch");
++  return deepFreeze(parsed);
++}
++
++/** Explicit empty synthetic fixture only; never initialize an absent real anchor. */
++export function createSyntheticCheckpointGenesis(pins: SyntheticCheckpointPins, producerGeneration: string): SyntheticCheckpoint {
++  const core = parse(coreSchema, { ...parse(pinsSchema, pins, "input-invalid"), schemaVersion: SYNTHETIC_CHECKPOINT_DOMAIN,
++    authority: "none", producerGeneration, sequence: 0, previousCheckpointDigest: null,
++    operationId: null, eventIndex: null, recordDigest: null, approvalIdentityDigest: null,
++    operationCount: 0, inventoryRootDigest: syntheticCheckpointInventory([], pins).inventoryRootDigest }, "input-invalid");
++  return checkpoint({ ...core, checkpointDigest: canonicalSha256Digest(core) }, pins);
++}
++
++export interface SyntheticCheckpointAnchorPort {
++  discover(ownerGeneration: string, signal: AbortSignal): Promise<unknown>;
++  compareAndAppend(ownerGeneration: string, expectedCheckpointDigest: string,
++    proposed: SyntheticCheckpoint, signal: AbortSignal): Promise<unknown>;
++}
++interface Options {
++  mode: "synthetic-only";
++  pins: SyntheticCheckpointPins;
++  ownerGeneration: string;
++  ledger: Pick<SqliteCandidateEffectLedger, "reserve" | "advance">;
++  /** Trusted complete atomic snapshot; validated again here before/after awaits. */
++  snapshot: () => unknown;
++  /** Must throw for expired/revoked ownership or policy, never return a boolean. */
++  assertCurrent: () => void;
++  anchor: SyntheticCheckpointAnchorPort;
++  appendMs: number;
++  discoveryMs: number;
++  pairMs: number;
++  monotonicNow?: () => number;
++}
++type Shared = { busy: boolean; closed: boolean; lastTime: number };
++const shared = new WeakMap<object, Shared>();
++const positive = (value: number, cap: number) => {
++  if (!Number.isSafeInteger(value) || value < 1 || value > cap) fail("input-invalid"); return value;
++};
++
++/** One pair at a time; no queue, retry, compensation or effects. A terminal record
++ * never creates admission permission. Shared latches cover only this ledger object;
++ * sole enrollment across reopened handles/processes remains a trusted host duty. */
++export class SyntheticCandidateCheckpointSequencer {
++  readonly #pins: SyntheticCheckpointPins;
++  readonly #owner: string;
++  readonly #state: Shared;
++  readonly #snapshot: () => unknown;
++  readonly #assertCurrent: () => void;
++  readonly #reserve: Options["ledger"]["reserve"];
++  readonly #advance: Options["ledger"]["advance"];
++  readonly #discover: SyntheticCheckpointAnchorPort["discover"];
++  readonly #append: SyntheticCheckpointAnchorPort["compareAndAppend"];
++  readonly #now: () => number;
++  readonly #appendMs: number;
++  readonly #discoveryMs: number;
++  readonly #pairMs: number;
++  constructor(options: Options) {
++    if (options.mode !== "synthetic-only") fail("input-invalid");
++    this.#pins = deepFreeze(parse(pinsSchema, options.pins, "input-invalid"));
++    this.#owner = parse(effectUuid, options.ownerGeneration, "input-invalid");
++    this.#appendMs = positive(options.appendMs, 30_000);
++    this.#discoveryMs = positive(options.discoveryMs, 30_000);
++    this.#pairMs = positive(options.pairMs, 120_000);
++    if (this.#appendMs + this.#discoveryMs > this.#pairMs) fail("input-invalid");
++    this.#snapshot = options.snapshot; this.#assertCurrent = options.assertCurrent;
++    this.#reserve = options.ledger.reserve.bind(options.ledger); this.#advance = options.ledger.advance.bind(options.ledger);
++    this.#discover = options.anchor.discover.bind(options.anchor); this.#append = options.anchor.compareAndAppend.bind(options.anchor);
++    this.#now = options.monotonicNow ?? (() => performance.now());
++    const previous = shared.get(options.ledger);
++    this.#state = previous ?? { busy: false, closed: false, lastTime: 0 };
++    if (!previous) shared.set(options.ledger, this.#state);
++  }
++  reserve(value: unknown, signal: AbortSignal) { return this.#pair("reserve", value, signal); }
++  advance(value: unknown, signal: AbortSignal) { return this.#pair("advance", value, signal); }
++  get closed(): boolean { return this.#state.closed; }
++  /** Descriptive fixture pins only; no ownership, approval or freshness proof. */
++  get identity() { return deepFreeze({ ...this.#pins, ownerGeneration: this.#owner, authority: "none" as const }); }
++  #time(): number {
++    let value: number; try { value = this.#now(); } catch { return fail("clock-invalid"); }
++    if (!Number.isFinite(value) || value < this.#state.lastTime || value > Number.MAX_SAFE_INTEGER - 120_000) fail("clock-invalid");
++    this.#state.lastTime = value; return value;
++  }
++  #live(signal: AbortSignal, deadline: number): void {
++    if (this.#state.closed) fail("closed");
++    if (signal.aborted) fail("cancelled");
++    if (this.#time() >= deadline) fail("deadline");
++    try { if (this.#assertCurrent() !== undefined) fail("owner-invalid"); } catch { return fail("owner-invalid"); }
++    if (signal.aborted) fail("cancelled");
++    if (this.#time() >= deadline) fail("deadline");
++  }
++  #inventory() { return syntheticCheckpointInventory(this.#snapshot(), this.#pins); }
++  #view(value: unknown): SyntheticCheckpoint {
++    const view = parse(viewSchema, value);
++    if (view.currentOwnerGeneration !== this.#owner) fail("owner-invalid");
++    return checkpoint(view.checkpoint, this.#pins);
++  }
++  #matches(head: SyntheticCheckpoint, inventory: ReturnType<typeof syntheticCheckpointInventory>): boolean {
++    if (head.inventoryRootDigest !== inventory.inventoryRootDigest || head.operationCount !== inventory.operationCount) return false;
++    if (head.sequence === 0) return inventory.operationCount === 0;
++    const latest = inventory.entries.find(e => e.operationId === head.operationId);
++    return latest?.eventIndex === head.eventIndex && latest.recordDigest === head.recordDigest
++      && latest.approvalIdentityDigest === head.approvalIdentityDigest;
++  }
++  async #call(run: (signal: AbortSignal) => Promise<unknown>, budget: number, deadline: number, outer: AbortSignal) {
++    this.#live(outer, deadline);
++    const started = this.#time(), callDeadline = Math.min(deadline, started + budget);
++    const remaining = callDeadline - started;
++    if (remaining <= 0) fail("deadline");
++    const controller = new AbortController();
++    let stop!: (reason: Reason) => void;
++    const stopped = new Promise<never>((_, reject) => { stop = reason => {
++      this.#state.closed = true; controller.abort(); reject(new SyntheticCheckpointError(reason));
++    }; });
++    // A synchronous port can abort and then throw before Promise.race is formed.
++    // Keep that stop rejection handled without converting the raced result.
++    void stopped.catch(() => {});
++    const abort = () => stop("cancelled"), timer = setTimeout(() => stop("deadline"), remaining);
++    outer.addEventListener("abort", abort, { once: true });
++    try {
++      this.#live(outer, Math.min(deadline, callDeadline));
++      // Direct invocation, after latches/listeners: no deferred contact after stop.
++      const work = Promise.resolve(run(controller.signal));
++      const result = await Promise.race([work, stopped]);
++      this.#live(outer, Math.min(deadline, callDeadline));
++      return result;
++    } finally { clearTimeout(timer); outer.removeEventListener("abort", abort); }
++  }
++  async #pair(kind: "reserve" | "advance", value: unknown, signal: AbortSignal) {
++    if (this.#state.closed) fail("closed");
++    if (this.#state.busy) fail("busy");
++    this.#state.busy = true;
++    let contacted = false;
++    try {
++      const input = deepFreeze(kind === "reserve" ? parse(effectIntentSchema, value, "input-invalid") : parse(effectAdvanceSchema, value, "input-invalid"));
++      if ("namespaceId" in input && (input.namespaceId !== this.#pins.namespaceId || input.storeId !== this.#pins.storeId)) fail("input-invalid");
++      const deadline = this.#time() + this.#pairMs;
++      this.#live(signal, deadline);
++      contacted = true;
++      const before = this.#inventory();
++      const head = this.#view(await this.#call(s => this.#discover(this.#owner, s), this.#discoveryMs, deadline, signal));
++      this.#live(signal, deadline);
++      const current = this.#inventory();
++      if (current.inventoryRootDigest !== before.inventoryRootDigest || !this.#matches(head, current)) fail("history-mismatch");
++      const operationId = input.operationId;
++      const original = current.records.find(r => r.intent.operationId === operationId);
++      // Exact replay is observation only: no ledger write, append or effect.
++      let replayed = false;
++      if (kind === "reserve" && original) {
++        if (canonicalJson(original.intent) !== canonicalJson(input)) fail("input-invalid");
++        replayed = true;
++      } else if (kind === "advance" && original) {
++        const advance = parse(effectAdvanceSchema, input, "input-invalid");
++        if (advance.intentDigest !== original.intentDigest) fail("input-invalid");
++        const prior = original.events.find(e => e.state === advance.state);
++        if (prior) {
++          if (prior.evidenceDigest !== advance.evidenceDigest || prior.resultDigest !== advance.resultDigest
++            || prior.verificationPassed !== advance.verificationPassed) fail("input-invalid");
++          replayed = true;
++        }
++      }
++      if (replayed) {
++        this.#live(signal, deadline);
++        return this.#result(original!, head, "replayed");
++      }
++      // Reserve a complete append interval BEFORE making a potentially durable write.
++      this.#live(signal, deadline);
++      if (deadline - this.#time() < this.#appendMs || head.sequence === Number.MAX_SAFE_INTEGER) fail("deadline");
++      let receipt: z.infer<typeof receiptSchema>;
++      try { receipt = parse(receiptSchema, kind === "reserve" ? this.#reserve(input) : this.#advance(input), "mutation-unconfirmed"); }
++      catch { return fail("mutation-unconfirmed"); }
++      this.#live(signal, deadline);
++      const record = validateCandidateEffectRecord(receipt.record);
++      if (receipt.storeId !== this.#pins.storeId || receipt.disposition !== "recorded" || record.intent.operationId !== operationId) fail("history-mismatch");
++      if (kind === "reserve") {
++        if (original || record.events.length !== 0 || canonicalJson(record.intent) !== canonicalJson(input)) fail("history-mismatch");
++      } else {
++        if (!original || !record.events.at(-1)) fail("history-mismatch");
++        const expected = advanceCandidateEffectRecord(original, parse(effectAdvanceSchema, input), record.events.at(-1)!.recordedAt);
++        if (canonicalJson(record) !== canonicalJson(expected)) fail("history-mismatch");
++      }
++      const after = this.#inventory();
++      const expectedRecords = current.records.filter(r => r.intent.operationId !== operationId).concat(record);
++      const expectedInventory = syntheticCheckpointInventory(expectedRecords, this.#pins);
++      if (after.inventoryRootDigest !== expectedInventory.inventoryRootDigest) fail("history-mismatch");
++      const core = { ...this.#pins, schemaVersion: SYNTHETIC_CHECKPOINT_DOMAIN, authority: "none" as const,
++        producerGeneration: this.#owner, sequence: head.sequence + 1, previousCheckpointDigest: head.checkpointDigest,
++        operationId, eventIndex: record.events.length, recordDigest: canonicalSha256Digest(record),
++        approvalIdentityDigest: record.approvalIdentityDigest, inventoryRootDigest: after.inventoryRootDigest, operationCount: after.operationCount };
++      const proposed = checkpoint({ ...core, checkpointDigest: canonicalSha256Digest(core) }, this.#pins);
++      const observed = this.#view(await this.#call(s => this.#append(this.#owner, head.checkpointDigest, proposed, s), this.#appendMs, deadline, signal));
++      if (canonicalJson(observed) !== canonicalJson(proposed)) fail("history-mismatch");
++      this.#live(signal, deadline);
++      if (this.#inventory().inventoryRootDigest !== proposed.inventoryRootDigest) fail("history-mismatch");
++      this.#live(signal, deadline);
++      return this.#result(record, observed, "recorded");
++    } catch (error) {
++      if (contacted || (error instanceof SyntheticCheckpointError && ["clock-invalid", "owner-invalid"].includes(error.reason))) this.#state.closed = true;
++      if (error instanceof SyntheticCheckpointError) throw error;
++      return fail("port-failed");
++    } finally { this.#state.busy = false; }
++  }
++  #result(record: CandidateEffectRecord, head: SyntheticCheckpoint, disposition: "recorded" | "replayed") {
++    return deepFreeze({ kind: "synthetic-recorded-checkpoint-not-effect-permission" as const, authority: "none" as const,
++      disposition, operationId: record.intent.operationId, recordDigest: canonicalSha256Digest(record),
++      checkpointDigest: head.checkpointDigest, sequence: head.sequence });
++  }
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts b/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
+index 5507bb7..3ab7637 100644
+--- a/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
++++ b/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
+@@ -83,7 +83,10 @@ export class SqliteCandidateEffectLedger {
+     guard(() => { effectParse(effectUuid, storeId); effectParse(effectUuid, namespaceId); schema(db); configure(db); this.#preflight(); });
+   }
+   #preflight(): void {
+-    if (this.#db.inTransaction) effectFail("transaction-active"); schema(this.#db); durability(this.#db);
++    if (this.#db.inTransaction) effectFail("transaction-active"); this.#checkStoredState();
++  }
++  #checkStoredState(): void {
++    schema(this.#db); durability(this.#db);
+     const rows = this.#db.prepare("SELECT singleton,version,substr(store_id,1,37) AS store_id,substr(namespace_id,1,37) AS namespace_id FROM candidate_effect_meta LIMIT 2").all();
+     if (canonicalJson(rows) !== canonicalJson([{ singleton: 1, version: 2, store_id: this.#storeId, namespace_id: this.#namespaceId }])) effectFail("identity-mismatch");
+   }
+@@ -124,7 +127,15 @@ export class SqliteCandidateEffectLedger {
+     return records;
+   }
+   #readAll(): CandidateEffectRecord[] {
+-    return guard(() => { this.#preflight(); return this.#db.transaction(() => this.#scan()).deferred(); });
++    return guard(() => {
++      this.#preflight();
++      return this.#db.transaction(() => {
++        // Pin schema + metadata and rows in ONE read snapshot, not a metadata
++        // check before BEGIN followed by rows from a later committed state.
++        this.#checkStoredState();
++        return this.#scan();
++      }).deferred();
++    });
+   }
+   #readOne(operationId: string): CandidateEffectRecord | undefined {
+     return this.#readAll().find(r => r.intent.operationId === operationId);
+@@ -133,6 +144,13 @@ export class SqliteCandidateEffectLedger {
+     effectParse(effectUuid, operationId); return this.#readOne(operationId);
+   }
+   listBlocked(): readonly CandidateEffectRecord[] { return deepFreeze(this.#readAll().filter(candidateEffectBlocked)); }
++  /** Complete, immutable operation-ID-ordered v2 history from one SQLite read
++   * snapshot, including spent/terminal/quarantined rows. At most 1,000 records,
++   * each at most 32,768 encoded bytes, enforced before driver/JSON disclosure.
++   * No caller callback, clock, writes, pagination, hidden filter or public-read
++   * override is used. Returned records are state, NOT permission, fresh anchor,
++   * physical custody or rollback/deletion detection. No HTTP export is provided. */
++  snapshot(): readonly CandidateEffectRecord[] { return deepFreeze(this.#readAll()); }
+   #save(record: CandidateEffectRecord, insert: boolean): void {
+     const wire = canonicalJson(record); if (Buffer.byteLength(wire) > CANDIDATE_EFFECT_MAX_RECORD_BYTES) effectFail("limit-exceeded");
+     const args = [record.intent.operationId, record.approvalIdentityDigest, record.intent.workflowId, record.intent.kind,
+diff --git a/product/companion-v1/src/build-only/windows-candidate-synthetic-execution.ts b/product/companion-v1/src/build-only/windows-candidate-synthetic-execution.ts
+new file mode 100644
+index 0000000..c9de9e7
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-synthetic-execution.ts
+@@ -0,0 +1,263 @@
++import { performance } from "node:perf_hooks";
++import { z } from "zod";
++import { canonicalJson, canonicalSha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { effectIntentSchema, effectParse, effectTime, effectUuid, validateCandidateEffectRecord } from "./windows-candidate-effect-state.js";
++import type { CandidateEffectIntent, CandidateEffectRecord, CandidateEffectAdvance } from "./windows-candidate-effect-state.js";
++import { parseCandidateSourceManifest } from "./windows-candidate-source-manifest.js";
++import type { CandidateSourceManifest } from "./windows-candidate-source-manifest.js";
++import { isManagedVerificationRequest, parseManagedVerificationResult, MANAGED_VERIFICATION_MAX_RESULT_BYTES } from "./windows-managed-verification-evidence.js";
++import type { ManagedVerificationRequest, ManagedVerificationResult } from "./windows-managed-verification-evidence.js";
++import type { SyntheticCandidateCheckpointSequencer } from "./windows-candidate-checkpoint-sequencer.js";
++
++// Synthetic DATA/PORT composition only. No source reader, transport backend,
++// VM acquisition, issuer, original-file writer, publication or v3 record schema.
++// Supplied ports are trusted test seams, not authentication or physical fencing.
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/);
++const bindingSchema = z.object({ namespaceId: effectUuid, storeId: effectUuid, operationId: effectUuid,
++  requestDigest: digest, manifestDigest: digest, ownerGeneration: effectUuid,
++  guestGeneration: effectUuid, controllerIdentityDigest: digest }).strict();
++export type SyntheticExecutionBinding = Readonly<z.infer<typeof bindingSchema>>;
++const readySchema = z.object({ kind: z.literal("synthetic-ready"), authority: z.literal("none"), binding: bindingSchema }).strict();
++const storedSchema = z.object({ kind: z.literal("synthetic-stored"), authority: z.literal("none"), binding: bindingSchema,
++  fileCount: z.number().int().min(1).max(128), byteLength: z.number().int().min(0).max(16_777_216),
++  wireByteLength: z.number().int().min(44).max(16_782_848), destinationInventoryDigest: digest,
++  endOfInputObserved: z.literal(true), destinationReadBack: z.literal(true), protectedDestination: z.literal(true) }).strict();
++const stoppedSchema = z.object({ kind: z.literal("synthetic-stopped"), authority: z.literal("none"), binding: bindingSchema,
++  hostOff: z.literal(true), dispatchClosed: z.literal(true), allRelatedWorkSettled: z.literal(true),
++  generationRetired: z.literal(true), sourceCustodyReleased: z.literal(true), originalPublicationExcluded: z.literal(true) }).strict();
++const checkpointReceiptSchema = z.object({ kind: z.literal("synthetic-recorded-checkpoint-not-effect-permission"),
++  authority: z.literal("none"), disposition: z.enum(["recorded", "replayed"]), operationId: effectUuid,
++  recordDigest: digest, checkpointDigest: digest, sequence: z.number().int().min(1).max(Number.MAX_SAFE_INTEGER) }).strict();
++type Reason = "input-invalid" | "session-used" | "cancelled" | "deadline" | "clock-invalid" | "owner-invalid"
++  | "port-invalid" | "checkpoint-unconfirmed" | "work-unsettled";
++export class SyntheticExecutionError extends Error {
++  constructor(readonly reason: Reason) { super(`candidate-synthetic-execution-${reason}`); this.name = "SyntheticExecutionError"; }
++}
++function fail(reason: Reason): never { throw new SyntheticExecutionError(reason); }
++function parse<T>(schema: z.ZodType<T>, input: unknown): T {
++  try { return effectParse(schema, input); } catch { return fail("port-invalid"); }
++}
++export interface SyntheticCandidateExecutionPorts {
++  /** Observe an ALREADY acquired fixture session; this method must not acquire a VM. */
++  ready(binding: SyntheticExecutionBinding, signal: AbortSignal): Promise<unknown>;
++  /** Fixture owns its synthetic bytes; this coordinator sends manifest metadata only. */
++  deliver(binding: SyntheticExecutionBinding, manifest: CandidateSourceManifest, signal: AbortSignal): Promise<unknown>;
++  run(binding: SyntheticExecutionBinding, request: ManagedVerificationRequest, signal: AbortSignal): Promise<unknown>;
++  stop(binding: SyntheticExecutionBinding, signal: AbortSignal): Promise<unknown>;
++}
++interface Options {
++  mode: "synthetic-only";
++  ownerGeneration: string;
++  checkpoint: SyntheticCandidateCheckpointSequencer;
++  readRecord: (operationId: string) => unknown;
++  /** Same owner/policy assertion used by checkpoint construction. Throw to deny. */
++  assertCurrent: () => void;
++  ports: SyntheticCandidateExecutionPorts;
++  readyMs: number; deliveryMs: number; runMs: number; stopMs: number; checkpointMs: number; overallMs: number;
++  monotonicNow?: () => number;
++  wallNow?: () => string;
++}
++type Disposition = "completed" | "verification-failed" | "cancelled" | "quarantined" | "needs-reconciliation" | "replayed";
++const usedPorts = new WeakSet<object>();
++const positive = (value: number, cap: number) => {
++  if (!Number.isSafeInteger(value) || value < 1 || value > cap) fail("input-invalid"); return value;
++};
++
++export class SyntheticCandidateExecution {
++  readonly #options: Options;
++  readonly #ports: SyntheticCandidateExecutionPorts;
++  readonly #owner: string;
++  readonly #storeId: string;
++  readonly #namespaceId: string;
++  readonly #resourcePolicyDigest: string;
++  readonly #now: () => number;
++  readonly #wall: () => string;
++  #used = false;
++  #lastTime = 0;
++  #lastWall = "";
++  #pending = 0;
++  #recordingUnconfirmed = false;
++  #lastRecord: CandidateEffectRecord | undefined;
++  constructor(options: Options) {
++    if (options.mode !== "synthetic-only") fail("input-invalid");
++    this.#owner = parse(effectUuid, options.ownerGeneration);
++    const identity = options.checkpoint.identity;
++    if (identity.ownerGeneration !== this.#owner || identity.authority !== "none") fail("input-invalid");
++    this.#storeId = parse(effectUuid, identity.storeId); this.#namespaceId = parse(effectUuid, identity.namespaceId);
++    const limits = { readyMs: positive(options.readyMs, 30_000), deliveryMs: positive(options.deliveryMs, 60_000),
++      runMs: positive(options.runMs, 60_000), stopMs: positive(options.stopMs, 10_000),
++      checkpointMs: positive(options.checkpointMs, 30_000), overallMs: positive(options.overallMs, 300_000) };
++    if (5 * limits.checkpointMs + limits.readyMs + limits.deliveryMs + limits.runMs + limits.stopMs > limits.overallMs) fail("input-invalid");
++    this.#resourcePolicyDigest = canonicalSha256Digest({ domain: "agent-candidate-synthetic-execution-resources/v1", ...limits });
++    this.#options = { ...options, ...limits };
++    this.#ports = { ready: options.ports.ready.bind(options.ports), deliver: options.ports.deliver.bind(options.ports),
++      run: options.ports.run.bind(options.ports), stop: options.ports.stop.bind(options.ports) };
++    this.#now = options.monotonicNow ?? (() => performance.now());
++    this.#wall = options.wallNow ?? (() => new Date().toISOString());
++  }
++  /** Synthetic configuration identity, not enrolled policy or approval. */
++  get resourcePolicyDigest(): string { return this.#resourcePolicyDigest; }
++  #time() {
++    let now: number; try { now = this.#now(); } catch { return fail("clock-invalid"); }
++    if (!Number.isFinite(now) || now < this.#lastTime || now > Number.MAX_SAFE_INTEGER - 300_000) fail("clock-invalid");
++    this.#lastTime = now; return now;
++  }
++  #live(input: CandidateEffectIntent, deadline: number, signal: AbortSignal, forward: boolean) {
++    if (signal.aborted) fail("cancelled");
++    if (this.#time() >= deadline) fail("deadline");
++    try { if (this.#options.assertCurrent() !== undefined) fail("owner-invalid"); } catch { return fail("owner-invalid"); }
++    let now: string; try { now = effectParse(effectTime, this.#wall()); } catch { return fail("clock-invalid"); }
++    if (now < this.#lastWall) fail("clock-invalid"); this.#lastWall = now;
++    if (forward && now >= input.expiresAt) fail("deadline");
++    if (signal.aborted) fail("cancelled");
++    if (this.#time() >= deadline) fail("deadline");
++  }
++  async #wait(run: (signal: AbortSignal) => Promise<unknown>, budget: number, absolute: number,
++    outer: AbortSignal, task: boolean, emergencyCleanup = false): Promise<unknown> {
++    const clock = emergencyCleanup ? () => performance.now() : () => this.#time();
++    const started = clock(), deadline = Math.min(absolute, started + budget);
++    if (outer.aborted) fail("cancelled"); if (started >= deadline) fail("deadline");
++    const controller = new AbortController();
++    let rejectStop!: (reason: Reason) => void;
++    const interrupted = new Promise<never>((_, reject) => { rejectStop = reason => {
++      controller.abort(); reject(new SyntheticExecutionError(reason));
++    }; });
++    void interrupted.catch(() => {});
++    const abort = () => rejectStop("cancelled"), timer = setTimeout(() => rejectStop("deadline"), deadline - started);
++    outer.addEventListener("abort", abort, { once: true });
++    try {
++      if (outer.aborted) fail("cancelled");
++      if (task) this.#pending++;
++      let work: Promise<unknown>;
++      try { work = Promise.resolve(run(controller.signal)); } catch (error) { work = Promise.reject(error); }
++      if (task) work = work.then(value => { this.#pending--; return value; }, error => { this.#pending--; throw error; });
++      const result = await Promise.race([work, interrupted]);
++      if (outer.aborted) fail("cancelled"); if (clock() >= deadline) fail("deadline");
++      return result;
++    } catch (error) { controller.abort(); throw error; }
++    finally { clearTimeout(timer); outer.removeEventListener("abort", abort); }
++  }
++  #same(binding: SyntheticExecutionBinding, observed: SyntheticExecutionBinding) {
++    if (canonicalJson(binding) !== canonicalJson(observed)) fail("port-invalid");
++  }
++  #result(disposition: Disposition, reason: string, resultDigest: string | null = null) {
++    return deepFreeze({ kind: "synthetic-execution-not-production-evidence" as const, authority: "none" as const,
++      disposition, reason, operationId: this.#lastRecord?.intent.operationId ?? null, resultDigest,
++      physicalCustodyEstablished: false as const });
++  }
++  async execute(value: unknown, request: ManagedVerificationRequest, manifestWire: unknown, external: AbortSignal) {
++    if (this.#used || usedPorts.has(this.#options.ports)) fail("session-used");
++    let input: CandidateEffectIntent, manifest: CandidateSourceManifest;
++    try {
++      input = deepFreeze(effectParse(effectIntentSchema, value));
++      if (input.kind !== "execute" || !isManagedVerificationRequest(request) || input.operationId !== request.operationId
++        || input.requestDigest !== request.requestDigest || input.workspaceDigest !== request.workspaceDigest
++        || input.policyBindingDigest !== request.policyBindingDigest || input.storeId !== this.#storeId
++        || input.namespaceId !== this.#namespaceId || input.resourcePolicyDigest !== this.#resourcePolicyDigest) fail("input-invalid");
++      manifest = parseCandidateSourceManifest(manifestWire, request, input.sourceManifestDigest);
++    } catch { return fail("input-invalid"); }
++    if (external.aborted) fail("cancelled");
++    // Before ANY injected clock/policy callback, not only before the first await.
++    this.#used = true; usedPorts.add(this.#options.ports);
++    const deadline = this.#time() + this.#options.overallMs;
++    this.#live(input, deadline, external, true);
++    const binding = deepFreeze(parse(bindingSchema, { namespaceId: input.namespaceId, storeId: input.storeId,
++      operationId: input.operationId, requestDigest: input.requestDigest, manifestDigest: input.sourceManifestDigest,
++      ownerGeneration: this.#owner, guestGeneration: input.guestGeneration, controllerIdentityDigest: input.controllerIdentityDigest }));
++    const forward = new AbortController(), cleanup = new AbortController();
++    const abort = () => forward.abort(); external.addEventListener("abort", abort, { once: true });
++    if (external.aborted) forward.abort();
++    let contact = false, stopping: Promise<unknown> | undefined, settled = false, settlementStarted = false;
++    let parsedResult: ManagedVerificationResult | undefined;
++    let runDeadline = Infinity;
++    const stop = () => {
++      if (stopping) return stopping;
++      // Latch before abort callbacks and port contact; cleanup ignores caller abort.
++      let resolve!: (value: unknown) => void, reject!: (error: unknown) => void;
++      stopping = new Promise((yes, no) => { resolve = yes; reject = no; });
++      forward.abort();
++      // A cleanup attempt is still needed after a synchronous host stall has used
++      // the overall budget; it gets one bounded stop interval, never a new run.
++      void this.#wait(s => this.#ports.stop(binding, s), this.#options.stopMs,
++        Infinity, cleanup.signal, false, true).then(value => {
++        const observed = parse(stoppedSchema, value); this.#same(binding, observed.binding);
++        if (this.#pending !== 0) fail("work-unsettled"); settled = true; return observed;
++      }).then(resolve, reject);
++      return stopping;
++    };
++    const checkpoint = async (advance?: CandidateEffectAdvance) => {
++      try {
++        const transport = await this.#wait(s => advance ? this.#options.checkpoint.advance(advance, s)
++          : this.#options.checkpoint.reserve(input, s), this.#options.checkpointMs, deadline,
++          settlementStarted ? cleanup.signal : forward.signal, false);
++        const receipt = parse(checkpointReceiptSchema, transport);
++        const record = validateCandidateEffectRecord(this.#options.readRecord(input.operationId));
++        if (receipt.operationId !== input.operationId || canonicalSha256Digest(record) !== receipt.recordDigest
++          || canonicalJson(record.intent) !== canonicalJson(input) || (advance && receipt.disposition !== "recorded")) fail("checkpoint-unconfirmed");
++        this.#lastRecord = record; return receipt;
++      } catch { this.#recordingUnconfirmed = true; return fail("checkpoint-unconfirmed"); }
++    };
++    const advance = (state: CandidateEffectAdvance["state"], evidence: unknown,
++      result: ManagedVerificationResult | undefined = undefined) => {
++      if (!this.#lastRecord) return fail("checkpoint-unconfirmed");
++      return checkpoint({ operationId: input.operationId, intentDigest: this.#lastRecord.intentDigest, state,
++        evidenceDigest: canonicalSha256Digest({ domain: "synthetic-candidate-phase-evidence/v1", binding, state, evidence }),
++        resultDigest: result?.resultDigest ?? null, verificationPassed: result ? result.disposition === "passed" : null });
++    };
++    const phase = async (run: (signal: AbortSignal) => Promise<unknown>, budget: number) => {
++      this.#live(input, deadline, forward.signal, true);
++      if (deadline - this.#time() < budget + this.#options.stopMs + 2 * this.#options.checkpointMs) fail("deadline");
++      const result = await this.#wait(run, budget, deadline, forward.signal, true);
++      this.#live(input, deadline, forward.signal, true); return result;
++    };
++    try {
++      const reserved = await checkpoint();
++      this.#live(input, deadline, forward.signal, true);
++      if (reserved.disposition === "replayed") return this.#result("replayed", "recorded-history-not-resume-permission");
++      const ready = parse(readySchema, await phase(s => { contact = true; return this.#ports.ready(binding, s); }, this.#options.readyMs));
++      this.#same(binding, ready.binding);
++      await advance("source-delivery-possible", ready);
++      const stored = parse(storedSchema, await phase(s => this.#ports.deliver(binding, manifest, s), this.#options.deliveryMs));
++      this.#same(binding, stored.binding);
++      const expectedStoredDigest = canonicalSha256Digest({ domain: "synthetic-destination-inventory/v1",
++        manifestDigest: manifest.manifestDigest, files: manifest.files });
++      if (stored.fileCount !== manifest.fileCount || stored.byteLength !== manifest.byteLength
++        || stored.wireByteLength !== manifest.byteLength + 44 * manifest.fileCount
++        || stored.destinationInventoryDigest !== expectedStoredDigest) fail("port-invalid");
++      await advance("launch-possible", stored);
++      const runBudget = Math.min(this.#options.runMs, request.timeoutMs);
++      runDeadline = this.#time() + runBudget;
++      const wire = await phase(s => this.#ports.run(binding, request, s), runBudget);
++      if (typeof wire !== "string" || wire.length > MANAGED_VERIFICATION_MAX_RESULT_BYTES
++        || Buffer.byteLength(wire) > MANAGED_VERIFICATION_MAX_RESULT_BYTES) fail("port-invalid");
++      parsedResult = parseManagedVerificationResult(wire, request);
++      const stopped = await stop();
++      this.#live(input, deadline, external, true);
++      if (this.#time() >= runDeadline) fail("deadline");
++      settlementStarted = true;
++      await advance("result-and-stop-observed", stopped, parsedResult);
++      this.#live(input, deadline, external, true);
++      await advance(parsedResult.disposition === "passed" ? "completed" : "failed", { resultDigest: parsedResult.resultDigest });
++      this.#live(input, deadline, external, true);
++      return this.#result(parsedResult.disposition === "passed" ? "completed" : "verification-failed",
++        parsedResult.disposition, parsedResult.resultDigest);
++    } catch (error) {
++      parsedResult = undefined;
++      const reason: Reason = error instanceof SyntheticExecutionError ? error.reason : "port-invalid";
++      if (contact) { try { await stop(); } catch { return this.#result("needs-reconciliation", "work-unsettled"); } }
++      if (this.#recordingUnconfirmed || this.#options.checkpoint.closed || settlementStarted || !this.#lastRecord
++        || (contact && (!settled || this.#pending !== 0))) return this.#result("needs-reconciliation", reason);
++      // V2 has no safe non-result release after possible effect: keep quarantine.
++      settlementStarted = true;
++      try {
++        this.#live(input, deadline, cleanup.signal, false);
++        const state = this.#lastRecord.events.length === 0 ? "cancelled" : "quarantined";
++        await advance(state, { cause: reason, taskPortsSettled: !contact || settled });
++        return this.#result(state, reason);
++      } catch { return this.#result("needs-reconciliation", reason); }
++    } finally {
++      external.removeEventListener("abort", abort); forward.abort(); cleanup.abort();
++    }
++  }
++}
+diff --git a/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts b/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts
+new file mode 100644
+index 0000000..737e4a8
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts
+@@ -0,0 +1,418 @@
++import assert from "node:assert/strict";
++import { randomUUID } from "node:crypto";
++import { mkdtempSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { basename, dirname, join, resolve } from "node:path";
++import test from "node:test";
++import Database from "better-sqlite3";
++import { canonicalJson, canonicalSha256Digest } from "../../src/compatibility/canonical-json.js";
++import { initializeCandidateEffectLedger, SqliteCandidateEffectLedger } from "../../src/build-only/windows-candidate-effect-ledger.js";
++import { CANDIDATE_EFFECT_DOMAIN, effectApprovalIdentity, candidateEffectState } from "../../src/build-only/windows-candidate-effect-state.js";
++import type { CandidateEffectAdvance, CandidateEffectIntent, CandidateEffectRecord } from "../../src/build-only/windows-candidate-effect-state.js";
++import { createSyntheticCheckpointGenesis, syntheticCheckpointInventory, SyntheticCandidateCheckpointSequencer,
++  SyntheticCheckpointError } from "../../src/build-only/windows-candidate-checkpoint-sequencer.js";
++import type { SyntheticCheckpoint, SyntheticCheckpointAnchorPort } from "../../src/build-only/windows-candidate-checkpoint-sequencer.js";
++
++const AT = "2026-09-14T06:00:00.000Z", d = (n: number) => `sha256:${n.toString(16).padStart(64, "0")}`;
++const signal = () => new AbortController().signal;
++const denies = async (action: Promise<unknown>, reason: string) => assert.rejects(action,
++  (error: unknown) => error instanceof SyntheticCheckpointError && error.reason === reason);
++function event(r: CandidateEffectRecord, state: CandidateEffectAdvance["state"]): CandidateEffectAdvance {
++  return { operationId: r.intent.operationId, intentDigest: r.intentDigest, state, evidenceDigest: d(10),
++    resultDigest: state === "result-and-stop-observed" ? d(11) : null,
++    verificationPassed: state === "result-and-stop-observed" ? true : null };
++}
++function fixture() {
++  const parent = resolve(tmpdir()), dir = mkdtempSync(join(parent, "onoes-checkpoint-pair-")), path = join(dir, "ledger.sqlite");
++  let db = new Database(path);
++  const namespaceId = randomUUID(), storeId = initializeCandidateEffectLedger(db, namespaceId);
++  const pins = { installationId: randomUUID(), namespaceId, storeId }, generation = randomUUID();
++  let ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => AT);
++  let currentOwner: string = generation;
++  let ownerLive = true, head = createSyntheticCheckpointGenesis(pins, generation);
++  const calls = { discovery: 0, append: 0, mutation: 0, inventory: 0, owner: 0 };
++  const hooks: {
++    discover?: () => unknown | Promise<unknown>;
++    append?: (proposed: SyntheticCheckpoint, signal: AbortSignal) => unknown | Promise<unknown>;
++    afterMutation?: () => void;
++    inventory?: () => unknown;
++    owner?: () => void;
++  } = {};
++  const makeIntent = (workspaceDigest = d(1)): CandidateEffectIntent => ({
++    schemaVersion: CANDIDATE_EFFECT_DOMAIN, namespaceId, storeId, operationId: randomUUID(), workflowId: randomUUID(),
++    approvalId: randomUUID(), kind: "execute", workspaceDigest, policyBindingDigest: d(2), candidateDigest: d(3),
++    reviewMaterialDigest: d(4), sourceManifestDigest: d(5), requestDigest: d(6), guestImageDigest: d(7),
++    guestGeneration: randomUUID(), controllerIdentityDigest: d(8), resourcePolicyDigest: d(9), expiresAt: "2026-09-14T06:05:00.000Z",
++  });
++  const outside = () => assert.equal(db.inTransaction, false, "every injected port outside SQLite transaction");
++  const records = () => {
++    outside();
++    return ledger.snapshot();
++  };
++  // Real complete SQLite snapshot; the anchor and ownership ports remain synthetic.
++  const ledgerPort = {
++    reserve(input: unknown) { calls.mutation++; const r = ledger.reserve(input); hooks.afterMutation?.(); return r; },
++    advance(input: unknown) { calls.mutation++; const r = ledger.advance(input); hooks.afterMutation?.(); return r; },
++  };
++  const view = () => ({ currentOwnerGeneration: currentOwner, checkpoint: head });
++  const anchor: SyntheticCheckpointAnchorPort = {
++    async discover(owner) {
++      outside(); calls.discovery++; if (owner !== currentOwner) throw new Error("fixture owner revoked");
++      return hooks.discover ? hooks.discover() : view();
++    },
++    async compareAndAppend(owner, expected, proposed, stopSignal) {
++      outside(); calls.append++;
++      if (owner !== currentOwner || head.checkpointDigest !== expected) throw new Error("fixture compare-and-append conflict");
++      if (hooks.append) return hooks.append(proposed, stopSignal);
++      head = proposed; return view();
++    },
++  };
++  const options = { mode: "synthetic-only" as const, pins, ownerGeneration: generation, ledger: ledgerPort,
++    snapshot: () => { outside(); calls.inventory++; return hooks.inventory ? hooks.inventory() : records(); },
++    assertCurrent: () => { outside(); calls.owner++; hooks.owner?.(); if (!ownerLive || currentOwner !== generation) throw new Error("fixture owner invalid"); },
++    anchor, appendMs: 1000, discoveryMs: 1000, pairMs: 3000 };
++  return {
++    pins, generation, makeIntent, calls, hooks, options, records, view,
++    get ledger() { return ledger; }, get db() { return db; }, get head() { return head; }, set head(value) { head = value; },
++    set ownerLive(value: boolean) { ownerLive = value; }, set owner(value: string) { currentOwner = value; },
++    sequencer() { return new SyntheticCandidateCheckpointSequencer(options); },
++    reopen() { db.close(); db = new Database(path, { fileMustExist: true }); ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => AT); },
++    dispose() {
++      if (db.open) db.close(); const target = resolve(dir);
++      assert.equal(dirname(target), parent); assert.match(basename(target), /^onoes-checkpoint-pair-[a-zA-Z0-9]+$/);
++      rmSync(target, { recursive: true, force: true });
++    },
++  };
++}
++
++test("synthetic paired v2 execution and separately approved publication checkpoint every exact mutation", async () => {
++  const f = fixture(); try {
++    const sequencer = f.sequencer(), input = f.makeIntent();
++    let receipt = await sequencer.reserve(input, signal());
++    assert.equal(receipt.authority, "none"); assert.equal(receipt.sequence, 1);
++    for (const state of ["source-delivery-possible", "launch-possible", "result-and-stop-observed", "completed"] as const)
++      receipt = await sequencer.advance(event(f.ledger.read(input.operationId)!, state), signal());
++    assert.equal(receipt.sequence, 5); assert.equal(f.head.operationCount, 1, "global sequence is not row count");
++    const publication: CandidateEffectIntent = { ...input, kind: "publish", operationId: randomUUID(), approvalId: randomUUID(),
++      executionOperationId: input.operationId, resultDigest: d(11) };
++    await sequencer.reserve(publication, signal());
++    for (const state of ["publication-possible", "completed"] as const)
++      receipt = await sequencer.advance(event(f.ledger.read(publication.operationId)!, state), signal());
++    assert.equal(receipt.sequence, 8); assert.equal(f.head.operationCount, 2);
++    assert.equal(f.calls.append, 8); assert.equal(f.calls.mutation, 8); assert.equal(f.calls.discovery, 8);
++    assert.equal(f.head.inventoryRootDigest, syntheticCheckpointInventory(f.records(), f.pins).inventoryRootDigest);
++    assert.ok(Object.isFrozen(receipt)); assert.equal(sequencer.closed, false);
++    f.reopen(); assert.equal(candidateEffectState(f.ledger.read(publication.operationId)!), "completed");
++  } finally { f.dispose(); }
++});
++
++test("exact terminal replay performs bounded reads but zero ledger mutations or anchor appends", async () => {
++  const f = fixture(); try {
++    const s = f.sequencer(), input = f.makeIntent(); await s.reserve(input, signal());
++    const cancellation = event(f.ledger.read(input.operationId)!, "cancelled");
++    await s.advance(cancellation, signal());
++    const saved = f.head.checkpointDigest, writes = f.calls.mutation, appends = f.calls.append;
++    assert.equal((await s.reserve(input, signal())).disposition, "replayed");
++    assert.equal((await s.advance(cancellation, signal())).disposition, "replayed");
++    assert.equal(f.calls.mutation, writes); assert.equal(f.calls.append, appends); assert.equal(f.head.checkpointDigest, saved);
++  } finally { f.dispose(); }
++});
++
++test("input snapshot precedes await and rejects proxies/getters without contact", async () => {
++  const f = fixture(); try {
++    const s = f.sequencer(); let traps = 0;
++    await denies(s.reserve(new Proxy({}, { getPrototypeOf() { traps++; throw new Error("trap"); } }), signal()), "input-invalid");
++    await denies(s.reserve(Object.defineProperty({}, "kind", { get() { traps++; return "execute"; } }), signal()), "input-invalid");
++    assert.equal(traps, 0); assert.equal(f.calls.discovery, 0); assert.equal(s.closed, false);
++    const input = f.makeIntent(), original = structuredClone(input);
++    f.hooks.discover = () => { input.candidateDigest = d(99); return f.view(); };
++    await s.reserve(input, signal());
++    assert.deepEqual(f.ledger.read(original.operationId)!.intent, original);
++  } finally { f.dispose(); }
++});
++
++test("absent anchor does not initialize even an empty ledger", async () => {
++  const f = fixture(); try {
++    f.hooks.discover = () => null; const s = f.sequencer();
++    await denies(s.reserve(f.makeIntent(), signal()), "history-mismatch");
++    assert.equal(f.calls.mutation, 0); assert.equal(f.calls.append, 0); assert.equal(s.closed, true);
++  } finally { f.dispose(); }
++});
++
++for (const loss of ["not-persisted", "persisted-lost-reply"] as const) {
++  test(`uncertain append ${loss} retains v2 row, poisons owner and never compensates`, async () => {
++    const f = fixture(); try {
++      f.hooks.append = proposed => { if (loss === "persisted-lost-reply") f.head = proposed; throw new Error("private fixture error"); };
++      const s = f.sequencer(), input = f.makeIntent();
++      await denies(s.reserve(input, signal()), "port-failed");
++      assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1); assert.equal(s.closed, true);
++      f.reopen(); assert.equal(candidateEffectState(f.ledger.read(input.operationId)!), "reserved");
++      assert.equal(f.head.sequence, loss === "persisted-lost-reply" ? 1 : 0);
++      await denies(s.reserve(f.makeIntent(d(20)), signal()), "closed");
++      await denies(f.sequencer().reserve(input, signal()), "closed");
++      assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1);
++    } finally { f.dispose(); }
++  });
++}
++
++test("terminal append loss blocks sequencer even where raw v2 terminal is releasing", async () => {
++  const f = fixture(); try {
++    const s = f.sequencer(), input = f.makeIntent(); await s.reserve(input, signal());
++    f.hooks.append = () => { throw new Error("terminal acknowledgment lost"); };
++    await denies(s.advance(event(f.ledger.read(input.operationId)!, "cancelled"), signal()), "port-failed");
++    f.reopen(); assert.deepEqual(f.ledger.listBlocked(), []);
++    assert.equal(candidateEffectState(f.ledger.read(input.operationId)!), "cancelled");
++    await denies(s.reserve(f.makeIntent(), signal()), "closed");
++    assert.equal(f.calls.mutation, 2); assert.equal(f.calls.append, 2);
++  } finally { f.dispose(); }
++});
++
++test("mutation response loss never appends a guessed checkpoint or compensating terminal", async () => {
++  const f = fixture(); try {
++    f.hooks.afterMutation = () => { throw new Error("COMMIT response loss"); };
++    const s = f.sequencer(), input = f.makeIntent();
++    await denies(s.reserve(input, signal()), "mutation-unconfirmed");
++    assert.equal(f.calls.append, 0); assert.equal(f.calls.mutation, 1);
++    f.reopen(); assert.equal(candidateEffectState(f.ledger.read(input.operationId)!), "reserved");
++    assert.equal(s.closed, true);
++  } finally { f.dispose(); }
++});
++
++test("concurrent work and reentrant callbacks reject without poisoning the active pair", async () => {
++  const f = fixture(); try {
++    let release!: (value: unknown) => void;
++    f.hooks.discover = () => new Promise(resolve => { release = resolve; });
++    const a = f.sequencer(), b = f.sequencer(), input = f.makeIntent();
++    const first = a.reserve(input, signal());
++    await denies(b.reserve(f.makeIntent(d(20)), signal()), "busy");
++    release(f.view()); await first;
++    assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1); assert.equal(a.closed, false);
++    delete f.hooks.discover;
++    let reentry: Promise<void> | undefined;
++    f.hooks.append = proposed => { reentry = denies(a.reserve(f.makeIntent(d(30)), signal()), "busy"); f.head = proposed; return f.view(); };
++    await a.advance(event(f.ledger.read(input.operationId)!, "cancelled"), signal());
++    await reentry; assert.equal(f.calls.mutation, 2); assert.equal(a.closed, false);
++  } finally { f.dispose(); }
++});
++
++test("already aborted request makes zero port contacts", async () => {
++  const f = fixture(); try {
++    const controller = new AbortController(); controller.abort();
++    await denies(f.sequencer().reserve(f.makeIntent(), controller.signal), "cancelled");
++    assert.deepEqual(f.calls, { discovery: 0, append: 0, mutation: 0, inventory: 0, owner: 0 });
++  } finally { f.dispose(); }
++});
++
++test("abort after durable mutation never starts anchor append", async () => {
++  const f = fixture(); try {
++    const controller = new AbortController(); f.hooks.afterMutation = () => controller.abort();
++    const s = f.sequencer(), input = f.makeIntent();
++    await denies(s.reserve(input, controller.signal), "cancelled");
++    assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 0); assert.equal(s.closed, true);
++    assert.equal(candidateEffectState(f.ledger.read(input.operationId)!), "reserved");
++  } finally { f.dispose(); }
++});
++
++test("timeout of unsettled append stays closed after late success and aborts only its injected signal", async () => {
++  const f = fixture(); try {
++    let settle!: (value: unknown) => void, proposal!: SyntheticCheckpoint, portSignal!: AbortSignal;
++    f.hooks.append = (p, s) => { proposal = p; portSignal = s; return new Promise(resolve => { settle = resolve; }); };
++    const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, appendMs: 15 });
++    const input = f.makeIntent(); await denies(s.reserve(input, signal()), "deadline");
++    assert.equal(portSignal.aborted, true); assert.equal(s.closed, true);
++    f.head = proposal; settle(f.view()); await new Promise(resolve => setImmediate(resolve));
++    await denies(s.reserve(input, signal()), "closed");
++    assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1);
++  } finally { f.dispose(); }
++});
++
++test("a fulfilled late port result cannot evade its own deadline when timer loses the race", async () => {
++  const f = fixture(); try {
++    let now = 0; f.hooks.discover = () => { now = 10; return f.view(); };
++    const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, discoveryMs: 10, monotonicNow: () => now });
++    await denies(s.reserve(f.makeIntent(), signal()), "deadline");
++    assert.equal(f.calls.mutation, 0); assert.equal(s.closed, true);
++  } finally { f.dispose(); }
++});
++
++test("abort plus synchronous injected throw leaves no unhandled rejection", async () => {
++  const f = fixture(); try {
++    const controller = new AbortController();
++    const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, anchor: {
++      discover() { controller.abort(); throw new Error("private sync failure"); },
++      async compareAndAppend() { assert.fail("no append"); },
++    } });
++    await denies(s.reserve(f.makeIntent(), controller.signal), "port-failed");
++    await new Promise(resolve => setImmediate(resolve));
++    assert.equal(s.closed, true); assert.equal(f.calls.mutation, 0);
++  } finally { f.dispose(); }
++});
++
++for (const seam of ["discovery", "append"] as const) {
++  test(`revocation after ${seam} refuses disclosure and further writes`, async () => {
++    const f = fixture(); try {
++      if (seam === "discovery") f.hooks.discover = () => { f.ownerLive = false; return f.view(); };
++      else f.hooks.append = proposed => { f.head = proposed; f.ownerLive = false; return f.view(); };
++      const s = f.sequencer(); await denies(s.reserve(f.makeIntent(), signal()), "owner-invalid");
++      assert.equal(f.calls.mutation, seam === "discovery" ? 0 : 1); assert.equal(s.closed, true);
++    } finally { f.dispose(); }
++  });
++}
++
++test("wrong owner and clock regression fail closed before new mutation", async () => {
++  const f = fixture(); try {
++    let now = 5; const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, monotonicNow: () => now });
++    const input = f.makeIntent(); await s.reserve(input, signal()); now = 4;
++    await denies(s.reserve(input, signal()), "clock-invalid"); assert.equal(s.closed, true); assert.equal(f.calls.mutation, 1);
++  } finally { f.dispose(); }
++  const g = fixture(); try {
++    g.owner = randomUUID(); await denies(g.sequencer().reserve(g.makeIntent(), signal()), "owner-invalid");
++    assert.equal(g.calls.discovery, 0); assert.equal(g.calls.mutation, 0);
++  } finally { g.dispose(); }
++});
++
++test("unexpected inventory mutation during discover denies before requested write", async () => {
++  const f = fixture(); try {
++    f.hooks.discover = () => { f.ledger.reserve(f.makeIntent(d(50))); return f.view(); };
++    await denies(f.sequencer().reserve(f.makeIntent(), signal()), "history-mismatch");
++    assert.equal(f.calls.mutation, 0); assert.equal(f.calls.append, 0);
++  } finally { f.dispose(); }
++});
++
++test("unexpected inventory mutation after append withholds result and closes owner", async () => {
++  const f = fixture(); try {
++    f.hooks.append = proposed => { f.head = proposed; f.ledger.reserve(f.makeIntent(d(50))); return f.view(); };
++    const s = f.sequencer(); await denies(s.reserve(f.makeIntent(), signal()), "history-mismatch");
++    assert.equal(s.closed, true); assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1);
++  } finally { f.dispose(); }
++});
++
++test("mismatched and accessor-bearing append replies never count as confirmation", async () => {
++  for (const accessor of [false, true]) {
++    const f = fixture(); try {
++      let getters = 0;
++      f.hooks.append = proposed => accessor
++        ? Object.defineProperty({}, "checkpoint", { get() { getters++; return proposed; } })
++        : f.view(); // old head, not the proposed checkpoint
++      const s = f.sequencer(); await denies(s.reserve(f.makeIntent(), signal()), "history-mismatch");
++      assert.equal(getters, 0); assert.equal(s.closed, true); assert.equal(f.calls.mutation, 1);
++    } finally { f.dispose(); }
++  }
++});
++
++test("complete inventory includes spent terminals and independently rejects duplicates and hostile arrays", () => {
++  const f = fixture(); try {
++    let r = f.ledger.reserve(f.makeIntent()).record; r = f.ledger.advance(event(r, "cancelled")).record;
++    const inventory = syntheticCheckpointInventory([r], f.pins);
++    assert.equal(inventory.operationCount, 1); assert.equal(inventory.entries[0]!.state, "cancelled");
++    assert.notEqual(inventory.inventoryRootDigest, syntheticCheckpointInventory([], f.pins).inventoryRootDigest);
++    let traps = 0;
++    const vectors = [[r, r], Object.defineProperty([], "0", { get() { traps++; return r; } }),
++      new Proxy([], { getPrototypeOf() { traps++; throw new Error("trap"); } }), new Array(1001), Object.assign([r], { extra: true })];
++    for (const value of vectors) assert.throws(() => syntheticCheckpointInventory(value, f.pins), /history-mismatch/);
++    assert.equal(traps, 0);
++  } finally { f.dispose(); }
++});
++
++test("maximum 1000-record synthetic inventory canonicalizes as bounded tuples, independent of input order", () => {
++  const f = fixture(); try {
++    const records = Array.from({ length: 1000 }, (_, i) => {
++      const intent = f.makeIntent(d(i + 100));
++      return { intent, intentDigest: canonicalSha256Digest(intent), approvalIdentityDigest: effectApprovalIdentity(intent), reservedAt: AT, events: [] };
++    });
++    const a = syntheticCheckpointInventory(records, f.pins), b = syntheticCheckpointInventory([...records].reverse(), f.pins);
++    assert.equal(a.operationCount, 1000); assert.equal(a.inventoryRootDigest, b.inventoryRootDigest);
++    assert.throws(() => syntheticCheckpointInventory([...records, records[0]], f.pins), /history-mismatch/);
++    assert.ok(Object.isFrozen(a.entries));
++  } finally { f.dispose(); }
++});
++
++test("explicit fixture budgets and mode cannot silently widen to production or infinity", () => {
++  const f = fixture(); try {
++    for (const appendMs of [0, -1, Infinity, NaN, 1.5, 30_001])
++      assert.throws(() => new SyntheticCandidateCheckpointSequencer({ ...f.options, appendMs }), /input-invalid/);
++    assert.throws(() => new SyntheticCandidateCheckpointSequencer({ ...f.options, appendMs: 2000, discoveryMs: 2000, pairMs: 3000 }), /input-invalid/);
++    assert.throws(() => new SyntheticCandidateCheckpointSequencer({ ...f.options, mode: "production" as "synthetic-only" }), /input-invalid/);
++    assert.equal(f.calls.mutation, 0);
++  } finally { f.dispose(); }
++});
++
++test("wrong intent store pin denies before inventory or anchor contact", async () => {
++  const f = fixture(); try {
++    const s = f.sequencer();
++    await denies(s.reserve({ ...f.makeIntent(), storeId: randomUUID() }, signal()), "input-invalid");
++    assert.equal(f.calls.inventory, 0); assert.equal(f.calls.discovery, 0); assert.equal(f.calls.mutation, 0);
++    assert.equal(s.closed, false);
++  } finally { f.dispose(); }
++});
++
++test("checkpoint latest-record binding is checked even when its inventory root matches", async () => {
++  const f = fixture(); try {
++    const s = f.sequencer(); await s.reserve(f.makeIntent(), signal());
++    const { checkpointDigest: _ignored, ...core } = f.head;
++    const forged = { ...core, operationId: randomUUID() };
++    f.head = { ...forged, checkpointDigest: canonicalSha256Digest(forged) };
++    await denies(s.reserve(f.makeIntent(d(40)), signal()), "history-mismatch");
++    assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1);
++  } finally { f.dispose(); }
++});
++
++test("independently retained fixture root detects deleted terminal, coherent rewrite and ledger rollback", async () => {
++  for (const corrupt of ["delete", "rollback", "coherent-rewrite"] as const) {
++    const f = fixture(); try {
++      const s = f.sequencer(), input = f.makeIntent(); await s.reserve(input, signal());
++      const beforeTerminal = f.db.prepare("SELECT * FROM candidate_effect_operations").get() as Record<string, unknown>;
++      await s.advance(event(f.ledger.read(input.operationId)!, "cancelled"), signal());
++      if (corrupt === "delete") f.db.prepare("DELETE FROM candidate_effect_operations WHERE operation_id=?").run(input.operationId);
++      else if (corrupt === "rollback") f.db.prepare("UPDATE candidate_effect_operations SET blocked=?,record_json=?,record_digest=? WHERE operation_id=?")
++        .run(beforeTerminal["blocked"], beforeTerminal["record_json"], beforeTerminal["record_digest"], input.operationId);
++      else {
++        const record = structuredClone(f.ledger.read(input.operationId)!);
++        record.intent.candidateDigest = d(99); record.intentDigest = canonicalSha256Digest(record.intent);
++        f.db.prepare("UPDATE candidate_effect_operations SET record_json=?,record_digest=? WHERE operation_id=?")
++          .run(canonicalJson(record), canonicalSha256Digest(record), input.operationId);
++      }
++      f.reopen();
++      await denies(s.reserve(f.makeIntent(d(41)), signal()), "history-mismatch");
++      assert.equal(f.calls.mutation, 2); assert.equal(f.calls.append, 2);
++    } finally { f.dispose(); }
++  }
++});
++
++test("wrong mutation receipt cannot anchor an extra unrequested transition", async () => {
++  const f = fixture(); try {
++    const port = { ...f.options.ledger, reserve(value: unknown) {
++      const receipt = f.options.ledger.reserve(value);
++      return f.ledger.advance(event(receipt.record, "cancelled"));
++    } };
++    const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, ledger: port });
++    const input = f.makeIntent(); await denies(s.reserve(input, signal()), "history-mismatch");
++    assert.equal(f.calls.append, 0); assert.equal(s.closed, true);
++    assert.equal(candidateEffectState(f.ledger.read(input.operationId)!), "cancelled");
++  } finally { f.dispose(); }
++});
++
++test("insufficient append reserve denies before SQLite mutation after a slow synchronous owner check", async () => {
++  const f = fixture(); try {
++    let now = 0;
++    f.hooks.owner = () => { if (f.calls.discovery > 0) now += 1; };
++    const s = new SyntheticCandidateCheckpointSequencer({ ...f.options, discoveryMs: 10, appendMs: 100, pairMs: 110, monotonicNow: () => now });
++    // Discovery remains inside its own ten-ms deadline; the later fresh checks
++    // consume more than the ten-ms slack before the reserved append interval.
++    f.hooks.inventory = () => { if (f.calls.discovery > 0) now += 8; return f.records(); };
++    await denies(s.reserve(f.makeIntent(), signal()), "deadline");
++    assert.equal(f.calls.mutation, 0); assert.equal(f.calls.append, 0);
++  } finally { f.dispose(); }
++});
++
++test("inventory re-derives approval, workflow, blocker and parent invariants rather than trusting a port", () => {
++  const f = fixture(); try {
++    const reserved = (intent: CandidateEffectIntent): CandidateEffectRecord => ({ intent, intentDigest: canonicalSha256Digest(intent),
++      approvalIdentityDigest: effectApprovalIdentity(intent), reservedAt: AT, events: [] });
++    const a = f.makeIntent(), b = f.makeIntent(d(42));
++    for (const input of [{ ...b, approvalId: a.approvalId }, { ...b, workflowId: a.workflowId }, { ...b, workspaceDigest: a.workspaceDigest }])
++      assert.throws(() => syntheticCheckpointInventory([reserved(a), reserved(input)], f.pins), /history-mismatch/);
++    const missingParent: CandidateEffectIntent = { ...b, kind: "publish", executionOperationId: randomUUID(), resultDigest: d(11) };
++    assert.throws(() => syntheticCheckpointInventory([reserved(missingParent)], f.pins), /history-mismatch/);
++  } finally { f.dispose(); }
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts b/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
+index 1e1958c..e9c8235 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
+@@ -487,9 +487,10 @@ test(`application scan independently rejects cross-row ${duplicate} duplication
+     try {
+       denies(() => f.store.read(a.intent.operationId), "state-invalid");
+       denies(() => f.store.listBlocked(), "state-invalid");
++      denies(() => f.store.snapshot(), "state-invalid");
+       denies(() => f.store.reserve({ ...intent(f.namespaceId, f.storeId), workspaceDigest: d(76) }), "state-invalid");
+       denies(() => f.store.advance(event(a, "cancelled")), "state-invalid");
+-      assert.equal(corruptScans, 4, "each access must reach the corrupted scan");
++      assert.equal(corruptScans, 5, "each access must reach the corrupted scan");
+     } finally { f.db.prepare = original; }
+     assert.deepEqual(f.store.listBlocked(), [a, b].sort((x, y) => x.intent.operationId.localeCompare(y.intent.operationId)));
+   } finally { f.dispose(); }
+diff --git a/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts b/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts
+new file mode 100644
+index 0000000..48fbb53
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts
+@@ -0,0 +1,218 @@
++import assert from "node:assert/strict";
++import { randomUUID } from "node:crypto";
++import { mkdtempSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { basename, dirname, join, resolve } from "node:path";
++import test from "node:test";
++import Database from "better-sqlite3";
++import { canonicalJson, canonicalSha256Digest } from "../../src/compatibility/canonical-json.js";
++import { initializeCandidateEffectLedger, SqliteCandidateEffectLedger } from "../../src/build-only/windows-candidate-effect-ledger.js";
++import { CANDIDATE_EFFECT_DOMAIN, CANDIDATE_EFFECT_MAX_OPERATIONS, CANDIDATE_EFFECT_MAX_RECORD_BYTES,
++  CandidateEffectError, advanceCandidateEffectRecord, candidateEffectBlocked, candidateEffectState,
++  effectApprovalIdentity, validateCandidateEffectRecord } from "../../src/build-only/windows-candidate-effect-state.js";
++import type { CandidateEffectIntent, CandidateEffectRecord, CandidateEffectAdvance } from "../../src/build-only/windows-candidate-effect-state.js";
++import { syntheticCheckpointInventory } from "../../src/build-only/windows-candidate-checkpoint-sequencer.js";
++
++const AT = "2026-09-14T08:00:00.000Z", EXPIRES = "2026-09-14T08:05:00.000Z";
++const d = (n: number) => `sha256:${n.toString(16).padStart(64, "0")}`;
++function fixture() {
++  const parent = resolve(tmpdir()), dir = mkdtempSync(join(parent, "onoes-effect-snapshot-")), path = join(dir, "ledger.sqlite");
++  const db = new Database(path), namespaceId = randomUUID(), storeId = initializeCandidateEffectLedger(db, namespaceId);
++  let clockCalls = 0;
++  const ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => { clockCalls++; return AT; });
++  const other = new Database(path, { fileMustExist: true });
++  const writer = new SqliteCandidateEffectLedger(other, storeId, namespaceId, () => AT);
++  const input = (n = 1): CandidateEffectIntent => ({ schemaVersion: CANDIDATE_EFFECT_DOMAIN, namespaceId, storeId,
++    kind: "execute", operationId: randomUUID(), workflowId: randomUUID(), approvalId: randomUUID(),
++    workspaceDigest: d(n), policyBindingDigest: d(2), candidateDigest: d(3), reviewMaterialDigest: d(4),
++    sourceManifestDigest: d(5), requestDigest: d(6), guestImageDigest: d(7), guestGeneration: randomUUID(),
++    controllerIdentityDigest: d(8), resourcePolicyDigest: d(9), expiresAt: EXPIRES });
++  return { db, other, ledger, writer, input, namespaceId, storeId, get clockCalls() { return clockCalls; },
++    dispose() { for (const handle of [db, other]) if (handle.open) handle.close();
++      const target = resolve(dir); assert.equal(dirname(target), parent); assert.match(basename(target), /^onoes-effect-snapshot-[a-zA-Z0-9]+$/);
++      rmSync(target, { recursive: true, force: true }); } };
++}
++function event(r: CandidateEffectRecord, state: CandidateEffectAdvance["state"]): CandidateEffectAdvance {
++  return { operationId: r.intent.operationId, intentDigest: r.intentDigest, state, evidenceDigest: d(10),
++    resultDigest: state === "result-and-stop-observed" ? d(11) : null,
++    verificationPassed: state === "result-and-stop-observed" ? true : null };
++}
++function record(intent: CandidateEffectIntent, finish = false) {
++  let r = validateCandidateEffectRecord({ intent, intentDigest: canonicalSha256Digest(intent),
++    approvalIdentityDigest: effectApprovalIdentity(intent), reservedAt: AT, events: [] });
++  if (finish) for (const state of ["source-delivery-possible", "launch-possible", "result-and-stop-observed", "completed"] as const)
++    r = advanceCandidateEffectRecord(r, event(r, state), AT);
++  return r;
++}
++function insert(db: Database.Database, r: CandidateEffectRecord) {
++  db.prepare("INSERT INTO candidate_effect_operations VALUES (?,?,?,?,?,?,?,?)").run(r.intent.operationId,
++    r.approvalIdentityDigest, r.intent.workflowId, r.intent.kind, r.intent.workspaceDigest,
++    Number(candidateEffectBlocked(r)), canonicalJson(r), canonicalSha256Digest(r));
++}
++function denies(fn: () => unknown, reason: string) {
++  assert.throws(fn, (e: unknown) => e instanceof CandidateEffectError && e.reason === reason);
++}
++
++test("snapshot includes complete terminal and blocked history in stable order; immutable and no clock/write/public-read calls", () => {
++  const f = fixture(); try {
++    assert.deepEqual(f.ledger.snapshot(), []);
++    const a = record(f.input(1), true), b = record(f.input(2));
++    const q = advanceCandidateEffectRecord(b, event(b, "quarantined"), AT);
++    insert(f.db, q); insert(f.db, a);
++    const p = record({ ...a.intent, kind: "publish", operationId: randomUUID(), approvalId: randomUUID(),
++      executionOperationId: a.intent.operationId, resultDigest: d(11) }); insert(f.db, p);
++    f.ledger.read = () => { throw new Error("public read must not supply snapshot"); };
++    f.ledger.listBlocked = () => { throw new Error("blocker filter must not supply snapshot"); };
++    const changes = f.db.prepare("SELECT total_changes()").pluck().get(), snapshot = f.ledger.snapshot();
++    assert.deepEqual(snapshot, [a, p, q].sort((x, y) => x.intent.operationId < y.intent.operationId ? -1 : 1));
++    assert.equal(f.clockCalls, 0); assert.equal(f.db.inTransaction, false);
++    assert.equal(f.db.prepare("SELECT total_changes()").pluck().get(), changes);
++    assert.ok(Object.isFrozen(snapshot)); assert.ok(Object.isFrozen(snapshot[0]!.intent)); assert.ok(Object.isFrozen(snapshot[0]!.events));
++    assert.throws(() => (snapshot as CandidateEffectRecord[]).pop(), TypeError);
++    assert.throws(() => { snapshot[0]!.intent.workspaceDigest = d(999); }, TypeError);
++    assert.deepEqual(f.ledger.snapshot(), snapshot); assert.notEqual(f.ledger.snapshot(), snapshot);
++  } finally { f.dispose(); }
++});
++
++test("WAL snapshot keeps old rows while a second connection commits between pinned identity and row scan", () => {
++  const f = fixture(); try {
++    const a = f.ledger.reserve(f.input(1)).record, next = f.input(2);
++    const prepare = f.db.prepare.bind(f.db); let fired = 0;
++    f.db.prepare = ((sql: string) => {
++      if (!fired && sql.includes("FROM candidate_effect_operations ORDER BY operation_id LIMIT 1001")) {
++        assert.equal(f.db.inTransaction, true, "reader snapshot must still be held"); fired++;
++        f.writer.advance(event(a, "cancelled")); f.writer.reserve(next);
++        assert.equal(f.other.inTransaction, false, "both writer commits finished BEFORE reader selects operation rows");
++        assert.equal(f.other.prepare("SELECT count(*) FROM candidate_effect_operations").pluck().get(), 2);
++      }
++      return prepare(sql);
++    }) as typeof f.db.prepare;
++    let snapshot: readonly CandidateEffectRecord[];
++    try { snapshot = f.ledger.snapshot(); } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); assert.deepEqual(snapshot, [a], "one old state, never old identity plus new rows");
++    const after = f.ledger.snapshot(); assert.equal(after.length, 2);
++    assert.equal(candidateEffectState(after.find(r => r.intent.operationId === a.intent.operationId)!), "cancelled");
++    assert.equal(candidateEffectState(snapshot[0]!), "reserved", "returned snapshot does not mutate after commit");
++  } finally { f.dispose(); }
++});
++
++test("identity replaced after preflight but before snapshot is rejected, including empty stores", () => {
++  const f = fixture(); try {
++    const prepare = f.db.prepare.bind(f.db); let fired = 0;
++    f.db.prepare = ((sql: string) => {
++      const stmt = prepare(sql);
++      if (sql.includes("FROM candidate_effect_meta LIMIT 2") && !f.db.inTransaction && !fired) {
++        const all = stmt.all.bind(stmt);
++        stmt.all = (...args: unknown[]) => {
++          const rows = all(...args); fired++;
++          f.other.prepare("UPDATE candidate_effect_meta SET store_id=?").run(randomUUID()); return rows;
++        };
++      }
++      return stmt;
++    }) as typeof f.db.prepare;
++    try { denies(() => f.ledger.snapshot(), "identity-mismatch"); } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); assert.equal(f.db.inTransaction, false);
++  } finally { f.dispose(); }
++});
++
++test("metadata and rows stay in one snapshot even if another connection deletes rows and changes pins mid-read", () => {
++  const f = fixture(); try {
++    const a = f.ledger.reserve(f.input()).record, prepare = f.db.prepare.bind(f.db); let fired = 0;
++    f.db.prepare = ((sql: string) => {
++      const stmt = prepare(sql);
++      if (sql.includes("FROM candidate_effect_meta LIMIT 2") && f.db.inTransaction && !fired) {
++        const all = stmt.all.bind(stmt);
++        stmt.all = (...args: unknown[]) => {
++          const rows = all(...args); fired++;
++          f.other.transaction(() => { f.other.exec("DELETE FROM candidate_effect_operations");
++            f.other.prepare("UPDATE candidate_effect_meta SET store_id=?").run(randomUUID()); }).immediate();
++          return rows;
++        };
++      }
++      return stmt;
++    }) as typeof f.db.prepare;
++    try { assert.deepEqual(f.ledger.snapshot(), [a]); } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); denies(() => f.ledger.snapshot(), "identity-mismatch");
++  } finally { f.dispose(); }
++});
++
++test("complete maximum 1000-row completed inventory composes with checkpoint digest; 1001 denies without truncation", () => {
++  const f = fixture(); try {
++    // Direct insertion is synthetic fixture setup, not forged provenance evidence.
++    f.db.transaction(() => { for (let i = 0; i < CANDIDATE_EFFECT_MAX_OPERATIONS; i++) insert(f.db, record(f.input(i + 100), true)); }).immediate();
++    const snapshot = f.ledger.snapshot(); assert.equal(snapshot.length, CANDIDATE_EFFECT_MAX_OPERATIONS);
++    assert.equal(f.ledger.listBlocked().length, 0, "spent history cannot be recovered from blockers");
++    assert.ok(snapshot.every(r => Buffer.byteLength(canonicalJson(r)) <= CANDIDATE_EFFECT_MAX_RECORD_BYTES));
++    const pins = { installationId: randomUUID(), namespaceId: f.namespaceId, storeId: f.storeId };
++    const inventory = syntheticCheckpointInventory(snapshot, pins);
++    assert.equal(inventory.operationCount, 1000); assert.equal(inventory.entries.length, 1000);
++    assert.equal(syntheticCheckpointInventory(f.ledger.snapshot(), pins).inventoryRootDigest, inventory.inventoryRootDigest);
++    insert(f.db, record(f.input(2000))); denies(() => f.ledger.snapshot(), "limit-exceeded");
++    assert.equal(f.db.inTransaction, false);
++  } finally { f.dispose(); }
++});
++
++for (const corruption of ["json", "oversize", "blob", "digest", "blocked", "store", "missing-parent"] as const)
++test(`snapshot rejects whole inventory on ${corruption} corruption, never returning partial rows`, () => {
++  const f = fixture(); try {
++    const a = record(f.input(1), true), b = record(f.input(2)); insert(f.db, a); insert(f.db, b);
++    if (corruption === "missing-parent") {
++      insert(f.db, record({ ...a.intent, kind: "publish", operationId: randomUUID(), approvalId: randomUUID(),
++        executionOperationId: a.intent.operationId, resultDigest: d(11) }));
++      f.db.prepare("DELETE FROM candidate_effect_operations WHERE operation_id=?").run(a.intent.operationId);
++    } else if (corruption === "store") {
++      const changed = record({ ...b.intent, storeId: randomUUID() });
++      f.db.prepare("UPDATE candidate_effect_operations SET record_json=?,record_digest=? WHERE operation_id=?")
++        .run(canonicalJson(changed), canonicalSha256Digest(changed), b.intent.operationId);
++    } else {
++      if (corruption === "oversize") f.db.pragma("ignore_check_constraints=ON");
++      const column = corruption === "digest" ? "record_digest" : corruption === "blocked" ? "blocked" : "record_json";
++      const value = corruption === "digest" ? d(99) : corruption === "blocked" ? 0
++        : corruption === "oversize" ? "x".repeat(CANDIDATE_EFFECT_MAX_RECORD_BYTES + 1)
++        : corruption === "blob" ? Buffer.from(canonicalJson(b)) : "{}";
++      f.db.prepare(`UPDATE candidate_effect_operations SET ${column}=? WHERE operation_id=?`).run(value, b.intent.operationId);
++      if (corruption === "oversize") f.db.pragma("ignore_check_constraints=OFF");
++    }
++    denies(() => f.ledger.snapshot(), corruption === "store" ? "identity-mismatch" : "state-invalid");
++    assert.equal(f.db.inTransaction, false);
++  } finally { f.dispose(); }
++});
++
++test("snapshot denies nested transactions, attached/temp schema and durability drift without normalizing them", () => {
++  const f = fixture(); try {
++    f.db.exec("BEGIN"); denies(() => f.ledger.snapshot(), "transaction-active"); assert.equal(f.db.inTransaction, true); f.db.exec("ROLLBACK");
++    f.db.pragma("synchronous=NORMAL"); denies(() => f.ledger.snapshot(), "durability-invalid");
++    assert.equal(f.db.pragma("synchronous", { simple: true }), 1); f.db.pragma("synchronous=FULL");
++    f.db.exec("ATTACH ':memory:' AS extra"); denies(() => f.ledger.snapshot(), "schema-invalid"); f.db.exec("DETACH extra");
++    f.db.exec("CREATE TEMP TABLE unrelated(x)"); denies(() => f.ledger.snapshot(), "schema-invalid"); f.db.exec("DROP TABLE temp.unrelated");
++    assert.deepEqual(f.ledger.snapshot(), []);
++    f.db.close(); denies(() => f.ledger.snapshot(), "storage-unavailable");
++  } finally { f.dispose(); }
++});
++
++test("snapshot read failure releases the read transaction and allows later safe discovery, without a write or clock", () => {
++  const f = fixture(); try {
++    const a = f.ledger.reserve(f.input()).record, calls = f.clockCalls, prepare = f.db.prepare.bind(f.db); let fired = 0;
++    f.db.prepare = ((sql: string) => {
++      if (sql.includes("FROM candidate_effect_operations ORDER BY operation_id LIMIT 1001")) {
++        assert.equal(f.db.inTransaction, true); fired++; throw new Error("synthetic-private-read-fault");
++      } return prepare(sql);
++    }) as typeof f.db.prepare;
++    try { denies(() => f.ledger.snapshot(), "storage-unavailable"); } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); assert.equal(f.db.inTransaction, false); assert.equal(f.clockCalls, calls);
++    assert.deepEqual(f.ledger.snapshot(), [a]);
++  } finally { f.dispose(); }
++});
++
++test("coherent terminal deletion is visible only as a changed complete inventory, not authenticated by snapshot alone", () => {
++  const f = fixture(); try {
++    const a = record(f.input(), true); insert(f.db, a);
++    const pins = { installationId: randomUUID(), namespaceId: f.namespaceId, storeId: f.storeId };
++    const before = syntheticCheckpointInventory(f.ledger.snapshot(), pins);
++    f.other.exec("DELETE FROM candidate_effect_operations");
++    const after = syntheticCheckpointInventory(f.ledger.snapshot(), pins);
++    assert.equal(before.operationCount, 1); assert.equal(after.operationCount, 0);
++    assert.notEqual(before.inventoryRootDigest, after.inventoryRootDigest);
++    assert.deepEqual(f.ledger.snapshot(), [], "SQLite cannot know deleted history without independently retained anchor");
++  } finally { f.dispose(); }
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-release-boundary.test.ts b/product/companion-v1/tests/unit/windows-candidate-release-boundary.test.ts
+new file mode 100644
+index 0000000..8dff161
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-release-boundary.test.ts
+@@ -0,0 +1,140 @@
++import assert from "node:assert/strict";
++import { randomUUID } from "node:crypto";
++import { mkdtempSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { basename, dirname, join, resolve } from "node:path";
++import test from "node:test";
++import Database from "better-sqlite3";
++import { canonicalSha256Digest } from "../../src/compatibility/canonical-json.js";
++import { initializeCandidateEffectLedger, SqliteCandidateEffectLedger } from "../../src/build-only/windows-candidate-effect-ledger.js";
++import { CANDIDATE_EFFECT_DOMAIN, candidateEffectBlocked, candidateEffectState } from "../../src/build-only/windows-candidate-effect-state.js";
++import type { CandidateEffectAdvance, CandidateEffectIntent, CandidateEffectRecord } from "../../src/build-only/windows-candidate-effect-state.js";
++
++// Boundary NEGATIVE controls, not a production release gate or an anchor adapter.
++// The separately retained synthetic checkpoint is an in-memory test oracle only.
++// Reopening the real SQLite file does not prove host reboot or protected freshness.
++const AT = "2026-09-14T04:00:00.000Z";
++const d = (n: number) => `sha256:${n.toString(16).padStart(64, "0")}`;
++function fixture() {
++  const parent = resolve(tmpdir()), dir = mkdtempSync(join(parent, "onoes-release-boundary-"));
++  const path = join(dir, "ledger.sqlite"), namespaceId = randomUUID();
++  let db = new Database(path);
++  const storeId = initializeCandidateEffectLedger(db, namespaceId);
++  let ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => AT);
++  const makeIntent = (): CandidateEffectIntent => ({
++    schemaVersion: CANDIDATE_EFFECT_DOMAIN, namespaceId, storeId,
++    operationId: randomUUID(), workflowId: randomUUID(), approvalId: randomUUID(), kind: "execute",
++    workspaceDigest: d(1), policyBindingDigest: d(2), candidateDigest: d(3), reviewMaterialDigest: d(4),
++    sourceManifestDigest: d(5), requestDigest: d(6), guestImageDigest: d(7), guestGeneration: randomUUID(),
++    controllerIdentityDigest: d(8), resourcePolicyDigest: d(9), expiresAt: "2026-09-14T04:05:00.000Z",
++  });
++  return {
++    get db() { return db; }, get ledger() { return ledger; }, makeIntent,
++    reopen() {
++      db.close(); db = new Database(path, { fileMustExist: true });
++      ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => AT);
++    },
++    // Controlled synchronous fixture only: no second writer. NOT an atomic
++    // production inventory API. All terminal rows are included, unlike listBlocked.
++    root() {
++      const ids = db.prepare("SELECT operation_id FROM candidate_effect_operations ORDER BY operation_id").all() as { operation_id: string }[];
++      return canonicalSha256Digest({ domain: "test-only-release-boundary-inventory", namespaceId, storeId,
++        entries: ids.map(({ operation_id }) => {
++          const r = ledger.read(operation_id); assert.ok(r);
++          return { operationId: operation_id, recordDigest: canonicalSha256Digest(r) };
++        }) });
++    },
++    dispose() {
++      if (db.open) db.close();
++      const target = resolve(dir);
++      assert.equal(dirname(target), parent);
++      assert.match(basename(target), /^onoes-release-boundary-[a-zA-Z0-9]+$/);
++      rmSync(target, { recursive: true, force: true });
++    },
++  };
++}
++function next(r: CandidateEffectRecord, state: CandidateEffectAdvance["state"], passed = true): CandidateEffectAdvance {
++  return { operationId: r.intent.operationId, intentDigest: r.intentDigest, state, evidenceDigest: d(10),
++    resultDigest: state === "result-and-stop-observed" ? d(11) : null,
++    verificationPassed: state === "result-and-stop-observed" ? passed : null };
++}
++function beforeTerminal(f: ReturnType<typeof fixture>, terminal: "completed" | "failed" | "cancelled" | "restored" | "publish-completed") {
++  let r = f.ledger.reserve(f.makeIntent()).record;
++  if (terminal === "cancelled") return r;
++  for (const state of ["source-delivery-possible", "launch-possible", "result-and-stop-observed"] as const)
++    r = f.ledger.advance(next(r, state, terminal !== "failed")).record;
++  if (terminal === "completed" || terminal === "failed") return r;
++  r = f.ledger.advance(next(r, "completed")).record;
++  const publication: CandidateEffectIntent = { ...r.intent, kind: "publish", operationId: randomUUID(), approvalId: randomUUID(),
++    executionOperationId: r.intent.operationId, resultDigest: d(11) };
++  r = f.ledger.reserve(publication).record;
++  return f.ledger.advance(next(r, "publication-possible")).record;
++}
++
++for (const terminal of ["completed", "failed", "cancelled", "restored", "publish-completed"] as const) {
++  test(`boundary negative: v2 ${terminal} releases after SQLite reopen without an anchor acknowledgment`, () => {
++    const f = fixture(); try {
++      const prior = beforeTerminal(f, terminal), checkpointBeforeTerminal = f.root();
++      assert.equal(candidateEffectBlocked(prior), true);
++      const terminalState = terminal === "publish-completed" ? "completed" : terminal;
++      const result = f.ledger.advance(next(prior, terminalState)).record;
++      // Simulate terminal commit followed by process loss before anchor append.
++      // No anchor callback exists in the ledger, and none was invoked here.
++      f.reopen();
++      assert.deepEqual(f.ledger.read(result.intent.operationId), result);
++      assert.equal(candidateEffectState(result), terminalState);
++      assert.equal(candidateEffectBlocked(result), false);
++      assert.deepEqual(f.ledger.listBlocked(), []);
++      assert.notEqual(f.root(), checkpointBeforeTerminal, "a fresh joined inventory would reject the stale checkpoint");
++      // Affirmatively reproduce the boundary: the RAW v2 store permits a new
++      // workflow. A future consumer MUST mediate this; this is not approval to do so.
++      assert.equal(f.ledger.reserve(f.makeIntent()).disposition, "recorded");
++    } finally { f.dispose(); }
++  });
++}
++
++test("boundary: anchor response loss and absent append have identical ledger bytes but different independent histories", () => {
++  const f = fixture(); try {
++    const prior = beforeTerminal(f, "completed"), absentAppend = f.root();
++    const terminal = f.ledger.advance(next(prior, "completed")).record;
++    const persistedAppendWithLostReply = f.root();
++    assert.notEqual(absentAppend, persistedAppendWithLostReply);
++    f.reopen();
++    assert.deepEqual(f.ledger.read(terminal.intent.operationId), terminal);
++    assert.equal(f.root(), persistedAppendWithLostReply);
++    assert.notEqual(f.root(), absentAppend);
++    // Memory of a missing reply cannot decide whether the anchor persisted.
++    // Neither equality above establishes owner fencing, safe custody or authority.
++    assert.equal(f.ledger.reserve(terminal.intent).disposition, "replayed");
++    assert.equal(f.root(), persistedAppendWithLostReply, "replay makes no new history");
++  } finally { f.dispose(); }
++});
++
++test("boundary negative: deleting a releasing terminal is invisible to listBlocked but changes complete inventory", () => {
++  const f = fixture(); try {
++    const prior = beforeTerminal(f, "completed"), terminal = f.ledger.advance(next(prior, "completed")).record;
++    const expected = f.root();
++    assert.deepEqual(f.ledger.listBlocked(), []);
++    // Deliberate corruption of this disposable SYNTHETIC fixture only.
++    f.db.prepare("DELETE FROM candidate_effect_operations WHERE operation_id=?").run(terminal.intent.operationId);
++    f.reopen();
++    assert.deepEqual(f.ledger.listBlocked(), []);
++    assert.equal(f.ledger.read(terminal.intent.operationId), undefined);
++    assert.notEqual(f.root(), expected, "complete independently retained inventory exposes the deletion");
++  } finally { f.dispose(); }
++});
++
++test("boundary: v2 missing-result quarantine stays absorbing and cannot emulate the proposed release protocol", () => {
++  const f = fixture(); try {
++    let r = f.ledger.reserve(f.makeIntent()).record;
++    r = f.ledger.advance(next(r, "source-delivery-possible")).record;
++    r = f.ledger.advance(next(r, "launch-possible")).record;
++    r = f.ledger.advance(next(r, "quarantined")).record;
++    const expected = f.root(); f.reopen();
++    assert.deepEqual(f.ledger.listBlocked(), [r]);
++    assert.throws(() => f.ledger.reserve(f.makeIntent()), /workspace-blocked/);
++    assert.throws(() => f.ledger.advance(next(r, "completed")), /transition-denied/);
++    assert.throws(() => f.ledger.advance({ ...next(r, "completed"), state: "released" }), /input-invalid/);
++    assert.equal(f.root(), expected);
++  } finally { f.dispose(); }
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts b/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts
+new file mode 100644
+index 0000000..7ca2b97
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts
+@@ -0,0 +1,379 @@
++import assert from "node:assert/strict";
++import { randomUUID } from "node:crypto";
++import { mkdtempSync, rmSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { basename, dirname, join, resolve } from "node:path";
++import test from "node:test";
++import Database from "better-sqlite3";
++import { canonicalJson, canonicalSha256Digest, sha256Digest } from "../../src/compatibility/canonical-json.js";
++import { CANDIDATE_EFFECT_DOMAIN, candidateEffectState } from "../../src/build-only/windows-candidate-effect-state.js";
++import type { CandidateEffectIntent } from "../../src/build-only/windows-candidate-effect-state.js";
++import { initializeCandidateEffectLedger, SqliteCandidateEffectLedger } from "../../src/build-only/windows-candidate-effect-ledger.js";
++import { createSyntheticCheckpointGenesis, SyntheticCandidateCheckpointSequencer } from "../../src/build-only/windows-candidate-checkpoint-sequencer.js";
++import type { SyntheticCheckpoint } from "../../src/build-only/windows-candidate-checkpoint-sequencer.js";
++import { createManagedVerificationRequest } from "../../src/build-only/windows-managed-verification-evidence.js";
++import { createCandidateSourceManifest } from "../../src/build-only/windows-candidate-source-manifest.js";
++import { CandidateSourceTransferReceiver, encodeCandidateSourceFileFrame, copyReceivedCandidateSourceFile,
++  discardReceivedCandidateSource } from "../../src/build-only/windows-candidate-source-transfer.js";
++import { SyntheticCandidateExecution, SyntheticExecutionError } from "../../src/build-only/windows-candidate-synthetic-execution.js";
++import type { SyntheticCandidateExecutionPorts, SyntheticExecutionBinding } from "../../src/build-only/windows-candidate-synthetic-execution.js";
++import { verificationResolution, verificationResult, d } from "../helpers/managed-executor-fixture.js";
++
++const AT = "2026-09-14T07:00:00.000Z", EXPIRES = "2026-09-14T07:05:00.000Z";
++const signal = () => new AbortController().signal;
++function deferred<T>() { let resolve!: (v: T) => void; const promise = new Promise<T>(yes => { resolve = yes; }); return { promise, resolve }; }
++function fixture(bytes = [Buffer.from("unchanged\n"), Buffer.from([0xef, 0xbb, 0xbf, 0x61])],
++  paths = bytes.map((_, i) => `src/${String(i).padStart(3, "0")}.txt`)) {
++  const parent = resolve(tmpdir()), dir = mkdtempSync(join(parent, "onoes-synthetic-execution-")), path = join(dir, "ledger.sqlite");
++  let db = new Database(path), wall = AT, live = true;
++  const namespaceId = randomUUID(), storeId = initializeCandidateEffectLedger(db, namespaceId), ownerGeneration = randomUUID();
++  let ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => wall);
++  const pins = { installationId: randomUUID(), namespaceId, storeId };
++  let head = createSyntheticCheckpointGenesis(pins, ownerGeneration);
++  const request = createManagedVerificationRequest(verificationResolution(), { requestId: randomUUID(), operationId: randomUUID(),
++    subject: { workspaceDigest: d(1), policyBindingDigest: d(2), files: paths.map((relativePath, i) => ({ relativePath, contentDigest: sha256Digest(bytes[i]!) })) } });
++  const manifest = createCandidateSourceManifest(request, bytes);
++  const input: CandidateEffectIntent = { schemaVersion: CANDIDATE_EFFECT_DOMAIN, namespaceId, storeId,
++    operationId: request.operationId, workflowId: randomUUID(), approvalId: randomUUID(), kind: "execute",
++    workspaceDigest: request.workspaceDigest, policyBindingDigest: request.policyBindingDigest,
++    candidateDigest: d(3), reviewMaterialDigest: d(4), sourceManifestDigest: manifest.manifestDigest,
++    requestDigest: request.requestDigest, guestImageDigest: d(7), guestGeneration: randomUUID(),
++    controllerIdentityDigest: d(8), resourcePolicyDigest: d(9), expiresAt: EXPIRES };
++  const calls: string[] = [], appended: number[] = [], destination = new Map<string, Buffer>();
++  const hooks: Partial<SyntheticCandidateExecutionPorts> & { append?: (proposed: SyntheticCheckpoint) => unknown | Promise<unknown> } = {};
++  const outside = () => assert.equal(db.inTransaction, false, "all lifecycle and checkpoint ports outside SQLite transaction");
++  const assertCurrent = () => { outside(); if (!live) throw new Error("fixture policy revoked"); };
++  const read = () => ledger.read(input.operationId)!;
++  const checkpoint = new SyntheticCandidateCheckpointSequencer({ mode: "synthetic-only", pins, ownerGeneration, ledger,
++    snapshot: () => {
++      outside(); return ledger.snapshot();
++    }, assertCurrent, appendMs: 100, discoveryMs: 100, pairMs: 500,
++    anchor: {
++      async discover() { outside(); return { currentOwnerGeneration: ownerGeneration, checkpoint: head }; },
++      async compareAndAppend(owner, expected, proposed) {
++        outside(); assert.equal(owner, ownerGeneration); assert.equal(expected, head.checkpointDigest); appended.push(proposed.sequence);
++        if (hooks.append) return hooks.append(proposed);
++        head = proposed; return { currentOwnerGeneration: ownerGeneration, checkpoint: head };
++      },
++    } });
++  const ready = (binding: SyntheticExecutionBinding) => ({ kind: "synthetic-ready", authority: "none", binding });
++  const stopped = (binding: SyntheticExecutionBinding) => {
++    for (const bytes of destination.values()) bytes.fill(0); destination.clear();
++    return { kind: "synthetic-stopped", authority: "none", binding,
++      hostOff: true, dispatchClosed: true, allRelatedWorkSettled: true, generationRetired: true,
++      sourceCustodyReleased: true, originalPublicationExcluded: true };
++  };
++  const deliver = (binding: SyntheticExecutionBinding) => {
++    const receiver = new CandidateSourceTransferReceiver(canonicalJson(manifest), request, manifest.manifestDigest);
++    try {
++      for (let i = 0; i < bytes.length; i++) {
++        const frame = encodeCandidateSourceFileFrame(manifest, i, bytes[i]);
++        try { for (let start = 0; start < frame.length; start += 65_536) receiver.write(frame.subarray(start, start + 65_536)); }
++        finally { frame.fill(0); }
++      }
++      const received = receiver.finish();
++      try {
++        // Independently hash reread destination copies, not echoed source digests.
++        const files = manifest.files.map((file, i) => {
++          const copy = copyReceivedCandidateSourceFile(received, i);
++          try {
++            assert.deepEqual(copy, bytes[i]); destination.set(file.relativePath, Buffer.from(copy));
++            return { relativePath: file.relativePath, byteLength: copy.length, contentDigest: sha256Digest(copy) };
++          }
++          finally { copy.fill(0); }
++        });
++        return { kind: "synthetic-stored", authority: "none", binding, fileCount: files.length,
++          byteLength: files.reduce((sum, file) => sum + file.byteLength, 0), wireByteLength: received.wireByteLength,
++          destinationInventoryDigest: canonicalSha256Digest({ domain: "synthetic-destination-inventory/v1", manifestDigest: manifest.manifestDigest, files }),
++          endOfInputObserved: true, destinationReadBack: true, protectedDestination: true };
++      } finally { discardReceivedCandidateSource(received); }
++    } finally { receiver.abort(); }
++  };
++  const ports: SyntheticCandidateExecutionPorts = {
++    async ready(binding, stop) { outside(); calls.push("ready"); assert.equal(candidateEffectState(read()), "reserved");
++      return hooks.ready ? hooks.ready(binding, stop) : ready(binding); },
++    async deliver(binding, actualManifest, stop) { outside(); calls.push("deliver");
++      assert.equal(candidateEffectState(read()), "source-delivery-possible"); assert.equal(head.recordDigest, canonicalSha256Digest(read()));
++      assert.equal(actualManifest.manifestDigest, manifest.manifestDigest);
++      return hooks.deliver ? hooks.deliver(binding, actualManifest, stop) : deliver(binding); },
++    async run(binding, actualRequest, stop) { outside(); calls.push("run");
++      assert.equal(candidateEffectState(read()), "launch-possible"); assert.equal(head.recordDigest, canonicalSha256Digest(read()));
++      assert.equal(actualRequest.requestDigest, request.requestDigest);
++      if (hooks.run) return hooks.run(binding, actualRequest, stop);
++      assert.equal(destination.size, actualRequest.files.length);
++      for (const file of actualRequest.files) {
++        const stored = destination.get(file.relativePath); assert.ok(stored);
++        assert.equal(sha256Digest(stored), file.contentDigest, "fixture runner checks retained destination, not just an earlier ack");
++      }
++      return verificationResult(actualRequest); },
++    async stop(binding, stop) { outside(); calls.push("stop"); return hooks.stop ? hooks.stop(binding, stop) : stopped(binding); },
++  };
++  const options = { mode: "synthetic-only" as const, ownerGeneration, checkpoint, readRecord: () => read(), assertCurrent, ports,
++    readyMs: 200, deliveryMs: 1000, runMs: 500, stopMs: 200, checkpointMs: 1000, overallMs: 10_000, wallNow: () => wall };
++  input.resourcePolicyDigest = new SyntheticCandidateExecution(options).resourcePolicyDigest;
++  return { input, request, manifest, bytes, calls, appended, hooks, options, read, ready, stopped, deliver, destination,
++    get ledger() { return ledger; }, get head() { return head; }, set head(value) { head = value; },
++    set wall(value: string) { wall = value; }, set live(value: boolean) { live = value; },
++    execution: () => new SyntheticCandidateExecution(options),
++    reopen() { db.close(); db = new Database(path, { fileMustExist: true }); ledger = new SqliteCandidateEffectLedger(db, storeId, namespaceId, () => wall); },
++    dispose() { for (const bytes of destination.values()) bytes.fill(0); destination.clear();
++      if (db.open) db.close(); const target = resolve(dir); assert.equal(dirname(target), parent);
++      assert.match(basename(target), /^onoes-synthetic-execution-[a-zA-Z0-9]+$/); rmSync(target, { recursive: true, force: true }); },
++  };
++}
++// Each bounded synthetic configuration gets its own exact intent pin before any
++// reservation. This helper is not an approval issuer or a production policy update.
++const run = (f: ReturnType<typeof fixture>, execution = f.execution(), stop = signal()) => execution.execute(
++  { ...f.input, resourcePolicyDigest: execution.resourcePolicyDigest }, f.request, canonicalJson(f.manifest), stop);
++
++test("synthetic full source -> stored -> run -> confirmed stop -> bound v2 outcome checkpoints in exact order", async () => {
++  const f = fixture(); try {
++    const result = await run(f);
++    assert.equal(result.disposition, "completed"); assert.equal(result.authority, "none"); assert.equal(result.physicalCustodyEstablished, false);
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]); assert.deepEqual(f.appended, [1, 2, 3, 4, 5]);
++    assert.deepEqual(f.read().events.map(e => e.state), ["source-delivery-possible", "launch-possible", "result-and-stop-observed", "completed"]);
++    assert.equal(f.read().events[2]!.resultDigest, result.resultDigest);
++    assert.equal(f.bytes[1]!.toString("hex"), "efbbbf61", "original synthetic BOM bytes retained");
++    assert.equal(f.destination.size, 0, "stop clears fixture-owned destination copies, not original source");
++    f.reopen(); assert.equal(candidateEffectState(f.read()), "completed");
++  } finally { f.dispose(); }
++});
++
++test("authentic failed verification stays failed after stop rather than becoming success or missing-result quarantine", async () => {
++  const f = fixture(); try {
++    f.hooks.run = async (_b, request) => verificationResult(request, false);
++    const result = await run(f); assert.equal(result.disposition, "verification-failed");
++    assert.equal(candidateEffectState(f.read()), "failed"); assert.ok(result.resultDigest);
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]);
++  } finally { f.dispose(); }
++});
++
++test("full 128-file 16-MiB source scope and maximum paths use the codec without narrowing the request", async () => {
++  const bytes = Array.from({ length: 128 }, (_, i) => i < 16 ? Buffer.alloc(1_048_576, i) : Buffer.alloc(0));
++  const paths = bytes.map((_, i) => `${String(i).padStart(3, "0")}/${"a".repeat(200)}/${"b".repeat(200)}/${"c".repeat(106)}`);
++  const f = fixture(bytes, paths); try {
++    assert.ok(Buffer.byteLength(canonicalJson(f.request)) > 65_536);
++    const result = await run(f); assert.equal(result.disposition, "completed");
++    assert.equal(f.manifest.fileCount, 128); assert.equal(f.manifest.byteLength, 16_777_216);
++    assert.equal(f.calls.filter(c => c === "deliver").length, 1);
++  } finally { f.dispose(); for (const bytes of f.bytes) bytes.fill(0); }
++});
++
++test("forged inputs, mismatched subject, proxies and pre-abort make zero ledger or lifecycle contacts", async () => {
++  const f = fixture(); try {
++    const e = f.execution(); let traps = 0;
++    for (const input of [new Proxy({}, { get() { traps++; throw new Error("trap"); } }), { ...f.input, requestDigest: d(99) }])
++      await assert.rejects(e.execute(input, f.request, canonicalJson(f.manifest), signal()), /input-invalid/);
++    await assert.rejects(e.execute(f.input, structuredClone(f.request), canonicalJson(f.manifest), signal()), /input-invalid/);
++    const stop = new AbortController(); stop.abort(); await assert.rejects(run(f, e, stop.signal), /cancelled/);
++    assert.equal(traps, 0); assert.deepEqual(f.calls, []); assert.deepEqual(f.appended, []); assert.equal(f.read(), undefined);
++  } finally { f.dispose(); }
++});
++
++test("replayed v2 record invokes no lifecycle port and never resumes a partial operation", async () => {
++  const f = fixture(); try {
++    await f.options.checkpoint.reserve(f.input, signal());
++    const result = await run(f); assert.equal(result.disposition, "replayed");
++    assert.deepEqual(f.calls, []); assert.deepEqual(f.appended, [1]);
++    assert.equal(candidateEffectState(f.read()), "reserved");
++  } finally { f.dispose(); }
++});
++
++for (const sequence of [1, 2, 3, 4, 5]) {
++  test(`checkpoint acknowledgment loss at sequence ${sequence} never advances the next effect or compensates`, async () => {
++    const f = fixture(); try {
++      f.hooks.append = proposed => { f.head = proposed; if (proposed.sequence === sequence) throw new Error("synthetic ack lost");
++        return { currentOwnerGeneration: f.options.ownerGeneration, checkpoint: proposed }; };
++      const result = await run(f); assert.equal(result.disposition, "needs-reconciliation"); assert.equal(result.resultDigest, null);
++      assert.deepEqual(f.appended, Array.from({ length: sequence }, (_, i) => i + 1));
++      assert.deepEqual(f.calls, sequence === 1 ? [] : sequence === 2 ? ["ready", "stop"]
++        : sequence === 3 ? ["ready", "deliver", "stop"] : ["ready", "deliver", "run", "stop"]);
++      const state = candidateEffectState(f.read()); f.reopen(); assert.equal(candidateEffectState(f.read()), state);
++    } finally { f.dispose(); }
++  });
++}
++
++for (const bad of ["digest", "eof", "count", "generation", "getter"] as const) {
++  test(`invalid stored ${bad} denies launch and leaves v2 quarantine after confirmed stop`, async () => {
++    const f = fixture(); try {
++      let getters = 0;
++      f.hooks.deliver = async binding => {
++        const ack = f.deliver(binding);
++        if (bad === "getter") return Object.defineProperty({}, "kind", { get() { getters++; return "synthetic-stored"; } });
++        return bad === "digest" ? { ...ack, destinationInventoryDigest: d(99) }
++          : bad === "eof" ? { ...ack, endOfInputObserved: false }
++          : bad === "count" ? { ...ack, fileCount: ack.fileCount + 1 }
++          : { ...ack, binding: { ...binding, guestGeneration: randomUUID() } };
++      };
++      const result = await run(f); assert.equal(result.disposition, "quarantined"); assert.equal(getters, 0);
++      assert.deepEqual(f.calls, ["ready", "deliver", "stop"]); assert.equal(candidateEffectState(f.read()), "quarantined");
++      assert.equal(f.read().events.some(e => e.state === "result-and-stop-observed"), false);
++    } finally { f.dispose(); }
++  });
++}
++
++test("wrong readiness identity stops once and cancels before any possible-delivery marker", async () => {
++  const f = fixture(); try {
++    f.hooks.ready = async binding => ({ ...f.ready(binding), binding: { ...binding, ownerGeneration: randomUUID() } });
++    const result = await run(f); assert.equal(result.disposition, "cancelled");
++    assert.deepEqual(f.calls, ["ready", "stop"]); assert.deepEqual(f.read().events.map(e => e.state), ["cancelled"]);
++  } finally { f.dispose(); }
++});
++
++test("altered source bytes fail the actual codec before launch and never become a valid stored acknowledgment", async () => {
++  const f = fixture(); try {
++    f.bytes[0]![0] = f.bytes[0]![0]! ^ 1;
++    const result = await run(f); assert.equal(result.disposition, "quarantined");
++    assert.deepEqual(f.calls, ["ready", "deliver", "stop"]);
++  } finally { f.dispose(); }
++});
++
++test("every missing stop fact withholds verification outcome and leaves a durable possible-effect blocker", async () => {
++  for (const key of ["hostOff", "dispatchClosed", "allRelatedWorkSettled", "generationRetired", "sourceCustodyReleased", "originalPublicationExcluded"]) {
++    const f = fixture(); try {
++      f.hooks.stop = async binding => { const ack = { ...f.stopped(binding) } as Record<string, unknown>; delete ack[key]; return ack; };
++      const result = await run(f); assert.equal(result.disposition, "needs-reconciliation"); assert.equal(result.resultDigest, null);
++      assert.equal(candidateEffectState(f.read()), "launch-possible"); assert.equal(f.calls.filter(c => c === "stop").length, 1);
++    } finally { f.dispose(); }
++  }
++});
++
++test("unsettled delivery cannot be called stopped merely because a stop object says so; late completion cannot resume", async () => {
++  const f = fixture(); try {
++    const work = deferred<unknown>(); let binding!: SyntheticExecutionBinding;
++    f.hooks.deliver = async b => { binding = b; return work.promise; };
++    const e = new SyntheticCandidateExecution({ ...f.options, deliveryMs: 15 });
++    const result = await run(f, e); assert.equal(result.disposition, "needs-reconciliation");
++    assert.deepEqual(f.calls, ["ready", "deliver", "stop"]); assert.equal(candidateEffectState(f.read()), "source-delivery-possible");
++    work.resolve(f.deliver(binding)); await new Promise(resolve => setImmediate(resolve));
++    await assert.rejects(run(f, e), /session-used/); assert.equal(f.calls.length, 3);
++  } finally { f.dispose(); }
++});
++
++test("unsettled stop has one finite cleanup attempt and never publishes a valid earlier result", async () => {
++  const f = fixture(); try {
++    const work = deferred<unknown>(); let binding!: SyntheticExecutionBinding;
++    f.hooks.stop = async b => { binding = b; return work.promise; };
++    const result = await run(f, new SyntheticCandidateExecution({ ...f.options, stopMs: 15 }));
++    assert.equal(result.disposition, "needs-reconciliation"); assert.equal(result.resultDigest, null);
++    assert.equal(candidateEffectState(f.read()), "launch-possible");
++    work.resolve(f.stopped(binding)); await new Promise(resolve => setImmediate(resolve));
++    assert.equal(f.calls.filter(c => c === "stop").length, 1);
++  } finally { f.dispose(); }
++});
++
++for (const seam of ["ready", "deliver", "run", "stop"] as const) {
++  test(`caller abort at ${seam} performs at most one cleanup and no later forward phase`, async () => {
++    const f = fixture(); try {
++      const controller = new AbortController();
++      if (seam === "ready") f.hooks.ready = async b => { controller.abort(); return f.ready(b); };
++      if (seam === "deliver") f.hooks.deliver = async b => { controller.abort(); return f.deliver(b); };
++      if (seam === "run") f.hooks.run = async (_b, r) => { controller.abort(); return verificationResult(r); };
++      if (seam === "stop") f.hooks.stop = async b => { controller.abort(); return f.stopped(b); };
++      const result = await run(f, f.execution(), controller.signal);
++      assert.equal(result.disposition, seam === "ready" ? "cancelled" : "quarantined"); assert.equal(result.resultDigest, null);
++      assert.equal(f.calls.filter(c => c === "stop").length, 1);
++      assert.equal(f.calls.includes("run"), seam === "run" || seam === "stop");
++    } finally { f.dispose(); }
++  });
++}
++
++test("reentrant calls and two wrappers sharing lifecycle ports cannot duplicate delivery", async () => {
++  const f = fixture(); try {
++    const a = f.execution(), b = f.execution(); let nested!: Promise<void>;
++    f.hooks.ready = async binding => {
++      nested = assert.rejects(run(f, b), /session-used/); return f.ready(binding);
++    };
++    assert.equal((await run(f, a)).disposition, "completed"); await nested;
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]);
++  } finally { f.dispose(); }
++});
++
++test("malformed and mismatched verifier results are not converted into passed observations", async () => {
++  const otherRequest = createManagedVerificationRequest(verificationResolution(), { requestId: randomUUID(), operationId: randomUUID(),
++    subject: { workspaceDigest: d(91), policyBindingDigest: d(92), files: [{ relativePath: "src/other.txt", contentDigest: d(93) }] } });
++  for (const bad of ["{}", "x".repeat(65_537), new Uint8Array(1), verificationResult(otherRequest)]) {
++    const f = fixture(); try {
++      f.hooks.run = async () => bad;
++      assert.equal((await run(f)).disposition, "quarantined");
++      assert.equal(f.read().events.some(e => e.state === "result-and-stop-observed"), false);
++    } finally { f.dispose(); }
++  }
++});
++
++test("scope expiry or policy revocation during delivery cannot launch; cleanup does not require fresh forward permission", async () => {
++  for (const revoke of [false, true]) {
++    const f = fixture(); try {
++      f.hooks.deliver = async b => { const ack = f.deliver(b); if (revoke) f.live = false; else f.wall = EXPIRES; return ack; };
++      const result = await run(f); assert.equal(result.disposition, revoke ? "needs-reconciliation" : "quarantined");
++      assert.deepEqual(f.calls, ["ready", "deliver", "stop"]);
++    } finally { f.dispose(); }
++  }
++});
++
++test("broken injected clock cannot prevent bounded emergency stop or create a success", async () => {
++  const f = fixture(); try {
++    let now = 0; f.hooks.run = async (_b, request) => { now = NaN; return verificationResult(request); };
++    const result = await run(f, new SyntheticCandidateExecution({ ...f.options, monotonicNow: () => now }));
++    assert.equal(result.disposition, "needs-reconciliation"); assert.equal(result.resultDigest, null);
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]);
++  } finally { f.dispose(); }
++});
++
++test("late stop cannot extend the successful run allowance", async () => {
++  const f = fixture(); try {
++    let now = 0; f.hooks.stop = async b => { now = 40; return f.stopped(b); };
++    const result = await run(f, new SyntheticCandidateExecution({ ...f.options, runMs: 40, monotonicNow: () => now }));
++    assert.equal(result.disposition, "quarantined"); assert.equal(result.resultDigest, null);
++  } finally { f.dispose(); }
++});
++
++test("synthetic scope rejects implicit/unbounded budgets without initializing work", () => {
++  const f = fixture(); try {
++    for (const stopMs of [0, Infinity, NaN, -1, 10_001])
++      assert.throws(() => new SyntheticCandidateExecution({ ...f.options, stopMs }), SyntheticExecutionError);
++    assert.throws(() => new SyntheticCandidateExecution({ ...f.options, overallMs: 1000 }), /input-invalid/);
++    assert.deepEqual(f.appended, []); assert.deepEqual(f.calls, []);
++  } finally { f.dispose(); }
++});
++
++test("resource policy, checkpoint owner and store identities cannot be substituted", async () => {
++  const f = fixture(); try {
++    assert.throws(() => new SyntheticCandidateExecution({ ...f.options, ownerGeneration: randomUUID() }), /input-invalid/);
++    const e = f.execution();
++    for (const patch of [{ resourcePolicyDigest: d(99) }, { storeId: randomUUID() }, { namespaceId: randomUUID() }])
++      await assert.rejects(e.execute({ ...f.input, ...patch }, f.request, canonicalJson(f.manifest), signal()), /input-invalid/);
++    assert.deepEqual(f.calls, []); assert.deepEqual(f.appended, []);
++    assert.ok(Object.isFrozen(f.options.checkpoint.identity));
++    assert.equal(f.options.checkpoint.identity.authority, "none");
++  } finally { f.dispose(); }
++});
++
++test("injected clock and policy callbacks cannot reenter before the single-use latch", async () => {
++  for (const atClock of [false, true]) {
++    const f = fixture(); try {
++      let first = true, nested!: Promise<void>, execution!: SyntheticCandidateExecution;
++      const reenter = () => { if (first) { first = false; nested = assert.rejects(run(f, execution), /session-used/); } };
++      execution = new SyntheticCandidateExecution({ ...f.options,
++        monotonicNow: () => { if (atClock) reenter(); return 0; },
++        assertCurrent: () => { if (!atClock) reenter(); f.options.assertCurrent(); },
++      });
++      assert.equal((await run(f, execution)).disposition, "completed"); await nested;
++      assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]); assert.deepEqual(f.appended, [1, 2, 3, 4, 5]);
++    } finally { f.dispose(); }
++  }
++});
++
++test("destination drift after stored acknowledgment is rejected by the fixture verifier before any passed outcome", async () => {
++  const f = fixture(); try {
++    f.hooks.append = proposed => {
++      f.head = proposed;
++      if (proposed.sequence === 3) f.destination.get(f.manifest.files[0]!.relativePath)!.fill(0);
++      return { currentOwnerGeneration: f.options.ownerGeneration, checkpoint: proposed };
++    };
++    const result = await run(f);
++    assert.equal(result.disposition, "quarantined"); assert.equal(result.resultDigest, null);
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]); assert.equal(f.destination.size, 0);
++    assert.equal(f.read().events.some(e => e.state === "result-and-stop-observed"), false);
++  } finally { f.dispose(); }
++});

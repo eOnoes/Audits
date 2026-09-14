@@ -1,0 +1,415 @@
+{
+  "baselineProductRevision": "fdf413aa0c7b8ed0972e5633302d59b3eac04957",
+  "baselinePacketCommit": "9c546c8e738418dc5273f7ca4bcb4ef14907bb8e",
+  "sourceRevision": "0c01a44237fa17970e173fd99e2b9db55863e54e",
+  "selectedMembers": [
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V2.md",
+      "status": "unchanged",
+      "baselineSha256": "1d7a062c4c6e3969c27a61f1ddfc7168b606937810936a1db4c50436e6c67a4c",
+      "baselineGitBlobOid": "7bfb08f2107f697155ea0b2a0e372809e30cf878",
+      "currentSha256": "1d7a062c4c6e3969c27a61f1ddfc7168b606937810936a1db4c50436e6c67a4c",
+      "currentGitBlobOid": "7bfb08f2107f697155ea0b2a0e372809e30cf878"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "fea36ca36ef76eeea2d569ef8f0c94f697760c4a5f28e4bcec45084fb84ba023",
+      "currentGitBlobOid": "605dc07b62261fa400a3738f8a1ab1ca840df0ea"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_SUCCESSOR_REVIEW_DISPOSITION.md",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "b8d042e3108a8477eec4082781edd17e84718af96e5a76d6e34d5a3c74cccf9b",
+      "currentGitBlobOid": "fd13080af4b666ab770df02784a3eea6e15f4e1e"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_SYNTHETIC_CHECKPOINT_SEQUENCER.md",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "6b5faadc85b770994a6713c2a1dc75dd4e3b7d4612849f399927815fae4092c3",
+      "currentGitBlobOid": "31e361bd04aad12f136c5b1180c4fb20ea2d8df4"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_SYNTHETIC_EXECUTION_COMPOSITION.md",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "c75f0f8ee22494be531193310392d56e1f21f5b41fb8c68adb35380ebee67706",
+      "currentGitBlobOid": "68facfdaa60e38374d51b4604090692bd36990de"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_ATOMIC_LEDGER_SNAPSHOT.md",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "3c95dcaa7067977cc190357e4933dcc51365ce82c8c921ac3103aadd3688806d",
+      "currentGitBlobOid": "1fcfd4702942aebab2977b28dbc82973582e6e94"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "unchanged",
+      "baselineSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "baselineGitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d",
+      "currentSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "currentGitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "changed",
+      "baselineSha256": "d9f19d0493ebeb1684bd982e79aaeeb90734b41dd0f4f54d83156ef332c2afc6",
+      "baselineGitBlobOid": "5507bb76582b792dda9c0784546c1cb7d43aa7d2",
+      "currentSha256": "3e0b35c0c49d622d3823cf358901865acff197510aa4c0c218888c654c0a8a38",
+      "currentGitBlobOid": "3ab76375d1dd04dbdac4b8b8b87a417d52958570"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-checkpoint-sequencer.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "1ba5b080ef924255492c6feeb2d861614e3cb2cdd30ae73d5e2e949bcb94560f",
+      "currentGitBlobOid": "e401fc98c76a930e85a1ee9df8e5db1a633db63c"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-synthetic-execution.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "93ea6ed00619b8d078a966f54aa73332e697e6516a2aae47225ccfe53f7be255",
+      "currentGitBlobOid": "c9de9e7d0d4814b9a8735aba2be931761e998114"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-source-manifest.ts",
+      "status": "unchanged",
+      "baselineSha256": "2028961a2e8454b7724bd92b34fb7c52b736847bfbb50c20c783eff12a9ebe53",
+      "baselineGitBlobOid": "edd772f8a24c63d1c96396ded882a1bd3bf4ebc4",
+      "currentSha256": "2028961a2e8454b7724bd92b34fb7c52b736847bfbb50c20c783eff12a9ebe53",
+      "currentGitBlobOid": "edd772f8a24c63d1c96396ded882a1bd3bf4ebc4"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-source-transfer.ts",
+      "status": "unchanged",
+      "baselineSha256": "d0322855442ad71bb74ebbabb420126549b38d5d950e6c96d84ddd8f4abc2605",
+      "baselineGitBlobOid": "3abe339fde6b7f724df2311e43c9731a612e1b61",
+      "currentSha256": "d0322855442ad71bb74ebbabb420126549b38d5d950e6c96d84ddd8f4abc2605",
+      "currentGitBlobOid": "3abe339fde6b7f724df2311e43c9731a612e1b61"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-verifier.ts",
+      "status": "unchanged",
+      "baselineSha256": "e41383ed8bcbf7f1e8e2542541b2402e6e017c8a92612fe87b4a24e59f7cbab4",
+      "baselineGitBlobOid": "90d98e4c827ed6911b79a3d3b2edf11579e2e89c",
+      "currentSha256": "e41383ed8bcbf7f1e8e2542541b2402e6e017c8a92612fe87b4a24e59f7cbab4",
+      "currentGitBlobOid": "90d98e4c827ed6911b79a3d3b2edf11579e2e89c"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "status": "unchanged",
+      "baselineSha256": "c06151252ec3287cfe7cfa87f4da6adfa086300328ed3ec64e757a53addfccdf",
+      "baselineGitBlobOid": "aa45d8b95d029ac00d27787d57830506b12ac49f",
+      "currentSha256": "c06151252ec3287cfe7cfa87f4da6adfa086300328ed3ec64e757a53addfccdf",
+      "currentGitBlobOid": "aa45d8b95d029ac00d27787d57830506b12ac49f"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-acquisition.ts",
+      "status": "unchanged",
+      "baselineSha256": "9bf4c07b4ed0b1beb30084e66496005dfec18fc17ea3074bef0cff728e1fb245",
+      "baselineGitBlobOid": "4219ab26317bb88b3bb988fd50c2b0266bfcaf21",
+      "currentSha256": "9bf4c07b4ed0b1beb30084e66496005dfec18fc17ea3074bef0cff728e1fb245",
+      "currentGitBlobOid": "4219ab26317bb88b3bb988fd50c2b0266bfcaf21"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "status": "changed",
+      "baselineSha256": "dedadadc4f4d473b161e9cfaeaa54c9087bcc3280b2e9f953fe3d387a8486f31",
+      "baselineGitBlobOid": "1e1958cea8c3dbea3b7e3534ee2f2bb4ddccb5fd",
+      "currentSha256": "64f00176f354439b76b3b81ea8ebda09000306ff55a7ff40653e28b802b7f475",
+      "currentGitBlobOid": "e9c8235580144bb75ae43d159e82040a69975399"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-effect-snapshot.test.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "799fe4d6e401e0e70d239e4e6814c6bbb7548b767a32499b28f00dd0df3d02bd",
+      "currentGitBlobOid": "48fbb532d00c5567c8b9316281b982050ce12598"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-release-boundary.test.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "5a9fa80a8a368bed249cd68730f533f54ab26195e8ec5b1a8fa97930ec28bff8",
+      "currentGitBlobOid": "8dff1615c4f94ef0d38b4f0bc74c767136e32e37"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-checkpoint-sequencer.test.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "7e6150af627ee074fbc871dca400a58bdffcb33803b33e5c276a9d1eca330d32",
+      "currentGitBlobOid": "737e4a8343303e9dd629caf3b240d5eb84786af1"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-synthetic-execution.test.ts",
+      "status": "new",
+      "baselineSha256": null,
+      "baselineGitBlobOid": null,
+      "currentSha256": "96484d44a70b670a33f7b8cc29756cea6bc258195d67a7938e9fe077e0d11eb8",
+      "currentGitBlobOid": "7ca2b978abb556e58538b539edc5845e5096177e"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "status": "unchanged",
+      "baselineSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "baselineGitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "currentSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "currentGitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "status": "unchanged",
+      "baselineSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "baselineGitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "currentSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "currentGitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "unchanged",
+      "baselineSha256": "45c8a0a92a71a8e150e521b46d5899da881421e515513138b09ce6a63087a089",
+      "baselineGitBlobOid": "cb3a52beb008fad129ed87f8060aaf3d33d57e18",
+      "currentSha256": "45c8a0a92a71a8e150e521b46d5899da881421e515513138b09ce6a63087a089",
+      "currentGitBlobOid": "cb3a52beb008fad129ed87f8060aaf3d33d57e18"
+    },
+    {
+      "productPath": "src/builder/schemas.ts",
+      "status": "unchanged",
+      "baselineSha256": "171c110be8bf05681210c6fe452903db7efe2a36ca7f6a8bd188c7886a61d102",
+      "baselineGitBlobOid": "863ed4b968b26325b0fc106f5a0a469209c70692",
+      "currentSha256": "171c110be8bf05681210c6fe452903db7efe2a36ca7f6a8bd188c7886a61d102",
+      "currentGitBlobOid": "863ed4b968b26325b0fc106f5a0a469209c70692"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-builder-executor.ts",
+      "status": "unchanged",
+      "baselineSha256": "3ff037448476d725c2c53b198511c45c3f25b883b29c9f89a90dffaaec845a8d",
+      "baselineGitBlobOid": "5dbaf9ce55e89e2765dcb510db4ef8f4e861c334",
+      "currentSha256": "3ff037448476d725c2c53b198511c45c3f25b883b29c9f89a90dffaaec845a8d",
+      "currentGitBlobOid": "5dbaf9ce55e89e2765dcb510db4ef8f4e861c334"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-crash.ts",
+      "status": "unchanged",
+      "baselineSha256": "dba9f04794cc3545d85a5137e8bcea4a7cd23d5e95fd6ed3ac729203ccfc7f41",
+      "baselineGitBlobOid": "de7340f80d212086cfadad13c193498746ae1467",
+      "currentSha256": "dba9f04794cc3545d85a5137e8bcea4a7cd23d5e95fd6ed3ac729203ccfc7f41",
+      "currentGitBlobOid": "de7340f80d212086cfadad13c193498746ae1467"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-racer.ts",
+      "status": "unchanged",
+      "baselineSha256": "34c193f079eccee539cb8ee4cc409c0a662f7b78e2e4b8cc80dc25563bc360f1",
+      "baselineGitBlobOid": "2c9de26b67bfa7c5b5e105a6c9d7a0fa1cbf5fa5",
+      "currentSha256": "34c193f079eccee539cb8ee4cc409c0a662f7b78e2e4b8cc80dc25563bc360f1",
+      "currentGitBlobOid": "2c9de26b67bfa7c5b5e105a6c9d7a0fa1cbf5fa5"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-contention.ts",
+      "status": "unchanged",
+      "baselineSha256": "6269f64c0f6adb79ef2251bbf71d638d6f10869cd0d06c99c88038657aa27b5c",
+      "baselineGitBlobOid": "adb3539ba89515254cc003679feb02d294de6983",
+      "currentSha256": "6269f64c0f6adb79ef2251bbf71d638d6f10869cd0d06c99c88038657aa27b5c",
+      "currentGitBlobOid": "adb3539ba89515254cc003679feb02d294de6983"
+    },
+    {
+      "productPath": "tests/helpers/managed-executor-fixture.ts",
+      "status": "unchanged",
+      "baselineSha256": "b89807699d42f53095db57546c6b96afee73c544b920fd3fdee74d10bbd24246",
+      "baselineGitBlobOid": "a7461810b5ddc536dbd07fce4925bd91b382cedb",
+      "currentSha256": "b89807699d42f53095db57546c6b96afee73c544b920fd3fdee74d10bbd24246",
+      "currentGitBlobOid": "a7461810b5ddc536dbd07fce4925bd91b382cedb"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "unchanged",
+      "baselineSha256": "62533033dcce7e424ad70ddb4b194a1b136da691ad189dd6173e4f68aa21cde1",
+      "baselineGitBlobOid": "5e601b49022a85f4125d162a73034da4dbf50da5",
+      "currentSha256": "62533033dcce7e424ad70ddb4b194a1b136da691ad189dd6173e4f68aa21cde1",
+      "currentGitBlobOid": "5e601b49022a85f4125d162a73034da4dbf50da5"
+    },
+    {
+      "productPath": "src/builder/content-policy.ts",
+      "status": "unchanged",
+      "baselineSha256": "0ca6216c627d8c71c3ecafface75b3571331b1c7b5eaed0396ae62160645edb9",
+      "baselineGitBlobOid": "f477690f29df21612dfd42cd111030604506a7e1",
+      "currentSha256": "0ca6216c627d8c71c3ecafface75b3571331b1c7b5eaed0396ae62160645edb9",
+      "currentGitBlobOid": "f477690f29df21612dfd42cd111030604506a7e1"
+    },
+    {
+      "productPath": "src/builder/types.ts",
+      "status": "unchanged",
+      "baselineSha256": "8c16c07a6242ffe9fc1d3ab20800c8568b38e46eb5dbe88cc668bc857c07e404",
+      "baselineGitBlobOid": "b9520f5effcf37dc75f9d305cf08c290f7d56ab7",
+      "currentSha256": "8c16c07a6242ffe9fc1d3ab20800c8568b38e46eb5dbe88cc668bc857c07e404",
+      "currentGitBlobOid": "b9520f5effcf37dc75f9d305cf08c290f7d56ab7"
+    },
+    {
+      "productPath": "src/kernel/schemas.ts",
+      "status": "unchanged",
+      "baselineSha256": "a1bd1abed962044176106d21ccd13dbf7e5fc5a193eb048cecbfb6c7c3dfef21",
+      "baselineGitBlobOid": "ad42f5bcf0b7a2146eb6bf8c9a5ae4073001ef24",
+      "currentSha256": "a1bd1abed962044176106d21ccd13dbf7e5fc5a193eb048cecbfb6c7c3dfef21",
+      "currentGitBlobOid": "ad42f5bcf0b7a2146eb6bf8c9a5ae4073001ef24"
+    },
+    {
+      "productPath": "src/build-only/windows-builder-effect-journal.ts",
+      "status": "unchanged",
+      "baselineSha256": "76126b7592d29520079126714ecb144558c07bc0a024cc7d8f77551b62e7bbd2",
+      "baselineGitBlobOid": "525bf1d4506af3b9345a74992ab8c4165c852f0a",
+      "currentSha256": "76126b7592d29520079126714ecb144558c07bc0a024cc7d8f77551b62e7bbd2",
+      "currentGitBlobOid": "525bf1d4506af3b9345a74992ab8c4165c852f0a"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-builder-approval.ts",
+      "status": "unchanged",
+      "baselineSha256": "725876a4e5b4d5adba2fae778cfb41d4badad45beb616196be73137988c8d4cb",
+      "baselineGitBlobOid": "449eb874a7895cdcc8bc921d1e62cdfe705f139b",
+      "currentSha256": "725876a4e5b4d5adba2fae778cfb41d4badad45beb616196be73137988c8d4cb",
+      "currentGitBlobOid": "449eb874a7895cdcc8bc921d1e62cdfe705f139b"
+    },
+    {
+      "productPath": "src/build-only/windows-workspace-policy.ts",
+      "status": "unchanged",
+      "baselineSha256": "69ece4866729b3d2f900ea25cec4fd7c5506e6008d48772d684f1b8dfd86d672",
+      "baselineGitBlobOid": "ee7e1041cf1fc589bd333f036baba3efde07b3c9",
+      "currentSha256": "69ece4866729b3d2f900ea25cec4fd7c5506e6008d48772d684f1b8dfd86d672",
+      "currentGitBlobOid": "ee7e1041cf1fc589bd333f036baba3efde07b3c9"
+    },
+    {
+      "productPath": "src/validation/json-value.ts",
+      "status": "unchanged",
+      "baselineSha256": "244f71b906df6eeb386d26fbe27b190f928332ffe11e08eacdb45847c58a8553",
+      "baselineGitBlobOid": "6fbc2c9f09fa3d4dbab9eaebaf8571e155e658ad",
+      "currentSha256": "244f71b906df6eeb386d26fbe27b190f928332ffe11e08eacdb45847c58a8553",
+      "currentGitBlobOid": "6fbc2c9f09fa3d4dbab9eaebaf8571e155e658ad"
+    },
+    {
+      "productPath": "src/profiles/types.ts",
+      "status": "unchanged",
+      "baselineSha256": "f6845a2cfbd2c662b31f3d9d1f073f7844f6c8cb22e8179484911f55bcd0f0dd",
+      "baselineGitBlobOid": "fcc524d9ccd2ebc6fa3e1d12e6a7ae62d2efc110",
+      "currentSha256": "f6845a2cfbd2c662b31f3d9d1f073f7844f6c8cb22e8179484911f55bcd0f0dd",
+      "currentGitBlobOid": "fcc524d9ccd2ebc6fa3e1d12e6a7ae62d2efc110"
+    },
+    {
+      "productPath": "src/kernel/types.ts",
+      "status": "unchanged",
+      "baselineSha256": "c90db7edd3434cbe8f020dd6fc6ed6d7e91d208e28de5bc57410fad331c4ac84",
+      "baselineGitBlobOid": "64613188b74154d04488f3809284c37e9b06ec45",
+      "currentSha256": "c90db7edd3434cbe8f020dd6fc6ed6d7e91d208e28de5bc57410fad331c4ac84",
+      "currentGitBlobOid": "64613188b74154d04488f3809284c37e9b06ec45"
+    },
+    {
+      "productPath": "src/build-only/windows-builder-recovery-store.ts",
+      "status": "unchanged",
+      "baselineSha256": "c372b77b3cdc9c1b19abbad45385ea63bfa528f8bb59ebfc506eb828c846f927",
+      "baselineGitBlobOid": "e362522cc95db2b309d0ab378a74409841a970d9",
+      "currentSha256": "c372b77b3cdc9c1b19abbad45385ea63bfa528f8bb59ebfc506eb828c846f927",
+      "currentGitBlobOid": "e362522cc95db2b309d0ab378a74409841a970d9"
+    },
+    {
+      "productPath": "src/build-only/windows-workspace-policy-store.ts",
+      "status": "unchanged",
+      "baselineSha256": "a6f8dfd286bfb0abb29c6fb19a6f22d2ed536d0cd82f5a26b8fa487b3f5cb9ae",
+      "baselineGitBlobOid": "25aec73260fe167d9beef3592c8afe24a6a074a9",
+      "currentSha256": "a6f8dfd286bfb0abb29c6fb19a6f22d2ed536d0cd82f5a26b8fa487b3f5cb9ae",
+      "currentGitBlobOid": "25aec73260fe167d9beef3592c8afe24a6a074a9"
+    },
+    {
+      "productPath": "src/builder/patch-executor.ts",
+      "status": "unchanged",
+      "baselineSha256": "baf5fc9baf9c802bf6cc38b25ee95938f0264dedd79d5da4e135d3e8c0a535d8",
+      "baselineGitBlobOid": "9a0de448a92dbcbd571944ea62a9ed0a6f21c5c4",
+      "currentSha256": "baf5fc9baf9c802bf6cc38b25ee95938f0264dedd79d5da4e135d3e8c0a535d8",
+      "currentGitBlobOid": "9a0de448a92dbcbd571944ea62a9ed0a6f21c5c4"
+    },
+    {
+      "productPath": "src/kernel/lease-authority.ts",
+      "status": "unchanged",
+      "baselineSha256": "fb0494dc9860233b35f2b87f6acc6f6a1e865a743912295318dee5e1228372b0",
+      "baselineGitBlobOid": "e58f5893a09fcf2dd2ae91f144cc6c25a87baf14",
+      "currentSha256": "fb0494dc9860233b35f2b87f6acc6f6a1e865a743912295318dee5e1228372b0",
+      "currentGitBlobOid": "e58f5893a09fcf2dd2ae91f144cc6c25a87baf14"
+    },
+    {
+      "productPath": "src/kernel/index.ts",
+      "status": "unchanged",
+      "baselineSha256": "4067b4f1840bdcade12ca8f6e825ba761ad33a52418f4aa58c1d892379af6aea",
+      "baselineGitBlobOid": "4883349f31b5388aef214c0bc0303a278ee31e50",
+      "currentSha256": "4067b4f1840bdcade12ca8f6e825ba761ad33a52418f4aa58c1d892379af6aea",
+      "currentGitBlobOid": "4883349f31b5388aef214c0bc0303a278ee31e50"
+    },
+    {
+      "productPath": "src/builder/attestation.ts",
+      "status": "unchanged",
+      "baselineSha256": "fb955fb015886a87fb37e47dce2e3b92c9af4d9ca0bcdde5e56521d2d189d0fb",
+      "baselineGitBlobOid": "07801c5f0a3304265efc9db49e946a15be700446",
+      "currentSha256": "fb955fb015886a87fb37e47dce2e3b92c9af4d9ca0bcdde5e56521d2d189d0fb",
+      "currentGitBlobOid": "07801c5f0a3304265efc9db49e946a15be700446"
+    },
+    {
+      "productPath": "src/builder/filesystem.ts",
+      "status": "unchanged",
+      "baselineSha256": "cf7786e7b45244ddf58baad2c3a3881b99278eb297fa585e35375a7bdd957ceb",
+      "baselineGitBlobOid": "58875a74d126643bcc48a9350c77a9ca7ed13ad2",
+      "currentSha256": "cf7786e7b45244ddf58baad2c3a3881b99278eb297fa585e35375a7bdd957ceb",
+      "currentGitBlobOid": "58875a74d126643bcc48a9350c77a9ca7ed13ad2"
+    },
+    {
+      "productPath": "src/builder/path-policy.ts",
+      "status": "unchanged",
+      "baselineSha256": "5056847b2591258720fceca412c39d193d4996b960a8e657ddf62ea68e68a788",
+      "baselineGitBlobOid": "c0bc446361dd7da414b1d6c59f5c942fa2db6fd6",
+      "currentSha256": "5056847b2591258720fceca412c39d193d4996b960a8e657ddf62ea68e68a788",
+      "currentGitBlobOid": "c0bc446361dd7da414b1d6c59f5c942fa2db6fd6"
+    },
+    {
+      "productPath": "src/kernel/policy.ts",
+      "status": "unchanged",
+      "baselineSha256": "56bec7f001799ac87ba328f1b3425bdd4f9d157a8e08fb2e951fa39e726da4d9",
+      "baselineGitBlobOid": "5f515b2b974744291bf47b2df35fbb47c600e7a4",
+      "currentSha256": "56bec7f001799ac87ba328f1b3425bdd4f9d157a8e08fb2e951fa39e726da4d9",
+      "currentGitBlobOid": "5f515b2b974744291bf47b2df35fbb47c600e7a4"
+    },
+    {
+      "productPath": "src/kernel/prompt-budget.ts",
+      "status": "unchanged",
+      "baselineSha256": "6d0b95c8e717969dda605313415b38c8af72c6a3c3670bfa49b7644370a90829",
+      "baselineGitBlobOid": "d96b18fdccf29df673815053a422877e2fccd5d6",
+      "currentSha256": "6d0b95c8e717969dda605313415b38c8af72c6a3c3670bfa49b7644370a90829",
+      "currentGitBlobOid": "d96b18fdccf29df673815053a422877e2fccd5d6"
+    },
+    {
+      "productPath": "src/kernel/runtime-identity.ts",
+      "status": "unchanged",
+      "baselineSha256": "4a040cce24be5b3e2db4f657fa5158a267478d9ca70cb510d20223d9a8d52b8f",
+      "baselineGitBlobOid": "904cf58c7cee291c8495b092487c3df7ca40201d",
+      "currentSha256": "4a040cce24be5b3e2db4f657fa5158a267478d9ca70cb510d20223d9a8d52b8f",
+      "currentGitBlobOid": "904cf58c7cee291c8495b092487c3df7ca40201d"
+    },
+    {
+      "productPath": "src/validation/schemas.ts",
+      "status": "unchanged",
+      "baselineSha256": "0d2786874713f5d33e2851469a830fa99feb40596d736d19091e1dde4f6e50e2",
+      "baselineGitBlobOid": "aec0b6a65836bd137715a032f55e2238a8e7c5a1",
+      "currentSha256": "0d2786874713f5d33e2851469a830fa99feb40596d736d19091e1dde4f6e50e2",
+      "currentGitBlobOid": "aec0b6a65836bd137715a032f55e2238a8e7c5a1"
+    }
+  ]
+}

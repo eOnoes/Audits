@@ -1,0 +1,1006 @@
+TAP version 13
+# Subtest: synthetic paired v2 execution and separately approved publication checkpoint every exact mutation
+ok 1 - synthetic paired v2 execution and separately approved publication checkpoint every exact mutation
+  ---
+  duration_ms: 95.6232
+  type: 'test'
+  ...
+# Subtest: exact terminal replay performs bounded reads but zero ledger mutations or anchor appends
+ok 2 - exact terminal replay performs bounded reads but zero ledger mutations or anchor appends
+  ---
+  duration_ms: 44.037
+  type: 'test'
+  ...
+# Subtest: input snapshot precedes await and rejects proxies/getters without contact
+ok 3 - input snapshot precedes await and rejects proxies/getters without contact
+  ---
+  duration_ms: 26.0429
+  type: 'test'
+  ...
+# Subtest: absent anchor does not initialize even an empty ledger
+ok 4 - absent anchor does not initialize even an empty ledger
+  ---
+  duration_ms: 21.1989
+  type: 'test'
+  ...
+# Subtest: uncertain append not-persisted retains v2 row, poisons owner and never compensates
+ok 5 - uncertain append not-persisted retains v2 row, poisons owner and never compensates
+  ---
+  duration_ms: 30.2308
+  type: 'test'
+  ...
+# Subtest: uncertain append persisted-lost-reply retains v2 row, poisons owner and never compensates
+ok 6 - uncertain append persisted-lost-reply retains v2 row, poisons owner and never compensates
+  ---
+  duration_ms: 26.9574
+  type: 'test'
+  ...
+# Subtest: terminal append loss blocks sequencer even where raw v2 terminal is releasing
+ok 7 - terminal append loss blocks sequencer even where raw v2 terminal is releasing
+  ---
+  duration_ms: 30.1249
+  type: 'test'
+  ...
+# Subtest: mutation response loss never appends a guessed checkpoint or compensating terminal
+ok 8 - mutation response loss never appends a guessed checkpoint or compensating terminal
+  ---
+  duration_ms: 25.7313
+  type: 'test'
+  ...
+# Subtest: concurrent work and reentrant callbacks reject without poisoning the active pair
+ok 9 - concurrent work and reentrant callbacks reject without poisoning the active pair
+  ---
+  duration_ms: 26.422
+  type: 'test'
+  ...
+# Subtest: already aborted request makes zero port contacts
+ok 10 - already aborted request makes zero port contacts
+  ---
+  duration_ms: 21.6994
+  type: 'test'
+  ...
+# Subtest: abort after durable mutation never starts anchor append
+ok 11 - abort after durable mutation never starts anchor append
+  ---
+  duration_ms: 21.4542
+  type: 'test'
+  ...
+# Subtest: timeout of unsettled append stays closed after late success and aborts only its injected signal
+ok 12 - timeout of unsettled append stays closed after late success and aborts only its injected signal
+  ---
+  duration_ms: 50.1528
+  type: 'test'
+  ...
+# Subtest: a fulfilled late port result cannot evade its own deadline when timer loses the race
+ok 13 - a fulfilled late port result cannot evade its own deadline when timer loses the race
+  ---
+  duration_ms: 25.5761
+  type: 'test'
+  ...
+# Subtest: abort plus synchronous injected throw leaves no unhandled rejection
+ok 14 - abort plus synchronous injected throw leaves no unhandled rejection
+  ---
+  duration_ms: 21.1225
+  type: 'test'
+  ...
+# Subtest: revocation after discovery refuses disclosure and further writes
+ok 15 - revocation after discovery refuses disclosure and further writes
+  ---
+  duration_ms: 26.5968
+  type: 'test'
+  ...
+# Subtest: revocation after append refuses disclosure and further writes
+ok 16 - revocation after append refuses disclosure and further writes
+  ---
+  duration_ms: 19.7964
+  type: 'test'
+  ...
+# Subtest: wrong owner and clock regression fail closed before new mutation
+ok 17 - wrong owner and clock regression fail closed before new mutation
+  ---
+  duration_ms: 47.7421
+  type: 'test'
+  ...
+# Subtest: unexpected inventory mutation during discover denies before requested write
+ok 18 - unexpected inventory mutation during discover denies before requested write
+  ---
+  duration_ms: 22.3124
+  type: 'test'
+  ...
+# Subtest: unexpected inventory mutation after append withholds result and closes owner
+ok 19 - unexpected inventory mutation after append withholds result and closes owner
+  ---
+  duration_ms: 24.7201
+  type: 'test'
+  ...
+# Subtest: mismatched and accessor-bearing append replies never count as confirmation
+ok 20 - mismatched and accessor-bearing append replies never count as confirmation
+  ---
+  duration_ms: 35.3006
+  type: 'test'
+  ...
+# Subtest: complete inventory includes spent terminals and independently rejects duplicates and hostile arrays
+ok 21 - complete inventory includes spent terminals and independently rejects duplicates and hostile arrays
+  ---
+  duration_ms: 19.3508
+  type: 'test'
+  ...
+# Subtest: maximum 1000-record synthetic inventory canonicalizes as bounded tuples, independent of input order
+ok 22 - maximum 1000-record synthetic inventory canonicalizes as bounded tuples, independent of input order
+  ---
+  duration_ms: 154.4378
+  type: 'test'
+  ...
+# Subtest: explicit fixture budgets and mode cannot silently widen to production or infinity
+ok 23 - explicit fixture budgets and mode cannot silently widen to production or infinity
+  ---
+  duration_ms: 22.7464
+  type: 'test'
+  ...
+# Subtest: wrong intent store pin denies before inventory or anchor contact
+ok 24 - wrong intent store pin denies before inventory or anchor contact
+  ---
+  duration_ms: 20.7344
+  type: 'test'
+  ...
+# Subtest: checkpoint latest-record binding is checked even when its inventory root matches
+ok 25 - checkpoint latest-record binding is checked even when its inventory root matches
+  ---
+  duration_ms: 18.3827
+  type: 'test'
+  ...
+# Subtest: independently retained fixture root detects deleted terminal, coherent rewrite and ledger rollback
+ok 26 - independently retained fixture root detects deleted terminal, coherent rewrite and ledger rollback
+  ---
+  duration_ms: 85.1049
+  type: 'test'
+  ...
+# Subtest: wrong mutation receipt cannot anchor an extra unrequested transition
+ok 27 - wrong mutation receipt cannot anchor an extra unrequested transition
+  ---
+  duration_ms: 20.3835
+  type: 'test'
+  ...
+# Subtest: insufficient append reserve denies before SQLite mutation after a slow synchronous owner check
+ok 28 - insufficient append reserve denies before SQLite mutation after a slow synchronous owner check
+  ---
+  duration_ms: 16.6757
+  type: 'test'
+  ...
+# Subtest: inventory re-derives approval, workflow, blocker and parent invariants rather than trusting a port
+ok 29 - inventory re-derives approval, workflow, blocker and parent invariants rather than trusting a port
+  ---
+  duration_ms: 16.1545
+  type: 'test'
+  ...
+# Subtest: execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+ok 30 - execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+  ---
+  duration_ms: 61.4828
+  type: 'test'
+  ...
+# Subtest: one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+ok 31 - one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+  ---
+  duration_ms: 35.4387
+  type: 'test'
+  ...
+# Subtest: publication requires a passed completed parent and exact complete subject, never bare result digest
+ok 32 - publication requires a passed completed parent and exact complete subject, never bare result digest
+  ---
+  duration_ms: 68.6359
+  type: 'test'
+  ...
+# Subtest: terminal quarantine remains absorbing and blocks a fresh workflow after restart
+ok 33 - terminal quarantine remains absorbing and blocks a fresh workflow after restart
+  ---
+  duration_ms: 31.515
+  type: 'test'
+  ...
+# Subtest: pure state graph rejects skipped effects, contradictory results and restoration of execution
+ok 34 - pure state graph rejects skipped effects, contradictory results and restoration of execution
+  ---
+  duration_ms: 37.7623
+  type: 'test'
+  ...
+# Subtest: caller mutation, getters, forged history and divergent event replay fail without extra state
+ok 35 - caller mutation, getters, forged history and divergent event replay fail without extra state
+  ---
+  duration_ms: 25.6697
+  type: 'test'
+  ...
+# Subtest: v2 no-result stop after source-delivery-possible cannot become failure/cancellation or release a workspace
+ok 36 - v2 no-result stop after source-delivery-possible cannot become failure/cancellation or release a workspace
+  ---
+  duration_ms: 33.5324
+  type: 'test'
+  ...
+# Subtest: v2 no-result stop after launch-possible cannot become failure/cancellation or release a workspace
+ok 37 - v2 no-result stop after launch-possible cannot become failure/cancellation or release a workspace
+  ---
+  duration_ms: 36.6248
+  type: 'test'
+  ...
+# Subtest: expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+ok 38 - expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+  ---
+  duration_ms: 31.5162
+  type: 'test'
+  ...
+# Subtest: reached expiry before transfer refuses delivery marker and permits cancellation only
+ok 39 - reached expiry before transfer refuses delivery marker and permits cancellation only
+  ---
+  duration_ms: 27.284
+  type: 'test'
+  ...
+# Subtest: reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 40 - reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 23.7125
+  type: 'test'
+  ...
+# Subtest: possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 41 - possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 32.7838
+  type: 'test'
+  ...
+# Subtest: terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 42 - terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 27.3451
+  type: 'test'
+  ...
+# Subtest: post-commit read-back fault retains record and poisons rather than compensating
+ok 43 - post-commit read-back fault retains record and poisons rather than compensating
+  ---
+  duration_ms: 36.5468
+  type: 'test'
+  ...
+# Subtest: malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+ok 44 - malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+  ---
+  duration_ms: 37.4606
+  type: 'test'
+  ...
+# Subtest: missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+ok 45 - missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+  ---
+  duration_ms: 20.4875
+  type: 'test'
+  ...
+# Subtest: maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+ok 46 - maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+  ---
+  duration_ms: 275.6452
+  type: 'test'
+  ...
+# Subtest: abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+ok 47 - abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+  ---
+  duration_ms: 148.895
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+ok 48 - two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+  ---
+  duration_ms: 108.9807
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+ok 49 - two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+  ---
+  duration_ms: 95.0934
+  type: 'test'
+  ...
+# Subtest: held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+ok 50 - held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+  ---
+  duration_ms: 799.6312
+  type: 'test'
+  ...
+# Subtest: v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+ok 51 - v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+  ---
+  duration_ms: 15.722
+  type: 'test'
+  ...
+# Subtest: overriding public read cannot substitute post-COMMIT integrity read-back
+ok 52 - overriding public read cannot substitute post-COMMIT integrity read-back
+  ---
+  duration_ms: 23.2193
+  type: 'test'
+  ...
+# Subtest: legacy v1 schema is refused without migration, adoption or rewriting
+ok 53 - legacy v1 schema is refused without migration, adoption or rewriting
+  ---
+  duration_ms: 13.0374
+  type: 'test'
+  ...
+# Subtest: oversized passive input and event-count overflow deny without writing
+ok 54 - oversized passive input and event-count overflow deny without writing
+  ---
+  duration_ms: 16.5083
+  type: 'test'
+  ...
+# Subtest: verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+ok 55 - verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+  ---
+  duration_ms: 45.6138
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row approval duplication on every access path
+ok 56 - application scan independently rejects cross-row approval duplication on every access path
+  ---
+  duration_ms: 23.5655
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workflow duplication on every access path
+ok 57 - application scan independently rejects cross-row workflow duplication on every access path
+  ---
+  duration_ms: 22.2788
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workspace duplication on every access path
+ok 58 - application scan independently rejects cross-row workspace duplication on every access path
+  ---
+  duration_ms: 17.3713
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row operation duplication on every access path
+ok 59 - application scan independently rejects cross-row operation duplication on every access path
+  ---
+  duration_ms: 19.0508
+  type: 'test'
+  ...
+# Subtest: coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+ok 60 - coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+  ---
+  duration_ms: 28.1335
+  type: 'test'
+  ...
+# Subtest: coherent cross-store rewrite is accepted: store binding is not authentication
+ok 61 - coherent cross-store rewrite is accepted: store binding is not authentication
+  ---
+  duration_ms: 55.4879
+  type: 'test'
+  ...
+# Subtest: two same-namespace stores each accept one approval: sole enrollment is a host obligation
+ok 62 - two same-namespace stores each accept one approval: sole enrollment is a host obligation
+  ---
+  duration_ms: 51.6237
+  type: 'test'
+  ...
+# Subtest: new ledger on the same connection clears only instance poison, not durable history
+ok 63 - new ledger on the same connection clears only instance poison, not durable history
+  ---
+  duration_ms: 19.1756
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+ok 64 - new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+  ---
+  duration_ms: 16.1192
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+ok 65 - new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+  ---
+  duration_ms: 20.736
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+ok 66 - new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+  ---
+  duration_ms: 16.6029
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: busy_timeout=0
+ok 67 - new ledger normalizes configured pragma on the same connection: busy_timeout=0
+  ---
+  duration_ms: 15.4515
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+ok 68 - new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+  ---
+  duration_ms: 27.0789
+  type: 'test'
+  ...
+# Subtest: constructor does not normalize ignore_check_constraints drift
+ok 69 - constructor does not normalize ignore_check_constraints drift
+  ---
+  duration_ms: 14.6897
+  type: 'test'
+  ...
+# Subtest: v1 record inside intact v2 schema denies all access without rewriting
+ok 70 - v1 record inside intact v2 schema denies all access without rewriting
+  ---
+  duration_ms: 27.7057
+  type: 'test'
+  ...
+# Subtest: publication restoration releases once-at-a-time workspace exclusion, never approval identity
+ok 71 - publication restoration releases once-at-a-time workspace exclusion, never approval identity
+  ---
+  duration_ms: 43.9833
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: synchronous=NORMAL
+ok 72 - current connection rejects durability drift: synchronous=NORMAL
+  ---
+  duration_ms: 14.8592
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: foreign_keys=OFF
+ok 73 - current connection rejects durability drift: foreign_keys=OFF
+  ---
+  duration_ms: 13.643
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: trusted_schema=ON
+ok 74 - current connection rejects durability drift: trusted_schema=ON
+  ---
+  duration_ms: 13.8482
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: busy_timeout=0
+ok 75 - current connection rejects durability drift: busy_timeout=0
+  ---
+  duration_ms: 13.6756
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: ignore_check_constraints=ON
+ok 76 - current connection rejects durability drift: ignore_check_constraints=ON
+  ---
+  duration_ms: 13.4462
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: journal_mode=DELETE
+ok 77 - current connection rejects durability drift: journal_mode=DELETE
+  ---
+  duration_ms: 17.5821
+  type: 'test'
+  ...
+# Subtest: attached database denies discovery without inspecting its content
+ok 78 - attached database denies discovery without inspecting its content
+  ---
+  duration_ms: 13.3484
+  type: 'test'
+  ...
+# Subtest: forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+ok 79 - forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+  ---
+  duration_ms: 31.8765
+  type: 'test'
+  ...
+# Subtest: expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+ok 80 - expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+  ---
+  duration_ms: 38.8507
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 completed releases after SQLite reopen without an anchor acknowledgment
+ok 81 - boundary negative: v2 completed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 56.4341
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 failed releases after SQLite reopen without an anchor acknowledgment
+ok 82 - boundary negative: v2 failed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 60.3919
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 cancelled releases after SQLite reopen without an anchor acknowledgment
+ok 83 - boundary negative: v2 cancelled releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 36.2562
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 restored releases after SQLite reopen without an anchor acknowledgment
+ok 84 - boundary negative: v2 restored releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 57.2155
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 publish-completed releases after SQLite reopen without an anchor acknowledgment
+ok 85 - boundary negative: v2 publish-completed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 55.8983
+  type: 'test'
+  ...
+# Subtest: boundary: anchor response loss and absent append have identical ledger bytes but different independent histories
+ok 86 - boundary: anchor response loss and absent append have identical ledger bytes but different independent histories
+  ---
+  duration_ms: 35.4258
+  type: 'test'
+  ...
+# Subtest: boundary negative: deleting a releasing terminal is invisible to listBlocked but changes complete inventory
+ok 87 - boundary negative: deleting a releasing terminal is invisible to listBlocked but changes complete inventory
+  ---
+  duration_ms: 34.4306
+  type: 'test'
+  ...
+# Subtest: boundary: v2 missing-result quarantine stays absorbing and cannot emulate the proposed release protocol
+ok 88 - boundary: v2 missing-result quarantine stays absorbing and cannot emulate the proposed release protocol
+  ---
+  duration_ms: 32.963
+  type: 'test'
+  ...
+# Subtest: manifest binds all exact file bytes including unchanged source and BOM, without retaining source
+ok 89 - manifest binds all exact file bytes including unchanged source and BOM, without retaining source
+  ---
+  duration_ms: 6.295
+  type: 'test'
+  ...
+# Subtest: all 128 paths at 512 bytes fit the new manifest while the old 65536 request limit stays unchanged
+ok 90 - all 128 paths at 512 bytes fit the new manifest while the old 65536 request limit stays unchanged
+  ---
+  duration_ms: 12.0385
+  type: 'test'
+  ...
+# Subtest: per-file and aggregate exact ceilings, empty files, and complete maximum metadata are coupled
+ok 91 - per-file and aggregate exact ceilings, empty files, and complete maximum metadata are coupled
+  ---
+  duration_ms: 41.4696
+  type: 'test'
+  ...
+# Subtest: pin, operation, workspace subject and genuine request provenance cannot be substituted
+ok 92 - pin, operation, workspace subject and genuine request provenance cannot be substituted
+  ---
+  duration_ms: 1.1395
+  type: 'test'
+  ...
+# Subtest: missing extra reordered and case-changed members deny even with recomputed self digest
+ok 93 - missing extra reordered and case-changed members deny even with recomputed self digest
+  ---
+  duration_ms: 2.1954
+  type: 'test'
+  ...
+# Subtest: new physical-name preconditions deny directory aliases, file-directory collisions and reserved control names
+ok 94 - new physical-name preconditions deny directory aliases, file-directory collisions and reserved control names
+  ---
+  duration_ms: 2.9263
+  type: 'test'
+  ...
+# Subtest: canonical wire rejects BOM, invalid UTF8, duplicate keys, whitespace, unknown fields and oversize
+ok 95 - canonical wire rejects BOM, invalid UTF8, duplicate keys, whitespace, unknown fields and oversize
+  ---
+  duration_ms: 1.2774
+  type: 'test'
+  ...
+# Subtest: caller arrays reject traps, accessors, holes, exotic prototypes and additional keys without invoking them
+ok 96 - caller arrays reject traps, accessors, holes, exotic prototypes and additional keys without invoking them
+  ---
+  duration_ms: 0.49
+  type: 'test'
+  ...
+# Subtest: byte snapshots ignore caller getters and iterators, and reject proxies shared detached and wrong-kind buffers
+ok 97 - byte snapshots ignore caller getters and iterators, and reject proxies shared detached and wrong-kind buffers
+  ---
+  duration_ms: 0.7088
+  type: 'test'
+  ...
+# Subtest: file verification denies truncation, suffix, wrong member, changed byte and invalid index
+ok 98 - file verification denies truncation, suffix, wrong member, changed byte and invalid index
+  ---
+  duration_ms: 1.1816
+  type: 'test'
+  ...
+# Subtest: framing has a fixed independent byte layout, exact source, and no source before declared EOF
+ok 99 - framing has a fixed independent byte layout, exact source, and no source before declared EOF
+  ---
+  duration_ms: 7.5034
+  type: 'test'
+  ...
+# Subtest: every split across headers, bodies and empty-file boundaries reconstructs the same subject
+ok 100 - every split across headers, bodies and empty-file boundaries reconstructs the same subject
+  ---
+  duration_ms: 22.1981
+  type: 'test'
+  ...
+# Subtest: 128 maximum-length paths and the full 16 MiB scope transfer without widening the historical channel
+ok 101 - 128 maximum-length paths and the full 16 MiB scope transfer without widening the historical channel
+  ---
+  duration_ms: 68.8627
+  type: 'test'
+  ...
+# Subtest: every truncated prefix, omitted member, duplicate, reorder and suffix denies and cannot resume
+ok 102 - every truncated prefix, omitted member, duplicate, reorder and suffix denies and cannot resume
+  ---
+  duration_ms: 8.2113
+  type: 'test'
+  ...
+# Subtest: magic, every manifest pin byte, index, reserved fields, declared length and content are checked
+ok 103 - magic, every manifest pin byte, index, reserved fields, declared length and content are checked
+  ---
+  duration_ms: 4.9075
+  type: 'test'
+  ...
+# Subtest: typed-array inputs are bounded without invoking caller accessors, coercion or proxy traps
+ok 104 - typed-array inputs are bounded without invoking caller accessors, coercion or proxy traps
+  ---
+  duration_ms: 1.2719
+  type: 'test'
+  ...
+# Subtest: chunk-count ceiling stops pathological fragmentation and poison is absorbing
+ok 105 - chunk-count ceiling stops pathological fragmentation and poison is absorbing
+  ---
+  duration_ms: 29.9557
+  type: 'test'
+  ...
+# Subtest: bad later file clears both previously accepted file buffers and the current partial body
+ok 106 - bad later file clears both previously accepted file buffers and the current partial body
+  ---
+  duration_ms: 0.8373
+  type: 'test'
+  ...
+# Subtest: actual local child pipe delivers synthetic frames; only clean EOF plus zero exit permits finish
+ok 107 - actual local child pipe delivers synthetic frames; only clean EOF plus zero exit permits finish
+  ---
+  duration_ms: 122.109
+  type: 'test'
+  ...
+# Subtest: synthetic full source -> stored -> run -> confirmed stop -> bound v2 outcome checkpoints in exact order
+ok 108 - synthetic full source -> stored -> run -> confirmed stop -> bound v2 outcome checkpoints in exact order
+  ---
+  duration_ms: 85.0422
+  type: 'test'
+  ...
+# Subtest: authentic failed verification stays failed after stop rather than becoming success or missing-result quarantine
+ok 109 - authentic failed verification stays failed after stop rather than becoming success or missing-result quarantine
+  ---
+  duration_ms: 47.5688
+  type: 'test'
+  ...
+# Subtest: full 128-file 16-MiB source scope and maximum paths use the codec without narrowing the request
+ok 110 - full 128-file 16-MiB source scope and maximum paths use the codec without narrowing the request
+  ---
+  duration_ms: 137.2321
+  type: 'test'
+  ...
+# Subtest: forged inputs, mismatched subject, proxies and pre-abort make zero ledger or lifecycle contacts
+ok 111 - forged inputs, mismatched subject, proxies and pre-abort make zero ledger or lifecycle contacts
+  ---
+  duration_ms: 22.4938
+  type: 'test'
+  ...
+# Subtest: replayed v2 record invokes no lifecycle port and never resumes a partial operation
+ok 112 - replayed v2 record invokes no lifecycle port and never resumes a partial operation
+  ---
+  duration_ms: 27.9404
+  type: 'test'
+  ...
+# Subtest: checkpoint acknowledgment loss at sequence 1 never advances the next effect or compensates
+ok 113 - checkpoint acknowledgment loss at sequence 1 never advances the next effect or compensates
+  ---
+  duration_ms: 25.0992
+  type: 'test'
+  ...
+# Subtest: checkpoint acknowledgment loss at sequence 2 never advances the next effect or compensates
+ok 114 - checkpoint acknowledgment loss at sequence 2 never advances the next effect or compensates
+  ---
+  duration_ms: 33.9764
+  type: 'test'
+  ...
+# Subtest: checkpoint acknowledgment loss at sequence 3 never advances the next effect or compensates
+ok 115 - checkpoint acknowledgment loss at sequence 3 never advances the next effect or compensates
+  ---
+  duration_ms: 36.8167
+  type: 'test'
+  ...
+# Subtest: checkpoint acknowledgment loss at sequence 4 never advances the next effect or compensates
+ok 116 - checkpoint acknowledgment loss at sequence 4 never advances the next effect or compensates
+  ---
+  duration_ms: 52.3018
+  type: 'test'
+  ...
+# Subtest: checkpoint acknowledgment loss at sequence 5 never advances the next effect or compensates
+ok 117 - checkpoint acknowledgment loss at sequence 5 never advances the next effect or compensates
+  ---
+  duration_ms: 50.1113
+  type: 'test'
+  ...
+# Subtest: invalid stored digest denies launch and leaves v2 quarantine after confirmed stop
+ok 118 - invalid stored digest denies launch and leaves v2 quarantine after confirmed stop
+  ---
+  duration_ms: 31.7344
+  type: 'test'
+  ...
+# Subtest: invalid stored eof denies launch and leaves v2 quarantine after confirmed stop
+ok 119 - invalid stored eof denies launch and leaves v2 quarantine after confirmed stop
+  ---
+  duration_ms: 32.7804
+  type: 'test'
+  ...
+# Subtest: invalid stored count denies launch and leaves v2 quarantine after confirmed stop
+ok 120 - invalid stored count denies launch and leaves v2 quarantine after confirmed stop
+  ---
+  duration_ms: 33.0497
+  type: 'test'
+  ...
+# Subtest: invalid stored generation denies launch and leaves v2 quarantine after confirmed stop
+ok 121 - invalid stored generation denies launch and leaves v2 quarantine after confirmed stop
+  ---
+  duration_ms: 27.5276
+  type: 'test'
+  ...
+# Subtest: invalid stored getter denies launch and leaves v2 quarantine after confirmed stop
+ok 122 - invalid stored getter denies launch and leaves v2 quarantine after confirmed stop
+  ---
+  duration_ms: 32.1264
+  type: 'test'
+  ...
+# Subtest: wrong readiness identity stops once and cancels before any possible-delivery marker
+ok 123 - wrong readiness identity stops once and cancels before any possible-delivery marker
+  ---
+  duration_ms: 23.7093
+  type: 'test'
+  ...
+# Subtest: altered source bytes fail the actual codec before launch and never become a valid stored acknowledgment
+ok 124 - altered source bytes fail the actual codec before launch and never become a valid stored acknowledgment
+  ---
+  duration_ms: 28.0838
+  type: 'test'
+  ...
+# Subtest: every missing stop fact withholds verification outcome and leaves a durable possible-effect blocker
+ok 125 - every missing stop fact withholds verification outcome and leaves a durable possible-effect blocker
+  ---
+  duration_ms: 189.2066
+  type: 'test'
+  ...
+# Subtest: unsettled delivery cannot be called stopped merely because a stop object says so; late completion cannot resume
+ok 126 - unsettled delivery cannot be called stopped merely because a stop object says so; late completion cannot resume
+  ---
+  duration_ms: 42.5913
+  type: 'test'
+  ...
+# Subtest: unsettled stop has one finite cleanup attempt and never publishes a valid earlier result
+ok 127 - unsettled stop has one finite cleanup attempt and never publishes a valid earlier result
+  ---
+  duration_ms: 48.3196
+  type: 'test'
+  ...
+# Subtest: caller abort at ready performs at most one cleanup and no later forward phase
+ok 128 - caller abort at ready performs at most one cleanup and no later forward phase
+  ---
+  duration_ms: 21.5317
+  type: 'test'
+  ...
+# Subtest: caller abort at deliver performs at most one cleanup and no later forward phase
+ok 129 - caller abort at deliver performs at most one cleanup and no later forward phase
+  ---
+  duration_ms: 27.1579
+  type: 'test'
+  ...
+# Subtest: caller abort at run performs at most one cleanup and no later forward phase
+ok 130 - caller abort at run performs at most one cleanup and no later forward phase
+  ---
+  duration_ms: 32.7981
+  type: 'test'
+  ...
+# Subtest: caller abort at stop performs at most one cleanup and no later forward phase
+ok 131 - caller abort at stop performs at most one cleanup and no later forward phase
+  ---
+  duration_ms: 32.1845
+  type: 'test'
+  ...
+# Subtest: reentrant calls and two wrappers sharing lifecycle ports cannot duplicate delivery
+ok 132 - reentrant calls and two wrappers sharing lifecycle ports cannot duplicate delivery
+  ---
+  duration_ms: 35.915
+  type: 'test'
+  ...
+# Subtest: malformed and mismatched verifier results are not converted into passed observations
+ok 133 - malformed and mismatched verifier results are not converted into passed observations
+  ---
+  duration_ms: 130.0526
+  type: 'test'
+  ...
+# Subtest: scope expiry or policy revocation during delivery cannot launch; cleanup does not require fresh forward permission
+ok 134 - scope expiry or policy revocation during delivery cannot launch; cleanup does not require fresh forward permission
+  ---
+  duration_ms: 49.6589
+  type: 'test'
+  ...
+# Subtest: broken injected clock cannot prevent bounded emergency stop or create a success
+ok 135 - broken injected clock cannot prevent bounded emergency stop or create a success
+  ---
+  duration_ms: 30.2086
+  type: 'test'
+  ...
+# Subtest: late stop cannot extend the successful run allowance
+ok 136 - late stop cannot extend the successful run allowance
+  ---
+  duration_ms: 30.0973
+  type: 'test'
+  ...
+# Subtest: synthetic scope rejects implicit/unbounded budgets without initializing work
+ok 137 - synthetic scope rejects implicit/unbounded budgets without initializing work
+  ---
+  duration_ms: 13.0986
+  type: 'test'
+  ...
+# Subtest: resource policy, checkpoint owner and store identities cannot be substituted
+ok 138 - resource policy, checkpoint owner and store identities cannot be substituted
+  ---
+  duration_ms: 13.6737
+  type: 'test'
+  ...
+# Subtest: injected clock and policy callbacks cannot reenter before the single-use latch
+ok 139 - injected clock and policy callbacks cannot reenter before the single-use latch
+  ---
+  duration_ms: 68.9349
+  type: 'test'
+  ...
+# Subtest: destination drift after stored acknowledgment is rejected by the fixture verifier before any passed outcome
+ok 140 - destination drift after stored acknowledgment is rejected by the fixture verifier before any passed outcome
+  ---
+  duration_ms: 30.3419
+  type: 'test'
+  ...
+# Subtest: VM verifier binds existing request/result and waits for matching host Off before releasing bytes
+ok 141 - VM verifier binds existing request/result and waits for matching host Off before releasing bytes
+  ---
+  duration_ms: 9.9554
+  type: 'test'
+  ...
+# Subtest: forged request and pre-abort deny without port contact
+ok 142 - forged request and pre-abort deny without port contact
+  ---
+  duration_ms: 0.9473
+  type: 'test'
+  ...
+# Subtest: result mismatch, oversized transport and malformed results stop before settled denial
+ok 143 - result mismatch, oversized transport and malformed results stop before settled denial
+  ---
+  duration_ms: 4.3701
+  type: 'test'
+  ...
+# Subtest: a legitimate failed verification is preserved only after stop, never rewritten as pass
+ok 144 - a legitimate failed verification is preserved only after stop, never rewritten as pass
+  ---
+  duration_ms: 0.9026
+  type: 'test'
+  ...
+# Subtest: runner synchronous throw and asynchronous reject both require host stop
+ok 145 - runner synchronous throw and asynchronous reject both require host stop
+  ---
+  duration_ms: 1.2479
+  type: 'test'
+  ...
+# Subtest: abort stops once and waits for run settlement even after host Off
+ok 146 - abort stops once and waits for run settlement even after host Off
+  ---
+  duration_ms: 4.5452
+  type: 'test'
+  ...
+# Subtest: abort while waiting for stop discards an already valid result
+ok 147 - abort while waiting for stop discards an already valid result
+  ---
+  duration_ms: 0.7862
+  type: 'test'
+  ...
+# Subtest: deadline abort is enforced without caller cancellation and does not release a late success
+ok 148 - deadline abort is enforced without caller cancellation and does not release a late success
+  ---
+  duration_ms: 9.8842
+  type: 'test'
+  ...
+# Subtest: monotonic read-back denies exact deadline even when timer has not fired
+ok 149 - monotonic read-back denies exact deadline even when timer has not fired
+  ---
+  duration_ms: 0.901
+  type: 'test'
+  ...
+# Subtest: invalid/wrong-session/failed stop cannot settle verification even with valid guest output
+ok 150 - invalid/wrong-session/failed stop cannot settle verification even with valid guest output
+  ---
+  duration_ms: 4.6783
+  type: 'test'
+  ...
+# Subtest: stop timeout latches uncertainty; late Off does not release a result or reset session
+ok 151 - stop timeout latches uncertainty; late Off does not release a result or reset session
+  ---
+  duration_ms: 5.3233
+  type: 'test'
+  ...
+# Subtest: pending launch cannot settle on Off alone; late run settlement does not clear uncertainty
+ok 152 - pending launch cannot settle on Off alone; late run settlement does not clear uncertainty
+  ---
+  duration_ms: 5.0112
+  type: 'test'
+  ...
+# Subtest: clock regression or stop read-back at exact stop deadline cannot claim quiescence
+ok 153 - clock regression or stop read-back at exact stop deadline cannot claim quiescence
+  ---
+  duration_ms: 2.1718
+  type: 'test'
+  ...
+# Subtest: invalid clock before dispatch denies without contact and permanently closes the instance
+ok 154 - invalid clock before dispatch denies without contact and permanently closes the instance
+  ---
+  duration_ms: 0.4182
+  type: 'test'
+  ...
+# Subtest: a transient invalid clock during result receipt cannot recover into a bounded stop claim
+ok 155 - a transient invalid clock during result receipt cannot recover into a bounded stop claim
+  ---
+  duration_ms: 0.7712
+  type: 'test'
+  ...
+# Subtest: concurrent requests cannot get a second run or stop through one verifier
+ok 156 - concurrent requests cannot get a second run or stop through one verifier
+  ---
+  duration_ms: 0.7153
+  type: 'test'
+  ...
+# Subtest: host budgets narrow only, and later method substitution cannot redirect the captured session
+ok 157 - host budgets narrow only, and later method substitution cannot redirect the captured session
+  ---
+  duration_ms: 0.4725
+  type: 'test'
+  ...
+# Subtest: reuse cannot assert settlement before the original host stop is confirmed
+ok 158 - reuse cannot assert settlement before the original host stop is confirmed
+  ---
+  duration_ms: 0.75
+  type: 'test'
+  ...
+# Subtest: reuse after an unconfirmed stop remains unsettled instead of inviting recovery
+ok 159 - reuse after an unconfirmed stop remains unsettled instead of inviting recovery
+  ---
+  duration_ms: 0.868
+  type: 'test'
+  ...
+# Subtest: the same host port object cannot acquire a fresh one-shot latch by constructing another wrapper
+ok 160 - the same host port object cannot acquire a fresh one-shot latch by constructing another wrapper
+  ---
+  duration_ms: 0.114
+  type: 'test'
+  ...
+# Subtest: existing executor restores failed verification only after VM session has settled Off
+ok 161 - existing executor restores failed verification only after VM session has settled Off
+  ---
+  duration_ms: 37.874
+  type: 'test'
+  ...
+# Subtest: existing executor quarantines unconfirmed VM stop without compensating writes or reused session
+ok 162 - existing executor quarantines unconfirmed VM stop without compensating writes or reused session
+  ---
+  duration_ms: 88.6194
+  type: 'test'
+  ...
+# Subtest: a second executor cannot recover beside a shared unconfirmed VM session
+ok 163 - a second executor cannot recover beside a shared unconfirmed VM session
+  ---
+  duration_ms: 155.636
+  type: 'test'
+  ...
+# Subtest: disk workflow with VM lifecycle composition: passed
+ok 164 - disk workflow with VM lifecycle composition: passed
+  ---
+  duration_ms: 74.0467
+  type: 'test'
+  ...
+# Subtest: disk workflow with VM lifecycle composition: failed
+ok 165 - disk workflow with VM lifecycle composition: failed
+  ---
+  duration_ms: 85.0148
+  type: 'test'
+  ...
+# Subtest: disk workflow with VM lifecycle composition: unconfirmed
+ok 166 - disk workflow with VM lifecycle composition: unconfirmed
+  ---
+  duration_ms: 294.2264
+  type: 'test'
+  ...
+1..166
+# tests 166
+# suites 0
+# pass 166
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2813.5377

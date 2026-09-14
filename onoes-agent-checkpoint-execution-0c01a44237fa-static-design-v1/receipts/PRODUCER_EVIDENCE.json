@@ -1,0 +1,75 @@
+{
+  "auditId": "onoes-agent-checkpoint-execution-0c01a44237fa-static-design-v1",
+  "sourceRevision": "0c01a44237fa17970e173fd99e2b9db55863e54e",
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "platform": "Windows x64",
+  "node": "24.14.0",
+  "typecheck": "exit 0",
+  "freshTestCompilation": "exit 0",
+  "runIdentity": "current source/test bytes at 0c01a44, tested before final documentation commit; artifact alone does not prove commit execution",
+  "runs": [
+    {
+      "path": "receipts/CURRENT_FOCUSED.tap",
+      "sha256": "25df68c1611c6733624a9bc9a4f1da86452b5399431850ef4782b9e1d0d11c4f",
+      "tests": 128,
+      "pass": 128,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 2921.6132,
+      "role": "current four focused suites"
+    },
+    {
+      "path": "receipts/CURRENT_FULL.tap",
+      "sha256": "a20dfde35e2649783eabbe8d12338c883067f2f2c3a2555b515449ccc12d5287",
+      "tests": 1925,
+      "pass": 1923,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2,
+      "duration_ms": 49418.685,
+      "role": "current full established offline regression"
+    },
+    {
+      "path": "receipts/HISTORICAL_RELEASE_59.tap",
+      "sha256": "151806b29b078e04776853e796f90b31d7d4f92026f22ae75a3ef19d0dad7f67",
+      "tests": 59,
+      "pass": 59,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 2868.9276,
+      "role": "historical release negative controls at 6daaa646"
+    },
+    {
+      "path": "receipts/HISTORICAL_CHECKPOINT_88.tap",
+      "sha256": "8deb3ffe92690d886d4b3af9504e92e566766849d3762e0896e9c50ced9f6777",
+      "tests": 88,
+      "pass": 88,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 2533.712,
+      "role": "historical initial checkpoint tests at dcdfc5e"
+    },
+    {
+      "path": "receipts/HISTORICAL_EXECUTION_166.tap",
+      "sha256": "84099d43d132cd09855d568c77f35fb1500cb3c7d4f5ac0a1d1580a891410e7d",
+      "tests": 166,
+      "pass": 166,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 2813.5377,
+      "role": "historical initial synthetic execution tests at 9af4f05"
+    }
+  ],
+  "skips": [
+    "Windows link creation privilege unavailable for symlinked binary case",
+    "non-Windows inspector refusal test intentionally skipped on Windows"
+  ],
+  "capture": "PowerShell captured local TAP, not claimed byte-identical pre-capture stdout",
+  "subjectExecutionDuringPacketPreparation": false,
+  "vmOrProviderExecution": false,
+  "productionAuthorized": false
+}

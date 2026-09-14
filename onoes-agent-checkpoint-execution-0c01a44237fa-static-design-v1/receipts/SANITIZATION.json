@@ -1,0 +1,18 @@
+{
+  "method": "bounded filename/token/private-workstation-pattern scan over every prepared input plus selected-scope review",
+  "result": "no configured prohibited patterns detected",
+  "scannedBeforeThisReceipt": 72,
+  "limitations": [
+    "Pattern scanning cannot prove all secrets absent.",
+    "Fixture paths and deterministic synthetic test tokens are not private workstation data."
+  ],
+  "excluded": [
+    "private logs",
+    "VM images",
+    "credential stores",
+    "environment files",
+    "full project",
+    "private Git metadata",
+    "runtime dependencies except named SQLite wrapper/license"
+  ]
+}

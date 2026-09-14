@@ -1,0 +1,538 @@
+TAP version 13
+# Subtest: synthetic paired v2 execution and separately approved publication checkpoint every exact mutation
+ok 1 - synthetic paired v2 execution and separately approved publication checkpoint every exact mutation
+  ---
+  duration_ms: 82.2952
+  type: 'test'
+  ...
+# Subtest: exact terminal replay performs bounded reads but zero ledger mutations or anchor appends
+ok 2 - exact terminal replay performs bounded reads but zero ledger mutations or anchor appends
+  ---
+  duration_ms: 28.101
+  type: 'test'
+  ...
+# Subtest: input snapshot precedes await and rejects proxies/getters without contact
+ok 3 - input snapshot precedes await and rejects proxies/getters without contact
+  ---
+  duration_ms: 19.073
+  type: 'test'
+  ...
+# Subtest: absent anchor does not initialize even an empty ledger
+ok 4 - absent anchor does not initialize even an empty ledger
+  ---
+  duration_ms: 12.7897
+  type: 'test'
+  ...
+# Subtest: uncertain append not-persisted retains v2 row, poisons owner and never compensates
+ok 5 - uncertain append not-persisted retains v2 row, poisons owner and never compensates
+  ---
+  duration_ms: 24.4697
+  type: 'test'
+  ...
+# Subtest: uncertain append persisted-lost-reply retains v2 row, poisons owner and never compensates
+ok 6 - uncertain append persisted-lost-reply retains v2 row, poisons owner and never compensates
+  ---
+  duration_ms: 18.7625
+  type: 'test'
+  ...
+# Subtest: terminal append loss blocks sequencer even where raw v2 terminal is releasing
+ok 7 - terminal append loss blocks sequencer even where raw v2 terminal is releasing
+  ---
+  duration_ms: 23.1474
+  type: 'test'
+  ...
+# Subtest: mutation response loss never appends a guessed checkpoint or compensating terminal
+ok 8 - mutation response loss never appends a guessed checkpoint or compensating terminal
+  ---
+  duration_ms: 21.2619
+  type: 'test'
+  ...
+# Subtest: concurrent work and reentrant callbacks reject without poisoning the active pair
+ok 9 - concurrent work and reentrant callbacks reject without poisoning the active pair
+  ---
+  duration_ms: 22.0151
+  type: 'test'
+  ...
+# Subtest: already aborted request makes zero port contacts
+ok 10 - already aborted request makes zero port contacts
+  ---
+  duration_ms: 12.8664
+  type: 'test'
+  ...
+# Subtest: abort after durable mutation never starts anchor append
+ok 11 - abort after durable mutation never starts anchor append
+  ---
+  duration_ms: 15.5819
+  type: 'test'
+  ...
+# Subtest: timeout of unsettled append stays closed after late success and aborts only its injected signal
+ok 12 - timeout of unsettled append stays closed after late success and aborts only its injected signal
+  ---
+  duration_ms: 48.2346
+  type: 'test'
+  ...
+# Subtest: a fulfilled late port result cannot evade its own deadline when timer loses the race
+ok 13 - a fulfilled late port result cannot evade its own deadline when timer loses the race
+  ---
+  duration_ms: 10.7567
+  type: 'test'
+  ...
+# Subtest: abort plus synchronous injected throw leaves no unhandled rejection
+ok 14 - abort plus synchronous injected throw leaves no unhandled rejection
+  ---
+  duration_ms: 10.1085
+  type: 'test'
+  ...
+# Subtest: revocation after discovery refuses disclosure and further writes
+ok 15 - revocation after discovery refuses disclosure and further writes
+  ---
+  duration_ms: 10.1059
+  type: 'test'
+  ...
+# Subtest: revocation after append refuses disclosure and further writes
+ok 16 - revocation after append refuses disclosure and further writes
+  ---
+  duration_ms: 14.5078
+  type: 'test'
+  ...
+# Subtest: wrong owner and clock regression fail closed before new mutation
+ok 17 - wrong owner and clock regression fail closed before new mutation
+  ---
+  duration_ms: 29.8901
+  type: 'test'
+  ...
+# Subtest: unexpected inventory mutation during discover denies before requested write
+ok 18 - unexpected inventory mutation during discover denies before requested write
+  ---
+  duration_ms: 11.334
+  type: 'test'
+  ...
+# Subtest: unexpected inventory mutation after append withholds result and closes owner
+ok 19 - unexpected inventory mutation after append withholds result and closes owner
+  ---
+  duration_ms: 15.3442
+  type: 'test'
+  ...
+# Subtest: mismatched and accessor-bearing append replies never count as confirmation
+ok 20 - mismatched and accessor-bearing append replies never count as confirmation
+  ---
+  duration_ms: 24.5299
+  type: 'test'
+  ...
+# Subtest: complete inventory includes spent terminals and independently rejects duplicates and hostile arrays
+ok 21 - complete inventory includes spent terminals and independently rejects duplicates and hostile arrays
+  ---
+  duration_ms: 14.9603
+  type: 'test'
+  ...
+# Subtest: maximum 1000-record synthetic inventory canonicalizes as bounded tuples, independent of input order
+ok 22 - maximum 1000-record synthetic inventory canonicalizes as bounded tuples, independent of input order
+  ---
+  duration_ms: 162.3476
+  type: 'test'
+  ...
+# Subtest: explicit fixture budgets and mode cannot silently widen to production or infinity
+ok 23 - explicit fixture budgets and mode cannot silently widen to production or infinity
+  ---
+  duration_ms: 10.28
+  type: 'test'
+  ...
+# Subtest: wrong intent store pin denies before inventory or anchor contact
+ok 24 - wrong intent store pin denies before inventory or anchor contact
+  ---
+  duration_ms: 10.345
+  type: 'test'
+  ...
+# Subtest: checkpoint latest-record binding is checked even when its inventory root matches
+ok 25 - checkpoint latest-record binding is checked even when its inventory root matches
+  ---
+  duration_ms: 13.8524
+  type: 'test'
+  ...
+# Subtest: independently retained fixture root detects deleted terminal, coherent rewrite and ledger rollback
+ok 26 - independently retained fixture root detects deleted terminal, coherent rewrite and ledger rollback
+  ---
+  duration_ms: 64.7632
+  type: 'test'
+  ...
+# Subtest: wrong mutation receipt cannot anchor an extra unrequested transition
+ok 27 - wrong mutation receipt cannot anchor an extra unrequested transition
+  ---
+  duration_ms: 13.3315
+  type: 'test'
+  ...
+# Subtest: insufficient append reserve denies before SQLite mutation after a slow synchronous owner check
+ok 28 - insufficient append reserve denies before SQLite mutation after a slow synchronous owner check
+  ---
+  duration_ms: 9.9062
+  type: 'test'
+  ...
+# Subtest: inventory re-derives approval, workflow, blocker and parent invariants rather than trusting a port
+ok 29 - inventory re-derives approval, workflow, blocker and parent invariants rather than trusting a port
+  ---
+  duration_ms: 10.3984
+  type: 'test'
+  ...
+# Subtest: execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+ok 30 - execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+  ---
+  duration_ms: 45.9526
+  type: 'test'
+  ...
+# Subtest: one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+ok 31 - one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+  ---
+  duration_ms: 24.4627
+  type: 'test'
+  ...
+# Subtest: publication requires a passed completed parent and exact complete subject, never bare result digest
+ok 32 - publication requires a passed completed parent and exact complete subject, never bare result digest
+  ---
+  duration_ms: 45.4967
+  type: 'test'
+  ...
+# Subtest: terminal quarantine remains absorbing and blocks a fresh workflow after restart
+ok 33 - terminal quarantine remains absorbing and blocks a fresh workflow after restart
+  ---
+  duration_ms: 21.3414
+  type: 'test'
+  ...
+# Subtest: pure state graph rejects skipped effects, contradictory results and restoration of execution
+ok 34 - pure state graph rejects skipped effects, contradictory results and restoration of execution
+  ---
+  duration_ms: 30.0537
+  type: 'test'
+  ...
+# Subtest: caller mutation, getters, forged history and divergent event replay fail without extra state
+ok 35 - caller mutation, getters, forged history and divergent event replay fail without extra state
+  ---
+  duration_ms: 17.0905
+  type: 'test'
+  ...
+# Subtest: v2 no-result stop after source-delivery-possible cannot become failure/cancellation or release a workspace
+ok 36 - v2 no-result stop after source-delivery-possible cannot become failure/cancellation or release a workspace
+  ---
+  duration_ms: 27.2749
+  type: 'test'
+  ...
+# Subtest: v2 no-result stop after launch-possible cannot become failure/cancellation or release a workspace
+ok 37 - v2 no-result stop after launch-possible cannot become failure/cancellation or release a workspace
+  ---
+  duration_ms: 30.8848
+  type: 'test'
+  ...
+# Subtest: expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+ok 38 - expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+  ---
+  duration_ms: 22.9021
+  type: 'test'
+  ...
+# Subtest: reached expiry before transfer refuses delivery marker and permits cancellation only
+ok 39 - reached expiry before transfer refuses delivery marker and permits cancellation only
+  ---
+  duration_ms: 15.3311
+  type: 'test'
+  ...
+# Subtest: reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 40 - reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 19.7697
+  type: 'test'
+  ...
+# Subtest: possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 41 - possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 14.3252
+  type: 'test'
+  ...
+# Subtest: terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 42 - terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 17.6965
+  type: 'test'
+  ...
+# Subtest: post-commit read-back fault retains record and poisons rather than compensating
+ok 43 - post-commit read-back fault retains record and poisons rather than compensating
+  ---
+  duration_ms: 22.1983
+  type: 'test'
+  ...
+# Subtest: malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+ok 44 - malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+  ---
+  duration_ms: 18.7364
+  type: 'test'
+  ...
+# Subtest: missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+ok 45 - missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+  ---
+  duration_ms: 16.8589
+  type: 'test'
+  ...
+# Subtest: maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+ok 46 - maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+  ---
+  duration_ms: 269.9695
+  type: 'test'
+  ...
+# Subtest: abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+ok 47 - abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+  ---
+  duration_ms: 152.2689
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+ok 48 - two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+  ---
+  duration_ms: 109.8395
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+ok 49 - two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+  ---
+  duration_ms: 109.167
+  type: 'test'
+  ...
+# Subtest: held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+ok 50 - held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+  ---
+  duration_ms: 811.9281
+  type: 'test'
+  ...
+# Subtest: v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+ok 51 - v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+  ---
+  duration_ms: 11.8505
+  type: 'test'
+  ...
+# Subtest: overriding public read cannot substitute post-COMMIT integrity read-back
+ok 52 - overriding public read cannot substitute post-COMMIT integrity read-back
+  ---
+  duration_ms: 38.2257
+  type: 'test'
+  ...
+# Subtest: legacy v1 schema is refused without migration, adoption or rewriting
+ok 53 - legacy v1 schema is refused without migration, adoption or rewriting
+  ---
+  duration_ms: 9.8969
+  type: 'test'
+  ...
+# Subtest: oversized passive input and event-count overflow deny without writing
+ok 54 - oversized passive input and event-count overflow deny without writing
+  ---
+  duration_ms: 12.0998
+  type: 'test'
+  ...
+# Subtest: verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+ok 55 - verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+  ---
+  duration_ms: 40.6602
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row approval duplication on every access path
+ok 56 - application scan independently rejects cross-row approval duplication on every access path
+  ---
+  duration_ms: 19.8574
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workflow duplication on every access path
+ok 57 - application scan independently rejects cross-row workflow duplication on every access path
+  ---
+  duration_ms: 14.0339
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workspace duplication on every access path
+ok 58 - application scan independently rejects cross-row workspace duplication on every access path
+  ---
+  duration_ms: 13.4563
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row operation duplication on every access path
+ok 59 - application scan independently rejects cross-row operation duplication on every access path
+  ---
+  duration_ms: 13.5653
+  type: 'test'
+  ...
+# Subtest: coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+ok 60 - coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+  ---
+  duration_ms: 25.0606
+  type: 'test'
+  ...
+# Subtest: coherent cross-store rewrite is accepted: store binding is not authentication
+ok 61 - coherent cross-store rewrite is accepted: store binding is not authentication
+  ---
+  duration_ms: 39.0554
+  type: 'test'
+  ...
+# Subtest: two same-namespace stores each accept one approval: sole enrollment is a host obligation
+ok 62 - two same-namespace stores each accept one approval: sole enrollment is a host obligation
+  ---
+  duration_ms: 43.3432
+  type: 'test'
+  ...
+# Subtest: new ledger on the same connection clears only instance poison, not durable history
+ok 63 - new ledger on the same connection clears only instance poison, not durable history
+  ---
+  duration_ms: 13.3795
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+ok 64 - new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+  ---
+  duration_ms: 14.0689
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+ok 65 - new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+  ---
+  duration_ms: 12.2867
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+ok 66 - new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+  ---
+  duration_ms: 11.9707
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: busy_timeout=0
+ok 67 - new ledger normalizes configured pragma on the same connection: busy_timeout=0
+  ---
+  duration_ms: 13.1138
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+ok 68 - new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+  ---
+  duration_ms: 19.3208
+  type: 'test'
+  ...
+# Subtest: constructor does not normalize ignore_check_constraints drift
+ok 69 - constructor does not normalize ignore_check_constraints drift
+  ---
+  duration_ms: 9.8348
+  type: 'test'
+  ...
+# Subtest: v1 record inside intact v2 schema denies all access without rewriting
+ok 70 - v1 record inside intact v2 schema denies all access without rewriting
+  ---
+  duration_ms: 25.51
+  type: 'test'
+  ...
+# Subtest: publication restoration releases once-at-a-time workspace exclusion, never approval identity
+ok 71 - publication restoration releases once-at-a-time workspace exclusion, never approval identity
+  ---
+  duration_ms: 36.9866
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: synchronous=NORMAL
+ok 72 - current connection rejects durability drift: synchronous=NORMAL
+  ---
+  duration_ms: 10.6057
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: foreign_keys=OFF
+ok 73 - current connection rejects durability drift: foreign_keys=OFF
+  ---
+  duration_ms: 9.5332
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: trusted_schema=ON
+ok 74 - current connection rejects durability drift: trusted_schema=ON
+  ---
+  duration_ms: 9.1462
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: busy_timeout=0
+ok 75 - current connection rejects durability drift: busy_timeout=0
+  ---
+  duration_ms: 8.6705
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: ignore_check_constraints=ON
+ok 76 - current connection rejects durability drift: ignore_check_constraints=ON
+  ---
+  duration_ms: 9.664
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: journal_mode=DELETE
+ok 77 - current connection rejects durability drift: journal_mode=DELETE
+  ---
+  duration_ms: 11.5273
+  type: 'test'
+  ...
+# Subtest: attached database denies discovery without inspecting its content
+ok 78 - attached database denies discovery without inspecting its content
+  ---
+  duration_ms: 8.9866
+  type: 'test'
+  ...
+# Subtest: forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+ok 79 - forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+  ---
+  duration_ms: 23.8488
+  type: 'test'
+  ...
+# Subtest: expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+ok 80 - expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+  ---
+  duration_ms: 31.723
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 completed releases after SQLite reopen without an anchor acknowledgment
+ok 81 - boundary negative: v2 completed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 40.3593
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 failed releases after SQLite reopen without an anchor acknowledgment
+ok 82 - boundary negative: v2 failed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 31.9803
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 cancelled releases after SQLite reopen without an anchor acknowledgment
+ok 83 - boundary negative: v2 cancelled releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 29.3323
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 restored releases after SQLite reopen without an anchor acknowledgment
+ok 84 - boundary negative: v2 restored releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 43.8496
+  type: 'test'
+  ...
+# Subtest: boundary negative: v2 publish-completed releases after SQLite reopen without an anchor acknowledgment
+ok 85 - boundary negative: v2 publish-completed releases after SQLite reopen without an anchor acknowledgment
+  ---
+  duration_ms: 37.6793
+  type: 'test'
+  ...
+# Subtest: boundary: anchor response loss and absent append have identical ledger bytes but different independent histories
+ok 86 - boundary: anchor response loss and absent append have identical ledger bytes but different independent histories
+  ---
+  duration_ms: 24.9197
+  type: 'test'
+  ...
+# Subtest: boundary negative: deleting a releasing terminal is invisible to listBlocked but changes complete inventory
+ok 87 - boundary negative: deleting a releasing terminal is invisible to listBlocked but changes complete inventory
+  ---
+  duration_ms: 26.8023
+  type: 'test'
+  ...
+# Subtest: boundary: v2 missing-result quarantine stays absorbing and cannot emulate the proposed release protocol
+ok 88 - boundary: v2 missing-result quarantine stays absorbing and cannot emulate the proposed release protocol
+  ---
+  duration_ms: 25.3366
+  type: 'test'
+  ...
+1..88
+# tests 88
+# suites 0
+# pass 88
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2533.712
