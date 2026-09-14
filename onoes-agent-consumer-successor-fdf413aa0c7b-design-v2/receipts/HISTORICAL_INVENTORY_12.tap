@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: source audit scans benign C\# without requiring a compiler or executing the file
+ok 1 - source audit scans benign C\# without requiring a compiler or executing the file
+  ---
+  duration_ms: 230.4283
+  type: 'test'
+  ...
+# Subtest: source audit rejects a synthetic secret-shaped marker in C\# and does not echo it
+ok 2 - source audit rejects a synthetic secret-shaped marker in C\# and does not echo it
+  ---
+  duration_ms: 246.017
+  type: 'test'
+  ...
+# Subtest: source audit includes .jsx frontend source and redacts findings
+ok 3 - source audit includes .jsx frontend source and redacts findings
+  ---
+  duration_ms: 257.4174
+  type: 'test'
+  ...
+# Subtest: source audit includes .tsx frontend source and redacts findings
+ok 4 - source audit includes .tsx frontend source and redacts findings
+  ---
+  duration_ms: 234.3794
+  type: 'test'
+  ...
+# Subtest: alias imports, export-star barrels and literal dynamic imports preserve transitive reachability
+ok 5 - alias imports, export-star barrels and literal dynamic imports preserve transitive reachability
+  ---
+  duration_ms: 5.6666
+  type: 'test'
+  ...
+# Subtest: type-only imports and exports are recorded but do not become runtime paths
+ok 6 - type-only imports and exports are recorded but do not become runtime paths
+  ---
+  duration_ms: 0.8373
+  type: 'test'
+  ...
+# Subtest: computed, unresolved, ambiguous, eval and createRequire loads remain explicit gaps
+ok 7 - computed, unresolved, ambiguous, eval and createRequire loads remain explicit gaps
+  ---
+  duration_ms: 0.8032
+  type: 'test'
+  ...
+# Subtest: parses but never evaluates source; native files are classified opaque
+ok 8 - parses but never evaluates source; native files are classified opaque
+  ---
+  duration_ms: 0.4728
+  type: 'test'
+  ...
+# Subtest: module-relative worker resource and CommonJS import-equals are visible
+ok 9 - module-relative worker resource and CommonJS import-equals are visible
+  ---
+  duration_ms: 0.4413
+  type: 'test'
+  ...
+# Subtest: cycles terminate deterministically and syntax errors are not silently ignored
+ok 10 - cycles terminate deterministically and syntax errors are not silently ignored
+  ---
+  duration_ms: 0.8648
+  type: 'test'
+  ...
+# Subtest: package script surfaces are inventoried without exposing or running their commands
+ok 11 - package script surfaces are inventoried without exposing or running their commands
+  ---
+  duration_ms: 0.2491
+  type: 'test'
+  ...
+# Subtest: current candidate ledger has no literal product import or bootstrap/barrel consumer
+ok 12 - current candidate ledger has no literal product import or bootstrap/barrel consumer
+  ---
+  duration_ms: 717.1027
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1026.4848

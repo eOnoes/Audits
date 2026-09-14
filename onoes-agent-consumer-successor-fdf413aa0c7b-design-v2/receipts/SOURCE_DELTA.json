@@ -1,0 +1,191 @@
+{
+  "baselineProduct": "7060f7058ae0c2febf3cf9d5b1efb3b3169f9dba",
+  "baselinePacketCommit": "459aa620ae778d2d4f5eb5f2ec39f946b9f5c4be",
+  "baselinePacketPath": "onoes-agent-candidate-consumer-7060f7058ae0-design-v1",
+  "sourceRevision": "fdf413aa0c7b8ed0972e5633302d59b3eac04957",
+  "selectedMembers": [
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V1.md",
+      "baselinePacketSha256": "f3bb6cc3849315c817d570885d4fd25b62c39b0f7ea60aaae9b52e34b14957ab",
+      "baselineBlobOid": "c7a416a8c076fdd359a2239aeee154fef9b37dfe",
+      "currentSha256": "f3bb6cc3849315c817d570885d4fd25b62c39b0f7ea60aaae9b52e34b14957ab",
+      "currentBlobOid": "c7a416a8c076fdd359a2239aeee154fef9b37dfe",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V2.md",
+      "baselinePacketSha256": null,
+      "baselineBlobOid": null,
+      "currentSha256": "1d7a062c4c6e3969c27a61f1ddfc7168b606937810936a1db4c50436e6c67a4c",
+      "currentBlobOid": "7bfb08f2107f697155ea0b2a0e372809e30cf878",
+      "status": "new"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_REVIEW_DISPOSITION.md",
+      "baselinePacketSha256": null,
+      "baselineBlobOid": null,
+      "currentSha256": "f7e7470dd2dd77448e692f9aa9295cd342b19cfef287e1c36bdeb8bbd8296766",
+      "currentBlobOid": "26959e8ea29f0abdbb4e39ff10469203e90564f3",
+      "status": "new"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "baselinePacketSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "baselineBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d",
+      "currentSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "currentBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-ledger.ts",
+      "baselinePacketSha256": "d9f19d0493ebeb1684bd982e79aaeeb90734b41dd0f4f54d83156ef332c2afc6",
+      "baselineBlobOid": "5507bb76582b792dda9c0784546c1cb7d43aa7d2",
+      "currentSha256": "d9f19d0493ebeb1684bd982e79aaeeb90734b41dd0f4f54d83156ef332c2afc6",
+      "currentBlobOid": "5507bb76582b792dda9c0784546c1cb7d43aa7d2",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "baselinePacketSha256": "c06151252ec3287cfe7cfa87f4da6adfa086300328ed3ec64e757a53addfccdf",
+      "baselineBlobOid": "aa45d8b95d029ac00d27787d57830506b12ac49f",
+      "currentSha256": "c06151252ec3287cfe7cfa87f4da6adfa086300328ed3ec64e757a53addfccdf",
+      "currentBlobOid": "aa45d8b95d029ac00d27787d57830506b12ac49f",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-verifier.ts",
+      "baselinePacketSha256": "e41383ed8bcbf7f1e8e2542541b2402e6e017c8a92612fe87b4a24e59f7cbab4",
+      "baselineBlobOid": "90d98e4c827ed6911b79a3d3b2edf11579e2e89c",
+      "currentSha256": "e41383ed8bcbf7f1e8e2542541b2402e6e017c8a92612fe87b4a24e59f7cbab4",
+      "currentBlobOid": "90d98e4c827ed6911b79a3d3b2edf11579e2e89c",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-vm-acquisition.ts",
+      "baselinePacketSha256": "9bf4c07b4ed0b1beb30084e66496005dfec18fc17ea3074bef0cff728e1fb245",
+      "baselineBlobOid": "4219ab26317bb88b3bb988fd50c2b0266bfcaf21",
+      "currentSha256": "9bf4c07b4ed0b1beb30084e66496005dfec18fc17ea3074bef0cff728e1fb245",
+      "currentBlobOid": "4219ab26317bb88b3bb988fd50c2b0266bfcaf21",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-source-manifest.ts",
+      "baselinePacketSha256": "2028961a2e8454b7724bd92b34fb7c52b736847bfbb50c20c783eff12a9ebe53",
+      "baselineBlobOid": "edd772f8a24c63d1c96396ded882a1bd3bf4ebc4",
+      "currentSha256": "2028961a2e8454b7724bd92b34fb7c52b736847bfbb50c20c783eff12a9ebe53",
+      "currentBlobOid": "edd772f8a24c63d1c96396ded882a1bd3bf4ebc4",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-source-transfer.ts",
+      "baselinePacketSha256": "d0322855442ad71bb74ebbabb420126549b38d5d950e6c96d84ddd8f4abc2605",
+      "baselineBlobOid": "3abe339fde6b7f724df2311e43c9731a612e1b61",
+      "currentSha256": "d0322855442ad71bb74ebbabb420126549b38d5d950e6c96d84ddd8f4abc2605",
+      "currentBlobOid": "3abe339fde6b7f724df2311e43c9731a612e1b61",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-verification-evidence.ts",
+      "baselinePacketSha256": "45c8a0a92a71a8e150e521b46d5899da881421e515513138b09ce6a63087a089",
+      "baselineBlobOid": "cb3a52beb008fad129ed87f8060aaf3d33d57e18",
+      "currentSha256": "45c8a0a92a71a8e150e521b46d5899da881421e515513138b09ce6a63087a089",
+      "currentBlobOid": "cb3a52beb008fad129ed87f8060aaf3d33d57e18",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "baselinePacketSha256": "82b4915b4eb5890d09ce14637210015513d10e92950b8ec3cea0e58eb1325652",
+      "baselineBlobOid": "9f2f527e3bf5ee0467694082b02d7e80e7e3dccf",
+      "currentSha256": "82b4915b4eb5890d09ce14637210015513d10e92950b8ec3cea0e58eb1325652",
+      "currentBlobOid": "9f2f527e3bf5ee0467694082b02d7e80e7e3dccf",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-candidate-verification.ts",
+      "baselinePacketSha256": "05fabb0b1d486f6bc09c089cbe78c7c56079b43cb44c2eba36d288c74e33f233",
+      "baselineBlobOid": "cce169b1142d9f2947f537c85b84c08a0178dac4",
+      "currentSha256": "05fabb0b1d486f6bc09c089cbe78c7c56079b43cb44c2eba36d288c74e33f233",
+      "currentBlobOid": "cce169b1142d9f2947f537c85b84c08a0178dac4",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/build-only/windows-managed-candidate-review.ts",
+      "baselinePacketSha256": "7273fa8f9c8ee44fb74ba4fd9998ea40dbf012e7169e747a1dd1ca5381ab6cbf",
+      "baselineBlobOid": "88eb046abdef78f25d271b937aebbb028e0a4285",
+      "currentSha256": "7273fa8f9c8ee44fb74ba4fd9998ea40dbf012e7169e747a1dd1ca5381ab6cbf",
+      "currentBlobOid": "88eb046abdef78f25d271b937aebbb028e0a4285",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/builder/agent-workflow.ts",
+      "baselinePacketSha256": "698fed9195403c9157d32018b23123defd410ed360e0936dec4a0c1f9d0134c1",
+      "baselineBlobOid": "4a406f9e3a465198babb334dd8e99eca16dfd183",
+      "currentSha256": "698fed9195403c9157d32018b23123defd410ed360e0936dec4a0c1f9d0134c1",
+      "currentBlobOid": "4a406f9e3a465198babb334dd8e99eca16dfd183",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/builder/schemas.ts",
+      "baselinePacketSha256": "171c110be8bf05681210c6fe452903db7efe2a36ca7f6a8bd188c7886a61d102",
+      "baselineBlobOid": "863ed4b968b26325b0fc106f5a0a469209c70692",
+      "currentSha256": "171c110be8bf05681210c6fe452903db7efe2a36ca7f6a8bd188c7886a61d102",
+      "currentBlobOid": "863ed4b968b26325b0fc106f5a0a469209c70692",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "baselinePacketSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "baselineBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "currentSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "currentBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "baselinePacketSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "baselineBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "currentSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "currentBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "baselinePacketSha256": "5c7cef47741ebb4c36e5de6e1d545d371bf8558fe10670e1ff68ff16f2cca276",
+      "baselineBlobOid": "d6d5d92c035850ba0b09acd995cc6f87d96d920a",
+      "currentSha256": "dedadadc4f4d473b161e9cfaeaa54c9087bcc3280b2e9f953fe3d387a8486f31",
+      "currentBlobOid": "1e1958cea8c3dbea3b7e3534ee2f2bb4ddccb5fd",
+      "status": "changed"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-crash.ts",
+      "baselinePacketSha256": "dba9f04794cc3545d85a5137e8bcea4a7cd23d5e95fd6ed3ac729203ccfc7f41",
+      "baselineBlobOid": "de7340f80d212086cfadad13c193498746ae1467",
+      "currentSha256": "dba9f04794cc3545d85a5137e8bcea4a7cd23d5e95fd6ed3ac729203ccfc7f41",
+      "currentBlobOid": "de7340f80d212086cfadad13c193498746ae1467",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-racer.ts",
+      "baselinePacketSha256": "34c193f079eccee539cb8ee4cc409c0a662f7b78e2e4b8cc80dc25563bc360f1",
+      "baselineBlobOid": "2c9de26b67bfa7c5b5e105a6c9d7a0fa1cbf5fa5",
+      "currentSha256": "34c193f079eccee539cb8ee4cc409c0a662f7b78e2e4b8cc80dc25563bc360f1",
+      "currentBlobOid": "2c9de26b67bfa7c5b5e105a6c9d7a0fa1cbf5fa5",
+      "status": "unchanged"
+    },
+    {
+      "productPath": "tests/helpers/candidate-effect-contention.ts",
+      "baselinePacketSha256": "6269f64c0f6adb79ef2251bbf71d638d6f10869cd0d06c99c88038657aa27b5c",
+      "baselineBlobOid": "adb3539ba89515254cc003679feb02d294de6983",
+      "currentSha256": "6269f64c0f6adb79ef2251bbf71d638d6f10869cd0d06c99c88038657aa27b5c",
+      "currentBlobOid": "adb3539ba89515254cc003679feb02d294de6983",
+      "status": "unchanged"
+    }
+  ],
+  "runRevision": "a3fc968662a825a56cbb11b326e69d11f483d1d4",
+  "afterFullRunChangedPaths": [
+    "product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V2.md",
+    "product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_REVIEW_DISPOSITION.md",
+    "product/companion-v1/docs/handoff/ONOES_AGENT_WINDOWS_RELEASE_GOAL.md"
+  ],
+  "historyEvidence": "Publisher local Git inspection, not an independent product bundle; baseline selected bytes are available in the immutable public predecessor."
+}

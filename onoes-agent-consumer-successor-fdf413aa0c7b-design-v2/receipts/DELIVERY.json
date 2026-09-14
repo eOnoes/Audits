@@ -1,0 +1,12 @@
+{
+  "auditId": "onoes-agent-consumer-successor-fdf413aa0c7b-design-v2",
+  "sourceRevision": "fdf413aa0c7b8ed0972e5633302d59b3eac04957",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "reportPath": "onoes-agent-consumer-successor-fdf413aa0c7b-design-v2/reports/AUDIT_REPORT.md",
+  "allowedWrite": "sanitized report only after workflow checks; no Actions",
+  "fallback": "full Markdown with BLOCKED_NO_GITHUB_WRITE_ACCESS for operator upload",
+  "preparedLocally": true,
+  "published": false,
+  "publicHistoryPersists": true
+}

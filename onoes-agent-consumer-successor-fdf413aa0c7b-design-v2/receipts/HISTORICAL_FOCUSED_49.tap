@@ -1,0 +1,304 @@
+TAP version 13
+# Subtest: execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+ok 1 - execution and separately approved publication preserve exact intent and immutable observation across cold reopen
+  ---
+  duration_ms: 102.7689
+  type: 'test'
+  ...
+# Subtest: one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+ok 2 - one enrolled store enforces namespace approval uniqueness across workflows and execute/publish; keys cannot be appended
+  ---
+  duration_ms: 19.1652
+  type: 'test'
+  ...
+# Subtest: publication requires a passed completed parent and exact complete subject, never bare result digest
+ok 3 - publication requires a passed completed parent and exact complete subject, never bare result digest
+  ---
+  duration_ms: 33.102
+  type: 'test'
+  ...
+# Subtest: terminal quarantine remains absorbing and blocks a fresh workflow after restart
+ok 4 - terminal quarantine remains absorbing and blocks a fresh workflow after restart
+  ---
+  duration_ms: 21.5567
+  type: 'test'
+  ...
+# Subtest: pure state graph rejects skipped effects, contradictory results and restoration of execution
+ok 5 - pure state graph rejects skipped effects, contradictory results and restoration of execution
+  ---
+  duration_ms: 18.014
+  type: 'test'
+  ...
+# Subtest: caller mutation, getters, forged history and divergent event replay fail without extra state
+ok 6 - caller mutation, getters, forged history and divergent event replay fail without extra state
+  ---
+  duration_ms: 15.1259
+  type: 'test'
+  ...
+# Subtest: expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+ok 7 - expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies
+  ---
+  duration_ms: 18.4387
+  type: 'test'
+  ...
+# Subtest: reached expiry before transfer refuses delivery marker and permits cancellation only
+ok 8 - reached expiry before transfer refuses delivery marker and permits cancellation only
+  ---
+  duration_ms: 12.7839
+  type: 'test'
+  ...
+# Subtest: reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 9 - reservation COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 15.7573
+  type: 'test'
+  ...
+# Subtest: possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 10 - possible-effect COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 16.1677
+  type: 'test'
+  ...
+# Subtest: terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+ok 11 - terminal COMMIT response loss persists once, poisons writes and recovers by exact read
+  ---
+  duration_ms: 16.5864
+  type: 'test'
+  ...
+# Subtest: post-commit read-back fault retains record and poisons rather than compensating
+ok 12 - post-commit read-back fault retains record and poisons rather than compensating
+  ---
+  duration_ms: 20.3462
+  type: 'test'
+  ...
+# Subtest: malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+ok 13 - malformed row fails whole discovery; rehashed forged transitions and blocker columns cannot clear quarantine
+  ---
+  duration_ms: 14.122
+  type: 'test'
+  ...
+# Subtest: missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+ok 14 - missing/wrong schema, namespace, store identity, nested transaction and durability drift deny
+  ---
+  duration_ms: 10.3959
+  type: 'test'
+  ...
+# Subtest: maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+ok 15 - maximum lifetime quota denies without pruning and SQL-side scan catches an over-limit store
+  ---
+  duration_ms: 259.3366
+  type: 'test'
+  ...
+# Subtest: abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+ok 16 - abrupt separate process exit after possible-effect COMMIT retains blocker and cannot redispatch on reopen
+  ---
+  duration_ms: 136.9829
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+ok 17 - two independent worker connections start together for identical approval: outcome consistency, not proof of contention
+  ---
+  duration_ms: 101.1137
+  type: 'test'
+  ...
+# Subtest: two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+ok 18 - two independent worker connections start together for same workspace: outcome consistency, not proof of contention
+  ---
+  duration_ms: 93.2926
+  type: 'test'
+  ...
+# Subtest: held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+ok 19 - held SQLite IMMEDIATE lock forces observed SQLITE_BUSY and denies ledger write until explicit release
+  ---
+  duration_ms: 814.241
+  type: 'test'
+  ...
+# Subtest: v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+ok 20 - v2 binds store identity, keeps historical approval identity and rejects v1 inputs
+  ---
+  duration_ms: 11.6963
+  type: 'test'
+  ...
+# Subtest: overriding public read cannot substitute post-COMMIT integrity read-back
+ok 21 - overriding public read cannot substitute post-COMMIT integrity read-back
+  ---
+  duration_ms: 20.2381
+  type: 'test'
+  ...
+# Subtest: legacy v1 schema is refused without migration, adoption or rewriting
+ok 22 - legacy v1 schema is refused without migration, adoption or rewriting
+  ---
+  duration_ms: 9.8342
+  type: 'test'
+  ...
+# Subtest: oversized passive input and event-count overflow deny without writing
+ok 23 - oversized passive input and event-count overflow deny without writing
+  ---
+  duration_ms: 10.3956
+  type: 'test'
+  ...
+# Subtest: verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+ok 24 - verbatim passed execution transplanted into a same-namespace store denies read, write and publication across reopen
+  ---
+  duration_ms: 42.6355
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row approval duplication on every access path
+ok 25 - application scan independently rejects cross-row approval duplication on every access path
+  ---
+  duration_ms: 19.0906
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workflow duplication on every access path
+ok 26 - application scan independently rejects cross-row workflow duplication on every access path
+  ---
+  duration_ms: 13.6478
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row workspace duplication on every access path
+ok 27 - application scan independently rejects cross-row workspace duplication on every access path
+  ---
+  duration_ms: 12.7078
+  type: 'test'
+  ...
+# Subtest: application scan independently rejects cross-row operation duplication on every access path
+ok 28 - application scan independently rejects cross-row operation duplication on every access path
+  ---
+  duration_ms: 13.0152
+  type: 'test'
+  ...
+# Subtest: coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+ok 29 - coherent in-store forgery is accepted: negative boundary control, not authenticated evidence
+  ---
+  duration_ms: 24.8826
+  type: 'test'
+  ...
+# Subtest: coherent cross-store rewrite is accepted: store binding is not authentication
+ok 30 - coherent cross-store rewrite is accepted: store binding is not authentication
+  ---
+  duration_ms: 35.8547
+  type: 'test'
+  ...
+# Subtest: two same-namespace stores each accept one approval: sole enrollment is a host obligation
+ok 31 - two same-namespace stores each accept one approval: sole enrollment is a host obligation
+  ---
+  duration_ms: 45.0694
+  type: 'test'
+  ...
+# Subtest: new ledger on the same connection clears only instance poison, not durable history
+ok 32 - new ledger on the same connection clears only instance poison, not durable history
+  ---
+  duration_ms: 11.8331
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+ok 33 - new ledger normalizes configured pragma on the same connection: synchronous=NORMAL
+  ---
+  duration_ms: 10.4766
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+ok 34 - new ledger normalizes configured pragma on the same connection: foreign_keys=OFF
+  ---
+  duration_ms: 10.8242
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+ok 35 - new ledger normalizes configured pragma on the same connection: trusted_schema=ON
+  ---
+  duration_ms: 11.0689
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: busy_timeout=0
+ok 36 - new ledger normalizes configured pragma on the same connection: busy_timeout=0
+  ---
+  duration_ms: 10.4443
+  type: 'test'
+  ...
+# Subtest: new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+ok 37 - new ledger normalizes configured pragma on the same connection: journal_mode=DELETE
+  ---
+  duration_ms: 18.2345
+  type: 'test'
+  ...
+# Subtest: constructor does not normalize ignore_check_constraints drift
+ok 38 - constructor does not normalize ignore_check_constraints drift
+  ---
+  duration_ms: 10.7299
+  type: 'test'
+  ...
+# Subtest: v1 record inside intact v2 schema denies all access without rewriting
+ok 39 - v1 record inside intact v2 schema denies all access without rewriting
+  ---
+  duration_ms: 23.6179
+  type: 'test'
+  ...
+# Subtest: publication restoration releases once-at-a-time workspace exclusion, never approval identity
+ok 40 - publication restoration releases once-at-a-time workspace exclusion, never approval identity
+  ---
+  duration_ms: 36.8996
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: synchronous=NORMAL
+ok 41 - current connection rejects durability drift: synchronous=NORMAL
+  ---
+  duration_ms: 9.2707
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: foreign_keys=OFF
+ok 42 - current connection rejects durability drift: foreign_keys=OFF
+  ---
+  duration_ms: 9.3667
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: trusted_schema=ON
+ok 43 - current connection rejects durability drift: trusted_schema=ON
+  ---
+  duration_ms: 9.8858
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: busy_timeout=0
+ok 44 - current connection rejects durability drift: busy_timeout=0
+  ---
+  duration_ms: 9.9777
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: ignore_check_constraints=ON
+ok 45 - current connection rejects durability drift: ignore_check_constraints=ON
+  ---
+  duration_ms: 10.6304
+  type: 'test'
+  ...
+# Subtest: current connection rejects durability drift: journal_mode=DELETE
+ok 46 - current connection rejects durability drift: journal_mode=DELETE
+  ---
+  duration_ms: 13.6597
+  type: 'test'
+  ...
+# Subtest: attached database denies discovery without inspecting its content
+ok 47 - attached database denies discovery without inspecting its content
+  ---
+  duration_ms: 11.2856
+  type: 'test'
+  ...
+# Subtest: forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+ok 48 - forward-clock record survives reopen and blocks all earlier writes; discovery remains read-only
+  ---
+  duration_ms: 23.2771
+  type: 'test'
+  ...
+# Subtest: expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+ok 49 - expired success is historical bookkeeping and replayed quarantine never grants a fresh effect
+  ---
+  duration_ms: 40.9595
+  type: 'test'
+  ...
+1..49
+# tests 49
+# suites 0
+# pass 49
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3264.1282

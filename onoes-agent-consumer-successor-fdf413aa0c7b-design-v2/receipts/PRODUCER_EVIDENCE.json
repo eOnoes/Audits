@@ -1,0 +1,68 @@
+{
+  "auditId": "onoes-agent-consumer-successor-fdf413aa0c7b-design-v2",
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "runRevision": "a3fc968662a825a56cbb11b326e69d11f483d1d4",
+  "sourceRevision": "fdf413aa0c7b8ed0972e5633302d59b3eac04957",
+  "typecheck": "passed",
+  "testCompilation": "passed",
+  "subjectExecutionDuringPackaging": false,
+  "vmExecution": false,
+  "providerCalls": false,
+  "productionAuthorized": false,
+  "runs": [
+    {
+      "path": "receipts/CURRENT_FOCUSED.tap",
+      "sha256": "a64f8c0795da14fce976e9c8ad46b7a41d237b544de722349b89089911bab8dd",
+      "tests": 51,
+      "pass": 51,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 3748.9246,
+      "role": "current local boundary regression, source/test bytes at a3fc968; not v3 implementation"
+    },
+    {
+      "path": "receipts/CURRENT_FULL.tap",
+      "sha256": "213aabd3354cd319b9c83df71b94421ff069ec96758143c4cea510485eee905e",
+      "tests": 1840,
+      "pass": 1838,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0,
+      "duration_ms": 48608.2745,
+      "role": "full local offline regression at a3fc968, later documentation-only delta"
+    },
+    {
+      "path": "receipts/HISTORICAL_FOCUSED_49.tap",
+      "sha256": "61ec1dc396be51b43282d5a6399935dc703694e8fdadab64a335cc0f0196431c",
+      "tests": 49,
+      "pass": 49,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 3264.1282,
+      "role": "previously cited but omitted focused receipt; historical, before final comment-only Node citation"
+    },
+    {
+      "path": "receipts/HISTORICAL_INVENTORY_12.tap",
+      "sha256": "941640a4b75cdad1820559b61c6b344d7b6712d6e514146473d661e9da5dd790",
+      "tests": 12,
+      "pass": 12,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "duration_ms": 1026.4848,
+      "role": "previously cited but omitted inventory-tool receipt; NOT architecture validation"
+    }
+  ],
+  "skips": [
+    "Windows symlink creation privilege unavailable",
+    "non-Windows-only inspector refusal test intentionally skipped on Windows"
+  ],
+  "limits": [
+    "Full TAP includes broader product names, not broader review authority.",
+    "Raw TAP does not independently prove a Git revision was executed.",
+    "No v3/anchor/controller/consumer acceptance test has run.",
+    "Other historical report citations remain historical references, not new claims or missing required inputs."
+  ]
+}

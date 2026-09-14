@@ -1,0 +1,48 @@
+diff --git a/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts b/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
+index d6d5d92..1e1958c 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-effect-ledger.test.ts
+@@ -147,6 +147,33 @@ test("caller mutation, getters, forged history and divergent event replay fail w
+   } finally { f.dispose(); }
+ });
+ 
++for (const marker of ["source-delivery-possible", "launch-possible"] as const)
++test(`v2 no-result stop after ${marker} cannot become failure/cancellation or release a workspace`, () => {
++  // CC-B-01 regression of the EXISTING boundary, not a simulated authentic stop.
++  // A future host must not invent a result merely to get a releasing terminal.
++  const f = fixture(); try {
++    let r = f.store.reserve(intent(f.namespaceId, f.storeId)).record;
++    r = f.store.advance(event(r, "source-delivery-possible")).record;
++    if (marker === "launch-possible") r = f.store.advance(event(r, marker)).record;
++    const before = canonicalJson(r);
++    for (const state of ["failed", "cancelled", "completed", "restored"] as const) {
++      denies(() => f.store.advance(event(r, state)), "transition-denied");
++      assert.equal(canonicalJson(f.store.read(r.intent.operationId)), before);
++    }
++    denies(() => f.store.advance({ ...event(r, "result-and-stop-observed", false), resultDigest: null }), "transition-denied");
++    assert.equal(canonicalJson(f.store.read(r.intent.operationId)), before);
++    const q = f.store.advance(event(r, "quarantined")).record;
++    f.db.close(); const reopened = f.reopen();
++    assert.deepEqual(reopened.listBlocked(), [q]);
++    assert.equal(reopened.reserve(r.intent).disposition, "replayed");
++    denies(() => reopened.advance(event(q, "failed")), "transition-denied");
++    denies(() => reopened.advance(event(q, "cancelled")), "transition-denied");
++    denies(() => reopened.reserve(intent(f.namespaceId, f.storeId)), "workspace-blocked");
++    denies(() => reopened.reserve(publication(q)), "workspace-blocked");
++    assert.equal(candidateEffectBlocked(q), true);
++  } finally { f.dispose(); }
++});
++
+ test("expiry denies new effects but does not prevent recording stop/failure; cross-operation clock regression denies", () => {
+   const f = fixture(); try {
+     let r = f.store.reserve(intent(f.namespaceId, f.storeId)).record;
+@@ -590,6 +617,9 @@ test("publication restoration releases once-at-a-time workspace exclusion, never
+     assert.equal(reopened.reserve(pub).disposition, "replayed");
+     denies(() => reopened.advance(event(restored, "completed")), "transition-denied");
+     denies(() => reopened.reserve({ ...intent(f.namespaceId, f.storeId), approvalId: pub.approvalId }), "approval-reused");
++    // CC-N-04: a new approval cannot re-publish this execution after restoration.
++    denies(() => reopened.reserve({ ...pub, operationId: randomUUID(), approvalId: randomUUID() }), "workflow-reused");
++    denies(() => reopened.reserve({ ...pub, operationId: randomUUID(), approvalId: randomUUID(), workflowId: randomUUID() }), "execution-unverified");
+     assert.equal(reopened.reserve(intent(f.namespaceId, f.storeId)).disposition, "recorded");
+   } finally { f.dispose(); }
+ });
