@@ -1,0 +1,12 @@
+{
+  "auditId": "onoes-agent-candidate-consumer-7060f7058ae0-design-v1",
+  "sourceRevision": "7060f7058ae0c2febf3cf9d5b1efb3b3169f9dba",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "reportPath": "onoes-agent-candidate-consumer-7060f7058ae0-design-v1/reports/AUDIT_REPORT.md",
+  "writeException": "sanitized-report-only-after-workflow-check",
+  "fallback": "complete Markdown for manual operator upload if reviewer lacks write access",
+  "preparedLocally": true,
+  "published": false,
+  "publicHistoryPersists": true
+}

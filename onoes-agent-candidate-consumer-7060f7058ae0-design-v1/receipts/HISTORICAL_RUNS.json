@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "onoes-effect-ledger-historical-run-index/v1",
+  "auditId": "onoes-agent-candidate-consumer-7060f7058ae0-design-v1",
+  "appliesToV2Execution": false,
+  "runs": [
+    {
+      "phase": "decision-document-precommit-final-run",
+      "packetRelativePath": "receipts/HISTORICAL_PRECOMMIT.tap",
+      "durationMs": 926.2852,
+      "sha256": "a7ecb823a88766df28b044b0faed1de7b7c3f7b7a71f3a346645f795a0ccb600",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    },
+    {
+      "phase": "fresh-compile-and-execution-after-pinned-commit",
+      "packetRelativePath": "receipts/HISTORICAL_PINNED.tap",
+      "durationMs": 1185.3941,
+      "sha256": "119918dea2ae0fc98c45f8dd153f1b80d067f88360a59d2a7fcb96b7d64c0f35",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "cancelled": 0
+    }
+  ],
+  "originalReceiptAlias": {
+    "historicalField": "receipts/FOCUSED_TESTS.tap",
+    "currentPacketPath": "receipts/HISTORICAL_PINNED.tap"
+  },
+  "historicalSource": {
+    "packetCommit": "2f6a42dec9fcddac975a312409e80d6f305ed72b",
+    "packetPath": "onoes-agent-effect-ledger-v2-0d31bf742307-static-v1"
+  },
+  "evidenceClass": "AUTHOR_REPORTED_EXECUTION_ARTIFACTS_NOT_INDEPENDENT_RUNS"
+}

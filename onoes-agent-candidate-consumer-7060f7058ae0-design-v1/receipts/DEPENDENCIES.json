@@ -1,0 +1,970 @@
+{
+  "method": "TypeScript syntax only; direct imports/exports, literal import/require and URL resources; no type resolution or complete runtime closure",
+  "dependencies": [
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "node:util",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "better-sqlite3",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "./windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-ledger.ts",
+      "specifier": "./windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "node:util",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "../builder/schemas.js",
+      "kind": "import",
+      "target": "src/builder/schemas.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "./windows-managed-candidate-review.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-candidate-review.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "./windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-verification.ts",
+      "specifier": "./windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "../builder/content-policy.js",
+      "kind": "import",
+      "target": "src/builder/content-policy.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "../builder/schemas.js",
+      "kind": "import",
+      "target": "src/builder/schemas.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "./windows-managed-task-inspection.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-task-inspection.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "./windows-managed-candidate-store.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-candidate-store.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review.ts",
+      "specifier": "./windows-operator-task-preview.js",
+      "kind": "import",
+      "target": "src/build-only/windows-operator-task-preview.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-candidate-review-verifier.ts",
+      "specifier": "./windows-managed-candidate-review.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-candidate-review.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "node:util",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "../builder/schemas.js",
+      "kind": "import",
+      "target": "src/builder/schemas.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-manifest.ts",
+      "specifier": "./windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-transfer.ts",
+      "specifier": "node:util",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-transfer.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-transfer.ts",
+      "specifier": "./windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-source-transfer.ts",
+      "specifier": "./windows-candidate-source-manifest.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-source-manifest.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-verifier.ts",
+      "specifier": "node:perf_hooks",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-verifier.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-verifier.ts",
+      "specifier": "./windows-managed-builder-executor.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-builder-executor.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-verifier.ts",
+      "specifier": "./windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-acquisition.ts",
+      "specifier": "./windows-managed-vm-controller-channel.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "specifier": "node:child_process",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "specifier": "./windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-vm-controller-channel.ts",
+      "specifier": "./windows-managed-vm-verifier.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-vm-verifier.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-evidence.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-evidence.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-evidence.ts",
+      "specifier": "../builder/schemas.js",
+      "kind": "import",
+      "target": "src/builder/schemas.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-evidence.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-evidence.ts",
+      "specifier": "./windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-catalog.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-catalog.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-catalog.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-launch-contract.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-launch-contract.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-launch-contract.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-managed-verification-launch-contract.ts",
+      "specifier": "./windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/compatibility/canonical-json.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "../compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./content-policy.js",
+      "kind": "import",
+      "target": "src/builder/content-policy.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./schemas.js",
+      "kind": "import",
+      "target": "src/builder/schemas.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./agent-workflow-schemas.js",
+      "kind": "import",
+      "target": "src/builder/agent-workflow-schemas.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./agent-workflow-types.js",
+      "kind": "import",
+      "target": "src/builder/agent-workflow-types.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./agent-workflow-types.js",
+      "kind": "import",
+      "target": "src/builder/agent-workflow-types.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/agent-workflow.ts",
+      "specifier": "./types.js",
+      "kind": "import",
+      "target": "src/builder/types.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "node:path",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "zod",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "../validation/deep-freeze.js",
+      "kind": "import",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "./content-policy.js",
+      "kind": "import",
+      "target": "src/builder/content-policy.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "./types.js",
+      "kind": "import",
+      "target": "src/builder/types.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/schemas.ts",
+      "specifier": "./types.js",
+      "kind": "import",
+      "target": "src/builder/types.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "src/builder/content-policy.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:assert/strict",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:child_process",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:url",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:fs",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:os",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:path",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:worker_threads",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "node:test",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "better-sqlite3",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../helpers/candidate-effect-crash.js",
+      "kind": "url-resource",
+      "target": "tests/helpers/candidate-effect-crash.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../helpers/candidate-effect-racer.js",
+      "kind": "url-resource",
+      "target": "tests/helpers/candidate-effect-racer.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-effect-ledger.test.ts",
+      "specifier": "../helpers/candidate-effect-contention.js",
+      "kind": "url-resource",
+      "target": "tests/helpers/candidate-effect-contention.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "better-sqlite3",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-crash.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "node:worker_threads",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "better-sqlite3",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-racer.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-contention.ts",
+      "specifier": "node:worker_threads",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-contention.ts",
+      "specifier": "better-sqlite3",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-contention.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-ledger.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-ledger.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-effect-contention.ts",
+      "specifier": "../../src/build-only/windows-candidate-effect-state.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "node:assert/strict",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "node:test",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-source-manifest.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-source-manifest.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-manifest.test.ts",
+      "specifier": "../../src/build-only/windows-managed-candidate-verification.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-candidate-verification.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "node:assert/strict",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "node:test",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "node:child_process",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "node:events",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-source-manifest.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-source-manifest.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-source-transfer.test.ts",
+      "specifier": "../../src/build-only/windows-candidate-source-transfer.js",
+      "kind": "import",
+      "target": "src/build-only/windows-candidate-source-transfer.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "node:assert/strict",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "node:crypto",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "node:fs",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "node:timers/promises",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "node:test",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "../../src/build-only/windows-managed-vm-verifier.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-vm-verifier.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "../helpers/managed-executor-fixture.js",
+      "kind": "import",
+      "target": "tests/helpers/managed-executor-fixture.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "../../src/build-only/windows-managed-builder-executor.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-builder-executor.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-vm-verifier.test.ts",
+      "specifier": "../helpers/managed-disk-workflow-fixture.js",
+      "kind": "import",
+      "target": "tests/helpers/managed-disk-workflow-fixture.ts",
+      "status": "not-supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "specifier": "node:assert/strict",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "specifier": "node:test",
+      "kind": "import",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "kind": "import",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-catalog.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-catalog.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-managed-verification-evidence.test.ts",
+      "specifier": "../../src/build-only/windows-managed-verification-evidence.js",
+      "kind": "import",
+      "target": "src/build-only/windows-managed-verification-evidence.ts",
+      "status": "supplied"
+    }
+  ],
+  "opaque": [],
+  "limitations": [
+    "Every not-supplied edge is excluded; do not infer its behavior.",
+    "No installed dependencies, native controller, package.json or executable closure.",
+    "Map source/productPath and tests/productPath into one hypothetical root for reading only. No builds or test execution permitted."
+  ]
+}

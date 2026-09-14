@@ -1,0 +1,32 @@
+{
+  "auditId": "onoes-agent-candidate-consumer-7060f7058ae0-design-v1",
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "full": {
+    "rawTap": "receipts/PRODUCER_FULL_REGRESSION.tap",
+    "sha256": "7b4487b767c59b8f8858090a50cf5239875b07281eaec23ddf6c98124b7fb5b6",
+    "tests": 1838,
+    "pass": 1836,
+    "fail": 0,
+    "skipped": 2,
+    "cancelled": 0,
+    "durationMs": 49109.7181,
+    "phase": "fresh compile and execution before ac279d2 test/doc commit; later 7060f70 changes documentation only",
+    "scope": "Full TAP contains broader product test names, not broader source review authorization. No claim the extract is executable.",
+    "skips": [
+      "Windows symlink creation privilege unavailable",
+      "deliberately non-Windows-only inspector refusal test"
+    ]
+  },
+  "noExecutionDuringPackaging": true,
+  "noProviderCalls": true,
+  "noRealApproval": true,
+  "noVm": true,
+  "excludedEvidence": [
+    "independent execution",
+    "protected storage",
+    "authentic task execution",
+    "consumer activation",
+    "OS/VM custody",
+    "release acceptance"
+  ]
+}
