@@ -1,0 +1,16 @@
+{
+  "method": "scoped source selection plus filename/private-host/token-pattern scan",
+  "result": "no configured prohibited matches",
+  "limitations": [
+    "Pattern scanning cannot prove no secrets.",
+    "Synthetic test paths/identifiers are not real workstation identity."
+  ],
+  "excluded": [
+    "credentials",
+    "private logs",
+    "VM images",
+    "full project",
+    "private Git metadata",
+    "provider configuration"
+  ]
+}

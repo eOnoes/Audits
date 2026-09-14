@@ -1,0 +1,46 @@
+{
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "sourceRevision": "49cd0792e5e7f48fff1798baebaa24e170ac5371",
+  "runBinding": "Source and test bytes tested before the final documentation commit. Artifact identity does not independently establish execution.",
+  "platform": "Windows x64",
+  "node": "24.14.0",
+  "typecheck": "exit 0",
+  "freshTestCompilation": "exit 0",
+  "runs": [
+    {
+      "path": "receipts/CURRENT_FOCUSED.tap",
+      "sha256": "9401c0a1b08c0a5a469d29cb0e00bb01b32407d6bb81c8621b85586fe02f86f8",
+      "tests": 143,
+      "pass": 143,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 3434.3871
+    },
+    {
+      "path": "receipts/CURRENT_FULL.tap",
+      "sha256": "ae0834b0d86a5b6cb2387dcb41b20c4148cdc15db900a12e75b4a23215fa7722",
+      "tests": 1932,
+      "pass": 1930,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2,
+      "duration_ms": 51127.497
+    }
+  ],
+  "focusedSuites": {
+    "checkpoint": 30,
+    "ledger": 51,
+    "snapshot": 19,
+    "execution": 35,
+    "releaseBoundary": 8
+  },
+  "skips": [
+    "Windows link creation privilege unavailable",
+    "Inspector unsupported-host test deliberately skipped on Windows; bare SKIP retained"
+  ],
+  "staleOutput": "First unprivileged compilation failed; its subsequent stale filtered run is excluded. Fresh compilation preceded reproductions and final receipts.",
+  "preparationExecutedSubject": false,
+  "physicalEvidence": false,
+  "productionAuthorized": false
+}

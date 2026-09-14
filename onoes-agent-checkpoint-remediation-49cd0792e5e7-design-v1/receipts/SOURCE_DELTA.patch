@@ -1,0 +1,451 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+index 605dc07..b0cfdfb 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+@@ -5,6 +5,11 @@ implementation. This document version is not a ledger format implementation.
+ V1/V2 drafts and public packets remain immutable historical review inputs.
+ Current source baseline: 06cb638302a867006713af7702b77400b7d38d34.
+ 
++2026-09-14 review follow-up: decisions below respond to the checkpoint audit at
++product 0c01a442 / packet 0d27ba2. They are design corrections for re-review,
++not accepted v3 schemas or a physical backend. See
++`ONOES_AGENT_CHECKPOINT_REVIEW_DISPOSITION.md` for findings and evidence limits.
++
+ This supersedes only the conflicting choices in CONTRACT_V2. All full-scope,
+ deny-first, separate approval, no automatic redispatch, physical fencing,
+ three-actor review/verification and W1-W5 requirements remain. The operator-returned
+@@ -31,7 +36,7 @@ In the proposed NEW ledger domain, distinguish outcome recording from release:
+   parentage: only a released, passed execution with an authentic result qualifies.
+   A released non-result, failed execution or restored publication never qualifies.
+ 
+-The ordinary new-domain blocked column may become false only at `released`.
++An INTERNAL new-domain blocked column may become false only at `released`.
+ That column is NECESSARY, NOT SUFFICIENT for admission. No SQL query, ledger
+ receipt or record parser exports workspace permission. Every new reservation and
+ physical fence release must independently establish, under the current fenced
+@@ -40,6 +45,82 @@ anchor checkpoint, and validate the settlement proof against current custody.
+ Missing or disputed facts return blocked/reconciliation, never an empty free set.
+ The authoritative admission decision is this joined read, not `listBlocked()`.
+ 
++### Admission API decision (F-01)
++
++Do not export a v3 `listBlocked`, `isFree`, `canReserve`, `candidateEffectBlocked`
++or public unguarded `reserve`/`advance` surface to task/UI consumers. V2 exports
++remain unchanged and cannot be injected into a real v3 consumer. V3 persistence
++and any SQL blocked index are private to the enrolled coordinator. Diagnostics
++may describe a record's historical state but return no availability boolean or
++permission token. A caller cannot read a decision and later invoke an effect.
++
++The single admission entry point accepts the proposed operation, acquires the
++enrolled owner fence, obtains authenticated fresh anchor/enrollment/custody
++observations, validates the complete atomic inventory and all live policy/consent
++pins, and records the reservation/checkpoint pair while still holding that fence.
++The successful return is recorded state only. The same coordinator retains the
++physical session and repeats the required checks before each effect; no reusable
++caller-supplied admission object exists. All mutation paths, including recovery,
++are internal to this coordinator. A forged object, imported raw store, alternate
++coordinator, restart, or stale prior observation must fail before effect contact.
++TypeScript module privacy is API discipline, NOT protection against a compromised
++host: protected process/storage/issuer ownership remains an activation gate.
++
++### Settlement-evidence core decision (F-02)
++
++Use the following exact canonical JSON core, with no optional or unknown fields,
++for `settlementEvidenceDigest = canonicalSha256Digest(core)`:
++
++```
++{
++  domain: "agent-candidate-settlement-evidence/v1",
++  installationId, namespaceId, storeId, operationId, workflowId,
++  intentDigest, requestDigest, sourceManifestDigest, workspaceDigest,
++  policyBindingDigest, ownerGeneration, guestGeneration,
++  controllerIdentityDigest, resourcePolicyDigest,
++  priorOutcomeRecordDigest, outcome, resultDigest, verificationPassed,
++  observedAt, validUntil,
++  contactAccountingDigest, ownerFenceEvidenceDigest,
++  processSettlementEvidenceDigest, generationRetirementEvidenceDigest,
++  custodyReleaseEvidenceDigest, publicationExclusionEvidenceDigest,
++  workspaceSafetyEvidenceDigest
++}
++```
++
++UUIDs use existing lowercase canonical UUID rules; all digest fields use exactly
++`sha256:` plus 64 lowercase hex digits. `outcome` is exactly one of `completed`,
++`failed`, `cancelled`, `restored`, `stopped-without-result`. Exact UTC millisecond
++timestamps must satisfy observedAt < validUntil, and both the outcome recording
++and release append must occur within this interval under the host's bounded
++settlement policy. A record's old evidence cannot renew its own validity.
++Execute completed/failed requires non-null resultDigest and respectively true/
++false verificationPassed. Execute cancelled/stopped-without-result and publish
++completed/restored/cancelled require both fields null; a publication's parent
++result is already bound in its intent, not falsely presented as a new result.
++No other kind/outcome combination is admitted. A quarantine has no release core.
++
++Maximum canonical UTF-8 core is 8,192 bytes, checked before JSON parse; use the
++existing passive-input/canonicalJson rules and canonical-wire equality. Missing
++fields, empty strings, omitted nulls, duplicate keys, alternative encodings and
++oversize inputs deny. No source bytes, paths, stdout, credentials, or variable
++arrays occur in this core. Every evidence digest names separately bounded,
++authenticated host evidence of that specific role and exact subject/generation;
++hash shape, a supplied digest or a task-supplied true flag is never sufficient.
++The coordinator must obtain and validate those role-specific evidence bodies,
++including every possible contact/descendant, before recording an outcome. Their
++authentication, retention and concrete producer contracts remain separate review
++inputs, not implicit implementations created by this core definition.
++
++Avoid a new circular hash: priorOutcomeRecordDigest hashes the entire record
++BEFORE the blocking outcome is appended. The outcome event binds this evidence
++digest. Checkpoint A then witnesses that outcome-containing record. The release
++event binds that complete predecessor record digest, the SAME evidence digest,
++and A. No evidence core contains the digest of the event that contains it, or B.
++Validate the full predecessor relation on read. Before release, require A to be
++authenticated-fresh for the current fenced owner; a believed, cached or merely
++well-formed A is insufficient. If any evidence has expired or is disputed, retain
++the blocker. Do not rewrite old evidence or manufacture a replacement outcome.
++
+ Non-circular ordering for release:
+ 
+ 1. Record the blocking outcome and exact settlement proof digest; append and
+@@ -81,6 +162,38 @@ that current epoch. Reject old generations, including delayed callbacks. This is
+ not physical fencing by itself; owner acquisition also requires the actual old
+ process/task boundary to be fenced and settled.
+ 
++### Enrollment and epoch location decision (F-03 / F-04 design residue)
++
++For this first release, prohibit concurrent active v2/v3 stores within one
++namespace. V2 remains synthetic/dormant; no production migration, adoption,
++coexistence or namespace reset is supplied by v3. There is one protected enrollment
++authority for an installation. Its authenticated namespace entry binds exactly
++one active storeId and ledger domain, immutable retired-store history and the
++version-independent spent-approval commitment. Unknown or conflicting enrollment
++denies; making a second empty database cannot create enrollment. A future version
++transition requires a separately reviewed, explicit offline continuity protocol
++preserving spent approvals/workflows/quarantines; it cannot run both versions or
++start a clean history to evade limits. Until that protocol exists, transition of
++an enrolled production namespace is unsupported, not automatic migration.
++
++Store the current-owner epoch CAS record IN the authenticated anchor authority's
++durable namespace stream, alongside the enrollment binding and checkpoint head,
++not in the mutable ledger database or an application-memory flag. The authority
++must atomically compare the expected enrollment/epoch/head and persist the new
++epoch before acknowledging ownership. Epoch changes preserve the existing ledger
++head and immutable checkpoint producer generations. All anchor requests bind that
++entry and the current epoch, with fresh authenticated responses; enrollment,
++epoch and head must not be assembled from independently stale reads. Unknown CAS
++outcome leaves the requester non-admitted until authenticated discovery. No local
++fallback and no recreation of a missing anchor entry is allowed.
++
++This selects the logical persistence/ownership boundary, not a physical Windows
++implementation. The anchor's backend, anti-rollback root, authentication keys,
++old-owner physical fencing and provisioning still do not exist in this packet.
++A second file under the same rewritable authority, SQLite WAL, an unkeyed hash,
++or an in-memory CAS does NOT implement this decision. B-03 remains OPEN and must
++be resolved with independently reviewed physical evidence before real admission.
++
+ Each immutable checkpoint payload binds installation, namespace, store, historical
+ producer generation, operation, explicit event index (reserved=0), exact record
+ digest, stable approval-identity digest, previous checkpoint digest and global
+@@ -117,9 +230,10 @@ concurrent requests rather than allocate an unbounded queue. Before the first
+ mutation, require exact fresh matching inventories; after each mutation, append
+ only its exact post-state. An inventory port must provide a complete consistent
+ snapshot, including unexpected and terminal rows. Re-reading only remembered IDs
+-or `listBlocked()` is not sufficient; v2 currently has no public all-record snapshot
+-API. A synthetic fixture can model that port; production composition must implement
+-and review it without weakening v2's private validated read-back.
++or `listBlocked()` is not sufficient. V2 now has a complete atomic `snapshot()`
++API (0c01a442); that is consistent local history, not authenticated freshness.
++Production composition must supply the physical boundary without weakening
++v2's private validated read-back or treating a snapshot as permission.
+ 
+ Unknown append outcome closes the owner for writes. New-owner reconciliation may
+ make at most one explicit idempotent append attempt for the exact unresolved
+@@ -179,7 +293,8 @@ Maintain the existing namespace/approvalId identity domain across versions. One
+ authoritative enrollment must prohibit independent active v2/v3 stores from
+ spending the same approval. A digest domain alone cannot do that. No activation
+ of a second version, empty-store adoption, refund or forgotten quarantine serves
+-as migration. Version coexistence requires reviewed shared consumption/retention.
++as migration. Concurrent version coexistence is prohibited for this release;
++the authority/continuity decision in section 2 applies across schema versions.
+ 
+ ## 5. SC-N-07/08: bounded work, cleanup and pair lifetime
+ 
+@@ -200,6 +315,15 @@ subsequent ledger mutation or growing waiter queue. Do not cancel and treat an
+ unsettled promise as completed. Physical watchdogs/fences remain independently
+ required for host stalls and process death.
+ 
++Synchronous SQLite, hashing and validation also consume the deadline; reserve
++explicit measured overhead with phase costs, then recheck after synchronous work.
++No finite allowance guarantees preemption of a blocked event loop or filesystem.
++In the current synthetic model, emergency cleanup may start after overallMs and
++use another stopMs. `overallMs + stopMs` is only the nominal asynchronous allowance,
++NOT a proven wall-clock ceiling: scheduling delay, synchronous stalls and pending
++work can exceed it. A real supervisor must independently enforce/observe stopping;
++time elapsed alone never releases a fence or converts unknown work into settlement.
++
+ Verifier SUCCESS acceptance stays strictly before start + min(runMs,
+ request.timeoutMs), with run and confirmed stop both inside that interval.
+ Worst-case FAILURE cleanup is different: timeout at that deadline may start a
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_CHECKPOINT_REVIEW_DISPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_CHECKPOINT_REVIEW_DISPOSITION.md
+new file mode 100644
+index 0000000..c5ed554
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_CHECKPOINT_REVIEW_DISPOSITION.md
+@@ -0,0 +1,107 @@
++# Checkpoint/execution review disposition — 2026-09-14
++
++Status: EXTERNAL DESIGN + STATIC_SOURCE REPORT RECEIVED; local corrections and
++design decisions made; v3 implementation/real admission NOT cleared.
++
++## Source and evidence class
++
++Operator supplied the complete publicly readable Claude artifact:
++https://claude.ai/public/artifacts/cc70c0ac-67a5-4dcd-ab2a-df36cb679b66
++
++Report ID: `onoes-agent-checkpoint-execution-0c01a44237fa-static-design-v1`.
++Reviewed source: `0c01a44237fa17970e173fd99e2b9db55863e54e`.
++Packet: `0d27ba257d09be6bea70baa2234cf42c785b7fe2`, eOnoes/Audits.
++Local correction baseline: `4112b690f1022781cc66561f1dc3021d00bab26f`.
++
++All eleven report sections and closing fields were read in the browser. The
++report identifies Claude Opus 5 and explicitly declines fresh-second-opinion
++status. Model-family identity alone does not establish authorship continuity;
++retain the reviewer's uncertainty rather than inventing continuity. It reports
++partial source reading, no subject execution, and raw-Git verification of 73
++manifest inputs, 51 source identities and five TAP artifacts. Those are reviewer
++claims, not new executions by this agent. Verdict: PASS_WITH_FINDINGS /
++NEEDS_REVIEW / PARTIAL; synthetic v2/design continuation only.
++
++Delivery is operator-mediated public artifact, NOT verified GitHub report delivery.
++The original Markdown bytes have not been downloaded/hashed into this repository;
++the URL is not claimed immutable. Do not clean the public packet until the full
++report is retained with byte identity and findings/continuity evidence preserved.
++No report has been overwritten or uploaded by this disposition.
++
++The report's observed manifest is 7,951 bytes and SHA-256
++`8afa0c4ff75a4630991167bc96e81cb4ee26c738544ff47460155a3a450e450b`.
++This matches the previously retained publisher pin and the local public-packet
++manifest rehashed after receipt. This is post-receipt comparison, NOT retroactive
++announce/acknowledge-before-read delivery; the reviewer says that acknowledgment
++never reached them. Preserve N-09's procedural limitation.
++
++## Findings and decisions
++
++| Finding | Local disposition | Remaining gate |
++| --- | --- | --- |
++| F-01 admission API | Accepted design gap. CONTRACT_V3 section 1 now selects private persistence/mutation, no public availability predicate, and a single fenced admission-and-reservation coordinator; no reusable caller permission object. | Targeted design review; then implementation and negative controls. TypeScript privacy is not physical protection. |
++| F-02 settlement evidence | Accepted. Section 1 defines the exact bounded canonical core, role-specific evidence bindings, kind/outcome/null rules, expiry and a non-circular pre-outcome -> proof -> outcome -> A -> release -> B order. | Core and producer-evidence contracts need review; authentic physical evidence is not supplied by hashes. |
++| F-03 version-spanning identity | Accepted. Sections 2/4 explicitly prohibit concurrent active v2/v3 stores for the first release; one enrollment authority binds the active store/domain and retained spent history. No migration/reset is supplied. | Enrollment backend/continuity implementation and review remain open. Prohibition in prose is not enforcement. |
++| F-04 physical anchor | OPEN, unchanged B-03. Section 2 selects the anchor's authenticated durable namespace stream for epoch CAS/enrollment/head, with atomic comparison and no local fallback. | Backend, anti-rollback root, authentication, provisioning and old-owner physical fencing do not exist here. No activation. |
++| N-01 object identity exclusion | Accepted limitation. New distinct-wrapper concurrency test shows the wrapper bypasses the object-key latch, but inventory mismatch prevents the first pending caller from writing after the second caller commits. | Same-process test only; enrolled cross-process exclusion remains required. |
++| N-02 write identity window | Confirmed and corrected: recheck schema/durability/store identity as first statement under BEGIN IMMEDIATE, before scan or mutation. Four regressions fail before the correction and pass after. | Local source correction, not independently re-reviewed or physical file custody. |
++| N-03 synchronous budget cost | Accepted liveness risk; exact proposed counterexample is qualified. Successful run AND stop must finish inside runDeadline, so full separate run/stop budgets cannot produce the report's assumed passed observation. New tests cover this denial and actual synchronous read-back exhaustion after observation. | Measured overhead and physical watchdogs remain necessary; retained blocker is not recovery completion. |
++| N-04 emergency allowance | Accepted with correction: overallMs + stopMs is nominal asynchronous allowance, NOT a hard wall ceiling under arbitrary synchronous stalls or delayed timers. CONTRACT_V3 now states this explicitly. | Do not encode that sum as physical stop proof. |
++| N-05 all-or-nothing reads | Accepted integrity policy; no partial inventory may drive admission. | Protected diagnostic/reconciliation design remains open; not permission for deletion or repair. |
++| N-06 read-back concurrent writer | Accepted under single serialized writer requirement. No weakening to accept a later/foreign record. | Real owner fencing must span mutation/read-back/anchor pairs. |
++| N-07 snapshot allocation | Accepted sizing input with qualification: 1,001 x 32,768 is a ~32 MiB raw record-text bound, not total driver/JS heap. There are up to four inventories per pair plus decoded/retained objects. | Measure peak memory/latency; no production sizing claim from this arithmetic. |
++| N-08 focused omission | Corrected for this run: all five suites, including eight release-boundary cases, are in the 143-test focused TAP. Historical packet unchanged. | Include them in next packet; never rewrite old receipts. |
++| N-09 separate pin delivery | Post-receipt match confirmed above; original ordering limitation retained. | Next reviewer handoff must explicitly deliver pin and record acknowledgment separately. |
++| N-10 baseline unavailable | Accepted evidence limitation. Public delta cannot establish unavailable private baseline membership. | Do not claim exact-tree provenance from a supplied patch. |
++
++F-04 is described as activation-only in its detailed finding but is grouped with
++all schema blockers elsewhere in the report. Do not silently resolve that
++inconsistency as permission. V3 implementation stays gated; the next narrow review
++must distinguish a data-model review from physical backend acceptance explicitly.
++New design decisions have NOT been approved by this report retroactively.
++
++## Executed local evidence
++
++Windows, installed Node 24.14.0 and TypeScript; synthetic inputs and isolated
++temporary SQLite only. No VM, provider, real approval, installer, native service,
++source export, OS setting or security-protection change.
++
++The first unprivileged compiler attempt failed to write generated .test-dist
++files. Its subsequent stale-output filtered run is NOT evidence. A scoped compiler
++retry succeeded before any reproduction claim. Four new write-window tests then
++failed against old source: reserve/replay attempted an INSERT after identity
++substitution, advance reported missing operation rather than bad identity, and
++the supposed in-transaction identity check was reached only during read-back.
++After the three-line correction all four passed with zero operation writes before
++identity rejection. The contention control observes SQLITE_BUSY on a second
++connection while the IMMEDIATE identity check runs. No index/schema format changed.
++
++Final typecheck and fresh test compilation: exit 0.
++Focused five suites: **143 pass / 0 fail / 0 cancelled / 0 skip**, 3,434.3871 ms.
++Full offline product: **1,932 tests / 1,930 pass / 0 fail / 0 cancelled / 2 skip**,
++51,127.497 ms. Seven new tests account for the increase from 1,925. The skips are
++the unchanged Windows link-privilege case and the intentionally non-Windows-only
++inspector refusal case (the latter still has a bare TAP SKIP; not newly fixed).
++
++Raw TAPs retained in the desktop workspace's `.audit-preparation/`:
++
++| Artifact | SHA-256 |
++| --- | --- |
++| checkpoint-review-remediation-focused-20260914.tap | 9401c0a1b08c0a5a469d29cb0e00bb01b32407d6bb81c8621b85586fe02f86f8 |
++| checkpoint-review-remediation-full-20260914.tap | ae0834b0d86a5b6cb2387dcb41b20c4148cdc15db900a12e75b4a23215fa7722 |
++
++These are producer-executed tests, not independent execution or release evidence.
++The focused command explicitly lists effect-snapshot, effect-ledger,
++checkpoint-sequencer, synthetic-execution and release-boundary emitted unit suites.
++Full command is the existing offline `.test-dist/tests/**/*.test.js` set with
++concurrency 4 plus candidate-review-http and candidate-crash script tests.
++
++## Next action
++
++Retain the complete report bytes, then prepare a narrow changed-boundary packet
++covering the revised CONTRACT_V3 decisions, this disposition and tested source
++delta. Request review of the decisions and residual gates, not another broad audit
++of unchanged code. New public transfer needs explicit scoped approval. Do not
++regenerate the old 74-file packet. Keep v3 schema, enrollment, real effects and
++activation gated; B-03 and all W1-W5 acceptance remain incomplete. The full Agent
++goal remains active; these results do not constitute an installable release.
+diff --git a/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts b/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
+index 3ab7637..a3b8c96 100644
+--- a/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
++++ b/product/companion-v1/src/build-only/windows-candidate-effect-ledger.ts
+@@ -170,6 +170,9 @@ export class SqliteCandidateEffectLedger {
+       let touched = false;
+       try {
+         const saved = this.#db.transaction(() => {
++          // Preflight precedes the host clock and lock acquisition. Recheck
++          // identity/schema/durability under the write lock even for zero rows.
++          this.#checkStoredState();
+           const records = this.#scan();
+           if (records.some(r => at < (r.events.at(-1)?.recordedAt ?? r.reservedAt))) effectFail("clock-invalid");
+           const result = operation(records, at);
+diff --git a/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts b/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts
+index 737e4a8..2879c7c 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-checkpoint-sequencer.test.ts
+@@ -85,6 +85,29 @@ function fixture() {
+   };
+ }
+ 
++test("distinct ledger wrapper evades object latch but stale inventory denies a second mutation", async () => {
++  const f = fixture(); try {
++    let release!: () => void;
++    const gate = new Promise<void>(yes => { release = yes; });
++    f.hooks.discover = async () => {
++      if (f.calls.discovery === 1) await gate;
++      return f.view();
++    };
++    const first = f.sequencer();
++    const second = new SyntheticCandidateCheckpointSequencer({ ...f.options,
++      ledger: { reserve: f.options.ledger.reserve.bind(f.options.ledger), advance: f.options.ledger.advance.bind(f.options.ledger) } });
++    const pending = first.reserve(f.makeIntent(d(900)), signal());
++    // This genuinely enters while first is pending; it does not share its key.
++    assert.equal(f.calls.discovery, 1);
++    const rejection = denies(pending, "history-mismatch");
++    try { assert.equal((await second.reserve(f.makeIntent(d(901)), signal())).disposition, "recorded"); }
++    finally { release(); }
++    await rejection;
++    assert.equal(f.calls.discovery, 2); assert.equal(f.calls.mutation, 1); assert.equal(f.calls.append, 1);
++    assert.equal(first.closed, true); assert.equal(second.closed, false); assert.equal(f.records().length, 1);
++  } finally { f.dispose(); }
++});
++
+ test("synthetic paired v2 execution and separately approved publication checkpoint every exact mutation", async () => {
+   const f = fixture(); try {
+     const sequencer = f.sequencer(), input = f.makeIntent();
+diff --git a/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts b/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts
+index 48fbb53..0b7a6ce 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-effect-snapshot.test.ts
+@@ -115,6 +115,57 @@ test("identity replaced after preflight but before snapshot is rejected, includi
+   } finally { f.dispose(); }
+ });
+ 
++for (const action of ["reserve", "advance", "replay"] as const)
++test(`write rechecks empty-store identity under IMMEDIATE before ${action}, with no durable mutation`, () => {
++  const f = fixture(); try {
++    const input = f.input(), before = action === "reserve" ? undefined : f.ledger.reserve(input).record;
++    const prepare = f.db.prepare.bind(f.db); let fired = 0, writes = 0;
++    f.db.prepare = ((sql: string) => {
++      if (/^(INSERT INTO|UPDATE) candidate_effect_operations/.test(sql)) writes++;
++      const stmt = prepare(sql);
++      if (sql.includes("FROM candidate_effect_meta LIMIT 2") && !f.db.inTransaction && !fired) {
++        const all = stmt.all.bind(stmt);
++        stmt.all = (...args: unknown[]) => {
++          const rows = all(...args); fired++;
++          // A second connection commits after preflight, before the writer's
++          // BEGIN IMMEDIATE. Empty rows must not vacuously authenticate identity.
++          f.other.transaction(() => {
++            f.other.exec("DELETE FROM candidate_effect_operations");
++            f.other.prepare("UPDATE candidate_effect_meta SET store_id=?").run(randomUUID());
++          }).immediate();
++          assert.equal(f.other.inTransaction, false); return rows;
++        };
++      }
++      return stmt;
++    }) as typeof f.db.prepare;
++    try {
++      denies(() => action === "advance" ? f.ledger.advance(event(before!, "cancelled")) : f.ledger.reserve(input), "identity-mismatch");
++    } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); assert.equal(writes, 0);
++    assert.equal(f.db.inTransaction, false);
++    assert.equal(f.other.prepare("SELECT count(*) FROM candidate_effect_operations").pluck().get(), 0);
++  } finally { f.dispose(); }
++});
++
++test("write holds IMMEDIATE lock while rechecking identity before scanning or saving", () => {
++  const f = fixture(); try {
++    const prepare = f.db.prepare.bind(f.db); let fired = 0;
++    f.other.pragma("busy_timeout=0");
++    f.db.prepare = ((sql: string) => {
++      if (sql.includes("FROM candidate_effect_meta LIMIT 2") && f.db.inTransaction && !fired) {
++        fired++;
++        assert.throws(() => f.other.prepare("UPDATE candidate_effect_meta SET store_id=?").run(randomUUID()),
++          (e: unknown) => e instanceof Error && "code" in e && e.code === "SQLITE_BUSY");
++      }
++      return prepare(sql);
++    }) as typeof f.db.prepare;
++    let saved: CandidateEffectRecord;
++    try { saved = f.ledger.reserve(f.input()).record; } finally { f.db.prepare = prepare; }
++    assert.equal(fired, 1); assert.equal(f.db.inTransaction, false);
++    assert.deepEqual(f.ledger.snapshot(), [saved]);
++  } finally { f.dispose(); }
++});
++
+ test("metadata and rows stay in one snapshot even if another connection deletes rows and changes pins mid-read", () => {
+   const f = fixture(); try {
+     const a = f.ledger.reserve(f.input()).record, prepare = f.db.prepare.bind(f.db); let fired = 0;
+diff --git a/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts b/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts
+index 7ca2b97..98e2021 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-synthetic-execution.test.ts
+@@ -320,6 +320,36 @@ test("broken injected clock cannot prevent bounded emergency stop or create a su
+   } finally { f.dispose(); }
+ });
+ 
++test("synchronous read-back exhaustion after observed-result checkpoint withholds success and retains blocker", async () => {
++  const f = fixture(); try {
++    let now = 0;
++    const execution = new SyntheticCandidateExecution({ ...f.options, monotonicNow: () => now,
++      readRecord: () => {
++        const record = f.read();
++        if (candidateEffectState(record) === "result-and-stop-observed") now = f.options.overallMs;
++        return record;
++      } });
++    const result = await run(f, execution);
++    assert.equal(result.disposition, "needs-reconciliation"); assert.equal(result.resultDigest, null);
++    assert.equal(candidateEffectState(f.read()), "result-and-stop-observed");
++    assert.equal(f.ledger.listBlocked().length, 1); assert.deepEqual(f.appended, [1, 2, 3, 4]);
++    assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]);
++    f.reopen(); assert.equal(f.ledger.listBlocked().length, 1);
++  } finally { f.dispose(); }
++});
++
++test("run plus stop at success deadline cannot record a passed observation even with global budget left", async () => {
++  const f = fixture(); try {
++    let now = 0;
++    f.hooks.run = async (_b, request) => { now = 499; return verificationResult(request); };
++    f.hooks.stop = async binding => { now += 200; return f.stopped(binding); };
++    const result = await run(f, new SyntheticCandidateExecution({ ...f.options, monotonicNow: () => now }));
++    assert.equal(result.disposition, "quarantined"); assert.equal(result.resultDigest, null);
++    assert.equal(f.read().events.some(e => e.state === "result-and-stop-observed"), false);
++    assert.equal(f.ledger.listBlocked().length, 1); assert.deepEqual(f.calls, ["ready", "deliver", "run", "stop"]);
++  } finally { f.dispose(); }
++});
++
+ test("late stop cannot extend the successful run allowance", async () => {
+   const f = fixture(); try {
+     let now = 0; f.hooks.stop = async b => { now = 40; return f.stopped(b); };

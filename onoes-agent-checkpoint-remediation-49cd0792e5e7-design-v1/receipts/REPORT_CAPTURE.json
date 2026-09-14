@@ -1,0 +1,14 @@
+{
+  "sourceUrl": "https://claude.ai/public/artifacts/cc70c0ac-67a5-4dcd-ab2a-df36cb679b66",
+  "capturedOn": "2026-09-14",
+  "sha256": "e1c929401c0b89d674c2633f44800d60eafa2c424bbdaf2cae88b3204220c15d",
+  "byteLength": 72798,
+  "sourceCharacters": 72061,
+  "method": "Public Code-view DOM text transferred once through a temporary loopback-only capture form; server stopped after write/readback.",
+  "limitations": [
+    "Browser text and form newline normalization; not original attachment byte identity.",
+    "Public artifact URL may change; this capture is a frozen review input.",
+    "This capture supersedes the not-yet-retained statement in the pinned disposition; no historical product blob edited."
+  ],
+  "externalUploadPerformed": false
+}

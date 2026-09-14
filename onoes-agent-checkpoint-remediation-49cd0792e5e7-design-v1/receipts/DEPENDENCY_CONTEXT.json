@@ -1,0 +1,16 @@
+{
+  "members": [
+    {
+      "packetPath": "source/context/better-sqlite3/lib/methods/transaction.js",
+      "sha256": "bc8624a3ef689d8f78e5669020ad121e17acbc93b1d5ee5afe26860b1084c66c",
+      "byteLength": 2792,
+      "origin": "installed-better-sqlite3-context-not-product-Git-blob"
+    },
+    {
+      "packetPath": "source/context/better-sqlite3/LICENSE",
+      "sha256": "09856b52897c91ab67e7456ef43067019f31dfd3b87fda72e655736b1ebdee55",
+      "byteLength": 1078,
+      "origin": "installed-better-sqlite3-context-not-product-Git-blob"
+    }
+  ]
+}
