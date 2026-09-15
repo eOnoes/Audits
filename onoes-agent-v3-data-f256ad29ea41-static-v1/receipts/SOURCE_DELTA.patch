@@ -1,0 +1,1454 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+index b0cfdfb..e971604 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md
+@@ -1,9 +1,23 @@
+ # Candidate consumer successor — release and checkpoint protocol revision
+ 
+-Status: PROPOSED DESIGN; bounded changed-boundary review required before v3 data
+-implementation. This document version is not a ledger format implementation.
++Status: DATA-ONLY IMPLEMENTATION CLEARED BY TARGETED STATIC REVIEW; implementation
++in progress. This document is not an activated ledger/store/admission format.
+ V1/V2 drafts and public packets remain immutable historical review inputs.
+-Current source baseline: 06cb638302a867006713af7702b77400b7d38d34.
++Current inventory implementation baseline: 0420349cf66ef16e6bc1b0e84de388938995509b.
++Reviewed design source: 49cd0792e5e7f48fff1798baebaa24e170ac5371.
++
++Record-history implementation and remaining inventory/checkpoint-B boundaries:
++see `ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md`. This is data-only implementation,
++not protected storage or admission. Frozen public review inputs are unchanged.
++The subsequent inventory, A/B and retained-history implementation is described
++in `ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md`; it closes those DATA validation
++steps, not authenticated completeness or any production gate.
++
++2026-09-15 remediation review: report at Audits b86e08b clears DATA-ONLY schema
++work with N-01/N-02/N-03/N-04 clarifications below. Real admission and activation
++remain NO. See `ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md` for exact report
++identity, all finding dispositions, coverage and delivery limitations. The
++following 2026-09-14 paragraph records historical preparation, not current gating.
+ 
+ 2026-09-14 review follow-up: decisions below respond to the checkpoint audit at
+ product 0c01a442 / packet 0d27ba2. They are design corrections for re-review,
+@@ -74,7 +88,7 @@ for `settlementEvidenceDigest = canonicalSha256Digest(core)`:
+ ```
+ {
+   domain: "agent-candidate-settlement-evidence/v1",
+-  installationId, namespaceId, storeId, operationId, workflowId,
++  installationId, namespaceId, storeId, kind, operationId, workflowId,
+   intentDigest, requestDigest, sourceManifestDigest, workspaceDigest,
+   policyBindingDigest, ownerGeneration, guestGeneration,
+   controllerIdentityDigest, resourcePolicyDigest,
+@@ -87,12 +101,21 @@ for `settlementEvidenceDigest = canonicalSha256Digest(core)`:
+ }
+ ```
+ 
++N-01 decision: include explicit `kind`, exactly `execute` or `publish`, in the
++core before freezing this domain in code. Standalone parsing checks the matrix
++below; future joined record validation MUST also compare kind with the intent
++alongside every other subject/predecessor field. Self-checking shape is not an
++authenticated join or permission.
++
+ UUIDs use existing lowercase canonical UUID rules; all digest fields use exactly
+ `sha256:` plus 64 lowercase hex digits. `outcome` is exactly one of `completed`,
+ `failed`, `cancelled`, `restored`, `stopped-without-result`. Exact UTC millisecond
+-timestamps must satisfy observedAt < validUntil, and both the outcome recording
+-and release append must occur within this interval under the host's bounded
+-settlement policy. A record's old evidence cannot renew its own validity.
++timestamps must satisfy observedAt < validUntil. N-02 boundary decision:
++`observedAt <= outcomeEvent.recordedAt < validUntil` and
++`outcomeEvent.recordedAt <= releaseEvent.recordedAt < validUntil`.
++Equal observation/outcome/release timestamps are permitted; equality with
++validUntil denies. The host's separately bounded settlement policy must enforce
++actual freshness. A record's old evidence cannot renew its own validity.
+ Execute completed/failed requires non-null resultDigest and respectively true/
+ false verificationPassed. Execute cancelled/stopped-without-result and publish
+ completed/restored/cancelled require both fields null; a publication's parent
+@@ -164,6 +187,21 @@ process/task boundary to be fenced and settled.
+ 
+ ### Enrollment and epoch location decision (F-03 / F-04 design residue)
+ 
++N-03 metadata decision: the v3 metadata core is exactly
++`{ domain: "agent-candidate-effect-ledger/v3", installationId, namespaceId, storeId }`.
++All three IDs use the existing lowercase canonical UUID rule. A future private
++store must durably bind every field and compare all four inside every read/write
++transaction, not only at constructor time. A metadata parser proves shape only;
++it neither creates a database nor establishes enrollment or protects relocation.
++Its canonical transport is bounded at 1,024 UTF-8 bytes before parsing.
++
++N-04 approval identity decision: preserve exactly the existing digest core
++`{ domain: "agent-candidate-effect-ledger/v1", namespaceId, approvalId }` across
++v2/v3 and store IDs. Do not add installation/store/schema fields to this digest.
++The enrollment authority's spent-approval commitment format and its durable
++version-spanning enforcement require a separate scoped design/review; they are
++not implicitly provided by this data-only identity function.
++
+ For this first release, prohibit concurrent active v2/v3 stores within one
+ namespace. V2 remains synthetic/dormant; no production migration, adoption,
+ coexistence or namespace reset is supplied by v3. There is one protected enrollment
+@@ -336,7 +374,8 @@ remain unselected measured release inputs. Preserve full 128-file source scope.
+ 
+ ## 6. Implementation order and falsifiable review boundary
+ 
+-The report allows synthetic sequencing over unchanged v2, not v3 implementation.
++Historical sequencing decision before the b86e08b follow-up review:
++the earlier report allowed synthetic sequencing over unchanged v2, not v3 implementation.
+ First pin real SQLite crash/reopen behavior and demonstrate why its releasing
+ predicate cannot substitute for joined admission. Then implement injected-only
+ pair sequencing with synthetic owner, complete inventory, anchor and policy ports;
+@@ -344,7 +383,13 @@ no real source, approval, VM, subprocess task or publication adapters. Validate
+ single-attempt/replay rules and every audit-specified crash cut with exact call
+ counts. Missing results after v2 possible-effect markers still quarantine.
+ 
+-Before any v3 record implementation, review this revised release/admission join,
++The targeted review now clears data-only implementation after the clarifications
++above. First implement bounded metadata/evidence parsers; complete record/event,
++predecessor/A/B joins, checkpoint/inventory and negative tests next. Submit the
++completed data-only delta for narrow changed-boundary review before consumers.
++No v3 store, admission path or anchor contact follows from this clearance.
++
++Historical pre-review requirement: before v3 record implementation, review the revised release/admission join,
+ checkpoint/reconciliation protocol, delivery grammar and budget arithmetic. Test
+ all release cuts, lost versus absent acknowledgments, snapshot rollback and row
+ deletion, old-owner retries, maximum inventories and clock/deadline failure. An
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md
+new file mode 100644
+index 0000000..17799e8
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md
+@@ -0,0 +1,130 @@
++# Checkpoint remediation review: disposition and data-only continuation
++
++2026-09-15. Local producer assessment of external DESIGN + STATIC_SOURCE evidence.
++Not an independent execution, release acceptance or new effect authorization.
++
++## Received evidence
++
++Claude report audited source `49cd0792e5e7f48fff1798baebaa24e170ac5371` in the
++immutable 72-file packet at Audits `0471fe15d4eca6c3dd5d8243fe929eb7a0d9ef05`.
++It is actually delivered at the required packet-specific reports path, commit
++`b86e08b793bfffd5a47a68c85a3bf99b18a1b017`, blob
++`339e7b2c403e943c83ec59f45e882216c1f0389f`:
++
++https://github.com/eOnoes/Audits/blob/b86e08b793bfffd5a47a68c85a3bf99b18a1b017/onoes-agent-checkpoint-remediation-49cd0792e5e7-design-v1/reports/AUDIT_REPORT.md
++
++The local attachment and remote raw blob compare byte-for-byte: 44,733 bytes,
++SHA-256 `ac20989a2576a1bf9f600b2e8bc6b4dbe6b976ea016001d42ea6295c54ab82a2`.
++Retained privately without modification as
++`docs/reports/CLAUDE_CHECKPOINT_REMEDIATION_49cd079_2026_09_15.md`.
++The report commit adds only that report; frozen packet inputs are unchanged.
++GitHub delivery is verified, unlike the prior browser-capture-only handoff.
++
++All eleven report sections and findings were read. The reviewer identifies
++Claude Opus 5 in operator-mediated Claude Code, discloses the same model family
++as the preceding reviewer, and explicitly declines fresh independent-second-
++opinion status. No subject tests or helpers were executed by that reviewer.
++They read the changed boundary and selected context, not every dependency source.
++Their hashing/TAP/patch results are reported reviewer observations, not a new
++producer execution claim. Current product ledger/contract bytes were compared
++with the audited revision before beginning the new delta and were unchanged.
++
++## Gate decision
++
++The report explicitly resolves the earlier F-04 ambiguity:
++`V3_DATA_SCHEMA_IMPLEMENTATION_READY: YES` with N-01/N-02 clarifications;
++`SYNTHETIC_COMPOSITION_VERDICT: PASS_WITH_FINDINGS`;
++`REAL_ADMISSION_READY: NO`; `ACTIVATION_READY: NO`.
++
++The user resumed the existing build goal after receipt. Under that goal, the
++next permitted work is data definitions/parsers/negative tests, not a new
++production store, enrolled coordinator, issuer, physical anchor or VM execution.
++The report supplies review evidence; it is not itself authority to perform
++side effects. The completed data-only implementation still needs its own narrow
++changed-boundary review before any consumer is composed.
++
++## Findings
++
++| Finding | Disposition and next obligation |
++| --- | --- |
++| B-01 / physical B-03 | OPEN for real admission/activation. Authenticated fresh storage/anchor, anti-rollback, enrollment, issuer custody and physical old-owner fencing remain absent. Does not block definitions and parsers. |
++| N-01 evidence kind | DECIDED: add exact execute/publish kind to the core before implementation. The standalone parser checks the kind/outcome/null matrix. Future record joins must also check kind and every subject field against the bound intent. |
++| N-02 time edges | DECIDED: observedAt <= outcomeRecordedAt < validUntil; outcomeRecordedAt <= releaseRecordedAt < validUntil. Equality at validUntil denies. Pure timeline parsing checks supplied historical data, not current time or authenticated release. |
++| N-03 metadata identity | DECIDED: exact domain/installationId/namespaceId/storeId metadata core. Parser has no DB. Future persistence must durably bind and recheck all four inside every transaction. |
++| N-04 approval identity | PRESERVED: namespaceId/approvalId with agent-candidate-effect-ledger/v1, unchanged from v2 and independent of store/domain. Enrollment commitment shape/enforcement stays separate and OPEN. |
++| N-05 trusted clock gap | ACCEPTED LIMITATION of unchanged v2: a misbehaving host clock can change transaction state after preflight. No hostile host protection is claimed. Future private v3 persistence must decide/check the pre-BEGIN transaction obligation; no store is added here. |
++| N-06 test labels | ACCEPTED PRECISION: the emptied-store retry is not a surviving-row replay; ordering of identity check before scan is proved by source, not the lock-hold assertion alone. Do not promote these tests into stronger evidence. |
++| N-07 deadline disagreement | RESOLVED IN PART: the full-run-plus-full-stop success counterexample is contradicted by unchanged runDeadline checks. Synchronous settlement cost remains a real fail-closed blocker, pinned synthetically. Later local capacity measurements are separate evidence, not this review's execution or production sizing. |
++| N-08 baseline header | CORRECTED in the next contract edit: current implementation baseline a6e7eb8, reviewed source 49cd079. Historical commits/packets remain unchanged. |
++| N-09 sourceCharacters | ACCEPTED CAPTURE LIMITATION: 72,061 refers to UTF-16 DOM length after CRLF-to-LF normalization, not raw retained attachment bytes. The old browser capture is not reclassified as an original download. |
++| N-10 hash-first handoff | OPEN HISTORICAL LIMITATION: the operator received a separate pin message, but Claude reports receiving only the URL without prior pin acknowledgment. No retroactive hash-first claim. Use explicit acknowledged-first sequencing on the next handoff. |
++
++## Report arithmetic corrections (producer checked)
++
++The report repeatedly says four supplied baseline blobs while listing five
++hashes; it also says 38 unchanged + five changed + one new among 46 members.
++Parsing the actual pinned SOURCE_DELTA.json and enumerating baseline files gives
++**40 unchanged + five changed + one new = 46; five supplied baseline blobs**.
++The local packet verifier independently checked all five. Retain the report
++unchanged and carry this correction alongside it; do not rewrite its evidence
++or imply the review repeated work it did not report correctly. These arithmetic
++errors do not change the concrete design decision or require a whole-audit redo.
++
++## Data-core implementation scope
++
++`windows-candidate-v3-data.ts` begins the data-only work with primitive canonical
++UTF-8 text parsers for metadata, settlement core and historical timeline, plus
++the stable approval-identity digest. Schemas are private. Unknown input objects
++are never reflected on; byte limits precede JSON.parse. Existing canonical JSON
++rules reject duplicate keys, alternate spelling, omitted nulls and extra fields.
++Outputs are isolated and frozen. Errors are fixed, without echoing input.
++
++These functions do not validate full v3 record histories, join evidence to an
++intent/predecessor, authenticate evidence, prove a complete inventory, verify
++checkpoint A/B, consult actual clocks, claim workspace availability or persist
++anything. Those missing joins must be implemented and negatively tested next;
++no consumer may treat standalone core parsing as those checks. No v2 mutation,
++barrel/HTTP/UI/runtime wiring, migration, installation or external transfer.
++W1-W5 remain the unchanged production finish line.
++
++## Local executed evidence for the data-core delta
++
++Baseline `a6e7eb86f99bad177634984d7f119fd28026f736` plus this new data-only
++module/test and documentation delta. Node v24.14.0 on Windows x64. Typecheck and
++fresh test compilation pass. Eighteen new platform-neutral tests include all
++12 kind/outcome groups with all six result/null/boolean variants (72 combinations),
++every missing/mistyped core field, altered digest commitments, strict wire
++encoding, pre-parse byte caps, hostile proxies/accessors and exact time edges.
++They compare the approval identity against the actual unchanged v2 helper.
++No new tests skip off Windows. This is first implementation testing, not a claim
++that an earlier nonexistent v3 implementation reproduced these defects.
++
++Focused six-suite run: **161/161 pass, zero fail/cancel/skip**, 3,309.875 ms.
++Full product offline regression: **1,950 tests / 1,948 pass / zero fail/cancel /
++two skips**, 48,885.2794 ms. Both existing skips are explicitly retained: Windows
++link-creation privilege unavailable and the non-Windows inspector refusal case
++intentionally skipped on Windows. They do not satisfy W4's executed link gate.
++The full command uses `.test-dist/tests/**/*.test.js` plus the existing synthetic
++candidate-review HTTP/crash script suites, not only the unit directory.
++
++Raw TAPs remain in desktop `.audit-preparation/`:
++
++| Receipt | SHA-256 |
++| --- | --- |
++| v3-data-cores-focused-20260915.tap | `43b7f1d51d615c0eb0557f736d4e5d81bc29797252198015676dafa3ab295ed5` |
++| v3-data-cores-full-product-20260915.tap | `9ad93aea7eb48d5cf6f36320025d4759980d7a4f6af2dca1f80f748503e1b749` |
++
++The earlier `v3-data-cores-full-20260915.tap` filename was overly broad: it
++contains UNIT ONLY (1,647 / 1,645 pass / two skips, 41,243.805 ms), not the full
++product. It remains unchanged and is superseded for full-product claims by the
++explicit `full-product` receipt above; its SHA-256 is
++`73c2c2d503d2dc374a605c23eea54ea7c782ad19fac51edb6a3d7e135ee2443f`.
++
++New module SHA-256:
++`2beda5cf81d018a6b25f43d343ca2347365be19fb9daacafe4f2eefae9f70760`.
++New test SHA-256:
++`7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067`.
++Reference search finds only the new test importing the new data module; no
++runtime/UI/HTTP/barrel consumer is wired. Local source scan and diff checks pass.
++No independent execution, UI rebuild, VM, OS adjustment, new public packet,
++provider, authentic evidence, real approval consumption or task effect occurred.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md
+new file mode 100644
+index 0000000..b06272b
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md
+@@ -0,0 +1,102 @@
++# V3 inventory and checkpoint-history data validation
++
++Baseline `0420349cf66ef16e6bc1b0e84de388938995509b` plus this data-only delta.
++Date: 2026-09-15. This is new implementation for targeted review, not evidence
++that the earlier design reviewer inspected these bytes. No store, admission,
++runtime/UI/HTTP consumer, enrollment, credentials, VM or provider is activated.
++
++## Exact new data surfaces
++
++`windows-candidate-v3-inventory.ts` accepts canonical primitive JSON text, with
++metadata independently supplied to every call. No object, callback, I/O, clock,
++authority flag or availability predicate is accepted or exported. Public results
++explicitly say `not-admission`. Existing v2 modules and consumers are unchanged.
++
++The inventory transport is exactly
++`{domain:"agent-candidate-inventory-transport/v1",records:[{recordWire,settlementWire,checkpointAWire}]}`.
++Each nested wire is canonical text independently parsed by the existing v3 record
++module; absent historical settlement/A is explicit null where that parser allows
++it. Record order must be strictly ascending operation UUID; duplicates deny rather
++than normalize. There are at most 1,000 rows. The aggregate wire is capped at
++64 MiB before JSON.parse; row count is checked before schema traversal/error
++collection, and each nested wire retains its separate byte/shape cap. This is a
++bounded offline data transport, not a recommended HTTP body size or latency SLA.
++
++Every row is validated, including terminal/quarantined rows. Independent sets
++reject reused approval identity, workflow/kind and currently blocking workspace.
++No SQL index is relied on. Only released rows leave the private validation set;
++that set is not returned as permission. Publication requires its retained released,
++completed, passed execution with a matching result and every shared subject field,
++and reservation no earlier than parent release. Approval uniqueness also requires
++a separately identified publication approval. Actual approval authenticity is not
++established by this comparison.
++
++The hash core is the CONTRACT_V3 tuple inventory, not the whole nested records.
++Every tuple contains operationId, explicit eventIndex, complete recordDigest,
++approvalIdentityDigest and last state. Metadata and operation count are included
++in the root. Empty means the exact domain-separated empty root, never a zero hash.
++
++Checkpoint snapshot validation compares this complete SUPPLIED inventory with
++checkpoint count/root/subject/event/approval/producer. Global sequence is exactly
++the sum of each retained reservation plus explicit events. This deliberately
++supports no pruning, migration or extra non-ledger checkpoint kind. The subject
++cannot predate any other row's last event under the global monotonic chronology.
++
++The adjacent release-pair checker requires A and B to differ by one global
++sequence and one appended release, with B.previousCheckpointDigest equal to A.
++No unrelated record or evidence context can change. It is deliberately labeled
++an adjacent model, not the only permissible interleaving.
++
++The COMPLETE retained-history checker additionally accepts exactly
++`{domain:"agent-candidate-checkpoint-history/v1",checkpoints:[canonicalCheckpointWire]}`.
++It requires explicit genesis plus one checkpoint per reservation/event, capped
++at 7,001 checkpoint strings and 64 MiB aggregate. It checks each previous digest,
++exact sequence, producer, event progression, prefix digest, approval and full
++post-commit tuple root. A private historical blocker set rejects overlapping
++workspace lifetimes even when final rows are both released. Publication cannot
++precede its parent's release checkpoint. Every supplied A must equal its actual
++historical checkpoint, including its inventory root. Intervening operations
++between A and B are supported and checked; missing or conflicting history fails.
++The final checkpoint must cover every complete final record with no omissions.
++
++## Limits and non-claims
++
++Unkeyed consistency does not authenticate completeness. Deleting a row while
++retaining the old checkpoint fails; coherently deleting history and replacing its
++checkpoint remains a parseable claim. Tests preserve this negative boundary.
++Snapshot-only validation does not validate historical A roots; use the full-history
++data checker for that relationship, then separately authenticate actual storage,
++anchor head, ownership, freshness and all role-specific evidence. Neither checker
++supplies those physical facts, actual consent, signing, revocation or admission.
++
++History replay repeatedly hashes bounded growing tuple inventories. Its worst-case
++work is proportional to checkpoints times retained rows. The representative 1,000
++reserved/released snapshot tests are not a worst-case full-history benchmark, a
++memory ceiling proof, hard preemption or production settlement-time evidence.
++Those remain host-composition/resource gates, not claims from a pure parser.
++
++Protected storage/anchor/anti-rollback/fencing B-03, enrollment, issuer custody,
++real consumers, installer and W1-W5 remain open. The data-only implementation
++should receive changed-boundary static review before persistence/consumer design
++depends on it. No new public transfer has been approved or performed this turn.
++
++## Local executed evidence
++
++Windows x64 / Node v24.14.0. Typecheck and fresh test compilation pass.
++Twelve new platform-neutral inventory/history tests plus the 35 record/data-core
++tests: 47/47 pass, no failure/cancellation/skip, 1,210.0111 ms.
++Tests include 1,000 reserved and 1,000 released records, 1,001-row rejection,
++rehashed cross-row conflicts, omission/substitution, failed/unreleased publication
++parents, A/B unrelated-row drift, full interleaved A-to-B history, historical
++workspace overlap, missing/reordered checkpoints, and substituted A claims.
++
++Raw focused receipt: desktop `.audit-preparation/v3-inventory-history-focused-20260915.tap`.
++Full offline receipt: desktop `.audit-preparation/v3-inventory-history-full-product-20260915.tap`.
++Focused SHA-256: `8afc426d0e7951671909e3934240f5825f7a66681f910e6dd7a12c08c984502c`.
++Full SHA-256: `b20f8a8eef5ea95e408dd848c41c1f53fb8460eeb284bbd1b9d5f03841b46039`.
++Full result: 1,979 tests / 1,977 pass / zero fail/cancel / two skips,
++49,212.4926 ms. The unchanged skips remain unavailable Windows link-creation
++privilege and the deliberate Windows skip of the unsupported-host inspector test.
++They do not close the W4 link/native gate. Full command includes all compiled
++test directories plus the synthetic candidate HTTP and crash script suites.
++Local execution is producer evidence, not independent execution or release approval.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md
+new file mode 100644
+index 0000000..693dd80
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md
+@@ -0,0 +1,78 @@
++# V3 record-history data validation
++
++Implementation baseline: `075ab1756f12aaa3291801a94efd3a12fc7c0641` plus this
++data-only module, synthetic fixture, tests and documentation delta (2026-09-15).
++The checkpoint remediation review cleared this scope, not these later bytes.
++No real admission is enabled.
++
++## Implemented boundary
++
++`windows-candidate-v3-record.ts` accepts primitive canonical JSON text only.
++Record/checkpoint transports are capped before JSON parse at 32,768/4,096 UTF-8
++bytes. Schemas are private and strict; results frozen; errors fixed. No caller
++object reflection, callbacks, storage, clock, process or effect port exists.
++Existing v2 contracts/consumers are unchanged. Added intent installation/owner/
++authorization fields are descriptive bindings, not authenticated authorization.
++
++Replay checks every allowed execution/publication history, monotonic timestamps,
++strict forward-effect expiry and absorbing quarantine/release. Reservation is
++implicit index zero; at most six explicit events. All result/release fields are
++required with explicit nulls when inapplicable. Safe outcomes grant no availability.
++Release binds the exact complete predecessor, the SAME settlement core digest as
++the outcome, and checkpoint A naming that outcome-containing prefix. Missing A
++before release is parseable history; missing A after release fails. An outcome
++later quarantined retains its historical core and cannot release.
++
++Settlement joins every shared intent subject, full intent digest, the predecessor
++BEFORE the outcome and the historical result. Additional chronology decision:
++settlement observation must not predate the preceding event (reservation for
++cancellation). Equal times are allowed. Existing outcome/release validity edges
++remain unchanged. There is no actual-clock freshness claim or validity renewal.
++
++Checkpoint claims bind installation/namespace/store, historical producer, global
++sequence, previous digest, operation, event index, record and approval identities,
++inventory root/count. Self-digest excludes only checkpointDigest. Genesis requires
++null predecessor/subject fields, zero count and the exact empty-inventory root;
++it is not a missing-anchor fallback. Non-genesis requires all subject fields and
++nonzero count. Sequence must be at least operationCount + subject.eventIndex:
++each retained operation needs its reservation checkpoint, and this subject its
++explicit events. This lower bound is NOT full inventory or chain verification.
++
++## Remaining boundary
++
++Complete inventory reconstruction, independent cross-row uniqueness/blocker
++checks, publication parentage, checkpoint B joins and full chain validation are
++NOT supplied. A's inventory root is a claim here, not independently reconstructed.
++Return kind is `parsed-v3-record-not-admission`; no availability predicate exists.
++
++Unkeyed coherent forgeries still parse. One boundary test changes a role-evidence
++digest and recomputes every downstream commitment, expecting parsing success:
++consistency cannot authenticate actual settlement, custody or physical fencing.
++B-03, protected storage, enrollment, issuer, freshness, real approvals, Windows
++installation and W1-W5 remain open. No runtime/UI/HTTP/barrel imports were added;
++reference search finds only the synthetic helper and tests using the new module.
++
++## Local executed verification
++
++Windows x64 / Node v24.14.0: typecheck and fresh test compilation pass.
++Seventeen new platform-neutral tests plus eighteen data-core tests: 35/35 pass,
++zero failure/cancellation/skip, 164.3038 ms. Coverage includes every history cut
++for eight legal path variants, rehashed substitutions, early release, quarantine,
++malformed wire, proxy non-invocation, exact time edges, genesis and sequence bounds.
++
++Full offline product suite: 1,967 tests / 1,965 pass / zero fail/cancel / two skips,
++50,610.4375 ms. Existing skips remain link-creation privilege unavailable and the
++non-Windows inspector refusal deliberately skipped on Windows; neither closes
++W4's native link gate. Full command uses `.test-dist/tests/**/*.test.js` and the
++synthetic candidate-review HTTP/crash script suites, not only unit tests.
++
++Raw receipts in desktop `.audit-preparation/`:
++
++- `v3-record-joins-focused-20260915.tap`: SHA-256
++  `8c0042afdea14580cac553f72a1ab8700b5077fc35833596230b90c20762ac60`.
++- `v3-record-joins-full-product-20260915.tap`: SHA-256
++  `4d14830358b6ecc9799b4b90d1df6d2f137ac647fc0d6ef1964369bd40246d57`.
++
++No independent review of the new implementation, VM/provider execution, OS change
++or public publication occurred. Next: complete inventory/checkpoint B validation,
++then targeted static review of the finished data-only delta.
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-data.ts b/product/companion-v1/src/build-only/windows-candidate-v3-data.ts
+new file mode 100644
+index 0000000..3da83cf
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-data.ts
+@@ -0,0 +1,94 @@
++import { z } from "zod";
++import { canonicalJson, canonicalSha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { effectTime, effectUuid } from "./windows-candidate-effect-state.js";
++
++// DATA ONLY. No database, enrollment, anchor, issuer, admission or effect port.
++// A parsed claim is NOT authenticated evidence, custody, freshness or permission.
++// V2 records and consumers are unchanged. These exports are not a v3 store API.
++export const CANDIDATE_V3_DOMAIN = "agent-candidate-effect-ledger/v3" as const;
++export const CANDIDATE_V3_APPROVAL_IDENTITY_DOMAIN = "agent-candidate-effect-ledger/v1" as const;
++export const CANDIDATE_SETTLEMENT_DOMAIN = "agent-candidate-settlement-evidence/v1" as const;
++export const CANDIDATE_SETTLEMENT_MAX_BYTES = 8_192;
++export const CANDIDATE_V3_META_MAX_BYTES = 1_024;
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/);
++const identity = { installationId: effectUuid, namespaceId: effectUuid, storeId: effectUuid };
++const metaSchema = z.object({ domain: z.literal(CANDIDATE_V3_DOMAIN), ...identity }).strict();
++const approvalSchema = z.object({ namespaceId: effectUuid, approvalId: effectUuid }).strict();
++const settlementSchema = z.object({
++  domain: z.literal(CANDIDATE_SETTLEMENT_DOMAIN), ...identity,
++  kind: z.enum(["execute", "publish"]), operationId: effectUuid, workflowId: effectUuid,
++  intentDigest: digest, requestDigest: digest, sourceManifestDigest: digest,
++  workspaceDigest: digest, policyBindingDigest: digest,
++  ownerGeneration: effectUuid, guestGeneration: effectUuid,
++  controllerIdentityDigest: digest, resourcePolicyDigest: digest,
++  priorOutcomeRecordDigest: digest,
++  outcome: z.enum(["completed", "failed", "cancelled", "restored", "stopped-without-result"]),
++  resultDigest: digest.nullable(), verificationPassed: z.boolean().nullable(),
++  observedAt: effectTime, validUntil: effectTime,
++  contactAccountingDigest: digest, ownerFenceEvidenceDigest: digest,
++  processSettlementEvidenceDigest: digest, generationRetirementEvidenceDigest: digest,
++  custodyReleaseEvidenceDigest: digest, publicationExclusionEvidenceDigest: digest,
++  workspaceSafetyEvidenceDigest: digest,
++}).strict();
++const timelineSchema = z.object({ outcomeRecordedAt: effectTime, releaseRecordedAt: effectTime.nullable() }).strict();
++
++export type CandidateV3Metadata = Readonly<z.infer<typeof metaSchema>>;
++export type CandidateSettlementCore = Readonly<z.infer<typeof settlementSchema>>;
++export class CandidateV3DataError extends Error {
++  constructor() { super("candidate-v3-data-invalid"); this.name = "CandidateV3DataError"; }
++}
++function fail(): never { throw new CandidateV3DataError(); }
++function parse<T>(schema: z.ZodType<T>, wire: unknown, cap: number): T {
++  try {
++    // Primitive text only: no Buffer getters, proxies, accessors, toJSON or
++    // caller-owned objects are reflected on. Bound bytes BEFORE JSON.parse.
++    if (typeof wire !== "string" || wire.length > cap || Buffer.byteLength(wire, "utf8") > cap) return fail();
++    const value = schema.parse(JSON.parse(wire));
++    // Reject BOM, duplicate keys, unknown/omitted fields, alternative escaping,
++    // key order or whitespace. Existing canonicalJson also rejects bad UTF-16.
++    if (canonicalJson(value) !== wire) return fail();
++    return deepFreeze(value);
++  } catch { return fail(); }
++}
++
++/** Descriptive identity only. A future store must bind these exact fields
++ * durably and recheck them inside each transaction; this function opens none. */
++export function parseCandidateV3Metadata(wire: unknown): CandidateV3Metadata {
++  return parse(metaSchema, wire, CANDIDATE_V3_META_MAX_BYTES);
++}
++
++/** Stable namespace + approvalId identity. Does not establish that an approval
++ * was issued/consumed or that version-spanning enrollment is exclusive. */
++export function candidateV3ApprovalIdentity(wire: unknown): string {
++  const key = parse(approvalSchema, wire, CANDIDATE_V3_META_MAX_BYTES);
++  return canonicalSha256Digest({ domain: CANDIDATE_V3_APPROVAL_IDENTITY_DOMAIN, ...key });
++}
++
++/** Self-checking core shape, NOT authenticated role-specific evidence. A future
++ * record parser must additionally join every subject/predecessor/digest field. */
++export function parseCandidateSettlementCore(wire: unknown): CandidateSettlementCore {
++  const core = parse(settlementSchema, wire, CANDIDATE_SETTLEMENT_MAX_BYTES);
++  if (core.observedAt >= core.validUntil) return fail();
++  const executionResult = core.kind === "execute" && (core.outcome === "completed" || core.outcome === "failed");
++  if (executionResult) {
++    if (core.resultDigest === null || core.verificationPassed !== (core.outcome === "completed")) return fail();
++  } else {
++    const allowed = core.kind === "execute"
++      ? core.outcome === "cancelled" || core.outcome === "stopped-without-result"
++      : core.outcome === "completed" || core.outcome === "restored" || core.outcome === "cancelled";
++    if (!allowed || core.resultDigest !== null || core.verificationPassed !== null) return fail();
++  }
++  return core;
++}
++
++/** Check supplied historical timestamps, not the actual clock or a live release.
++ * null releaseRecordedAt represents outcome-only evidence, never availability. */
++export function parseCandidateSettlementTimeline(coreWire: unknown, timelineWire: unknown) {
++  const core = parseCandidateSettlementCore(coreWire);
++  const timeline = parse(timelineSchema, timelineWire, CANDIDATE_V3_META_MAX_BYTES);
++  if (timeline.outcomeRecordedAt < core.observedAt || timeline.outcomeRecordedAt >= core.validUntil
++    || (timeline.releaseRecordedAt !== null && (timeline.releaseRecordedAt < timeline.outcomeRecordedAt
++      || timeline.releaseRecordedAt >= core.validUntil))) return fail();
++  return deepFreeze({ core, timeline });
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts b/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts
+new file mode 100644
+index 0000000..ba09a2d
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts
+@@ -0,0 +1,165 @@
++import { z } from "zod";
++import { canonicalJson, canonicalSha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { CandidateV3DataError, parseCandidateV3Metadata, CANDIDATE_SETTLEMENT_MAX_BYTES } from "./windows-candidate-v3-data.js";
++import { parseCandidateV3Record, parseCandidateV3Checkpoint, CANDIDATE_V3_MAX_RECORD_BYTES,
++  CANDIDATE_V3_MAX_CHECKPOINT_BYTES } from "./windows-candidate-v3-record.js";
++
++// DATA ONLY. A caller can omit or coherently forge rows AND their checkpoint.
++// Authentic complete storage discovery, anchor freshness and admission are absent.
++export const CANDIDATE_V3_MAX_OPERATIONS = 1_000;
++export const CANDIDATE_V3_MAX_INVENTORY_BYTES = 64 * 1024 * 1024;
++const transport = z.object({ domain: z.literal("agent-candidate-inventory-transport/v1"), records: z.array(z.object({
++  recordWire: z.string().max(CANDIDATE_V3_MAX_RECORD_BYTES),
++  settlementWire: z.string().max(CANDIDATE_SETTLEMENT_MAX_BYTES).nullable(),
++  checkpointAWire: z.string().max(CANDIDATE_V3_MAX_CHECKPOINT_BYTES).nullable(),
++}).strict()).max(CANDIDATE_V3_MAX_OPERATIONS) }).strict();
++const fail = (): never => { throw new CandidateV3DataError(); };
++const parentFields = ["installationId", "namespaceId", "storeId", "workflowId", "workspaceDigest", "policyBindingDigest",
++  "candidateDigest", "reviewMaterialDigest", "sourceManifestDigest", "requestDigest", "guestImageDigest", "guestGeneration",
++  "controllerIdentityDigest", "resourcePolicyDigest"] as const;
++
++/** Validate every supplied row independently of SQL indexes, then hash only the
++ * bounded tuple inventory. Does not establish that the caller supplied all rows. */
++export function parseCandidateV3Inventory(wire: unknown, metadataWire: unknown) {
++  try {
++    const metadata = parseCandidateV3Metadata(metadataWire);
++    if (typeof wire !== "string" || wire.length > CANDIDATE_V3_MAX_INVENTORY_BYTES
++      || Buffer.byteLength(wire, "utf8") > CANDIDATE_V3_MAX_INVENTORY_BYTES) return fail();
++    const decoded: unknown = JSON.parse(wire);
++    // JSON.parse produces passive data. Check collection size before zod can
++    // traverse a hostile oversized array and accumulate per-element errors.
++    if (decoded === null || typeof decoded !== "object" || Array.isArray(decoded)
++      || !Array.isArray((decoded as { records?: unknown }).records)
++      || (decoded as { records: unknown[] }).records.length > CANDIDATE_V3_MAX_OPERATIONS) return fail();
++    const input = transport.parse(decoded);
++    if (canonicalJson(input) !== wire) return fail();
++    const rows = input.records.map(r => parseCandidateV3Record(r.recordWire, metadataWire, r.settlementWire, r.checkpointAWire));
++    const approvals = new Set<string>(), workflows = new Set<string>(), blockedWorkspaces = new Set<string>();
++    const byId = new Map(rows.map(r => [r.record.intent.operationId, r]));
++    let previousId = "", sequence = 0;
++    const entries = rows.map(({ record }) => {
++      const { intent } = record, workflow = `${intent.workflowId}/${intent.kind}`, state = record.events.at(-1)?.state ?? "reserved";
++      if (intent.operationId <= previousId || approvals.has(record.approvalIdentityDigest) || workflows.has(workflow)) return fail();
++      previousId = intent.operationId; approvals.add(record.approvalIdentityDigest); workflows.add(workflow);
++      if (state !== "released") {
++        if (blockedWorkspaces.has(intent.workspaceDigest)) return fail();
++        blockedWorkspaces.add(intent.workspaceDigest);
++      }
++      sequence += record.events.length + 1;
++      if (intent.kind === "publish") {
++        const parent = byId.get(intent.executionOperationId), release = parent?.record.events.at(-1);
++        if (!parent || parent.record.intent.kind !== "execute" || release?.state !== "released" || release.outcome !== "completed"
++          || parent.settlementEvidence?.verificationPassed !== true || parent.settlementEvidence.resultDigest !== intent.resultDigest
++          || parentFields.some(k => parent.record.intent[k] !== intent[k]) || record.reservedAt < release.recordedAt) return fail();
++      }
++      return { operationId: intent.operationId, eventIndex: record.events.length,
++        recordDigest: canonicalSha256Digest(record), approvalIdentityDigest: record.approvalIdentityDigest, state };
++    });
++    const core = { domain: "agent-candidate-inventory-root/v1" as const, installationId: metadata.installationId,
++      namespaceId: metadata.namespaceId, storeId: metadata.storeId, operationCount: rows.length, entries };
++    return deepFreeze({ kind: "parsed-v3-inventory-not-admission" as const, core,
++      inventoryRootDigest: canonicalSha256Digest(core), sequence, rows });
++  } catch { return fail(); }
++}
++
++/** Match one checkpoint claim to all supplied post-commit records. The exact
++ * sequence assumes retained append-only histories, with one checkpoint per
++ * reservation/event and no pruning/migration. No anchor authentication occurs. */
++export function parseCandidateV3CheckpointSnapshot(inventoryWire: unknown, metadataWire: unknown, checkpointWire: unknown) {
++  const inventory = parseCandidateV3Inventory(inventoryWire, metadataWire), checkpoint = parseCandidateV3Checkpoint(checkpointWire, metadataWire);
++  if (checkpoint.inventoryRootDigest !== inventory.inventoryRootDigest || checkpoint.operationCount !== inventory.rows.length
++    || checkpoint.sequence !== inventory.sequence) return fail();
++  if (inventory.rows.length) {
++    const subject = inventory.rows.find(r => r.record.intent.operationId === checkpoint.operationId);
++    if (!subject || checkpoint.eventIndex !== subject.record.events.length || checkpoint.recordDigest !== canonicalSha256Digest(subject.record)
++      || checkpoint.approvalIdentityDigest !== subject.record.approvalIdentityDigest
++      || checkpoint.producerGeneration !== subject.record.intent.ownerGeneration) return fail();
++    const at = subject.record.events.at(-1)?.recordedAt ?? subject.record.reservedAt;
++    if (inventory.rows.some(r => (r.record.events.at(-1)?.recordedAt ?? r.record.reservedAt) > at)) return fail();
++  }
++  return deepFreeze({ kind: "matched-v3-checkpoint-claim-not-admission" as const, inventory, checkpoint });
++}
++
++/** Restricted adjacent A->B data model: no intervening operation/checkpoint.
++ * Authenticate neither checkpoint and do not infer physical fence release. */
++export function parseCandidateV3ReleasePair(beforeWire: unknown, afterWire: unknown, metadataWire: unknown,
++  checkpointAWire: unknown, checkpointBWire: unknown) {
++  const a = parseCandidateV3CheckpointSnapshot(beforeWire, metadataWire, checkpointAWire);
++  const b = parseCandidateV3CheckpointSnapshot(afterWire, metadataWire, checkpointBWire);
++  if (b.checkpoint.sequence !== a.checkpoint.sequence + 1 || b.checkpoint.previousCheckpointDigest !== a.checkpoint.checkpointDigest
++    || b.checkpoint.operationId !== a.checkpoint.operationId || a.inventory.rows.length !== b.inventory.rows.length) return fail();
++  for (let n = 0; n < a.inventory.rows.length; n++) {
++    const before = a.inventory.rows[n]!, after = b.inventory.rows[n]!;
++    if (before.record.intent.operationId !== after.record.intent.operationId) return fail();
++    if (before.record.intent.operationId !== a.checkpoint.operationId) {
++      if (canonicalJson(before) !== canonicalJson(after)) return fail();
++      continue;
++    }
++    const release = after.record.events.at(-1);
++    if (release?.state !== "released" || after.record.events.length !== before.record.events.length + 1
++      || canonicalJson({ ...after.record, events: after.record.events.slice(0, -1) }) !== canonicalJson(before.record)
++      || canonicalJson(before.settlementEvidence) !== canonicalJson(after.settlementEvidence)
++      || after.outcomeCheckpoint?.checkpointDigest !== a.checkpoint.checkpointDigest
++      || release.outcomeCheckpointDigest !== a.checkpoint.checkpointDigest) return fail();
++  }
++  return deepFreeze({ kind: "matched-v3-release-pair-not-admission" as const, before: a, after: b });
++}
++
++/** Replay the complete retained checkpoint stream, including interleaved
++ * operations between A and B. No pruning, missing genesis or inferred records.
++ * This authenticates nothing: a coherent forged stream remains a coherent claim. */
++export function parseCandidateV3CheckpointHistory(inventoryWire: unknown, metadataWire: unknown, historyWire: unknown) {
++  try {
++    const inventory = parseCandidateV3Inventory(inventoryWire, metadataWire);
++    if (typeof historyWire !== "string" || historyWire.length > CANDIDATE_V3_MAX_INVENTORY_BYTES
++      || Buffer.byteLength(historyWire, "utf8") > CANDIDATE_V3_MAX_INVENTORY_BYTES) return fail();
++    const decoded: unknown = JSON.parse(historyWire);
++    if (decoded === null || typeof decoded !== "object" || Array.isArray(decoded)
++      || !Array.isArray((decoded as { checkpoints?: unknown }).checkpoints)
++      || (decoded as { checkpoints: unknown[] }).checkpoints.length > 7 * CANDIDATE_V3_MAX_OPERATIONS + 1) return fail();
++    const input = z.object({ domain: z.literal("agent-candidate-checkpoint-history/v1"),
++      checkpoints: z.array(z.string().max(CANDIDATE_V3_MAX_CHECKPOINT_BYTES)).min(1).max(7 * CANDIDATE_V3_MAX_OPERATIONS + 1),
++    }).strict().parse(decoded);
++    if (canonicalJson(input) !== historyWire || input.checkpoints.length !== inventory.sequence + 1) return fail();
++    const rows = new Map(inventory.rows.map(r => [r.record.intent.operationId, r]));
++    const entries = new Map<string, (typeof inventory.core.entries)[number]>(), blocked = new Map<string, string>();
++    let previous = parseCandidateV3Checkpoint(input.checkpoints[0], metadataWire), lastAt = "";
++    if (previous.sequence !== 0) return fail();
++    for (let sequence = 1; sequence < input.checkpoints.length; sequence++) {
++      const cp = parseCandidateV3Checkpoint(input.checkpoints[sequence], metadataWire), row = rows.get(cp.operationId ?? "");
++      if (!row || cp.sequence !== sequence || cp.previousCheckpointDigest !== previous.checkpointDigest
++        || cp.producerGeneration !== row.record.intent.ownerGeneration || cp.approvalIdentityDigest !== row.record.approvalIdentityDigest) return fail();
++      const { record } = row, id = record.intent.operationId, prior = entries.get(id), index = cp.eventIndex!;
++      if (index !== (prior ? prior.eventIndex + 1 : 0) || index > record.events.length) return fail();
++      const prefix = { ...record, events: record.events.slice(0, index) }, event = prefix.events.at(-1);
++      const at = event?.recordedAt ?? record.reservedAt;
++      if (at < lastAt || cp.recordDigest !== canonicalSha256Digest(prefix)) return fail();
++      lastAt = at;
++      if (index === 0) {
++        if (blocked.has(record.intent.workspaceDigest)) return fail();
++        if (record.intent.kind === "publish") {
++          const parent = entries.get(record.intent.executionOperationId);
++          if (!parent || parent.state !== "released") return fail();
++        }
++        blocked.set(record.intent.workspaceDigest, id);
++      } else if (event?.state === "released") {
++        if (blocked.get(record.intent.workspaceDigest) !== id) return fail();
++        blocked.delete(record.intent.workspaceDigest);
++      }
++      entries.set(id, { operationId: id, eventIndex: index, recordDigest: cp.recordDigest!,
++        approvalIdentityDigest: record.approvalIdentityDigest, state: event?.state ?? "reserved" });
++      const core = { ...inventory.core, operationCount: entries.size,
++        entries: [...entries.values()].sort((a, b) => a.operationId < b.operationId ? -1 : a.operationId > b.operationId ? 1 : 0) };
++      if (cp.operationCount !== entries.size || cp.inventoryRootDigest !== canonicalSha256Digest(core)) return fail();
++      // Any supplied A must be the exact historical checkpoint in this stream,
++      // not a fabricated self-consistent prefix with a different inventory root.
++      if (row.outcomeCheckpoint?.eventIndex === index && row.outcomeCheckpoint.checkpointDigest !== cp.checkpointDigest) return fail();
++      previous = cp;
++    }
++    if (entries.size !== inventory.rows.length || previous.inventoryRootDigest !== inventory.inventoryRootDigest
++      || inventory.core.entries.some(e => entries.get(e.operationId)?.recordDigest !== e.recordDigest)) return fail();
++    return deepFreeze({ kind: "matched-v3-checkpoint-history-not-admission" as const, inventory, head: previous,
++      checkpointCount: input.checkpoints.length });
++  } catch { return fail(); }
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-record.ts b/product/companion-v1/src/build-only/windows-candidate-v3-record.ts
+new file mode 100644
+index 0000000..aed6f50
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-record.ts
+@@ -0,0 +1,141 @@
++import { z } from "zod";
++import { canonicalJson, canonicalSha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { effectTime, effectUuid } from "./windows-candidate-effect-state.js";
++import { CANDIDATE_V3_DOMAIN, CandidateV3DataError, candidateV3ApprovalIdentity,
++  parseCandidateV3Metadata, parseCandidateSettlementCore, parseCandidateSettlementTimeline,
++} from "./windows-candidate-v3-data.js";
++
++// DATA ONLY: replay supplied histories and digest relations. No mutation/store,
++// enrollment, availability predicate, authenticated anchor, issuer or effect API.
++export const CANDIDATE_V3_MAX_RECORD_BYTES = 32_768;
++export const CANDIDATE_V3_CHECKPOINT_DOMAIN = "agent-candidate-checkpoint/v1" as const;
++export const CANDIDATE_V3_MAX_CHECKPOINT_BYTES = 4_096;
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/);
++const common = {
++  schemaVersion: z.literal(CANDIDATE_V3_DOMAIN), installationId: effectUuid, namespaceId: effectUuid, storeId: effectUuid,
++  operationId: effectUuid, workflowId: effectUuid, approvalId: effectUuid, ownerGeneration: effectUuid,
++  authorizationDigest: digest, workspaceDigest: digest, policyBindingDigest: digest, candidateDigest: digest,
++  reviewMaterialDigest: digest, sourceManifestDigest: digest, requestDigest: digest,
++  guestImageDigest: digest, guestGeneration: effectUuid, controllerIdentityDigest: digest,
++  resourcePolicyDigest: digest, expiresAt: effectTime,
++};
++const intentSchema = z.discriminatedUnion("kind", [
++  z.object({ ...common, kind: z.literal("execute") }).strict(),
++  z.object({ ...common, kind: z.literal("publish"), executionOperationId: effectUuid, resultDigest: digest }).strict(),
++]);
++const outcomes = ["completed", "failed", "restored", "cancelled", "stopped-without-result"] as const;
++const outcomeSchema = z.enum(outcomes);
++const stateSchema = z.enum(["source-delivery-possible", "launch-possible", "result-and-stop-observed",
++  "publication-possible", ...outcomes, "quarantined", "released"]);
++const eventSchema = z.object({ state: stateSchema, recordedAt: effectTime, evidenceDigest: digest,
++  resultDigest: digest.nullable(), verificationPassed: z.boolean().nullable(),
++  outcome: outcomeSchema.nullable(), predecessorRecordDigest: digest.nullable(), outcomeCheckpointDigest: digest.nullable(),
++}).strict();
++const recordSchema = z.object({ intent: intentSchema, intentDigest: digest, approvalIdentityDigest: digest,
++  reservedAt: effectTime, events: z.array(eventSchema).max(6) }).strict();
++const checkpointSchema = z.object({ domain: z.literal(CANDIDATE_V3_CHECKPOINT_DOMAIN),
++  installationId: effectUuid, namespaceId: effectUuid, storeId: effectUuid, producerGeneration: effectUuid,
++  sequence: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER), previousCheckpointDigest: digest.nullable(),
++  operationId: effectUuid.nullable(), eventIndex: z.number().int().min(0).max(6).nullable(), recordDigest: digest.nullable(),
++  approvalIdentityDigest: digest.nullable(), inventoryRootDigest: digest,
++  operationCount: z.number().int().min(0).max(1_000), checkpointDigest: digest,
++}).strict();
++export type CandidateV3Record = Readonly<z.infer<typeof recordSchema>>;
++export type CandidateV3Checkpoint = Readonly<z.infer<typeof checkpointSchema>>;
++function fail(): never { throw new CandidateV3DataError(); }
++function parse<T>(schema: z.ZodType<T>, wire: unknown, maxBytes: number): T {
++  try {
++    if (typeof wire !== "string" || wire.length > maxBytes || Buffer.byteLength(wire, "utf8") > maxBytes) return fail();
++    const value = schema.parse(JSON.parse(wire));
++    if (canonicalJson(value) !== wire) return fail();
++    return deepFreeze(value);
++  } catch { return fail(); }
++}
++function outcome(state: string): state is z.infer<typeof outcomeSchema> { return (outcomes as readonly string[]).includes(state); }
++function state(record: CandidateV3Record): string { return record.events.at(-1)?.state ?? "reserved"; }
++function prefix(record: CandidateV3Record, length: number): CandidateV3Record { return { ...record, events: record.events.slice(0, length) }; }
++
++/** Digest-consistent checkpoint CLAIM only. The full inventory root, previous
++ * checkpoint chain and actual authenticated freshness must be checked separately. */
++export function parseCandidateV3Checkpoint(wire: unknown, metadataWire: unknown): CandidateV3Checkpoint {
++  const pins = parseCandidateV3Metadata(metadataWire), value = parse(checkpointSchema, wire, CANDIDATE_V3_MAX_CHECKPOINT_BYTES);
++  for (const key of ["installationId", "namespaceId", "storeId"] as const) if (value[key] !== pins[key]) return fail();
++  const { checkpointDigest, ...core } = value;
++  if (canonicalSha256Digest(core) !== checkpointDigest) return fail();
++  if (value.sequence === 0) {
++    if (value.previousCheckpointDigest !== null || value.operationId !== null || value.eventIndex !== null
++      || value.recordDigest !== null || value.approvalIdentityDigest !== null || value.operationCount !== 0) return fail();
++    const emptyRoot = canonicalSha256Digest({ domain: "agent-candidate-inventory-root/v1",
++      installationId: pins.installationId, namespaceId: pins.namespaceId, storeId: pins.storeId, operationCount: 0, entries: [] });
++    if (value.inventoryRootDigest !== emptyRoot) return fail();
++  } else if (value.previousCheckpointDigest === null || value.operationId === null || value.eventIndex === null
++    || value.recordDigest === null || value.approvalIdentityDigest === null || value.operationCount === 0) return fail();
++  // Each retained operation needs its reservation checkpoint, and this subject
++  // alone needs eventIndex additional checkpoints. Full-inventory checking is
++  // separate; this lower bound is not a claim that all other rows were supplied.
++  if (value.eventIndex !== null && value.sequence < value.operationCount + value.eventIndex) return fail();
++  return value;
++}
++
++/** Parse a history with its exact settlement core and checkpoint-A claims.
++ * null context means not yet observed, not permission. Missing A after a local
++ * release is rejected; missing B is NEVER represented as successful admission. */
++export function parseCandidateV3Record(recordWire: unknown, metadataWire: unknown,
++  settlementWire: unknown = null, checkpointAWire: unknown = null) {
++  const pins = parseCandidateV3Metadata(metadataWire), record = parse(recordSchema, recordWire, CANDIDATE_V3_MAX_RECORD_BYTES);
++  for (const key of ["installationId", "namespaceId", "storeId"] as const) if (record.intent[key] !== pins[key]) return fail();
++  if (record.intentDigest !== canonicalSha256Digest(record.intent)
++    || record.approvalIdentityDigest !== candidateV3ApprovalIdentity(canonicalJson({ namespaceId: record.intent.namespaceId, approvalId: record.intent.approvalId }))
++    || record.reservedAt >= record.intent.expiresAt) return fail();
++  let outcomeIndex = -1;
++  for (let index = 0; index < record.events.length; index++) {
++    const next = record.events[index]!, prior = prefix(record, index), previous = state(prior), last = prior.events.at(-1);
++    if (previous === "quarantined" || previous === "released" || next.recordedAt < (last?.recordedAt ?? record.reservedAt)) return fail();
++    if (next.state === "result-and-stop-observed"
++      ? next.resultDigest === null || next.verificationPassed === null
++      : next.resultDigest !== null || next.verificationPassed !== null) return fail();
++    if (next.state !== "released" && (next.outcome !== null || next.predecessorRecordDigest !== null || next.outcomeCheckpointDigest !== null)) return fail();
++    if (next.state === "quarantined") continue;
++    if (next.state === "released") {
++      if (!outcome(previous) || next.outcome !== previous || next.predecessorRecordDigest !== canonicalSha256Digest(prior)
++        || next.outcomeCheckpointDigest === null || next.evidenceDigest !== last?.evidenceDigest) return fail();
++      continue;
++    }
++    const valid = record.intent.kind === "execute"
++      ? (previous === "reserved" && ["source-delivery-possible", "cancelled"].includes(next.state))
++        || (previous === "source-delivery-possible" && ["launch-possible", "stopped-without-result"].includes(next.state))
++        || (previous === "launch-possible" && ["result-and-stop-observed", "stopped-without-result"].includes(next.state))
++        || (previous === "result-and-stop-observed" && next.state === (last?.verificationPassed ? "completed" : "failed"))
++      : (previous === "reserved" && ["publication-possible", "cancelled"].includes(next.state))
++        || (previous === "publication-possible" && ["completed", "restored"].includes(next.state));
++    if (!valid) return fail();
++    if (["source-delivery-possible", "launch-possible", "publication-possible"].includes(next.state)
++      && next.recordedAt >= record.intent.expiresAt) return fail();
++    if (outcome(next.state)) outcomeIndex = index;
++  }
++  if (outcomeIndex < 0) {
++    if (settlementWire !== null || checkpointAWire !== null) return fail();
++    return deepFreeze({ kind: "parsed-v3-record-not-admission" as const, record, settlementEvidence: null, outcomeCheckpoint: null });
++  }
++  const core = parseCandidateSettlementCore(settlementWire), event = record.events[outcomeIndex]!;
++  for (const key of ["installationId", "namespaceId", "storeId", "kind", "operationId", "workflowId", "requestDigest",
++    "sourceManifestDigest", "workspaceDigest", "policyBindingDigest", "ownerGeneration", "guestGeneration",
++    "controllerIdentityDigest", "resourcePolicyDigest"] as const) if (core[key] !== record.intent[key]) return fail();
++  const before = prefix(record, outcomeIndex), observation = before.events.at(-1);
++  if (core.intentDigest !== record.intentDigest || core.priorOutcomeRecordDigest !== canonicalSha256Digest(before)
++    || core.outcome !== event.state || core.observedAt < (observation?.recordedAt ?? record.reservedAt)
++    || canonicalSha256Digest(core) !== event.evidenceDigest) return fail();
++  if (record.intent.kind === "execute" && ["completed", "failed"].includes(event.state)
++    && (core.resultDigest !== observation?.resultDigest || core.verificationPassed !== observation?.verificationPassed)) return fail();
++  const release = record.events.find(e => e.state === "released");
++  parseCandidateSettlementTimeline(settlementWire, canonicalJson({ outcomeRecordedAt: event.recordedAt, releaseRecordedAt: release?.recordedAt ?? null }));
++  const checkpointA = checkpointAWire === null ? null : parseCandidateV3Checkpoint(checkpointAWire, metadataWire);
++  if (checkpointA !== null) {
++    if (checkpointA.operationId !== record.intent.operationId || checkpointA.producerGeneration !== record.intent.ownerGeneration
++      || checkpointA.eventIndex !== outcomeIndex + 1 || checkpointA.recordDigest !== canonicalSha256Digest(prefix(record, outcomeIndex + 1))
++      || checkpointA.approvalIdentityDigest !== record.approvalIdentityDigest) return fail();
++  }
++  if (release && (!checkpointA || release.outcomeCheckpointDigest !== checkpointA.checkpointDigest)) return fail();
++  return deepFreeze({ kind: "parsed-v3-record-not-admission" as const, record, settlementEvidence: core, outcomeCheckpoint: checkpointA });
++}
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-record-fixture.ts b/product/companion-v1/tests/helpers/candidate-v3-record-fixture.ts
+new file mode 100644
+index 0000000..5a1bdab
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-record-fixture.ts
+@@ -0,0 +1,71 @@
++import { canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { CANDIDATE_V3_DOMAIN, CANDIDATE_SETTLEMENT_DOMAIN } from "../../src/build-only/windows-candidate-v3-data.js";
++import { CANDIDATE_V3_CHECKPOINT_DOMAIN } from "../../src/build-only/windows-candidate-v3-record.js";
++
++// Synthetic CLAIM construction. No parser is used to certify its own fixture;
++// no storage, checkpoint service, actual evidence, issuer or effects exist here.
++export const uuid = (n: number) => `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
++export const digest = (n: number) => "sha256:" + n.toString(16).padStart(64, "0");
++export const time = (n: number) => new Date(Date.UTC(2026, 8, 15) + n).toISOString();
++export const metadata = { domain: CANDIDATE_V3_DOMAIN, installationId: uuid(1), namespaceId: uuid(2), storeId: uuid(3) };
++export function event(state: string, n: number) {
++  return { state, recordedAt: time(n), evidenceDigest: digest(n + 100), resultDigest: null as string | null,
++    verificationPassed: null as boolean | null, outcome: null as string | null,
++    predecessorRecordDigest: null as string | null, outcomeCheckpointDigest: null as string | null };
++}
++export function fixture(kind = "execute", outcome = "completed", stopAfterDelivery = false) {
++  const intent = { schemaVersion: CANDIDATE_V3_DOMAIN, installationId: uuid(1), namespaceId: uuid(2), storeId: uuid(3),
++    operationId: uuid(4), workflowId: uuid(5), approvalId: uuid(6), ownerGeneration: uuid(7), authorizationDigest: digest(20),
++    workspaceDigest: digest(1), policyBindingDigest: digest(2), candidateDigest: digest(3), reviewMaterialDigest: digest(4),
++    sourceManifestDigest: digest(5), requestDigest: digest(6), guestImageDigest: digest(7), guestGeneration: uuid(8),
++    controllerIdentityDigest: digest(8), resourcePolicyDigest: digest(9), expiresAt: time(10), kind,
++    ...(kind === "publish" ? { executionOperationId: uuid(9), resultDigest: digest(10) } : {}) };
++  const record = { intent, intentDigest: hash(intent),
++    approvalIdentityDigest: hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: intent.namespaceId, approvalId: intent.approvalId }),
++    reservedAt: time(0), events: [] as ReturnType<typeof event>[] };
++  if (outcome !== "cancelled") {
++    record.events.push(event(kind === "execute" ? "source-delivery-possible" : "publication-possible", 1));
++    if (kind === "execute" && !stopAfterDelivery) record.events.push(event("launch-possible", 2));
++    if (kind === "execute" && ["completed", "failed"].includes(outcome)) record.events.push({ ...event("result-and-stop-observed", 3), resultDigest: digest(10), verificationPassed: outcome === "completed" });
++  }
++  const outcomeIndex = record.events.length;
++  const core = { domain: CANDIDATE_SETTLEMENT_DOMAIN, installationId: intent.installationId, namespaceId: intent.namespaceId,
++    storeId: intent.storeId, kind, operationId: intent.operationId, workflowId: intent.workflowId,
++    intentDigest: record.intentDigest, requestDigest: intent.requestDigest, sourceManifestDigest: intent.sourceManifestDigest,
++    workspaceDigest: intent.workspaceDigest, policyBindingDigest: intent.policyBindingDigest, ownerGeneration: intent.ownerGeneration,
++    guestGeneration: intent.guestGeneration, controllerIdentityDigest: intent.controllerIdentityDigest, resourcePolicyDigest: intent.resourcePolicyDigest,
++    priorOutcomeRecordDigest: hash(record), outcome,
++    resultDigest: kind === "execute" && ["completed", "failed"].includes(outcome) ? digest(10) as string | null : null,
++    verificationPassed: kind === "execute" && ["completed", "failed"].includes(outcome) ? (outcome === "completed") as boolean | null : null,
++    observedAt: time(outcomeIndex + 1), validUntil: time(20), contactAccountingDigest: digest(21), ownerFenceEvidenceDigest: digest(22),
++    processSettlementEvidenceDigest: digest(23), generationRetirementEvidenceDigest: digest(24), custodyReleaseEvidenceDigest: digest(25),
++    publicationExclusionEvidenceDigest: digest(26), workspaceSafetyEvidenceDigest: digest(27) };
++  record.events.push({ ...event(outcome, outcomeIndex + 1), evidenceDigest: hash(core) });
++  const checkpointA = { domain: CANDIDATE_V3_CHECKPOINT_DOMAIN, installationId: intent.installationId,
++    namespaceId: intent.namespaceId, storeId: intent.storeId, producerGeneration: intent.ownerGeneration,
++    sequence: outcomeIndex + 2, previousCheckpointDigest: digest(80) as string | null, operationId: intent.operationId as string | null,
++    eventIndex: outcomeIndex + 1 as number | null, recordDigest: hash(record) as string | null,
++    approvalIdentityDigest: record.approvalIdentityDigest as string | null, inventoryRootDigest: digest(81), operationCount: 1, checkpointDigest: "" };
++  record.events.push({ ...event("released", outcomeIndex + 2), evidenceDigest: hash(core), outcome,
++    predecessorRecordDigest: checkpointA.recordDigest, outcomeCheckpointDigest: "" });
++  const value = { record, core, checkpointA, outcomeIndex };
++  rebind(value);
++  return value;
++}
++export function rebind(value: ReturnType<typeof fixture>): void {
++  const { record, core, checkpointA, outcomeIndex } = value;
++  record.events[outcomeIndex]!.evidenceDigest = hash(core);
++  const prior = { ...record, events: record.events.slice(0, outcomeIndex + 1) };
++  checkpointA.recordDigest = hash(prior);
++  checkpointA.inventoryRootDigest = hash({ domain: "agent-candidate-inventory-root/v1", installationId: metadata.installationId,
++    namespaceId: metadata.namespaceId, storeId: metadata.storeId, operationCount: 1,
++    entries: [{ operationId: record.intent.operationId, eventIndex: prior.events.length, recordDigest: hash(prior),
++      approvalIdentityDigest: record.approvalIdentityDigest, state: prior.events.at(-1)!.state }] });
++  rehashCheckpoint(checkpointA);
++  const release = record.events[outcomeIndex + 1]!;
++  release.evidenceDigest = hash(core); release.predecessorRecordDigest = checkpointA.recordDigest; release.outcomeCheckpointDigest = checkpointA.checkpointDigest;
++}
++export function rehashCheckpoint(checkpoint: ReturnType<typeof fixture>["checkpointA"]): void {
++  const { checkpointDigest: _unused, ...core } = checkpoint;
++  checkpoint.checkpointDigest = hash(core);
++}
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-data.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-data.test.ts
+new file mode 100644
+index 0000000..4b6296a
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-data.test.ts
+@@ -0,0 +1,133 @@
++import assert from "node:assert/strict";
++import test from "node:test";
++import { canonicalJson, canonicalSha256Digest } from "../../src/compatibility/canonical-json.js";
++import { effectApprovalIdentity, effectIntentSchema, effectParse } from "../../src/build-only/windows-candidate-effect-state.js";
++import { CANDIDATE_V3_DOMAIN, CANDIDATE_V3_APPROVAL_IDENTITY_DOMAIN, CANDIDATE_SETTLEMENT_DOMAIN,
++  CANDIDATE_SETTLEMENT_MAX_BYTES, CandidateV3DataError, parseCandidateV3Metadata,
++  candidateV3ApprovalIdentity, parseCandidateSettlementCore, parseCandidateSettlementTimeline,
++} from "../../src/build-only/windows-candidate-v3-data.js";
++
++// No platform skip: pure schema checks run on any supported Node host. Synthetic
++// claims only, with no database, task, provider, approval issuer or anchor.
++const id = (n: number) => `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
++const d = (n: number) => "sha256:" + n.toString(16).padStart(64, "0");
++const at = "2026-09-15T00:00:00.000Z", later = "2026-09-15T00:00:01.000Z";
++const meta = { domain: CANDIDATE_V3_DOMAIN, installationId: id(1), namespaceId: id(2), storeId: id(3) };
++function evidence() {
++  return { ...meta, domain: CANDIDATE_SETTLEMENT_DOMAIN, kind: "execute", operationId: id(4), workflowId: id(5),
++    intentDigest: d(1), requestDigest: d(2), sourceManifestDigest: d(3), workspaceDigest: d(4),
++    policyBindingDigest: d(5), ownerGeneration: id(6), guestGeneration: id(7),
++    controllerIdentityDigest: d(6), resourcePolicyDigest: d(7), priorOutcomeRecordDigest: d(8),
++    outcome: "completed", resultDigest: d(9) as string | null, verificationPassed: true as boolean | null,
++    observedAt: at, validUntil: later, contactAccountingDigest: d(10), ownerFenceEvidenceDigest: d(11),
++    processSettlementEvidenceDigest: d(12), generationRetirementEvidenceDigest: d(13),
++    custodyReleaseEvidenceDigest: d(14), publicationExclusionEvidenceDigest: d(15), workspaceSafetyEvidenceDigest: d(16) };
++}
++const denied = (fn: () => unknown) => assert.throws(fn, e => e instanceof CandidateV3DataError && e.message === "candidate-v3-data-invalid");
++
++test("v3 metadata binds exact installation/namespace/store/domain without creating authority", () => {
++  assert.deepEqual(parseCandidateV3Metadata(canonicalJson(meta)), meta);
++  assert.ok(Object.isFrozen(parseCandidateV3Metadata(canonicalJson(meta))));
++  for (const field of Object.keys(meta)) { const value = { ...meta } as Record<string, unknown>; delete value[field]; denied(() => parseCandidateV3Metadata(canonicalJson(value))); }
++  for (const value of [{ ...meta, domain: "agent-candidate-effect-ledger/v2" }, { ...meta, installationId: "" },
++    { ...meta, permission: true }, { ...meta, installationId: "00000000-0000-4000-8000-00000000000A" }]) denied(() => parseCandidateV3Metadata(canonicalJson(value)));
++  assert.notDeepEqual(parseCandidateV3Metadata(canonicalJson({ ...meta, installationId: id(99) })), meta,
++    "a different well-formed identity remains different; parsing is not enrollment validation");
++});
++
++test("v3 approval identity stays identical to v2 across stores and schema domains", () => {
++  const legacy = effectParse(effectIntentSchema, { schemaVersion: "agent-candidate-effect-ledger/v2", kind: "execute",
++    namespaceId: id(2), storeId: id(3), operationId: id(4), workflowId: id(5), approvalId: id(6),
++    workspaceDigest: d(1), policyBindingDigest: d(2), candidateDigest: d(3), reviewMaterialDigest: d(4),
++    sourceManifestDigest: d(5), requestDigest: d(6), guestImageDigest: d(7), guestGeneration: id(7),
++    controllerIdentityDigest: d(8), resourcePolicyDigest: d(9), expiresAt: later });
++  const wire = canonicalJson({ namespaceId: legacy.namespaceId, approvalId: legacy.approvalId });
++  assert.equal(CANDIDATE_V3_APPROVAL_IDENTITY_DOMAIN, "agent-candidate-effect-ledger/v1");
++  assert.equal(candidateV3ApprovalIdentity(wire), effectApprovalIdentity(legacy));
++  assert.equal(candidateV3ApprovalIdentity(wire), effectApprovalIdentity({ ...legacy, storeId: id(99) }));
++  assert.notEqual(candidateV3ApprovalIdentity(canonicalJson({ namespaceId: id(99), approvalId: id(6) })), candidateV3ApprovalIdentity(wire));
++  assert.notEqual(candidateV3ApprovalIdentity(canonicalJson({ namespaceId: id(2), approvalId: id(99) })), candidateV3ApprovalIdentity(wire));
++  denied(() => candidateV3ApprovalIdentity(canonicalJson({ namespaceId: id(2), approvalId: id(6), storeId: id(3) })));
++});
++
++for (const kind of ["execute", "publish"]) for (const outcome of ["completed", "failed", "cancelled", "restored", "stopped-without-result", "quarantined"]) {
++  test(`settlement kind/outcome/null matrix: ${kind}/${outcome}`, () => {
++    for (const resultDigest of [null, d(9)]) for (const verificationPassed of [null, false, true]) {
++      const value = { ...evidence(), kind, outcome, resultDigest, verificationPassed };
++      const allowed = kind === "execute" && (outcome === "completed" || outcome === "failed")
++        ? resultDigest !== null && verificationPassed === (outcome === "completed")
++        : (kind === "execute" ? ["cancelled", "stopped-without-result"] : ["completed", "restored", "cancelled"]).includes(outcome)
++          && resultDigest === null && verificationPassed === null;
++      if (allowed) assert.deepEqual(parseCandidateSettlementCore(canonicalJson(value)), value);
++      else denied(() => parseCandidateSettlementCore(canonicalJson(value)));
++    }
++  });
++}
++
++test("every settlement field is required, strictly typed and part of the digest", () => {
++  const valid = evidence(), wire = canonicalJson(valid), parsed = parseCandidateSettlementCore(wire);
++  assert.ok(Object.isFrozen(parsed)); assert.ok(Buffer.byteLength(wire) < CANDIDATE_SETTLEMENT_MAX_BYTES);
++  assert.deepEqual(parsed, valid);
++  for (const field of Object.keys(valid)) {
++    const omitted = { ...valid } as Record<string, unknown>; delete omitted[field];
++    denied(() => parseCandidateSettlementCore(canonicalJson(omitted)));
++    denied(() => parseCandidateSettlementCore(canonicalJson({ ...valid, [field]: "" })));
++    denied(() => parseCandidateSettlementCore(canonicalJson({ ...valid, [field]: {} })));
++    if (field.endsWith("Digest")) {
++      const changed = parseCandidateSettlementCore(canonicalJson({ ...valid, [field]: d(999) }));
++      assert.notEqual(canonicalSha256Digest(changed), canonicalSha256Digest(parsed), field);
++      denied(() => parseCandidateSettlementCore(canonicalJson({ ...valid, [field]: "sha256:" + "A".repeat(64) })));
++    }
++  }
++  denied(() => parseCandidateSettlementCore(canonicalJson({ ...valid, authenticated: true })));
++  assert.equal("authority" in parsed, false); assert.equal("released" in parsed, false);
++});
++
++test("canonical primitive-wire parsing rejects alternate spelling and oversize before parsing", () => {
++  const wire = canonicalJson(evidence());
++  for (const invalid of ["\ufeff" + wire, " " + wire, wire + "\n", JSON.stringify(evidence()),
++    wire.replace('"kind":"execute"', '"kind":"publish","kind":"execute"'),
++    wire.replace('"execute"', '"\\u0065xecute"'), "null", "[]", "{", "x".repeat(8193),
++    "é".repeat(4097), wire.replace(at, "2026-02-30T00:00:00.000Z"),
++    wire.replace(at, "2026-09-15T00:00:00Z"), wire.replace(at, "2026-09-15T00:00:00.000+00:00")]) {
++    denied(() => parseCandidateSettlementCore(invalid));
++  }
++  const original = JSON.parse; let calls = 0;
++  JSON.parse = ((...args: Parameters<typeof JSON.parse>) => { calls++; return original(...args); }) as typeof JSON.parse;
++  try { denied(() => parseCandidateSettlementCore("é".repeat(4097))); denied(() => parseCandidateSettlementCore("x".repeat(8193))); assert.equal(calls, 0); }
++  finally { JSON.parse = original; }
++});
++
++test("non-text and proxy/accessor inputs are rejected without running caller code", () => {
++  let hits = 0;
++  const hostile = new Proxy({}, { get() { hits++; throw Error("get"); }, ownKeys() { hits++; throw Error("keys"); },
++    getPrototypeOf() { hits++; throw Error("prototype"); } });
++  const accessor = { get toJSON() { hits++; throw Error("getter"); } };
++  const revoked = Proxy.revocable({}, {}); revoked.revoke();
++  for (const input of [hostile, accessor, revoked.proxy, Buffer.from(canonicalJson(evidence())), new String(canonicalJson(evidence())),
++    undefined, null, 1, true, Symbol("wire"), () => { hits++; }]) {
++    denied(() => parseCandidateSettlementCore(input)); denied(() => parseCandidateV3Metadata(input));
++    denied(() => candidateV3ApprovalIdentity(input));
++    denied(() => parseCandidateSettlementTimeline(canonicalJson(evidence()), input));
++  }
++  assert.equal(hits, 0);
++});
++
++test("settlement observation and release bounds are exact, with no clock or renewal claim", () => {
++  const core = evidence(), wire = canonicalJson(core);
++  for (const validUntil of [at, "2026-09-14T23:59:59.999Z"]) denied(() => parseCandidateSettlementCore(canonicalJson({ ...core, validUntil })));
++  for (const releaseRecordedAt of [null, at, "2026-09-15T00:00:00.999Z"]) {
++    const parsed = parseCandidateSettlementTimeline(wire, canonicalJson({ outcomeRecordedAt: at, releaseRecordedAt }));
++    assert.ok(Object.isFrozen(parsed) && Object.isFrozen(parsed.timeline));
++  }
++  for (const timeline of [
++    { outcomeRecordedAt: "2026-09-14T23:59:59.999Z", releaseRecordedAt: null },
++    { outcomeRecordedAt: later, releaseRecordedAt: null },
++    { outcomeRecordedAt: at, releaseRecordedAt: later },
++    { outcomeRecordedAt: "2026-09-15T00:00:00.001Z", releaseRecordedAt: at },
++    { outcomeRecordedAt: at }, { outcomeRecordedAt: at, releaseRecordedAt: null, authenticated: true },
++  ]) denied(() => parseCandidateSettlementTimeline(wire, canonicalJson(timeline)));
++  // Old canonical timestamps are legal data. Actual now, predecessor history,
++  // subject joins, authenticated freshness and physical release are NOT checked.
++  assert.equal(parseCandidateSettlementTimeline(wire, canonicalJson({ outcomeRecordedAt: at, releaseRecordedAt: null })).core.observedAt, at);
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-inventory.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-inventory.test.ts
+new file mode 100644
+index 0000000..852ad6a
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-inventory.test.ts
+@@ -0,0 +1,213 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { parseCandidateV3Inventory, parseCandidateV3CheckpointSnapshot, parseCandidateV3ReleasePair,
++  parseCandidateV3CheckpointHistory } from "../../src/build-only/windows-candidate-v3-inventory.js";
++import { fixture, metadata, uuid, digest, time, rebind, rehashCheckpoint } from "../helpers/candidate-v3-record-fixture.js";
++
++const pins = wire(metadata), denied = (f: () => unknown) => assert.throws(f, e => e instanceof CandidateV3DataError);
++type F = ReturnType<typeof fixture>;
++const item = (f: F, count = f.record.events.length) => ({ recordWire: wire({ ...f.record, events: f.record.events.slice(0, count) }),
++  settlementWire: count > f.outcomeIndex ? wire(f.core) : null, checkpointAWire: count > f.outcomeIndex ? wire(f.checkpointA) : null });
++const envelope = (records: ReturnType<typeof item>[]) => wire({ domain: "agent-candidate-inventory-transport/v1", records });
++function reserved(n: number) {
++  const f = fixture(); f.record.events = [];
++  f.record.intent.operationId = uuid(n); f.record.intent.approvalId = uuid(n + 2000);
++  f.record.intent.workflowId = uuid(n + 4000); f.record.intent.workspaceDigest = digest(n + 6000);
++  f.record.intentDigest = hash(f.record.intent);
++  f.record.approvalIdentityDigest = hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: metadata.namespaceId, approvalId: f.record.intent.approvalId });
++  return f;
++}
++function root(records: F["record"][]) {
++  return hash({ domain: "agent-candidate-inventory-root/v1", installationId: metadata.installationId,
++    namespaceId: metadata.namespaceId, storeId: metadata.storeId, operationCount: records.length,
++    entries: records.map(r => ({ operationId: r.intent.operationId, eventIndex: r.events.length, recordDigest: hash(r),
++      approvalIdentityDigest: r.approvalIdentityDigest, state: r.events.at(-1)?.state ?? "reserved" })) });
++}
++function checkpoint(records: F["record"][], index = records.length - 1) {
++  const cp = fixture().checkpointA, record = records[index];
++  cp.sequence = records.reduce((n, r) => n + r.events.length + 1, 0); cp.operationCount = records.length;
++  cp.operationId = record?.intent.operationId ?? null; cp.eventIndex = record?.events.length ?? null;
++  cp.recordDigest = record ? hash(record) : null; cp.approvalIdentityDigest = record?.approvalIdentityDigest ?? null;
++  cp.producerGeneration = record?.intent.ownerGeneration ?? uuid(7);
++  cp.previousCheckpointDigest = record ? digest(500) : null; cp.inventoryRootDigest = root(records); rehashCheckpoint(cp); return cp;
++}
++
++test("v3 canonical complete inventory and checkpoint claims have no admission surface", () => {
++  for (const records of [[], [reserved(100)], [reserved(100), reserved(101)]]) {
++    const input = envelope(records.map(f => item(f, 0))), cp = checkpoint(records.map(f => f.record));
++    const result = parseCandidateV3CheckpointSnapshot(input, pins, wire(cp));
++    assert.equal(result.inventory.inventoryRootDigest, root(records.map(f => f.record)));
++    assert.equal(result.kind, "matched-v3-checkpoint-claim-not-admission");
++    assert.ok(Object.isFrozen(result.inventory.rows)); assert.equal("available" in result, false);
++  }
++});
++
++test("v3 re-derives cross-row invariants independently from indexes and rehashed records", () => {
++  for (const field of ["operationId", "approvalId", "workflowId", "workspaceDigest"] as const) {
++    const a = reserved(100), b = reserved(101); b.record.intent[field] = a.record.intent[field];
++    b.record.intentDigest = hash(b.record.intent);
++    b.record.approvalIdentityDigest = hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: metadata.namespaceId, approvalId: b.record.intent.approvalId });
++    denied(() => parseCandidateV3Inventory(envelope([item(a, 0), item(b, 0)]), pins));
++  }
++  denied(() => parseCandidateV3Inventory(envelope([item(reserved(101), 0), item(reserved(100), 0)]), pins));
++});
++
++test("v3 supplied snapshot omission, replacement, stale sequence and wrong checkpoint subject deny", () => {
++  const a = reserved(100), b = reserved(101), input = envelope([item(a, 0), item(b, 0)]), cp = checkpoint([a.record, b.record]);
++  denied(() => parseCandidateV3CheckpointSnapshot(envelope([item(a, 0)]), pins, wire(cp)));
++  denied(() => parseCandidateV3CheckpointSnapshot(envelope([item(a, 0), item(reserved(102), 0)]), pins, wire(cp)));
++  for (const key of ["sequence", "operationCount", "eventIndex", "operationId", "recordDigest", "approvalIdentityDigest", "producerGeneration", "inventoryRootDigest"] as const) {
++    const changed = structuredClone(cp);
++    if (key === "sequence" || key === "operationCount" || key === "eventIndex") changed[key] = 9;
++    else changed[key] = key.endsWith("Digest") ? digest(999) : uuid(999);
++    rehashCheckpoint(changed); denied(() => parseCandidateV3CheckpointSnapshot(input, pins, wire(changed)));
++  }
++  b.record.reservedAt = time(1);
++  denied(() => parseCandidateV3CheckpointSnapshot(envelope([item(a, 0), item(b, 0)]), pins, wire(checkpoint([a.record, b.record], 0))));
++});
++
++test("v3 release A and B join exact complete before/after inventories with only one release append", () => {
++  const f = fixture(), before = { ...f.record, events: f.record.events.slice(0, -1) };
++  const a = f.checkpointA, b = checkpoint([f.record]); b.previousCheckpointDigest = a.checkpointDigest; rehashCheckpoint(b);
++  const beforeWire = envelope([item(f, f.record.events.length - 1)]), afterWire = envelope([item(f)]);
++  assert.equal(a.inventoryRootDigest, root([before]));
++  assert.equal(parseCandidateV3ReleasePair(beforeWire, afterWire, pins, wire(a), wire(b)).kind, "matched-v3-release-pair-not-admission");
++  const missingA = JSON.parse(beforeWire) as { domain: string; records: ReturnType<typeof item>[] };
++  missingA.records[0]!.checkpointAWire = null;
++  assert.ok(parseCandidateV3ReleasePair(wire(missingA), afterWire, pins, wire(a), wire(b)));
++  denied(() => parseCandidateV3ReleasePair(afterWire, beforeWire, pins, wire(b), wire(a)));
++  const wrong = structuredClone(b); wrong.previousCheckpointDigest = digest(999); rehashCheckpoint(wrong);
++  denied(() => parseCandidateV3ReleasePair(beforeWire, afterWire, pins, wire(a), wire(wrong)));
++  denied(() => parseCandidateV3ReleasePair(beforeWire, beforeWire, pins, wire(a), wire(a)));
++  const added = reserved(100), addedB = checkpoint([f.record, added.record], 0);
++  addedB.previousCheckpointDigest = a.checkpointDigest; rehashCheckpoint(addedB);
++  denied(() => parseCandidateV3ReleasePair(beforeWire, envelope([item(f), item(added, 0)]), pins, wire(a), wire(addedB)));
++});
++
++test("v3 publication requires the released passed execution with separate approval and exact subject", () => {
++  const parent = fixture(), pub = reserved(100);
++  pub.record.intent = { ...parent.record.intent, kind: "publish", operationId: uuid(100), approvalId: uuid(101),
++    executionOperationId: parent.record.intent.operationId, resultDigest: digest(10) };
++  pub.record.reservedAt = time(6); pub.record.intentDigest = hash(pub.record.intent);
++  pub.record.approvalIdentityDigest = hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: metadata.namespaceId, approvalId: pub.record.intent.approvalId });
++  assert.ok(parseCandidateV3Inventory(envelope([item(parent), item(pub, 0)]), pins));
++  denied(() => parseCandidateV3Inventory(envelope([item(pub, 0)]), pins));
++  denied(() => parseCandidateV3Inventory(envelope([item(parent, parent.record.events.length - 1), item(pub, 0)]), pins));
++  for (const outcome of ["failed", "cancelled", "stopped-without-result"]) {
++    denied(() => parseCandidateV3Inventory(envelope([item(fixture("execute", outcome)), item(pub, 0)]), pins));
++  }
++  for (const field of ["resultDigest", "sourceManifestDigest", "policyBindingDigest", "controllerIdentityDigest"] as const) {
++    const changed = structuredClone(pub); changed.record.intent[field] = digest(999); changed.record.intentDigest = hash(changed.record.intent);
++    denied(() => parseCandidateV3Inventory(envelope([item(parent), item(changed, 0)]), pins));
++  }
++  pub.record.reservedAt = time(4); denied(() => parseCandidateV3Inventory(envelope([item(parent), item(pub, 0)]), pins));
++});
++
++test("v3 inventory limits include all 1000 rows, rejecting 1001, hostile inputs and noncanonical envelopes", () => {
++  const records = Array.from({ length: 1000 }, (_, n) => reserved(n + 100));
++  const input = envelope(records.map(f => item(f, 0))), cp = checkpoint(records.map(f => f.record));
++  assert.equal(parseCandidateV3CheckpointSnapshot(input, pins, wire(cp)).inventory.rows.length, 1000);
++  denied(() => parseCandidateV3Inventory(envelope([...records.map(f => item(f, 0)), item(reserved(1200), 0)]), pins));
++  for (const bad of [input + "\n", "\ufeff" + input, wire({ domain: "agent-candidate-inventory-transport/v1", records: [], available: true }),
++    '{"domain":"agent-candidate-inventory-transport/v1","records":[],"records":[]}']) denied(() => parseCandidateV3Inventory(bad, pins));
++  let traps = 0; const proxy = new Proxy({}, { get() { traps++; throw Error("get"); }, ownKeys() { traps++; throw Error("keys"); } });
++  denied(() => parseCandidateV3Inventory(proxy, pins)); denied(() => parseCandidateV3Inventory(input, proxy)); assert.equal(traps, 0);
++});
++
++test("v3 coherent omitted history plus a recomputed checkpoint remains a claim, never authenticated completeness", () => {
++  const remaining = reserved(100), cp = checkpoint([remaining.record]);
++  assert.equal(parseCandidateV3CheckpointSnapshot(envelope([item(remaining, 0)]), pins, wire(cp)).kind,
++    "matched-v3-checkpoint-claim-not-admission");
++});
++
++test("v3 release pair rejects an unrelated rehashed row change despite individually matching snapshots", () => {
++  const f = fixture(), other = reserved(100), predecessor = { ...f.record, events: f.record.events.slice(0, -1) };
++  const a = checkpoint([predecessor, other.record], 0);
++  f.checkpointA = a; f.record.events.at(-1)!.outcomeCheckpointDigest = a.checkpointDigest;
++  const b = checkpoint([f.record, other.record], 0); b.previousCheckpointDigest = a.checkpointDigest; rehashCheckpoint(b);
++  const beforeWire = envelope([item(f, f.record.events.length - 1), item(other, 0)]);
++  assert.ok(parseCandidateV3ReleasePair(beforeWire, envelope([item(f), item(other, 0)]), pins, wire(a), wire(b)));
++  other.record.intent.authorizationDigest = digest(999); other.record.intentDigest = hash(other.record.intent);
++  const substituted = checkpoint([f.record, other.record], 0); substituted.previousCheckpointDigest = a.checkpointDigest; rehashCheckpoint(substituted);
++  const afterWire = envelope([item(f), item(other, 0)]);
++  assert.ok(parseCandidateV3CheckpointSnapshot(afterWire, pins, wire(substituted)));
++  denied(() => parseCandidateV3ReleasePair(beforeWire, afterWire, pins, wire(a), wire(substituted)));
++});
++
++test("v3 full released-history inventory at 1000 rows uses bounded tuple hashing", () => {
++  const records = Array.from({ length: 1000 }, (_, n) => {
++    const f = fixture(); const i = n + 100;
++    f.record.intent.operationId = uuid(i); f.record.intent.approvalId = uuid(i + 2000); f.record.intent.workflowId = uuid(i + 4000);
++    f.record.intentDigest = hash(f.record.intent);
++    f.record.approvalIdentityDigest = hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: metadata.namespaceId, approvalId: f.record.intent.approvalId });
++    f.core.operationId = f.record.intent.operationId; f.core.workflowId = f.record.intent.workflowId; f.core.intentDigest = f.record.intentDigest;
++    f.core.priorOutcomeRecordDigest = hash({ ...f.record, events: f.record.events.slice(0, f.outcomeIndex) });
++    f.checkpointA.operationId = f.record.intent.operationId; f.checkpointA.approvalIdentityDigest = f.record.approvalIdentityDigest;
++    rebind(f); return f;
++  });
++  const input = envelope(records.map(f => item(f))), cp = checkpoint(records.map(f => f.record));
++  const result = parseCandidateV3CheckpointSnapshot(input, pins, wire(cp));
++  assert.equal(result.inventory.rows.length, 1000); assert.equal(result.checkpoint.sequence, 6000);
++  assert.equal(result.inventory.inventoryRootDigest, root(records.map(f => f.record)));
++  assert.ok(Buffer.byteLength(input) < 16 * 1024 * 1024, "synthetic representative corpus, not a worst-case record-size proof");
++});
++
++function history(order: [F, number][]) {
++  const checkpoints = [checkpoint([])], current = new Map<string, F["record"]>();
++  for (const [f, index] of order) {
++    const prefix = { ...f.record, events: f.record.events.slice(0, index) }; current.set(f.record.intent.operationId, prefix);
++    const records = [...current.values()].sort((a, b) => a.intent.operationId < b.intent.operationId ? -1 : 1);
++    const cp = checkpoint(records, records.findIndex(r => r.intent.operationId === f.record.intent.operationId));
++    cp.previousCheckpointDigest = checkpoints.at(-1)!.checkpointDigest; rehashCheckpoint(cp); checkpoints.push(cp);
++    if (index === f.outcomeIndex + 1) {
++      f.checkpointA = structuredClone(cp); f.record.events.at(-1)!.outcomeCheckpointDigest = cp.checkpointDigest;
++    }
++  }
++  return checkpoints;
++}
++const historyWire = (checkpoints: ReturnType<typeof checkpoint>[]) => wire({ domain: "agent-candidate-checkpoint-history/v1", checkpoints: checkpoints.map(wire) });
++
++test("v3 full checkpoint history checks every root and A including intervening work before B", () => {
++  const f = fixture(), other = reserved(100); other.record.reservedAt = time(4);
++  const order: [F, number][] = Array.from({ length: 5 }, (_, n) => [f, n]);
++  order.push([other, 0], [f, 5]); const checkpoints = history(order);
++  const input = envelope([item(f), item(other, 0)]);
++  assert.equal(parseCandidateV3CheckpointHistory(input, pins, historyWire(checkpoints)).checkpointCount, 8);
++  assert.notEqual(checkpoints.at(-1)!.previousCheckpointDigest, f.checkpointA.checkpointDigest,
++    "A need not be adjacent to B when the full intervening history is supplied");
++  for (const bad of [checkpoints.slice(1), checkpoints.slice(0, -1), [checkpoints[0]!, ...checkpoints],
++    [checkpoints[0]!, checkpoints[2]!, checkpoints[1]!, ...checkpoints.slice(3)]]) {
++    denied(() => parseCandidateV3CheckpointHistory(input, pins, historyWire(bad)));
++  }
++  const changed = structuredClone(checkpoints); changed[2]!.inventoryRootDigest = digest(999); rehashCheckpoint(changed[2]!);
++  denied(() => parseCandidateV3CheckpointHistory(input, pins, historyWire(changed)));
++  const changedA = structuredClone(f); changedA.checkpointA.previousCheckpointDigest = digest(999); rehashCheckpoint(changedA.checkpointA);
++  changedA.record.events.at(-1)!.outcomeCheckpointDigest = changedA.checkpointA.checkpointDigest;
++  const changedB = checkpoint([changedA.record, other.record], 0); changedB.previousCheckpointDigest = checkpoints.at(-2)!.checkpointDigest; rehashCheckpoint(changedB);
++  denied(() => parseCandidateV3CheckpointHistory(envelope([item(changedA), item(other, 0)]), pins,
++    historyWire([...checkpoints.slice(0, -1), changedB])));
++});
++
++test("v3 historical workspace overlap denies even when final rows are individually released", () => {
++  const a = fixture(), b = fixture("execute", "cancelled");
++  b.record.intent.operationId = uuid(100); b.record.intent.workflowId = uuid(101); b.record.intent.approvalId = uuid(102);
++  b.record.intentDigest = hash(b.record.intent); b.core.operationId = uuid(100); b.core.workflowId = uuid(101); b.core.intentDigest = b.record.intentDigest;
++  b.record.approvalIdentityDigest = hash({ domain: "agent-candidate-effect-ledger/v1", namespaceId: metadata.namespaceId, approvalId: uuid(102) });
++  b.core.priorOutcomeRecordDigest = hash({ ...b.record, events: [] });
++  b.checkpointA.operationId = uuid(100); b.checkpointA.approvalIdentityDigest = b.record.approvalIdentityDigest;
++  b.record.events[0]!.recordedAt = time(6); b.record.events[1]!.recordedAt = time(7); b.core.observedAt = time(6); rebind(b);
++  const order: [F, number][] = [[a, 0], [b, 0], ...Array.from({ length: 5 }, (_, n): [F, number] => [a, n + 1]), [b, 1], [b, 2]];
++  const checkpoints = history(order), input = envelope([item(a), item(b)]);
++  assert.ok(parseCandidateV3Inventory(input, pins), "final released rows alone cannot reveal historical overlap");
++  denied(() => parseCandidateV3CheckpointHistory(input, pins, historyWire(checkpoints)));
++});
++
++test("v3 checkpoint history requires explicit genesis even for empty state and rejects non-text callers", () => {
++  assert.equal(parseCandidateV3CheckpointHistory(envelope([]), pins, historyWire([checkpoint([])])).checkpointCount, 1);
++  for (const bad of [historyWire([]), historyWire([checkpoint([])]) + "\n", wire({ domain: "agent-candidate-checkpoint-history/v1", checkpoints: [42] }),
++    wire({ domain: "agent-candidate-checkpoint-history/v1", checkpoints: Array(7002).fill("") })]) denied(() => parseCandidateV3CheckpointHistory(envelope([]), pins, bad));
++  let traps = 0; const proxy = new Proxy({}, { get() { traps++; throw Error("get"); } });
++  denied(() => parseCandidateV3CheckpointHistory(envelope([]), pins, proxy)); assert.equal(traps, 0);
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-record.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-record.test.ts
+new file mode 100644
+index 0000000..d6af7d2
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-record.test.ts
+@@ -0,0 +1,155 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { parseCandidateV3Record, parseCandidateV3Checkpoint } from "../../src/build-only/windows-candidate-v3-record.js";
++import { fixture, rebind, rehashCheckpoint, metadata, uuid, digest, time, event } from "../helpers/candidate-v3-record-fixture.js";
++
++const denied = (fn: () => unknown) => assert.throws(fn, e => e instanceof CandidateV3DataError);
++const parse = (f: ReturnType<typeof fixture>, count = f.record.events.length) => parseCandidateV3Record(
++  wire({ ...f.record, events: f.record.events.slice(0, count) }), wire(metadata),
++  count > f.outcomeIndex ? wire(f.core) : null, count > f.outcomeIndex ? wire(f.checkpointA) : null);
++
++for (const [kind, outcome, early] of [["execute", "completed", false], ["execute", "failed", false],
++  ["execute", "cancelled", false], ["execute", "stopped-without-result", false], ["execute", "stopped-without-result", true],
++  ["publish", "completed", false], ["publish", "restored", false], ["publish", "cancelled", false]] as const) {
++  test(`v3 every history cut parses as data only: ${kind}/${outcome}/${early}`, () => {
++    const f = fixture(kind, outcome, early);
++    assert.ok(f.record.events.length <= 5);
++    for (let n = 0; n <= f.record.events.length; n++) {
++      const value = parse(f, n); assert.equal(value.kind, "parsed-v3-record-not-admission");
++      assert.deepEqual(value.record.events, f.record.events.slice(0, n));
++      assert.ok(Object.isFrozen(value.record.events) && Object.isFrozen(value.record.intent));
++      assert.equal("canReserve" in value, false); assert.equal("available" in value, false);
++    }
++    const repeated = structuredClone(f); repeated.record.events.push(event("quarantined", 19)); denied(() => parse(repeated));
++  });
++}
++
++test("v3 rejects release before an outcome, changed predecessor, evidence or checkpoint-A digest", () => {
++  const f = fixture();
++  for (let n = 0; n <= f.outcomeIndex; n++) {
++    const wrong = structuredClone(f);
++    wrong.record.events = [...wrong.record.events.slice(0, n), { ...wrong.record.events.at(-1)!, recordedAt: time(19),
++      predecessorRecordDigest: hash({ ...wrong.record, events: wrong.record.events.slice(0, n) }) }];
++    denied(() => parseCandidateV3Record(wire(wrong.record), wire(metadata), wire(wrong.core), wire(wrong.checkpointA)));
++  }
++  for (const field of ["predecessorRecordDigest", "outcomeCheckpointDigest", "evidenceDigest", "outcome"] as const) {
++    const wrong = structuredClone(f); wrong.record.events.at(-1)![field] = field === "outcome" ? "failed" : digest(999);
++    denied(() => parse(wrong));
++  }
++  denied(() => parseCandidateV3Record(wire(f.record), wire(metadata), wire(f.core)));
++  const cut = { ...f.record, events: f.record.events.slice(0, -1) };
++  assert.equal(parseCandidateV3Record(wire(cut), wire(metadata), wire(f.core)).outcomeCheckpoint, null,
++    "outcome before A is parseable history but not an admission or release");
++  denied(() => parseCandidateV3Record(wire(cut), wire(metadata)));
++});
++
++test("v3 quarantine is absorbing at every prefix and has no release path", () => {
++  const f = fixture();
++  for (let n = 0; n < f.record.events.length; n++) {
++    const record = { ...f.record, events: [...f.record.events.slice(0, n), event("quarantined", 19)] };
++    const core = n > f.outcomeIndex ? wire(f.core) : null;
++    const a = n > f.outcomeIndex ? wire(f.checkpointA) : null;
++    assert.equal(parseCandidateV3Record(wire(record), wire(metadata), core, a).record.events.at(-1)?.state, "quarantined");
++    for (const state of ["released", "stopped-without-result", "quarantined", "completed"]) {
++      denied(() => parseCandidateV3Record(wire({ ...record, events: [...record.events, event(state, 20)] }), wire(metadata), core, a));
++    }
++  }
++});
++
++test("v3 evidence joins every subject even after downstream evidence and checkpoint hashes are recomputed", () => {
++  for (const key of ["installationId", "namespaceId", "storeId", "operationId", "workflowId", "ownerGeneration", "guestGeneration",
++    "requestDigest", "sourceManifestDigest", "workspaceDigest", "policyBindingDigest", "controllerIdentityDigest",
++    "resourcePolicyDigest", "intentDigest", "priorOutcomeRecordDigest", "resultDigest"] as const) {
++    const f = fixture(); f.core[key] = key.endsWith("Digest") ? digest(999) : uuid(999); rebind(f); denied(() => parse(f));
++  }
++  const kind = fixture(); kind.core.kind = "publish"; kind.core.resultDigest = null; kind.core.verificationPassed = null;
++  rebind(kind); denied(() => parse(kind));
++  const outcome = fixture(); outcome.core.outcome = "failed"; outcome.core.verificationPassed = false;
++  rebind(outcome); denied(() => parse(outcome));
++  const role = fixture(); role.core.processSettlementEvidenceDigest = digest(999);
++  denied(() => parse(role)); // The historical event binds the exact role core.
++  rebind(role); assert.equal(parse(role).settlementEvidence?.processSettlementEvidenceDigest, digest(999),
++    "coherent unkeyed claims remain parseable; this parser authenticates no physical evidence");
++});
++
++test("v3 checkpoint A must name the exact historical subject and outcome prefix", () => {
++  for (const key of ["operationId", "producerGeneration", "recordDigest", "approvalIdentityDigest", "eventIndex"] as const) {
++    const f = fixture();
++    if (key === "eventIndex") f.checkpointA.eventIndex = 0;
++    else if (key.endsWith("Digest")) f.checkpointA[key] = digest(999);
++    else f.checkpointA[key] = uuid(999);
++    rehashCheckpoint(f.checkpointA); f.record.events.at(-1)!.outcomeCheckpointDigest = f.checkpointA.checkpointDigest;
++    denied(() => parse(f));
++  }
++  const f = fixture(); f.checkpointA.recordDigest = hash(f.record); rehashCheckpoint(f.checkpointA);
++  f.record.events.at(-1)!.outcomeCheckpointDigest = f.checkpointA.checkpointDigest;
++  denied(() => parse(f)); // A cannot witness its released successor or B.
++});
++
++test("v3 transition replay rejects skipped/reordered/wrong-kind/result-bearing paths and seventh events", () => {
++  const f = fixture();
++  for (const order of [[1, 0, 2, 3, 4], [0, 2, 3, 4], [0, 1, 1, 2, 3, 4]]) {
++    const wrong = structuredClone(f); wrong.record.events = order.map(n => structuredClone(f.record.events[n]!)); denied(() => parse(wrong));
++  }
++  for (const [index, state] of [[0, "launch-possible"], [1, "publication-possible"], [2, "completed"], [3, "failed"], [3, "stopped-without-result"], [0, "reserved"]] as const) {
++    const wrong = structuredClone(f); wrong.record.events[index]!.state = state; denied(() => parse(wrong));
++  }
++  for (const key of ["resultDigest", "verificationPassed", "predecessorRecordDigest", "outcomeCheckpointDigest", "outcome"] as const) {
++    const wrong = structuredClone(f);
++    if (key === "verificationPassed") wrong.record.events[0]![key] = true;
++    else wrong.record.events[0]![key] = key === "outcome" ? "completed" : digest(999);
++    denied(() => parse(wrong));
++  }
++  const limit = structuredClone(f); limit.record.events.push(event("quarantined", 18), event("quarantined", 19)); denied(() => parse(limit));
++});
++
++test("v3 rejects identity/domain/hash drift, unknown/omitted fields and invalid wire without caller invocation", () => {
++  const f = fixture(), valid = wire(f.record);
++  for (const key of ["installationId", "namespaceId", "storeId"] as const) denied(() => parseCandidateV3Record(valid, wire({ ...metadata, [key]: uuid(999) }), wire(f.core), wire(f.checkpointA)));
++  for (const key of Object.keys(f.record)) { const bad = { ...f.record } as Record<string, unknown>; delete bad[key]; denied(() => parseCandidateV3Record(wire(bad), wire(metadata))); }
++  for (const key of Object.keys(f.record.events[0]!)) { const bad = structuredClone(f.record); delete (bad.events[0] as Record<string, unknown>)[key]; denied(() => parseCandidateV3Record(wire(bad), wire(metadata))); }
++  for (const key of ["intentDigest", "approvalIdentityDigest"] as const) { const wrong = structuredClone(f); wrong.record[key] = digest(999); denied(() => parse(wrong)); }
++  for (const input of ["\ufeff" + valid, valid + "\n", "x".repeat(32769), "é".repeat(16385),
++    valid.replace('"reservedAt":', '"reservedAt":"2026-09-15T00:00:00.000Z","reservedAt":'),
++    wire({ ...f.record, permission: true })]) denied(() => parseCandidateV3Record(input, wire(metadata)));
++  let traps = 0; const proxy = new Proxy({}, { get() { traps++; throw Error("getter"); }, ownKeys() { traps++; throw Error("keys"); } });
++  denied(() => parseCandidateV3Record(proxy, wire(metadata))); denied(() => parseCandidateV3Checkpoint(proxy, wire(metadata)));
++  denied(() => parseCandidateV3Record(valid, proxy)); denied(() => parseCandidateV3Record(valid, wire(metadata), proxy));
++  denied(() => parseCandidateV3Record(valid, wire(metadata), wire(f.core), proxy)); assert.equal(traps, 0);
++});
++
++test("v3 timing permits bounded post-expiry outcome bookkeeping, never late forward effects or release", () => {
++  for (const index of [0, 1]) { const f = fixture(); f.record.events[index]!.recordedAt = time(10); denied(() => parse(f)); }
++  const f = fixture(); f.record.events[2]!.recordedAt = time(0); denied(() => parse(f));
++  for (const at of [time(20), time(21)]) { const expired = fixture(); expired.record.events.at(-1)!.recordedAt = at; denied(() => parse(expired)); }
++  const old = fixture(); old.core.observedAt = time(-1); rebind(old); denied(() => parse(old));
++  const beforeResult = fixture(); beforeResult.core.observedAt = time(2); rebind(beforeResult); denied(() => parse(beforeResult));
++  const equalResult = fixture(); equalResult.core.observedAt = time(3); rebind(equalResult); assert.ok(parse(equalResult));
++  const future = fixture(); future.record.events[3]!.recordedAt = time(15); future.record.events[4]!.recordedAt = time(19);
++  rebind(future); assert.equal(parse(future).record.events.at(-1)?.recordedAt, time(19));
++});
++
++test("checkpoint genesis is canonical empty data, not initialization or a missing-anchor fallback", () => {
++  const f = fixture(), a = f.checkpointA;
++  a.sequence = 0; a.previousCheckpointDigest = null; a.operationId = null; a.eventIndex = null;
++  a.recordDigest = null; a.approvalIdentityDigest = null; a.operationCount = 0;
++  a.inventoryRootDigest = hash({ domain: "agent-candidate-inventory-root/v1", installationId: metadata.installationId,
++    namespaceId: metadata.namespaceId, storeId: metadata.storeId, operationCount: 0, entries: [] }); rehashCheckpoint(a);
++  assert.equal(parseCandidateV3Checkpoint(wire(a), wire(metadata)).sequence, 0);
++  a.inventoryRootDigest = digest(0); rehashCheckpoint(a); denied(() => parseCandidateV3Checkpoint(wire(a), wire(metadata)));
++  for (const sequence of [-1, 0.5, Number.MAX_SAFE_INTEGER + 1]) {
++    const wrong = fixture().checkpointA; wrong.sequence = sequence; rehashCheckpoint(wrong); denied(() => parseCandidateV3Checkpoint(wire(wrong), wire(metadata)));
++  }
++  denied(() => parseCandidateV3Checkpoint(wire(fixture().checkpointA) + "\n", wire(metadata)));
++});
++
++test("checkpoint sequence cannot precede its retained operations and subject events", () => {
++  const f = fixture(); f.checkpointA.sequence = f.checkpointA.eventIndex!;
++  rehashCheckpoint(f.checkpointA); denied(() => parseCandidateV3Checkpoint(wire(f.checkpointA), wire(metadata)));
++  f.checkpointA.sequence = f.checkpointA.eventIndex! + 1;
++  rehashCheckpoint(f.checkpointA); assert.ok(parseCandidateV3Checkpoint(wire(f.checkpointA), wire(metadata)));
++  f.checkpointA.operationCount = 2;
++  rehashCheckpoint(f.checkpointA); denied(() => parseCandidateV3Checkpoint(wire(f.checkpointA), wire(metadata)));
++});

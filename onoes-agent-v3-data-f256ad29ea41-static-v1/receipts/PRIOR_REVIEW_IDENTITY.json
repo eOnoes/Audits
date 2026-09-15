@@ -1,0 +1,14 @@
+{
+  "sha256": "ac20989a2576a1bf9f600b2e8bc6b4dbe6b976ea016001d42ea6295c54ab82a2",
+  "byteLength": 44733,
+  "gitBlobOid": "339e7b2c403e943c83ec59f45e882216c1f0389f",
+  "reportCommit": "b86e08b793bfffd5a47a68c85a3bf99b18a1b017",
+  "sourceReviewed": "49cd0792e5e7f48fff1798baebaa24e170ac5371",
+  "url": "https://github.com/eOnoes/Audits/blob/b86e08b793bfffd5a47a68c85a3bf99b18a1b017/onoes-agent-checkpoint-remediation-49cd0792e5e7-design-v1/reports/AUDIT_REPORT.md",
+  "limits": [
+    "Design review, not review of this later v3 implementation.",
+    "Not independent second-opinion status per reviewer disclosure.",
+    "Historical missing hash-first acknowledgment remains.",
+    "Producer disposition corrects two report arithmetic counts; original report preserved."
+  ]
+}

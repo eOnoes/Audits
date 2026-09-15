@@ -1,0 +1,128 @@
+{
+  "auditId": "onoes-agent-v3-data-f256ad29ea41-static-v1",
+  "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+  "provenance": "publisher-local-Git-not-independent-bundle",
+  "memberCount": 15,
+  "members": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-data.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "2beda5cf81d018a6b25f43d343ca2347365be19fb9daacafe4f2eefae9f70760",
+      "byteLength": 5778,
+      "gitBlobOid": "3da83cfb38e691506f96b2f2840236ed988574b4"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-data.test.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "byteLength": 9936,
+      "gitBlobOid": "4b6296a4958cabf6494dec475a09c81c5bb4c4d1"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-record.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "572c1e579582ce00a4176266223c3e30aec891b447807ee6e3a2d7a07f3ba675",
+      "byteLength": 11143,
+      "gitBlobOid": "aed6f50a4ff30e7a7ac14b71facd816e4f404e03"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-record.test.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "2db694c86e7ae397ea9ace96c63c8d36e3247efbb67d76d7329ff6da88cb5eb3",
+      "byteLength": 11759,
+      "gitBlobOid": "d6af7d2e43d51725e662c34499244b8dcfcb2156"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-inventory.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "a154bd2143b1e1aa5a6089f6cf132cb45f3e86cbf8059e3e886925d591cb8926",
+      "byteLength": 12459,
+      "gitBlobOid": "ba09a2d562f51ab2e29c86512cf0ba66461da32c"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-inventory.test.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "5037e11f048ae3c958b2896b06eb3069f0b1a90b5382300b055782701b23c53f",
+      "byteLength": 17270,
+      "gitBlobOid": "852ad6aaa44c6eae3a8c1bf9e2d5480c5c7968b0"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V2.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V2.md",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "1d7a062c4c6e3969c27a61f1ddfc7168b606937810936a1db4c50436e6c67a4c",
+      "byteLength": 15449,
+      "gitBlobOid": "7bfb08f2107f697155ea0b2a0e372809e30cf878"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "c856eef3871dca857e631740697dcb0e47f4a911c7dcf704c9d563fd75bce8d3",
+      "byteLength": 26041,
+      "gitBlobOid": "e971604976a1b61f613f7126a37e9c8894ed2ac2"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_DATA_REVIEW_DISPOSITION.md",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "3f9b08d6cd674a8b19b2b34eab9daaeeaf0e64610149a5be830576597e00dea7",
+      "byteLength": 9455,
+      "gitBlobOid": "17799e8548c1898a2757d50c5472f1eb366aeb27"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_RECORD_IMPLEMENTATION.md",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "b5e4ecda7cc954f1c86903c85bdb945662a7805f9814af0ae451db2f84cac52f",
+      "byteLength": 4659,
+      "gitBlobOid": "693dd808f7a08d01a75489ee113ba8910d147bc5"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_INVENTORY_IMPLEMENTATION.md",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "c6c343d3f2dbf4eefbcf902b4ff1c13a6326fa02c4899b437b99b4526769dc8e",
+      "byteLength": 6614,
+      "gitBlobOid": "b06272b225aa9b1ef9a8a6e321e9189fa24c3e4e"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "packetPath": "source/src/compatibility/canonical-json.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteLength": 4581,
+      "gitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "packetPath": "source/src/validation/deep-freeze.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteLength": 378,
+      "gitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "packetPath": "source/src/build-only/windows-candidate-effect-state.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "byteLength": 9092,
+      "gitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-record-fixture.ts",
+      "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+      "sha256": "9db5f947414c921d610899ae54cfc96005dc4b16310742ba91873683003b0653",
+      "byteLength": 6249,
+      "gitBlobOid": "5a1bdab116c1e4b4e7056c9eab0a021bdbd61358"
+    }
+  ]
+}

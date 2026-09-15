@@ -1,0 +1,47 @@
+{
+  "sourceRevision": "f256ad29ea4176cdc60244db20fd3742769e1f0a",
+  "evidenceClass": "AUTHOR_REPORTED_LOCAL_EXECUTION_NOT_INDEPENDENT",
+  "platform": "Windows x64",
+  "node": "24.14.0",
+  "sourceBinding": "These exact source/test bytes were tested in the worktree before final documentation commit. Raw artifacts do not independently establish execution.",
+  "typecheck": "exit 0",
+  "freshTestCompilation": "exit 0",
+  "focusedSuites": {
+    "data": 18,
+    "record": 17,
+    "inventory": 12
+  },
+  "runs": [
+    {
+      "path": "receipts/CURRENT_FOCUSED.tap",
+      "sha256": "8afc426d0e7951671909e3934240f5825f7a66681f910e6dd7a12c08c984502c",
+      "tests": 47,
+      "pass": 47,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 1210.0111
+    },
+    {
+      "path": "receipts/CURRENT_FULL.tap",
+      "sha256": "b20f8a8eef5ea95e408dd848c41c1f53fb8460eeb284bbd1b9d5f03841b46039",
+      "tests": 1979,
+      "pass": 1977,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 2,
+      "duration_ms": 49212.4926
+    }
+  ],
+  "fullCommand": "node --test --test-concurrency=4 .test-dist/tests/**/*.test.js scripts/tests/candidate-review-http.test.mjs scripts/tests/candidate-crash.test.mjs",
+  "skips": [
+    "Windows link creation privilege unavailable",
+    "Unsupported-host inspector case deliberately skipped on Windows"
+  ],
+  "limits": [
+    "Representative 1000-row snapshots, not worst-case full-history timing or a heap ceiling.",
+    "No independent execution, physical admission, VM or production gate is demonstrated.",
+    "Historical run numbers in predecessor implementation docs are labeled historical, not this final run."
+  ],
+  "preparationExecutedSubject": false
+}

@@ -1,0 +1,16 @@
+{
+  "method": "minimal dependency-closed selection plus path/private-host/token pattern scan",
+  "result": "no configured prohibited matches",
+  "excluded": [
+    "private logs",
+    "credentials",
+    "VM images",
+    "full project",
+    "private Git metadata",
+    "provider configuration"
+  ],
+  "limitations": [
+    "Pattern scan is not proof of absence of every secret.",
+    "Synthetic fixture identifiers and times are not real task data."
+  ]
+}
