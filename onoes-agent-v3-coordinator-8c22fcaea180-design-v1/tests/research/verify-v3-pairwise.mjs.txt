@@ -1,0 +1,48 @@
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+const self = fileURLToPath(import.meta.url), here = dirname(self), repo = '[PRIVATE_REPOSITORY_ROOT]';
+const root = join(repo, 'product/companion-v1'), stem = 'v3-pairwise-20260916';
+const sha = b => createHash('sha256').update(b).digest('hex');
+const modules = ['data', 'record', 'inventory', 'incremental'];
+const sources = [...modules.map(n => `src/build-only/windows-candidate-v3-${n}.ts`),
+  'src/build-only/windows-candidate-effect-state.ts', 'src/compatibility/canonical-json.ts', 'src/validation/deep-freeze.ts',
+  ...[...modules, 'incremental-negative', 'pairwise'].map(n => `tests/unit/windows-candidate-v3-${n}.test.ts`),
+  'tests/helpers/candidate-v3-record-fixture.ts', 'tests/helpers/candidate-v3-history-fixture.ts'];
+const paths = [...sources, ...sources.map(p => '.test-dist/' + p.replace(/\.ts$/, '.js')), 'package-lock.json', 'tsconfig.json', 'tsconfig.test.json'];
+const identities = () => paths.map(path => { const bytes = readFileSync(join(root, path)); return { path, byteLength: bytes.length, sha256: sha(bytes) }; });
+for (const suffix of ['focused.tap', 'full.tap', 'json']) if (existsSync(join(here, `${stem}.${suffix}`))) throw Error('Create-only receipt already exists');
+const before = identities(), startedAtUtc = new Date().toISOString();
+const baseRevision = execFileSync('git', ['-c', `safe.directory=${repo}`, '-C', repo, 'rev-parse', 'HEAD'], { windowsHide: true }).toString().trim();
+const all = []; function walk(dir) { for (const e of readdirSync(dir, { withFileTypes: true })) { const path = join(dir, e.name); if (e.isDirectory()) walk(path); else if (e.name.endsWith('.test.js')) all.push(path); } }
+walk(join(root, '.test-dist/tests')); all.sort();
+const runs = [];
+for (const [name, files] of [
+  ['focused', [...modules, 'incremental-negative', 'pairwise'].map(n => `.test-dist/tests/unit/windows-candidate-v3-${n}.test.js`)],
+  ['full', [...all, 'scripts/tests/candidate-review-http.test.mjs', 'scripts/tests/candidate-crash.test.mjs']],
+]) {
+  const args = ['--test', '--test-reporter=tap', '--test-concurrency=4', ...files], beganAtUtc = new Date().toISOString();
+  const run = spawnSync(process.execPath, args, { cwd: root, windowsHide: true, timeout: 480000, maxBuffer: 16000000 });
+  const raw = run.stdout ?? Buffer.alloc(0), path = `${stem}.${name}.tap`;
+  writeFileSync(join(here, path), raw, { flag: 'wx' });
+  const result = { name, beganAtUtc, endedAtUtc: new Date().toISOString(), command: [process.execPath, ...args],
+    exitCode: run.status, signal: run.signal, errorCode: run.error?.code ?? null,
+    path, byteLength: raw.length, sha256: sha(raw), stderrSha256: sha(run.stderr ?? Buffer.alloc(0)),
+    summary: raw.toString().split('\n').filter(l => /^# (tests|pass|fail|cancelled|skipped|duration_ms) /.test(l)),
+    matrixDiagnostics: raw.toString().split('\n').filter(l => /^# \{"(family|pair|deterministicFullRowCases)"/.test(l)),
+    skipLines: raw.toString().split('\n').filter(l => /# SKIP/.test(l)) };
+  runs.push(result); console.log(JSON.stringify({ ...result, command: undefined }));
+  if (run.status !== 0) break;
+}
+const after = identities(), unchanged = JSON.stringify(before) === JSON.stringify(after);
+const receipt = { kind: 'producer-pure-incremental-tests-not-independent', startedAtUtc, endedAtUtc: new Date().toISOString(),
+  baseRevision, workingTreeDelta: true, node: process.version, platform: process.platform, arch: process.arch,
+  nodeExecutableSha256: sha(readFileSync(process.execPath)), helperSha256: sha(readFileSync(self)),
+  identitiesBefore: before, identitiesAfter: after, unchanged, runs,
+  limitations: ['Source and compiled selected dependency closure identified before/after; new uncommitted files explicitly hash-bound, not falsely attributed to HEAD.',
+    'Three-row bounded matrix exhaustive over declared paths, not arbitrary three fully-progressing paths or every history.',
+    'Shared-parser differential evidence is not independent correctness.', 'No durable pair, owner admission, physical storage, VM, provider or OS tests.'] };
+writeFileSync(join(here, `${stem}.json`), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
+if (!unchanged || runs.length !== 2 || runs.some(r => r.exitCode !== 0)) process.exitCode = 1;

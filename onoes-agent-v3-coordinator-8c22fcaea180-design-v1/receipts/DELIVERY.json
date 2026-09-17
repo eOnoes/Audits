@@ -1,0 +1,13 @@
+{
+  "auditId": "onoes-agent-v3-coordinator-8c22fcaea180-design-v1",
+  "sourceRevision": "8c22fcaea18088ab2118fe89959bf609878c92aa",
+  "baseline": "82c8664434c7ecefcbb54b87984828c28fbae595",
+  "templateRevision": "db8edab84ec893e7b71d03d59dca799f9a75e7d5",
+  "statusAtPreparation": "prepared-locally-not-yet-authorized-or-published",
+  "inputCommitSource": "immutable GitHub handoff after separate scoped approval and remote readback",
+  "reportPath": "onoes-agent-v3-coordinator-8c22fcaea180-design-v1/reports/AUDIT_REPORT.md",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "allowedWrite": "Report repository: eOnoes/Audits. Branch: main. Exact output: onoes-agent-v3-coordinator-8c22fcaea180-design-v1/reports/AUDIT_REPORT.md. The only reviewer write exception is adding the completed sanitized Markdown report there using existing authorized access. Inspect current workflow files AND activation state first; if Actions could run or status is unknown, stop before writing and ask Eddie for specific run approval. No branches, PRs, force pushes, deletions, source/test/input/manifest changes, subject execution, installs, providers or charges. Preserve prior reports as the next unused AUDIT_REPORT_ADDENDUM_N.md in this reports directory, citing the prior output. Read back committed output bytes and return the immutable report link and commit, distinct from the input commit. Without write access return complete Markdown with REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS and the exact target. Never ask for credentials. Public Git history persists after cleanup.",
+  "publicHistoryPersists": true
+}

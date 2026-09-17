@@ -1,0 +1,11 @@
+# Contemporaneity and non-claims
+
+Product 8c22fcaea18088ab2118fe89959bf609878c92aa; prior audited 82c8664434c7ecefcbb54b87984828c28fbae595. That reviewer accepted pure validator retention as input to coordinator design, not real persistence. Follow-up consolidated unchanged outcome literals and added missing N-1/N-2 controls. This revision adds N-3 pairwise tests and concrete staged/confirmed coordinator design; no coordinator runtime exists. The design, physical anchor and enrollment drafts are proposals, not OS changes or admission.
+
+Producer compilation and no-emit typecheck passed. Retained run: 2026-09-16T16:18:37.947Z to 16:25:34.783Z, Node 24.14.0, win32 x64. Focused 124/124, 195620.4788 ms; full 2056 tests / 2054 pass / zero fail / two skips, 221073.7742 ms. Skips: Windows link-creation privilege unavailable; non-Windows-only inspector refusal skipped on Windows. Raw TAP is exact, with wider test names only as evidence context.
+
+Producer receipt identifies base 907f896 plus uncommitted test delta, not falsely a clean source revision. All selected current TS matches recorded before/after identities. Compiled blobs, Node executable, config and dependency originals are omitted, so their hashes are producer claims. Private-root strings in JSON/helper are explicitly derived, with original/derived hashes separate. Tests are synthetic; no actual ledger pair/worker/anchor/service/VM/provider/approval/effect exercised. C01-C12 composition controls are NOT RUN.
+
+New bounded pair counters are 36/6724/84146/39195, with serial parent prelude and rotating cuts, NOT arbitrary exhaustive histories. Older 3774/25416/80052 scope stays distinct. Shared-parser agreement is not independent correctness. Earlier capacity timings cited in design are historical single-sample claims, not production budgets or measurements of this new composition.
+
+Prior reviewer did not receive the advance expected manifest pin; this new packet does not repair that ordering. Same reviewer continuity is not independent second opinion. Physical B-03/W1-W5, protected installation, fencing/authentication, retention, whole-PC rollback decision, independent execution and operator acceptance remain open.

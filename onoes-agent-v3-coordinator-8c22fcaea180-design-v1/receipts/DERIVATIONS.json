@@ -1,0 +1,92 @@
+{
+  "members": [
+    {
+      "productPath": "docs/reports/v3-pairwise-20260916/v3-pairwise-20260916.json",
+      "packetPath": "receipts/PRODUCER_EXECUTION.json",
+      "originalSha256": "8d0a1f87e9bca8f03db596c21d1d1df584291eb9d2d4809684c8ede44e41ec39",
+      "originalByteLength": 56634,
+      "originalGitBlobOid": "124342f758c262b8a93e63cd236cc8430ff246f8",
+      "derivedSha256": "5845e146910fe9b37f817ad29f1bf85e054bcebb026ce06efb4b2cd37df6ceb4",
+      "derivedByteLength": 47245,
+      "byteIdentical": false,
+      "sourceChecks": [
+        {
+          "path": "src/build-only/windows-candidate-v3-data.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-record.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-inventory.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-incremental.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-effect-state.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/compatibility/canonical-json.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "src/validation/deep-freeze.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-data.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-record.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-inventory.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-incremental.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-incremental-negative.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-pairwise.test.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-record-fixture.ts",
+          "matchesCurrentPacket": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-history-fixture.ts",
+          "matchesCurrentPacket": true
+        }
+      ],
+      "transform": "JSON parse, exact private-root replacements in string values, two-space indent/LF. Derived bytes, not the original private receipt."
+    },
+    {
+      "productPath": "docs/reports/v3-pairwise-20260916/verify-v3-pairwise.mjs.txt",
+      "packetPath": "tests/research/verify-v3-pairwise.mjs.txt",
+      "originalSha256": "390eff634869f861c0484d43d90423ccc7a6c619bb4bb92d7ba00d1e2aaf2662",
+      "originalByteLength": 4519,
+      "originalGitBlobOid": "e52ac8977cfd7874dffe2d178c73a82508175a99",
+      "derivedSha256": "64e15e486a6e5b1bc775665db5660252b8b7f2e05e3f130ac4ecbe0d1729f897",
+      "derivedByteLength": 4506,
+      "byteIdentical": false,
+      "transform": "Exact UTF-8 private-root replacement only. Static text, NOT byte-identical executed helper or runnable packet."
+    }
+  ],
+  "limitations": [
+    "Original private-path JSON/helper omitted; their original digests remain producer provenance claims.",
+    "Exact source, prior report and raw TAP in SOURCE_IDENTITIES remain unchanged. No subject/helper execution permitted."
+  ]
+}

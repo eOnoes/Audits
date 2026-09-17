@@ -1,0 +1,13 @@
+{
+  "sourceReviewed": "82c8664434c7ecefcbb54b87984828c28fbae595",
+  "reportSha256": "9bdebf232b4d963bf92844b339a8a40cbaab7924cf6bc1b4ac37f7bbebf936c1",
+  "reportByteLength": 30667,
+  "priorPacketId": "onoes-agent-v3-incremental-82c8664434c7-static-v2",
+  "priorManifestSha256": "5a878306952a98dbeeb173ab0b8f7009ae291f17fe0564344d5054af2cf47022",
+  "priorReportDelivery": "local; no public input/report commit",
+  "limitations": [
+    "Same reviewer as preceding design review, not a second independent opinion.",
+    "Advance expected manifest pin did not reach that reviewer. No retroactive repair.",
+    "STATIC_SOURCE only; no independent subject tests."
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "baselineProductRevision": "82c8664434c7ecefcbb54b87984828c28fbae595",
+  "sourceRevision": "8c22fcaea18088ab2118fe89959bf609878c92aa",
+  "scope": "Selected TypeScript delta since prior reviewed pure validator; current design docs supplied separately",
+  "members": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "baselineByteLength": 6084,
+      "baselineGitBlobOid": "742967e6e54a69d1afed05f2c6eca7a0a3d76c7e",
+      "currentSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/src/build-only/windows-candidate-v3-record.ts",
+      "baselineSha256": "45c312d6e37588daddf40bd9942916969ee267ed0badf7866b07b0f33aed5aa1",
+      "baselineByteLength": 11178,
+      "baselineGitBlobOid": "d7245775c94d789ae75f65289f824237f0035d45",
+      "currentSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/src/build-only/windows-candidate-v3-inventory.ts",
+      "baselineSha256": "0c66f8a28977b95c132aa26f49afc21096cdcb87bb93b08fd2b3c84abc7bf318",
+      "baselineByteLength": 13101,
+      "baselineGitBlobOid": "1742da293213d71025b8858d05b7b897d3c905c3",
+      "currentSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/src/build-only/windows-candidate-v3-incremental.ts",
+      "baselineSha256": "187decabb2c892c671a88e8699efa3e3fc4c61649d436db947626c1382abc31f",
+      "baselineByteLength": 5506,
+      "baselineGitBlobOid": "77e965889ad10f3e25183edb1a4122c97652639e",
+      "currentSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "baselineByteLength": 9936,
+      "baselineGitBlobOid": "4b6296a4958cabf6494dec475a09c81c5bb4c4d1",
+      "currentSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "baselineByteLength": 12586,
+      "baselineGitBlobOid": "8128fbb02ac6d7b256c0062676f2d6e8b26fa917",
+      "currentSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "baselineByteLength": 29964,
+      "baselineGitBlobOid": "e3c2d36491e274ebf54b6b7fb3de4d589060fc29",
+      "currentSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-incremental.test.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/tests/unit/windows-candidate-v3-incremental.test.ts",
+      "baselineSha256": "519f860e07cfd2fb0954af3c3e44dd927288dc643e6cb704a42bc2b73d5e8cd6",
+      "baselineByteLength": 5371,
+      "baselineGitBlobOid": "9ca7792d311391dfd4ef1db7468dfff11a7c0b75",
+      "currentSha256": "0840ab400cefa787a08540fc31225e2f0faf3d28566067aa8f22866d7f0b3e98"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-incremental-negative.test.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/tests/unit/windows-candidate-v3-incremental-negative.test.ts",
+      "baselineSha256": "afdeb1a4f23e4718f854198afd4b2b109a9f3cbd116c920e5e01cac951c5e797",
+      "baselineByteLength": 12514,
+      "baselineGitBlobOid": "89892e7f5826760f734fec0a32c5bb94b830795a",
+      "currentSha256": "f2e5168c76bc6d973a96a8644599a6af67fcd8002f1202cf5bc78ac0d2bc8743"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-pairwise.test.ts",
+      "status": "added",
+      "currentSha256": "7f4615e7bfabc27664677b8c5e494a56acb506563a9e0454e787e19edbd40f5e"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "baselineByteLength": 4581,
+      "baselineGitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "currentSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "baselineByteLength": 378,
+      "baselineGitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "currentSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "baselineByteLength": 9092,
+      "baselineGitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d",
+      "currentSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "baselineByteLength": 6284,
+      "baselineGitBlobOid": "923fc068f172566a4c71bbcccb6e2ee1f07e0fd7",
+      "currentSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "changed",
+      "baselinePacketPath": "receipts/baseline/tests/helpers/candidate-v3-history-fixture.ts",
+      "baselineSha256": "4135fe51be44610882e2df6cac091ed162f6a85f9ce0bb1b1f7e17d6e77bc7c2",
+      "baselineByteLength": 7486,
+      "baselineGitBlobOid": "377122ff86af37a00094420b5126b0919b1ab14d",
+      "currentSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    }
+  ]
+}

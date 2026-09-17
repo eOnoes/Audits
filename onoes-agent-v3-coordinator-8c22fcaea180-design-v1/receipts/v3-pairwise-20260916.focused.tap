@@ -1,0 +1,799 @@
+TAP version 13
+# Subtest: v3 metadata binds exact installation/namespace/store/domain without creating authority
+ok 1 - v3 metadata binds exact installation/namespace/store/domain without creating authority
+  ---
+  duration_ms: 2.7558
+  type: 'test'
+  ...
+# Subtest: v3 approval identity stays identical to v2 across stores and schema domains
+ok 2 - v3 approval identity stays identical to v2 across stores and schema domains
+  ---
+  duration_ms: 2.5851
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/completed
+ok 3 - settlement kind/outcome/null matrix: execute/completed
+  ---
+  duration_ms: 1.8212
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/failed
+ok 4 - settlement kind/outcome/null matrix: execute/failed
+  ---
+  duration_ms: 0.7235
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/cancelled
+ok 5 - settlement kind/outcome/null matrix: execute/cancelled
+  ---
+  duration_ms: 0.5446
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/restored
+ok 6 - settlement kind/outcome/null matrix: execute/restored
+  ---
+  duration_ms: 0.4776
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/stopped-without-result
+ok 7 - settlement kind/outcome/null matrix: execute/stopped-without-result
+  ---
+  duration_ms: 1.1539
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/quarantined
+ok 8 - settlement kind/outcome/null matrix: execute/quarantined
+  ---
+  duration_ms: 0.618
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/completed
+ok 9 - settlement kind/outcome/null matrix: publish/completed
+  ---
+  duration_ms: 0.3727
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/failed
+ok 10 - settlement kind/outcome/null matrix: publish/failed
+  ---
+  duration_ms: 0.4419
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/cancelled
+ok 11 - settlement kind/outcome/null matrix: publish/cancelled
+  ---
+  duration_ms: 0.5177
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/restored
+ok 12 - settlement kind/outcome/null matrix: publish/restored
+  ---
+  duration_ms: 0.5008
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/stopped-without-result
+ok 13 - settlement kind/outcome/null matrix: publish/stopped-without-result
+  ---
+  duration_ms: 0.4202
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/quarantined
+ok 14 - settlement kind/outcome/null matrix: publish/quarantined
+  ---
+  duration_ms: 0.4133
+  type: 'test'
+  ...
+# Subtest: every settlement field is required, strictly typed and part of the digest
+ok 15 - every settlement field is required, strictly typed and part of the digest
+  ---
+  duration_ms: 9.2009
+  type: 'test'
+  ...
+# Subtest: canonical primitive-wire parsing rejects alternate spelling and oversize before parsing
+ok 16 - canonical primitive-wire parsing rejects alternate spelling and oversize before parsing
+  ---
+  duration_ms: 0.6626
+  type: 'test'
+  ...
+# Subtest: non-text and proxy/accessor inputs are rejected without running caller code
+ok 17 - non-text and proxy/accessor inputs are rejected without running caller code
+  ---
+  duration_ms: 1.0585
+  type: 'test'
+  ...
+# Subtest: settlement observation and release bounds are exact, with no clock or renewal claim
+ok 18 - settlement observation and release bounds are exact, with no clock or renewal claim
+  ---
+  duration_ms: 0.9486
+  type: 'test'
+  ...
+# Subtest: v3 incremental exact-prefix guard rejects snapshot-valid subject history rewrites
+ok 19 - v3 incremental exact-prefix guard rejects snapshot-valid subject history rewrites
+  ---
+  duration_ms: 38.3553
+  type: 'test'
+  ...
+# Subtest: v3 incremental rejects a self-consistent wrong A arriving with its outcome
+ok 20 - v3 incremental rejects a self-consistent wrong A arriving with its outcome
+  ---
+  duration_ms: 11.6531
+  type: 'test'
+  ...
+# Subtest: v3 incremental sequence gap duplicate and previous-head faults permanently latch
+ok 21 - v3 incremental sequence gap duplicate and previous-head faults permanently latch
+  ---
+  duration_ms: 13.8993
+  type: 'test'
+  ...
+# Subtest: v3 incremental rejects row deletion replacement two-row change and changed-subject mismatch
+ok 22 - v3 incremental rejects row deletion replacement two-row change and changed-subject mismatch
+  ---
+  duration_ms: 17.3407
+  type: 'test'
+  ...
+# Subtest: v3 incremental rejects zero-change two-event new-with-event and inserted-event updates
+ok 23 - v3 incremental rejects zero-change two-event new-with-event and inserted-event updates
+  ---
+  duration_ms: 14.4848
+  type: 'test'
+  ...
+# Subtest: v3 incremental cannot introduce conflicting workspace reservations at any blocking state
+ok 24 - v3 incremental cannot introduce conflicting workspace reservations at any blocking state
+  ---
+  duration_ms: 28.4291
+  type: 'test'
+  ...
+# Subtest: v3 incremental cannot make publication parent available by skipping its release
+ok 25 - v3 incremental cannot make publication parent available by skipping its release
+  ---
+  duration_ms: 21.7127
+  type: 'test'
+  ...
+# Subtest: v3 incremental lastAt regression rejects new and existing rows
+ok 26 - v3 incremental lastAt regression rejects new and existing rows
+  ---
+  duration_ms: 6.9045
+  type: 'test'
+  ...
+# Subtest: v3 incremental substitutes no late A and never forgets already supplied A
+ok 27 - v3 incremental substitutes no late A and never forgets already supplied A
+  ---
+  duration_ms: 28.044
+  type: 'test'
+  ...
+# Subtest: v3 incremental rejects released A replacement core rewrite absent core and duplicate outcome
+ok 28 - v3 incremental rejects released A replacement core rewrite absent core and duplicate outcome
+  ---
+  duration_ms: 29.0148
+  type: 'test'
+  ...
+# Subtest: v3 incremental historical generation cannot be relabeled to a current coordinator epoch
+ok 29 - v3 incremental historical generation cannot be relabeled to a current coordinator epoch
+  ---
+  duration_ms: 7.5633
+  type: 'test'
+  ...
+# Subtest: v3 incremental primitive boundaries never invoke caller getters proxies or coercion
+ok 30 - v3 incremental primitive boundaries never invoke caller getters proxies or coercion
+  ---
+  duration_ms: 5.2305
+  type: 'test'
+  ...
+# Subtest: v3 outcome states are one frozen literal contract for record bootstrap and append
+ok 31 - v3 outcome states are one frozen literal contract for record bootstrap and append
+  ---
+  duration_ms: 0.9947
+  type: 'test'
+  ...
+# Subtest: v3 incremental first receives historical A on the subject quarantine step for every family
+ok 32 - v3 incremental first receives historical A on the subject quarantine step for every family
+  ---
+  duration_ms: 234.9128
+  type: 'test'
+  ...
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 0 execute/completed
+ok 33 - v3 incremental exhaustive bounded three-row schedules: family 0 execute/completed
+  ---
+  duration_ms: 23641.4272
+  type: 'test'
+  ...
+# {"family":0,"schedulesAndContextModes":978,"prefixes":6474,"continued":19086}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 1 execute/failed
+ok 34 - v3 incremental exhaustive bounded three-row schedules: family 1 execute/failed
+  ---
+  duration_ms: 23895.3668
+  type: 'test'
+  ...
+# {"family":1,"schedulesAndContextModes":978,"prefixes":6474,"continued":19086}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 2 execute/cancelled
+ok 35 - v3 incremental exhaustive bounded three-row schedules: family 2 execute/cancelled
+  ---
+  duration_ms: 3085.4528
+  type: 'test'
+  ...
+# {"family":2,"schedulesAndContextModes":210,"prefixes":942,"continued":1686}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 3 execute/stopped-without-result
+ok 36 - v3 incremental exhaustive bounded three-row schedules: family 3 execute/stopped-without-result
+  ---
+  duration_ms: 12548.0434
+  type: 'test'
+  ...
+# {"family":3,"schedulesAndContextModes":642,"prefixes":3786,"continued":9678}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 4 execute/stopped-without-result/true
+ok 37 - v3 incremental exhaustive bounded three-row schedules: family 4 execute/stopped-without-result/true
+  ---
+  duration_ms: 6551.9481
+  type: 'test'
+  ...
+# {"family":4,"schedulesAndContextModes":390,"prefixes":2022,"continued":4386}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 5 publish/completed
+ok 38 - v3 incremental exhaustive bounded three-row schedules: family 5 publish/completed
+  ---
+  duration_ms: 12543.2315
+  type: 'test'
+  ...
+# {"family":5,"schedulesAndContextModes":204,"prefixes":2004,"continued":8946}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 6 publish/restored
+ok 39 - v3 incremental exhaustive bounded three-row schedules: family 6 publish/restored
+  ---
+  duration_ms: 12055.2433
+  type: 'test'
+  ...
+# {"family":6,"schedulesAndContextModes":204,"prefixes":2004,"continued":8946}
+# Subtest: v3 incremental exhaustive bounded three-row schedules: family 7 publish/cancelled
+ok 40 - v3 incremental exhaustive bounded three-row schedules: family 7 publish/cancelled
+  ---
+  duration_ms: 7186.8724
+  type: 'test'
+  ...
+# {"family":7,"schedulesAndContextModes":138,"prefixes":1278,"continued":5316}
+# Subtest: v3 incremental also compares multiple fully progressing rows and nonempty A bootstrap
+ok 41 - v3 incremental also compares multiple fully progressing rows and nonempty A bootstrap
+  ---
+  duration_ms: 5036.8667
+  type: 'test'
+  ...
+# {"deterministicFullRowCases":30,"prefixes":432,"continued":2922}
+# Subtest: v3 incremental claims remain forgeable data, cannot import state objects and explicitly invalidate
+ok 42 - v3 incremental claims remain forgeable data, cannot import state objects and explicitly invalidate
+  ---
+  duration_ms: 4.3219
+  type: 'test'
+  ...
+# Subtest: v3 centralized domains retain independently pinned historical wire literals
+ok 43 - v3 centralized domains retain independently pinned historical wire literals
+  ---
+  duration_ms: 0.8591
+  type: 'test'
+  ...
+# Subtest: v3 canonical complete inventory and checkpoint claims have no admission surface
+ok 44 - v3 canonical complete inventory and checkpoint claims have no admission surface
+  ---
+  duration_ms: 9.0217
+  type: 'test'
+  ...
+# Subtest: v3 re-derives cross-row invariants independently from indexes and rehashed records
+ok 45 - v3 re-derives cross-row invariants independently from indexes and rehashed records
+  ---
+  duration_ms: 5.6744
+  type: 'test'
+  ...
+# Subtest: v3 supplied snapshot omission, replacement, stale sequence and wrong checkpoint subject deny
+ok 46 - v3 supplied snapshot omission, replacement, stale sequence and wrong checkpoint subject deny
+  ---
+  duration_ms: 5.9143
+  type: 'test'
+  ...
+# Subtest: v3 release A and B join exact complete before/after inventories with only one release append
+ok 47 - v3 release A and B join exact complete before/after inventories with only one release append
+  ---
+  duration_ms: 8.3885
+  type: 'test'
+  ...
+# Subtest: v3 publication requires the released passed execution with separate approval and exact subject
+ok 48 - v3 publication requires the released passed execution with separate approval and exact subject
+  ---
+  duration_ms: 7.2865
+  type: 'test'
+  ...
+# Subtest: v3 inventory limits include all 1000 rows, rejecting 1001, hostile inputs and noncanonical envelopes
+ok 49 - v3 inventory limits include all 1000 rows, rejecting 1001, hostile inputs and noncanonical envelopes
+  ---
+  duration_ms: 345.9799
+  type: 'test'
+  ...
+# Subtest: v3 coherent omitted history plus a recomputed checkpoint remains a claim, never authenticated completeness
+ok 50 - v3 coherent omitted history plus a recomputed checkpoint remains a claim, never authenticated completeness
+  ---
+  duration_ms: 0.7833
+  type: 'test'
+  ...
+# Subtest: v3 release pair rejects an unrelated rehashed row change despite individually matching snapshots
+ok 51 - v3 release pair rejects an unrelated rehashed row change despite individually matching snapshots
+  ---
+  duration_ms: 4.4631
+  type: 'test'
+  ...
+# Subtest: v3 full released-history inventory at 1000 rows uses bounded tuple hashing
+ok 52 - v3 full released-history inventory at 1000 rows uses bounded tuple hashing
+  ---
+  duration_ms: 714.4342
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap returns frozen historical A and lastAt at every prefix without requiring supplied A
+ok 53 - v3 bootstrap returns frozen historical A and lastAt at every prefix without requiring supplied A
+  ---
+  duration_ms: 9.5847
+  type: 'test'
+  ...
+# Subtest: v3 historical row generation differs from genesis epoch and cannot be relabeled to a new coordinator epoch
+ok 54 - v3 historical row generation differs from genesis epoch and cannot be relabeled to a new coordinator epoch
+  ---
+  duration_ms: 4.1536
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap extracts each execution outcome across cuts and retains A after quarantine
+ok 55 - v3 bootstrap extracts each execution outcome across cuts and retains A after quarantine
+  ---
+  duration_ms: 68.1485
+  type: 'test'
+  ...
+# Subtest: v3 history denies a publication reserved before its parent exists even when final inventory is valid
+ok 56 - v3 history denies a publication reserved before its parent exists even when final inventory is valid
+  ---
+  duration_ms: 9.9209
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap extracts publication completed restored and cancelled A across cuts and quarantine
+ok 57 - v3 bootstrap extracts publication completed restored and cancelled A across cuts and quarantine
+  ---
+  duration_ms: 69.2062
+  type: 'test'
+  ...
+# Subtest: v3 history accepts released execution then publication with unrelated work between publication A and B
+ok 58 - v3 history accepts released execution then publication with unrelated work between publication A and B
+  ---
+  duration_ms: 5.2588
+  type: 'test'
+  ...
+# Subtest: v3 history rejects publication reservation before equal-time parent release despite valid final inventory
+ok 59 - v3 history rejects publication reservation before equal-time parent release despite valid final inventory
+  ---
+  duration_ms: 8.7007
+  type: 'test'
+  ...
+# Subtest: v3 history rejects publication reservation before parent outcome with equal timestamps and rehashed roots
+ok 60 - v3 history rejects publication reservation before parent outcome with equal timestamps and rehashed roots
+  ---
+  duration_ms: 9.0465
+  type: 'test'
+  ...
+# Subtest: v3 unreleased terminal and quarantined rows retain workspace exclusion
+ok 61 - v3 unreleased terminal and quarantined rows retain workspace exclusion
+  ---
+  duration_ms: 2.2623
+  type: 'test'
+  ...
+# Subtest: v3 publication parent lookup is independent of sorted operation identity order
+ok 62 - v3 publication parent lookup is independent of sorted operation identity order
+  ---
+  duration_ms: 5.044
+  type: 'test'
+  ...
+# Subtest: v3 history rejects time regression with otherwise exact sequence chain subjects and roots
+ok 63 - v3 history rejects time regression with otherwise exact sequence chain subjects and roots
+  ---
+  duration_ms: 2.9091
+  type: 'test'
+  ...
+# Subtest: v3 full checkpoint history checks every root and A including intervening work before B
+ok 64 - v3 full checkpoint history checks every root and A including intervening work before B
+  ---
+  duration_ms: 7.7697
+  type: 'test'
+  ...
+# Subtest: v3 historical workspace overlap denies even when final rows are individually released
+ok 65 - v3 historical workspace overlap denies even when final rows are individually released
+  ---
+  duration_ms: 5.8398
+  type: 'test'
+  ...
+# Subtest: v3 checkpoint history requires explicit genesis even for empty state and rejects non-text callers
+ok 66 - v3 checkpoint history requires explicit genesis even for empty state and rejects non-text callers
+  ---
+  duration_ms: 3.2545
+  type: 'test'
+  ...
+# Subtest: v3 pairwise complete schedules 0/0
+ok 67 - v3 pairwise complete schedules 0/0
+  ---
+  duration_ms: 25809.6387
+  type: 'test'
+  ...
+# {"pair":[0,0],"cases":924,"prefixes":11088,"resumedAppends":5082,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 0/1
+ok 68 - v3 pairwise complete schedules 0/1
+  ---
+  duration_ms: 26387.8265
+  type: 'test'
+  ...
+# {"pair":[0,1],"cases":924,"prefixes":11088,"resumedAppends":5082,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 0/2
+ok 69 - v3 pairwise complete schedules 0/2
+  ---
+  duration_ms: 1564.9578
+  type: 'test'
+  ...
+# {"pair":[0,2],"cases":84,"prefixes":756,"resumedAppends":345,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 0/3
+ok 70 - v3 pairwise complete schedules 0/3
+  ---
+  duration_ms: 11503.6157
+  type: 'test'
+  ...
+# {"pair":[0,3],"cases":462,"prefixes":5082,"resumedAppends":2310,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 0/4
+ok 71 - v3 pairwise complete schedules 0/4
+  ---
+  duration_ms: 4792.54
+  type: 'test'
+  ...
+# {"pair":[0,4],"cases":210,"prefixes":2100,"resumedAppends":945,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 0/5
+ok 72 - v3 pairwise complete schedules 0/5
+  ---
+  duration_ms: 11242.0559
+  type: 'test'
+  ...
+# {"pair":[0,5],"cases":210,"prefixes":3360,"resumedAppends":1589,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 0/6
+ok 73 - v3 pairwise complete schedules 0/6
+  ---
+  duration_ms: 10707.2439
+  type: 'test'
+  ...
+# {"pair":[0,6],"cases":210,"prefixes":3360,"resumedAppends":1589,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 0/7
+ok 74 - v3 pairwise complete schedules 0/7
+  ---
+  duration_ms: 3922.5383
+  type: 'test'
+  ...
+# {"pair":[0,7],"cases":84,"prefixes":1260,"resumedAppends":615,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 1/1
+ok 75 - v3 pairwise complete schedules 1/1
+  ---
+  duration_ms: 22902.0845
+  type: 'test'
+  ...
+# {"pair":[1,1],"cases":924,"prefixes":11088,"resumedAppends":5082,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 1/2
+ok 76 - v3 pairwise complete schedules 1/2
+  ---
+  duration_ms: 1311.4493
+  type: 'test'
+  ...
+# {"pair":[1,2],"cases":84,"prefixes":756,"resumedAppends":345,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 1/3
+ok 77 - v3 pairwise complete schedules 1/3
+  ---
+  duration_ms: 8873.5328
+  type: 'test'
+  ...
+# {"pair":[1,3],"cases":462,"prefixes":5082,"resumedAppends":2310,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 1/4
+ok 78 - v3 pairwise complete schedules 1/4
+  ---
+  duration_ms: 3496.9193
+  type: 'test'
+  ...
+# {"pair":[1,4],"cases":210,"prefixes":2100,"resumedAppends":945,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 1/5
+ok 79 - v3 pairwise complete schedules 1/5
+  ---
+  duration_ms: 8600.8003
+  type: 'test'
+  ...
+# {"pair":[1,5],"cases":210,"prefixes":3360,"resumedAppends":1589,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 1/6
+ok 80 - v3 pairwise complete schedules 1/6
+  ---
+  duration_ms: 8011.2604
+  type: 'test'
+  ...
+# {"pair":[1,6],"cases":210,"prefixes":3360,"resumedAppends":1589,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 1/7
+ok 81 - v3 pairwise complete schedules 1/7
+  ---
+  duration_ms: 2825.6639
+  type: 'test'
+  ...
+# {"pair":[1,7],"cases":84,"prefixes":1260,"resumedAppends":615,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 2/2
+ok 82 - v3 pairwise complete schedules 2/2
+  ---
+  duration_ms: 186.8987
+  type: 'test'
+  ...
+# {"pair":[2,2],"cases":20,"prefixes":120,"resumedAppends":54,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 2/3
+ok 83 - v3 pairwise complete schedules 2/3
+  ---
+  duration_ms: 719.275
+  type: 'test'
+  ...
+# {"pair":[2,3],"cases":56,"prefixes":448,"resumedAppends":196,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 2/4
+ok 84 - v3 pairwise complete schedules 2/4
+  ---
+  duration_ms: 408.7282
+  type: 'test'
+  ...
+# {"pair":[2,4],"cases":35,"prefixes":245,"resumedAppends":105,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 2/5
+ok 85 - v3 pairwise complete schedules 2/5
+  ---
+  duration_ms: 982.7202
+  type: 'test'
+  ...
+# {"pair":[2,5],"cases":35,"prefixes":455,"resumedAppends":228,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 2/6
+ok 86 - v3 pairwise complete schedules 2/6
+  ---
+  duration_ms: 964.4251
+  type: 'test'
+  ...
+# {"pair":[2,6],"cases":35,"prefixes":455,"resumedAppends":228,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 2/7
+ok 87 - v3 pairwise complete schedules 2/7
+  ---
+  duration_ms: 491.5628
+  type: 'test'
+  ...
+# {"pair":[2,7],"cases":20,"prefixes":240,"resumedAppends":126,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 3/3
+ok 88 - v3 pairwise complete schedules 3/3
+  ---
+  duration_ms: 4660.1869
+  type: 'test'
+  ...
+# {"pair":[3,3],"cases":252,"prefixes":2520,"resumedAppends":1142,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 3/4
+ok 89 - v3 pairwise complete schedules 3/4
+  ---
+  duration_ms: 1816.8194
+  type: 'test'
+  ...
+# {"pair":[3,4],"cases":126,"prefixes":1134,"resumedAppends":504,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 3/5
+ok 90 - v3 pairwise complete schedules 3/5
+  ---
+  duration_ms: 4172.6702
+  type: 'test'
+  ...
+# {"pair":[3,5],"cases":126,"prefixes":1890,"resumedAppends":909,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 3/6
+ok 91 - v3 pairwise complete schedules 3/6
+  ---
+  duration_ms: 4340.5874
+  type: 'test'
+  ...
+# {"pair":[3,6],"cases":126,"prefixes":1890,"resumedAppends":909,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 3/7
+ok 92 - v3 pairwise complete schedules 3/7
+  ---
+  duration_ms: 1598.1862
+  type: 'test'
+  ...
+# {"pair":[3,7],"cases":56,"prefixes":784,"resumedAppends":364,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 4/4
+ok 93 - v3 pairwise complete schedules 4/4
+  ---
+  duration_ms: 867.8514
+  type: 'test'
+  ...
+# {"pair":[4,4],"cases":70,"prefixes":560,"resumedAppends":251,"serializedParents":0}
+# Subtest: v3 pairwise complete schedules 4/5
+ok 94 - v3 pairwise complete schedules 4/5
+  ---
+  duration_ms: 2011.2282
+  type: 'test'
+  ...
+# {"pair":[4,5],"cases":70,"prefixes":980,"resumedAppends":455,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 4/6
+ok 95 - v3 pairwise complete schedules 4/6
+  ---
+  duration_ms: 2015.9003
+  type: 'test'
+  ...
+# {"pair":[4,6],"cases":70,"prefixes":980,"resumedAppends":455,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 4/7
+ok 96 - v3 pairwise complete schedules 4/7
+  ---
+  duration_ms: 915.7206
+  type: 'test'
+  ...
+# {"pair":[4,7],"cases":35,"prefixes":455,"resumedAppends":228,"serializedParents":1}
+# Subtest: v3 pairwise complete schedules 5/5
+ok 97 - v3 pairwise complete schedules 5/5
+  ---
+  duration_ms: 3943.1457
+  type: 'test'
+  ...
+# {"pair":[5,5],"cases":70,"prefixes":1400,"resumedAppends":715,"serializedParents":2}
+# Subtest: v3 pairwise complete schedules 5/6
+ok 98 - v3 pairwise complete schedules 5/6
+  ---
+  duration_ms: 4231.1148
+  type: 'test'
+  ...
+# {"pair":[5,6],"cases":70,"prefixes":1400,"resumedAppends":715,"serializedParents":2}
+# Subtest: v3 pairwise complete schedules 5/7
+ok 99 - v3 pairwise complete schedules 5/7
+  ---
+  duration_ms: 1933.6251
+  type: 'test'
+  ...
+# {"pair":[5,7],"cases":35,"prefixes":665,"resumedAppends":339,"serializedParents":2}
+# Subtest: v3 pairwise complete schedules 6/6
+ok 100 - v3 pairwise complete schedules 6/6
+  ---
+  duration_ms: 4243.5674
+  type: 'test'
+  ...
+# {"pair":[6,6],"cases":70,"prefixes":1400,"resumedAppends":715,"serializedParents":2}
+# Subtest: v3 pairwise complete schedules 6/7
+ok 101 - v3 pairwise complete schedules 6/7
+  ---
+  duration_ms: 1833.4759
+  type: 'test'
+  ...
+# {"pair":[6,7],"cases":35,"prefixes":665,"resumedAppends":339,"serializedParents":2}
+# Subtest: v3 pairwise complete schedules 7/7
+ok 102 - v3 pairwise complete schedules 7/7
+  ---
+  duration_ms: 916.1617
+  type: 'test'
+  ...
+# {"pair":[7,7],"cases":20,"prefixes":360,"resumedAppends":186,"serializedParents":2}
+# Subtest: v3 pairwise workspace reuse requires the previous execute release
+ok 103 - v3 pairwise workspace reuse requires the previous execute release
+  ---
+  duration_ms: 65.3072
+  type: 'test'
+  ...
+# Subtest: v3 pairwise increasing global timestamps survive all nonempty bootstrap cuts
+ok 104 - v3 pairwise increasing global timestamps survive all nonempty bootstrap cuts
+  ---
+  duration_ms: 68.7276
+  type: 'test'
+  ...
+# Subtest: v3 pairwise a second publication cannot reuse a released parent workflow
+ok 105 - v3 pairwise a second publication cannot reuse a released parent workflow
+  ---
+  duration_ms: 12.4653
+  type: 'test'
+  ...
+# Subtest: v3 pre-outcome records reject supplied settlement or checkpoint context independently
+ok 106 - v3 pre-outcome records reject supplied settlement or checkpoint context independently
+  ---
+  duration_ms: 9.2709
+  type: 'test'
+  ...
+# Subtest: v3 reservation itself must precede expiry even without any events
+ok 107 - v3 reservation itself must precede expiry even without any events
+  ---
+  duration_ms: 0.7758
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/completed/false
+ok 108 - v3 every history cut parses as data only: execute/completed/false
+  ---
+  duration_ms: 4.4632
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/failed/false
+ok 109 - v3 every history cut parses as data only: execute/failed/false
+  ---
+  duration_ms: 2.4496
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/cancelled/false
+ok 110 - v3 every history cut parses as data only: execute/cancelled/false
+  ---
+  duration_ms: 1.2094
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/stopped-without-result/false
+ok 111 - v3 every history cut parses as data only: execute/stopped-without-result/false
+  ---
+  duration_ms: 1.5861
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/stopped-without-result/true
+ok 112 - v3 every history cut parses as data only: execute/stopped-without-result/true
+  ---
+  duration_ms: 1.3475
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/completed/false
+ok 113 - v3 every history cut parses as data only: publish/completed/false
+  ---
+  duration_ms: 1.8816
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/restored/false
+ok 114 - v3 every history cut parses as data only: publish/restored/false
+  ---
+  duration_ms: 1.518
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/cancelled/false
+ok 115 - v3 every history cut parses as data only: publish/cancelled/false
+  ---
+  duration_ms: 1.0834
+  type: 'test'
+  ...
+# Subtest: v3 rejects release before an outcome, changed predecessor, evidence or checkpoint-A digest
+ok 116 - v3 rejects release before an outcome, changed predecessor, evidence or checkpoint-A digest
+  ---
+  duration_ms: 2.7687
+  type: 'test'
+  ...
+# Subtest: v3 quarantine is absorbing at every prefix and has no release path
+ok 117 - v3 quarantine is absorbing at every prefix and has no release path
+  ---
+  duration_ms: 3.6322
+  type: 'test'
+  ...
+# Subtest: v3 evidence joins every subject even after downstream evidence and checkpoint hashes are recomputed
+ok 118 - v3 evidence joins every subject even after downstream evidence and checkpoint hashes are recomputed
+  ---
+  duration_ms: 10.1031
+  type: 'test'
+  ...
+# Subtest: v3 checkpoint A must name the exact historical subject and outcome prefix
+ok 119 - v3 checkpoint A must name the exact historical subject and outcome prefix
+  ---
+  duration_ms: 3.2594
+  type: 'test'
+  ...
+# Subtest: v3 transition replay rejects skipped/reordered/wrong-kind/result-bearing paths and seventh events
+ok 120 - v3 transition replay rejects skipped/reordered/wrong-kind/result-bearing paths and seventh events
+  ---
+  duration_ms: 3.5632
+  type: 'test'
+  ...
+# Subtest: v3 rejects identity/domain/hash drift, unknown/omitted fields and invalid wire without caller invocation
+ok 121 - v3 rejects identity/domain/hash drift, unknown/omitted fields and invalid wire without caller invocation
+  ---
+  duration_ms: 4.6814
+  type: 'test'
+  ...
+# Subtest: v3 timing permits bounded post-expiry outcome bookkeeping, never late forward effects or release
+ok 122 - v3 timing permits bounded post-expiry outcome bookkeeping, never late forward effects or release
+  ---
+  duration_ms: 5.6448
+  type: 'test'
+  ...
+# Subtest: checkpoint genesis is canonical empty data, not initialization or a missing-anchor fallback
+ok 123 - checkpoint genesis is canonical empty data, not initialization or a missing-anchor fallback
+  ---
+  duration_ms: 1.7315
+  type: 'test'
+  ...
+# Subtest: checkpoint sequence cannot precede its retained operations and subject events
+ok 124 - checkpoint sequence cannot precede its retained operations and subject events
+  ---
+  duration_ms: 0.6164
+  type: 'test'
+  ...
+1..124
+# tests 124
+# suites 0
+# pass 124
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 195620.4788

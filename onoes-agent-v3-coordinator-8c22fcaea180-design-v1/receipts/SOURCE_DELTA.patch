@@ -1,0 +1,296 @@
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-incremental.ts b/product/companion-v1/src/build-only/windows-candidate-v3-incremental.ts
+index 77e9658..976f376 100644
+--- a/product/companion-v1/src/build-only/windows-candidate-v3-incremental.ts
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-incremental.ts
+@@ -1,6 +1,7 @@
+ import { canonicalJson } from "../compatibility/canonical-json.js";
+ import { deepFreeze } from "../validation/deep-freeze.js";
+ import { CandidateV3DataError } from "./windows-candidate-v3-data.js";
++import { CANDIDATE_V3_OUTCOME_STATES } from "./windows-candidate-v3-record.js";
+ import { parseCandidateV3CheckpointHistory, parseCandidateV3CheckpointSnapshot } from "./windows-candidate-v3-inventory.js";
+ 
+ // PURE CLAIM VALIDATION ONLY. No storage, anchor, owner epoch, clock, callback,
+@@ -10,7 +11,7 @@ import { parseCandidateV3CheckpointHistory, parseCandidateV3CheckpointSnapshot }
+ // passing strings here cannot prove physical custody or authentic history.
+ type ClaimState = ReturnType<typeof parseCandidateV3CheckpointHistory>;
+ const fail = (): never => { throw new CandidateV3DataError(); };
+-const outcomes: ReadonlySet<string> = new Set(["completed", "failed", "cancelled", "restored", "stopped-without-result"]);
++const outcomes: ReadonlySet<string> = new Set(CANDIDATE_V3_OUTCOME_STATES);
+ 
+ function summary(state: ClaimState) {
+   return deepFreeze({ kind: "validated-v3-incremental-claim-not-admission" as const,
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts b/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts
+index 1742da2..d02251b 100644
+--- a/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-inventory.ts
+@@ -5,7 +5,7 @@ import { CandidateV3DataError, parseCandidateV3Metadata, CANDIDATE_SETTLEMENT_MA
+   CANDIDATE_V3_INVENTORY_ROOT_DOMAIN, CANDIDATE_V3_INVENTORY_TRANSPORT_DOMAIN,
+   CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN } from "./windows-candidate-v3-data.js";
+ import { parseCandidateV3Record, parseCandidateV3Checkpoint, CANDIDATE_V3_MAX_RECORD_BYTES,
+-  CANDIDATE_V3_MAX_CHECKPOINT_BYTES } from "./windows-candidate-v3-record.js";
++  CANDIDATE_V3_MAX_CHECKPOINT_BYTES, CANDIDATE_V3_OUTCOME_STATES } from "./windows-candidate-v3-record.js";
+ 
+ // DATA ONLY. A caller can omit or coherently forge rows AND their checkpoint.
+ // Authentic complete storage discovery, anchor freshness and admission are absent.
+@@ -160,7 +160,7 @@ export function parseCandidateV3CheckpointHistory(inventoryWire: unknown, metada
+       // Any supplied A must be the exact historical checkpoint in this stream,
+       // not a fabricated self-consistent prefix with a different inventory root.
+       if (row.outcomeCheckpoint?.eventIndex === index && row.outcomeCheckpoint.checkpointDigest !== cp.checkpointDigest) return fail();
+-      if (event && ["completed", "failed", "cancelled", "stopped-without-result", "restored"].includes(event.state)) {
++      if (event && (CANDIDATE_V3_OUTCOME_STATES as readonly string[]).includes(event.state)) {
+         if (outcomeCheckpointByOperation[id] !== undefined) return fail();
+         outcomeCheckpointByOperation[id] = cp.checkpointDigest;
+       }
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-record.ts b/product/companion-v1/src/build-only/windows-candidate-v3-record.ts
+index d724577..5df15ac 100644
+--- a/product/companion-v1/src/build-only/windows-candidate-v3-record.ts
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-record.ts
+@@ -24,7 +24,8 @@ const intentSchema = z.discriminatedUnion("kind", [
+   z.object({ ...common, kind: z.literal("execute") }).strict(),
+   z.object({ ...common, kind: z.literal("publish"), executionOperationId: effectUuid, resultDigest: digest }).strict(),
+ ]);
+-const outcomes = ["completed", "failed", "restored", "cancelled", "stopped-without-result"] as const;
++export const CANDIDATE_V3_OUTCOME_STATES = Object.freeze(["completed", "failed", "restored", "cancelled", "stopped-without-result"] as const);
++const outcomes = CANDIDATE_V3_OUTCOME_STATES;
+ const outcomeSchema = z.enum(outcomes);
+ const stateSchema = z.enum(["source-delivery-possible", "launch-possible", "result-and-stop-observed",
+   "publication-possible", ...outcomes, "quarantined", "released"]);
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-history-fixture.ts b/product/companion-v1/tests/helpers/candidate-v3-history-fixture.ts
+index 377122f..bd29fbe 100644
+--- a/product/companion-v1/tests/helpers/candidate-v3-history-fixture.ts
++++ b/product/companion-v1/tests/helpers/candidate-v3-history-fixture.ts
+@@ -6,7 +6,7 @@ export type ClaimFixture = ReturnType<typeof fixture>;
+ export type ClaimRecord = ClaimFixture["record"];
+ export type ClaimCheckpoint = ClaimFixture["checkpointA"];
+ export type TransportRow = { recordWire: string; settlementWire: string | null; checkpointAWire: string | null };
+-export type Attachment = "outcome" | "release" | "later-unrelated";
++export type Attachment = "outcome" | "release" | "later-unrelated" | "quarantine-step";
+ export const families = [["execute", "completed"], ["execute", "failed"], ["execute", "cancelled"],
+   ["execute", "stopped-without-result"], ["execute", "stopped-without-result", true],
+   ["publish", "completed"], ["publish", "restored"], ["publish", "cancelled"]] as const;
+@@ -73,6 +73,7 @@ export function transcript(fixtures: ClaimFixture[], order: number[], attachment
+     const input = envelope(entries.map(({ record: r, f: original }) => {
+       const key = r.intent.operationId, a = knownA.get(key);
+       if (a && (attachment === "outcome" || r.events.at(-1)?.state === "released"
++        || (attachment === "quarantine-step" && id === key && r.events.at(-1)?.state === "quarantined")
+         || (attachment === "later-unrelated" && id !== key && cp.sequence > a.sequence))) delivered.add(key);
+       return { recordWire: wire(r), settlementWire: a ? wire(original.core) : null,
+         checkpointAWire: delivered.has(key) ? wire(a) : null };
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-incremental-negative.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-incremental-negative.test.ts
+index 89892e7..f417982 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-v3-incremental-negative.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-incremental-negative.test.ts
+@@ -28,6 +28,42 @@ function assertDenial(before: Frame | undefined, good: Frame, bad: Frame, snapsh
+ }
+ const basic = () => transcript([make(0, 0), make(2, 1)], [0, 1, 0, 0, 0, 0, 0, 1, 1]);
+ 
++test("v3 incremental exact-prefix guard rejects snapshot-valid subject history rewrites", () => {
++  const fs = basic(), before = fs[2]!, good = fs[3]!;
++  for (const field of ["evidenceDigest", "authorizationDigest", "candidateDigest", "reviewMaterialDigest", "guestImageDigest", "reservedAt"]) {
++    const bad = edited(good, rows => {
++      const r = read(rows[0]!);
++      if (field === "evidenceDigest") r.events[0]!.evidenceDigest = digest(9999);
++      else if (field === "reservedAt") r.reservedAt = time(-1);
++      else {
++        // Each field is independent of the current event's grammar. Rehashing
++        // intent and the complete snapshot must not rewrite the retained past.
++        const key = field as "authorizationDigest" | "candidateDigest" | "reviewMaterialDigest" | "guestImageDigest";
++        r.intent[key] = digest(9999); r.intentDigest = hash(r.intent);
++      }
++      rows[0]!.recordWire = wire(r);
++    });
++    const oldRows = recordsOf(before.input), newRows = recordsOf(bad.input);
++    assert.equal(read(newRows[0]!).events.length, read(oldRows[0]!).events.length + 1);
++    assert.equal(newRows[1]!.recordWire, oldRows[1]!.recordWire);
++    assert.equal(bad.checkpoint.sequence, before.checkpoint.sequence + 1);
++    assert.equal(bad.checkpoint.previousCheckpointDigest, before.checkpoint.checkpointDigest);
++    assertDenial(before, good, bad, true);
++  }
++});
++
++test("v3 incremental rejects a self-consistent wrong A arriving with its outcome", () => {
++  const fs = basic(), good = fs[5]!;
++  assert.equal(read(recordsOf(good.input)[0]!).events.at(-1)!.state, "completed");
++  assert.equal(recordsOf(good.input)[0]!.checkpointAWire, null);
++  const bad = edited(good, rows => {
++    const wrongA = structuredClone(good.checkpoint);
++    wrongA.previousCheckpointDigest = digest(9999); rehashCheckpoint(wrongA);
++    rows[0]!.checkpointAWire = wire(wrongA);
++  });
++  assertDenial(fs[4], good, bad, true);
++});
++
+ test("v3 incremental sequence gap duplicate and previous-head faults permanently latch", () => {
+   const fs = basic(), good = fs[2]!;
+   for (const kind of ["gap", "duplicate", "previous"]) {
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-incremental.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-incremental.test.ts
+index 9ca7792..a1599da 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-v3-incremental.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-incremental.test.ts
+@@ -4,6 +4,7 @@ import { canonicalJson as wire } from "../../src/compatibility/canonical-json.js
+ import { createCandidateV3IncrementalClaims } from "../../src/build-only/windows-candidate-v3-incremental.js";
+ import { parseCandidateV3CheckpointHistory } from "../../src/build-only/windows-candidate-v3-inventory.js";
+ import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { CANDIDATE_V3_OUTCOME_STATES } from "../../src/build-only/windows-candidate-v3-record.js";
+ import { families, make, transcript, schedules, pins, envelope, historyWire, genesis,
+   type Frame, type Attachment } from "../helpers/candidate-v3-history-fixture.js";
+ 
+@@ -31,6 +32,30 @@ function exercise(frames: Frame[]) {
+   return continued;
+ }
+ 
++test("v3 outcome states are one frozen literal contract for record bootstrap and append", () => {
++  assert.deepEqual(CANDIDATE_V3_OUTCOME_STATES, ["completed", "failed", "restored", "cancelled", "stopped-without-result"]);
++  assert.ok(Object.isFrozen(CANDIDATE_V3_OUTCOME_STATES));
++  assert.throws(() => { (CANDIDATE_V3_OUTCOME_STATES as unknown as string[])[0] = "released"; }, TypeError);
++});
++
++test("v3 incremental first receives historical A on the subject quarantine step for every family", () => {
++  for (let family = 0; family < families.length; family++) {
++    const parent = family >= 5 ? make(0, 0) : undefined;
++    const full = make(family, 1, parent);
++    const subject = make(family, 1, parent, full.outcomeIndex + 1, true);
++    const fixtures = parent ? [parent, subject] : [subject];
++    const order = fixtures.flatMap((f, n) => Array(f.record.events.length + 1).fill(n) as number[]);
++    const frames = transcript(fixtures, order, "quarantine-step"), prior = frames.at(-2)!, last = frames.at(-1)!;
++    const subjectId = subject.record.intent.operationId;
++    const rowAt = (frame: Frame) => (JSON.parse(frame.input) as { records: { recordWire: string; checkpointAWire: string | null }[] }).records
++      .find(row => (JSON.parse(row.recordWire) as { intent: { operationId: string } }).intent.operationId === subjectId)!;
++    assert.equal(rowAt(prior).checkpointAWire, null);
++    assert.equal(rowAt(last).checkpointAWire, wire(prior.checkpoint));
++    assert.equal((JSON.parse(rowAt(last).recordWire) as { events: { state: string }[] }).events.at(-1)!.state, "quarantined");
++    exercise(frames); // Includes bootstrap before outcome, after outcome and after quarantine.
++  }
++});
++
+ for (let family = 0; family < families.length; family++) {
+   test(`v3 incremental exhaustive bounded three-row schedules: family ${family} ${families[family]!.join("/")}`, t => {
+     let cases = 0, prefixes = 0, continued = 0;
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-pairwise.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-pairwise.test.ts
+new file mode 100644
+index 0000000..3a9e0a4
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-pairwise.test.ts
+@@ -0,0 +1,122 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { createCandidateV3IncrementalClaims } from "../../src/build-only/windows-candidate-v3-incremental.js";
++import { parseCandidateV3CheckpointHistory } from "../../src/build-only/windows-candidate-v3-inventory.js";
++import { families, make, transcript, pins, envelope, historyWire, genesis,
++  type Frame, type ClaimFixture } from "../helpers/candidate-v3-history-fixture.js";
++import { time, rebind } from "../helpers/candidate-v3-record-fixture.js";
++
++const boot = (f?: Frame) => createCandidateV3IncrementalClaims(pins, f?.input ?? envelope([]), historyWire(f?.history ?? [genesis]));
++const ref = (f: Frame) => parseCandidateV3CheckpointHistory(f.input, pins, historyWire(f.history));
++const denied = (fn: () => unknown) => assert.throws(fn, e => e instanceof CandidateV3DataError);
++const complete = (f: ClaimFixture, n: number) => Array(f.record.events.length + 1).fill(n) as number[];
++
++function compare(view: ReturnType<ReturnType<typeof boot>["snapshot"]>, expected: ReturnType<typeof ref>) {
++  assert.deepEqual(view.head, expected.head);
++  assert.equal(view.inventoryRootDigest, expected.inventory.inventoryRootDigest);
++  assert.equal(view.operationCount, expected.inventory.rows.length);
++  assert.equal(view.lastAt, expected.lastAt);
++  assert.deepEqual(view.outcomeCheckpointByOperation, expected.outcomeCheckpointByOperation);
++  assert.ok(Object.isFrozen(view));
++}
++
++function* weave(left: number, right: number, prefix: number[] = []): Generator<number[]> {
++  if (!left && !right) { yield prefix; return; }
++  if (left) yield* weave(left - 1, right, [...prefix, 0]);
++  if (right) yield* weave(left, right - 1, [...prefix, 1]);
++}
++function choose(n: number, k: number) {
++  let result = 1;
++  for (let i = 1; i <= k; i++) result = result * (n - k + i) / i;
++  return Math.round(result);
++}
++
++// All complete two-subject interleavings for the fixed eight family shapes.
++// Publications have distinct already-released parents in a serialized prelude;
++// parent progression is not part of the pairwise permutation claim. One A mode
++// (release) and equal timestamps here; other timing/context modes have own tests.
++for (let left = 0; left < families.length; left++) for (let right = left; right < families.length; right++) {
++  test(`v3 pairwise complete schedules ${left}/${right}`, t => {
++    const parents: ClaimFixture[] = [];
++    const leftParent = left >= 5 ? make(0, 0) : undefined;
++    const rightParent = right >= 5 ? make(0, 1) : undefined;
++    if (leftParent) parents.push(leftParent);
++    if (rightParent) parents.push(rightParent);
++    const a = make(left, 3, leftParent), b = make(right, 4, rightParent), offset = parents.length;
++    const fixtures = [...parents, a, b], prelude = parents.flatMap(complete);
++    const expectedCases = choose(a.record.events.length + b.record.events.length + 2, a.record.events.length + 1);
++    const seen = new Set<string>(); let prefixes = 0, resumedAppends = 0;
++    for (const order of weave(a.record.events.length + 1, b.record.events.length + 1)) {
++      const key = order.join(""); assert.equal(seen.has(key), false); seen.add(key);
++      const frames = transcript(fixtures, [...prelude, ...order.map(n => n + offset)]);
++      const fresh = boot(), refs = frames.map(ref);
++      for (let n = 0; n < frames.length; n++) compare(fresh.append(frames[n]!.input, wire(frames[n]!.checkpoint)), refs[n]!);
++      // A rotating nonempty cut on each schedule, not every cut of every pair.
++      // The separate bounded three-row matrix still checks all of its cuts.
++      const cut = (seen.size - 1) % frames.length, resumed = boot(frames[cut]);
++      compare(resumed.snapshot(), refs[cut]!);
++      for (let n = cut + 1; n < frames.length; n++) {
++        compare(resumed.append(frames[n]!.input, wire(frames[n]!.checkpoint)), refs[n]!); resumedAppends++;
++      }
++      assert.deepEqual(resumed.snapshot(), fresh.snapshot()); prefixes += frames.length;
++    }
++    assert.equal(seen.size, expectedCases);
++    t.diagnostic(JSON.stringify({ pair: [left, right], cases: seen.size, prefixes, resumedAppends, serializedParents: parents.length }));
++  });
++}
++
++function refresh(f: ClaimFixture) {
++  f.record.intentDigest = hash(f.record.intent);
++  f.core.intentDigest = f.record.intentDigest; f.core.workspaceDigest = f.record.intent.workspaceDigest;
++  f.core.observedAt = f.record.events[f.outcomeIndex]!.recordedAt;
++  f.core.priorOutcomeRecordDigest = hash({ ...f.record, events: f.record.events.slice(0, f.outcomeIndex) });
++  rebind(f);
++}
++function everyCut(frames: Frame[]) {
++  const refs = frames.map(ref);
++  for (let cut = -1; cut < frames.length; cut++) {
++    const model = boot(cut < 0 ? undefined : frames[cut]);
++    for (let n = cut + 1; n < frames.length; n++) compare(model.append(frames[n]!.input, wire(frames[n]!.checkpoint)), refs[n]!);
++  }
++}
++function denyAfter(before: Frame, bad: Frame, good: Frame) {
++  ref(before); ref(good); denied(() => ref(bad));
++  const model = boot(before); denied(() => model.append(bad.input, wire(bad.checkpoint)));
++  denied(() => model.snapshot()); denied(() => model.append(good.input, wire(good.checkpoint)));
++}
++
++test("v3 pairwise workspace reuse requires the previous execute release", () => {
++  const a = make(0, 0), b = make(0, 1);
++  b.record.intent.workspaceDigest = a.record.intent.workspaceDigest; refresh(b);
++  const good = transcript([a, b], [...complete(a, 0), ...complete(b, 1)]);
++  everyCut(good);
++  const releaseIndex = a.record.events.length;
++  const bad = transcript([a, b], [...complete(a, 0).slice(0, -1), 1]).at(-1)!;
++  denyAfter(good[releaseIndex - 1]!, bad, good[releaseIndex]!);
++});
++
++test("v3 pairwise increasing global timestamps survive all nonempty bootstrap cuts", () => {
++  const fs = [make(0, 0), make(1, 1)];
++  const order = Array.from({ length: 6 }, () => [0, 1]).flat(), indexes = [-1, -1];
++  order.forEach((n, position) => {
++    const index = ++indexes[n]!;
++    if (!index) fs[n]!.record.reservedAt = time(position + 1);
++    else fs[n]!.record.events[index - 1]!.recordedAt = time(position + 1);
++  });
++  fs.forEach(refresh);
++  const frames = transcript(fs, order, "outcome");
++  for (let n = 0; n < frames.length; n++) assert.equal(ref(frames[n]!).lastAt, time(n + 1));
++  everyCut(frames);
++});
++
++test("v3 pairwise a second publication cannot reuse a released parent workflow", () => {
++  const p = make(0, 0), first = make(5, 1, p), second = make(5, 2, p), unrelated = make(0, 3);
++  const prefix = [...complete(p, 0), ...complete(first, 1)];
++  const good = transcript([p, first, unrelated], [...prefix, 2]);
++  const bad = transcript([p, first, second], [...prefix, 2]).at(-1)!;
++  assert.notEqual(first.record.intent.approvalId, second.record.intent.approvalId);
++  assert.equal(first.record.intent.workflowId, second.record.intent.workflowId);
++  denyAfter(good.at(-2)!, bad, good.at(-1)!);
++});
