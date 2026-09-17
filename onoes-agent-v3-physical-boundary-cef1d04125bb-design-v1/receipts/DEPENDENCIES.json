@@ -1,0 +1,757 @@
+{
+  "method": "Recursive TypeScript literal import/export closure; dynamic imports rejected",
+  "edges": [
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 1,
+      "specifier": "node:crypto",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 2,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 3,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-effect-state.js",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 6,
+      "specifier": "./windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 7,
+      "specifier": "./windows-candidate-v3-messages.js",
+      "target": "src/build-only/windows-candidate-v3-messages.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "line": 8,
+      "specifier": "./windows-candidate-v3-coordinator-data.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 1,
+      "specifier": "node:test",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 2,
+      "specifier": "node:assert/strict",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 3,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 4,
+      "specifier": "../../src/build-only/windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 5,
+      "specifier": "../helpers/candidate-v3-pair-claims.js",
+      "target": "tests/helpers/candidate-v3-pair-claims.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 6,
+      "specifier": "../helpers/candidate-v3-history-fixture.js",
+      "target": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "line": 7,
+      "specifier": "../helpers/candidate-v3-reconciliation-model.js",
+      "target": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 1,
+      "specifier": "node:test",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 2,
+      "specifier": "node:assert/strict",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 3,
+      "specifier": "node:timers/promises",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 4,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 5,
+      "specifier": "../../src/build-only/windows-candidate-v3-coordinator.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 6,
+      "specifier": "../../src/build-only/windows-candidate-v3-coordinator-data.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 7,
+      "specifier": "../helpers/candidate-v3-pair-claims.js",
+      "target": "tests/helpers/candidate-v3-pair-claims.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 8,
+      "specifier": "../helpers/candidate-v3-history-fixture.js",
+      "target": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 9,
+      "specifier": "../helpers/candidate-v3-coordinator-ports.js",
+      "target": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "line": 10,
+      "specifier": "../helpers/candidate-v3-record-fixture.js",
+      "target": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 1,
+      "specifier": "node:test",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 2,
+      "specifier": "node:assert/strict",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 3,
+      "specifier": "node:fs",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 4,
+      "specifier": "node:crypto",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 5,
+      "specifier": "node:path",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 6,
+      "specifier": "typescript",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 7,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 8,
+      "specifier": "../../src/build-only/windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 9,
+      "specifier": "../../src/build-only/windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 10,
+      "specifier": "../../src/build-only/windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 11,
+      "specifier": "../../src/build-only/windows-candidate-v3-messages.js",
+      "target": "src/build-only/windows-candidate-v3-messages.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 12,
+      "specifier": "../../src/build-only/windows-candidate-v3-coordinator-data.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 13,
+      "specifier": "../helpers/candidate-v3-wire-bound.js",
+      "target": "tests/helpers/candidate-v3-wire-bound.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 14,
+      "specifier": "../helpers/candidate-v3-record-fixture.js",
+      "target": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "line": 15,
+      "specifier": "../helpers/candidate-v3-history-fixture.js",
+      "target": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/compatibility/canonical-json.ts",
+      "line": 1,
+      "specifier": "node:crypto",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "line": 2,
+      "specifier": "node:util",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "line": 3,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-effect-state.ts",
+      "line": 4,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-inventory.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-inventory.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-inventory.ts",
+      "line": 3,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-inventory.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-inventory.ts",
+      "line": 7,
+      "specifier": "./windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-record.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-record.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-record.ts",
+      "line": 3,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-record.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-effect-state.js",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-record.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 3,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-effect-state.js",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 6,
+      "specifier": "./windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-messages.ts",
+      "line": 7,
+      "specifier": "./windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 3,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 6,
+      "specifier": "./windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "line": 7,
+      "specifier": "./windows-candidate-v3-messages.js",
+      "target": "src/build-only/windows-candidate-v3-messages.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-data.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-data.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-data.ts",
+      "line": 3,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-data.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-effect-state.js",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-pair-claims.ts",
+      "line": 1,
+      "specifier": "node:crypto",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-pair-claims.ts",
+      "line": 2,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-pair-claims.ts",
+      "line": 3,
+      "specifier": "../../src/build-only/windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-pair-claims.ts",
+      "line": 4,
+      "specifier": "../../src/build-only/windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-history-fixture.ts",
+      "line": 1,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-history-fixture.ts",
+      "line": 2,
+      "specifier": "./candidate-v3-record-fixture.js",
+      "target": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "line": 1,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "line": 2,
+      "specifier": "./candidate-v3-pair-claims.js",
+      "target": "tests/helpers/candidate-v3-pair-claims.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "line": 3,
+      "specifier": "./candidate-v3-history-fixture.js",
+      "target": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 1,
+      "specifier": "node:assert/strict",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 2,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 3,
+      "specifier": "../../src/build-only/windows-candidate-v3-coordinator.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 4,
+      "specifier": "../../src/build-only/windows-candidate-v3-coordinator-data.js",
+      "target": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 5,
+      "specifier": "../../src/build-only/windows-candidate-v3-validation-session.js",
+      "target": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 6,
+      "specifier": "./candidate-v3-history-fixture.js",
+      "target": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "line": 7,
+      "specifier": "./candidate-v3-record-fixture.js",
+      "target": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-record-fixture.ts",
+      "line": 1,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-record-fixture.ts",
+      "line": 2,
+      "specifier": "../../src/build-only/windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-record-fixture.ts",
+      "line": 3,
+      "specifier": "../../src/build-only/windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "tests/helpers/candidate-v3-wire-bound.ts",
+      "line": 1,
+      "specifier": "../../src/compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 1,
+      "specifier": "zod",
+      "target": null,
+      "status": "external-not-distributed"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 2,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 3,
+      "specifier": "./windows-candidate-effect-state.js",
+      "target": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 6,
+      "specifier": "./windows-candidate-v3-incremental.js",
+      "target": "src/build-only/windows-candidate-v3-incremental.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 7,
+      "specifier": "./windows-candidate-v3-messages.js",
+      "target": "src/build-only/windows-candidate-v3-messages.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "line": 8,
+      "specifier": "./windows-candidate-v3-messages.js",
+      "target": "src/build-only/windows-candidate-v3-messages.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-incremental.ts",
+      "line": 1,
+      "specifier": "../compatibility/canonical-json.js",
+      "target": "src/compatibility/canonical-json.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-incremental.ts",
+      "line": 2,
+      "specifier": "../validation/deep-freeze.js",
+      "target": "src/validation/deep-freeze.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-incremental.ts",
+      "line": 3,
+      "specifier": "./windows-candidate-v3-data.js",
+      "target": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-incremental.ts",
+      "line": 4,
+      "specifier": "./windows-candidate-v3-record.js",
+      "target": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "supplied"
+    },
+    {
+      "from": "src/build-only/windows-candidate-v3-incremental.ts",
+      "line": 5,
+      "specifier": "./windows-candidate-v3-inventory.js",
+      "target": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "supplied"
+    }
+  ],
+  "missingRelative": [],
+  "nonTs": "Native reference files are static context, not build closure. Documents may reference historical artifacts not supplied; those remain author-reported.",
+  "exclusions": [
+    "full product",
+    "runtime/dependencies",
+    "native executable/orchestrator",
+    "VM",
+    "real storage/IPC",
+    "original private Claude report"
+  ]
+}

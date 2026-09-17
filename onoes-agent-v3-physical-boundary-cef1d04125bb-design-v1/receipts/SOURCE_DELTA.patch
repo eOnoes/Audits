@@ -1,0 +1,1759 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_AUTHORITY_JOURNAL_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_AUTHORITY_JOURNAL_DESIGN.md
+new file mode 100644
+index 0000000..fc84944
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_AUTHORITY_JOURNAL_DESIGN.md
+@@ -0,0 +1,264 @@
++# V3 authority journal and owner replacement — proposed durable contract
++
++2026-09-17. DESIGN FOR THE COMBINED PHYSICAL BOUNDARY REVIEW, NOT IMPLEMENTATION.
++Baseline: `9f525e208d05694976d4d451a3aa7add3e2ad8ec`. Read with the physical-adapter,
++Windows peer-channel, anchor-backend and enrollment-recovery designs. Existing
++canonical v3 records/checkpoints/approval identity bytes are unchanged. No SQL,
++service, account, enrollment, signature, task or OS operation is executed here.
++
++## 1. Authority placement and limits of the proposal
++
++Put enrollment, current-owner history, complete checkpoint history and maintenance
++attempt accounting in ONE anchor-owned transactional database, separate from the
++coordinator ledger and its restore domain. This makes an anchor append and its
++maintenance witness atomic within that authority, not with the ledger. Keep the
++entire authoritative state inaccessible to the coordinator/task identities,
++including WAL/SHM, parent renames, process injection and service reconfiguration.
++PEER_CHANNEL_DESIGN proposes the contact authentication; it does not prove storage.
++
++Only one active store/domain is enrolled per namespace. Version transitions and
++retired/prepared entries keep their reservation of names and spent approvals.
++The v1 namespace+approval identity remains unchanged; a new store, schema version,
++installation request or owner UUID is not a way to consume it again. No v2/v3
++parallel enrollment, automatic empty initialization or missing-file adoption.
++
++This local candidate still cannot detect coherent rollback of all PC authorities.
++The operator's scope choice is pending. Unkeyed canonical digests detect byte and
++consistency drift, not coherent forgery by an actor who controls the anchor. No
++extra file, MAC or counter on the same restored PC is claimed to solve that.
++
++## 2. Proposed normalized data and independent read checks
++
++The following is a logical schema with explicit keys and invariants for review,
++not executable SQL or permission to initialize a database. Exact SQLite DDL,
++connection/open flags, file custody and schema read-back will be implementation
++review inputs. Use primitive strict canonical wire parsing, fixed domains,
++bounded exact UTC timestamps/UUIDs/digests and safe nonnegative integer counters.
++Never deserialize a function, caller object, native handle or process pointer.
++
++| Relation | Stored subject and key | Independently re-derived constraints |
++| --- | --- | --- |
++| `authority_meta` | Singleton schema/domain, authorityId, installationId, configuration identity | Exact externally enrolled identity/version; absence is not a new install; unknown columns/schema deny |
++| `enrollments` | Namespace key; store/domain, immutable genesis+initial producer generation, original install authorization identity, state `prepared/active/retired`, physical-root/runtime pins when active | Same state ordering as ENROLLMENT_RECOVERY_DESIGN; no second store/domain; unique install authorization; retired never reactivates |
++| `owner_events` | `(namespace, ordinal)`; epoch, event, previous-event digest, authenticated request binding and observation metadata | Contiguous event chain from enrolled genesis; fresh epochs unique across history; legal state transitions; at most one unresolved owner; summaries agree with replay |
++| `checkpoints` | `(namespace, sequence)`; exact canonical v3 checkpoint wire and digest | Contiguous sequence; genesis equals enrollment; every predecessor, store identity and digest agrees; derive current head from stream, never from a caller's counter |
++| `maintenance_intents` | Stable tuple `(installation, namespace, store, predecessor checkpoint digest, candidate checkpoint digest)`; exact consent subject described below | Tuple unique, and at most one candidate intent per enrolled predecessor; no different request ID/epoch can bypass either rule |
++| `maintenance_events` | `(intent tuple, phase ordinal)` with phase `prepared/contact-possible/witnessed`, original request binding and exact result identity | Exactly one ordered phase chain; immutable intent; witnessed joins the exact stored checkpoint; contact-possible never returns to prepared |
++
++An implementation may retain a transactionally updated summary for lookup, but
++must independently recompute it during bootstrap/discovery from canonical rows.
++SQL PRIMARY KEY/UNIQUE/CHECK/FK constraints are defense in depth, not the only
++checker. Reads must detect duplicate approvals/enrollments/epochs/intents,
++conflicting candidates, gaps, changed indexed columns, impossible phase chains,
++wrong store/authority and orphaned witnesses even if index/check enforcement was
++bypassed. Reject the entire authoritative view; never return unverified partial
++state as live admission. Redacted forensic export would be a separate interface.
++
++The checkpoint stream cannot by itself validate the full ledger inventory; joined
++bootstrap still uses the existing complete history+inventory reference validator.
++The authority validates its own append continuity/current-owner/consent rules;
++it does not claim to observe the truth of producer filesystem or task results.
++The authority database has no task source, provider credential, user command,
++raw diagnostic or arbitrary file-path column.
++
++## 3. Owner state machine and physical prerequisites
++
++Distinguish ENROLLMENT active, an OWNER active, and task admission. None implies
++the others. Owner history uses `prepared -> active -> retiring -> retired`; a
++prepared owner may instead go directly to retiring. Only retired permits a new
++prepared epoch. Retired is absorbing; never reuse an earlier epoch. There is no
++`unknown -> active` transition and no elapsed-time takeover.
++
++1. **Prepare:** with an active enrollment and no unresolved prior owner, the
++   authenticated supervisor reserves a fresh epoch and exact package/configuration
++   and physical-resource plan under explicit installation/maintenance authority.
++   This grants no task permission or child launch by itself.
++2. **Establish custody:** the supervisor/native coordinator host constructs only
++   the fixed metadata runtime and channels allowed by that maintenance plan.
++   It proves process identity, exact job membership, protected ledger/runtime,
++   no task activity and authenticated anchor peer. Possible launch/contact must
++   have its prior durable accounting; losing setup response is not a clean slate.
++3. **Activate owner:** transactionally compare the prepared epoch and original
++   request; bind the freshly authenticated supervisor incarnation, coordinator
++   service/process instance and custody evidence identity. Active owner is only
++   eligible for full joined bootstrap. No local ready flag or this receipt admits.
++4. **Retire:** close admission and durably append retiring before proposing a
++   replacement. Stop/drain the exact old generation. Re-authenticate settlement
++   observations from the current custody owner, not from the old worker result.
++5. **Retired:** only with complete stop/contact/custody evidence, append retired
++   and preserve that evidence identity. Create the next epoch in a separate
++   transaction, never by overwriting the old owner or clearing unresolved work.
++
++Owner retirement does not settle an operation, free a workspace, remove a
++quarantine, forgive an unknown effect or consume a new task approval. New owners
++cannot continue old-generation forward effects. Any old-row stop/outcome
++bookkeeping remains subject to the separately reviewed recovery authorization
++and original v3 outcome/A/release/B rules.
++
++Owner observations must include the exact old epoch, supervisor incarnation,
++coordinator/native and Node process lifetimes, job custody identity, guest
++generation (when one exists), ledger and anchor identities, complete host-contact
++accounting identity, observation time/validity, and retirement request digest.
++These fields are claims until authenticated by the selected physical observers.
++Do not accept one input `allStopped: true` or a caller-computed evidence hash.
++
++## 4. Supervisor and anchor restart — no implicit resurrection
++
++Retain exact process and job handles for the lifetime of an admitted owner and
++through retirement. Do not store numeric handle values as a recoverable identity.
++Job membership is established before the trusted child can run; child inheritance
++and handle duplication are explicitly limited. The separate supervisor requires
++its OWN retained/queryable custody, not just a report from the native host.
++
++This design chooses fail-closed discovery after a custody-owner restart, not
++automatic adoption by a name/PID. A surviving, authenticated custody peer may
++support a future reviewed reattachment that proves the same kernel objects. A
++persisted job name, matching PID/creation-time tuple or newly created empty job
++is insufficient alone. If no live trusted handle chain can be established,
++replacement remains blocked for separately authorized recovery. No unimplemented
++reattachment protocol is counted as available restart support.
++The peer-channel design now specifies a downward supervisor pull of restricted
++job/root-handle duplicates before child resume as the first experiment candidate.
++It does not grant the lower-privilege host duplication rights on the supervisor,
++or solve the loss of both custody holders. No such experiment has run.
++
++In particular, KILL_ON_JOB_CLOSE triggers when the LAST job handle closes, not
++when one supervisor dies. Extra observer/host handles change that behavior.
++Never keep an observer handle while also claiming supervisor death necessarily
++terminated the job. Absence of an opened job, an elapsed stop timer or root exit
++is not accepted here as a zero-member observation. A proposed name-based recovery
++would need its own object lifetime/name-reuse proof and physical adversarial tests.
++[Windows job lifetime](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects)
++
++Anchor startup creates a fresh ephemeral service incarnation and accepts NO
++previous session. It reads the complete durable authority history before serving
++discovery. A persisted active owner from another anchor incarnation is not live:
++admission stays closed and the owner must enter retiring under the current
++authenticated supervisor/recovery protocol. A failure to record that transition
++does not reopen admission. Read-only disclosure is separately authenticated and
++explicitly labels the persisted owner as non-admitted.
++
++Supervisor restart similarly invalidates its local pending contexts immediately.
++Its durable owner entry stays unresolved; a new service instance cannot simply
++replay activate or claim the old observation was fresh. Both services restarting
++does not clear either record. A Windows reboot may establish some new physical
++facts, but a reboot/time/boot-ID string is not an implemented substitute for
++retirement, guest-state checks or reconciliation. No reboot is requested here.
++
++This is an explicit availability gap for abrupt loss of all custody handles.
++Orderly service restart can complete retirement first; abrupt restart support
++is NOT release-complete until a reviewed physical recovery procedure works.
++The logical journal must not hide that gap behind a passing synthetic reopen test.
++
++## 5. Maintenance attempt subject and transaction cuts
++
++Each intent stores the stable tuple from section 2, full expected local metadata/
++inventory/history/head digests, full anchor history digest, exact candidate
++checkpoint wire, current maintenance epoch, anchor/service session binding,
++operator consent evidence digest and original bounded validity. Consent says
++witness the already committed checkpoint only. It does not authorize a task,
++publication, deletion, fresh history event or replacement of original bytes.
++
++Use a create-only intent transaction. Under BEGIN IMMEDIATE, verify current
++enrollment/owner/expected anchor and capacity; reject existing conflicting tuple
++or predecessor; write prepared intent+event together; commit; independently
++read back exact canonical state. No await, callback, IPC, native effect or
++operator interaction inside a transaction. Reads do not create attempts.
++
++After fresh full-local validation and live checks, the authority itself handles
++one authenticated witness request in TWO short transactions:
++
++- T1 rechecks prepared intent, exact owner/session, original deadline and expected
++  predecessor. Append contact-possible and commit. Only successful durable T1
++  read-back in THIS handler creates a private continuation to T2. Reopening a
++  connection/process or reading that marker cannot reconstruct the continuation.
++- T2 consumes that continuation before validation, rechecks the same original
++  subject/time/owner and exact predecessor, then appends the checkpoint AND
++  witnessed event atomically. Commit, then independent fresh read-back. No anchor
++  call or second database is inside either transaction.
++
++This resolves an ambiguity of the test model's separately callable mark/commit
++methods: they are fault-injection seams, not two public retryable RPC methods.
++T1 acknowledgement uncertainty, crash before T2, failed T2 or lost read-back
++consume the attempt. Fresh discovery may establish a witnessed equal pair after
++success; contact-possible still one-ahead cannot attempt T2 again. `unknown` is
++a discovery disposition, not another terminal/compensating database mutation.
++
++Prepared-only response loss remains recoverable by exact discovery and the FIRST
++witness request within the same still-current maintenance epoch/anchor lifetime
++and unexpired consent. It does not allocate another intent. Changed epoch,
++expiration or any consumed marker denies continuation. An unconsumed expired
++intent is not garbage to be deleted; escalation/retention requires separate design.
++
++All write paths acquire transaction locks BEFORE scan/conflict decisions, recheck
++the exact enrolled storage/schema/durability profile, scan independent invariants,
++validate the full post-state, commit and read back. No permissive pragma repair
++on reopen. Any attempted-commit uncertainty poisons that live writer; recreation
++cannot turn unresolved durable records into an available namespace.
++
++## 6. Clock and capacity obligations
++
++Use each live authority's own monotonic request deadline. Do not compare raw
++monotonic numbers from different processes or reboots. Bind original budget and
++timestamps into authenticated requests; the authority clamps to its own remaining
++budget, never refreshes it on a replay, and checks it again at both T1/T2.
++Persisted expiration is an additional bound, not permission to reconstruct lost
++monotonic time after restart. Clock error/regression closes the live authority;
++restart must use new sessions/retirement, not restart the same attempt's timer.
++
++Preserve current structural limits: 1000 ledger operations and at most 7001
++checkpoints (`7 * CANDIDATE_V3_MAX_OPERATIONS + 1`), not the smaller 6001-checkpoint
++performance sample. At most one maintenance intent per predecessor, INCLUDING
++genesis when the missing witness is for sequence 1; candidates are non-genesis.
++Additional proposed initial authority limits:
++4 KiB candidate checkpoint, 16 KiB canonical owner/maintenance event, and a
++64 MiB bounded canonical owner+maintenance scan. These are proposal limits, not
++measured SQLite/WAL/RSS ceilings or a production lifetime promise. Exact record
++counts and aggregate escaped sizes must both be bounded before allocation.
++
++Before admitting an owner or preparing an intent, reserve logical space for its
++maximum remaining retirement/maintenance events. Normal work cannot consume that
++reservation. Disk/WAL growth and emergency physical space still need measured
++limits; a logical reservation does not guarantee an OS write will succeed. On
++failure preserve uncertainty, not delete old records or rotate a namespace.
++
++The long-lived retention/capacity-extension design remains a W3/W4 release blocker.
++The initial extract does not solve it by silently limiting the final product to
++1000 lifetime tasks. Historical spent approvals, publication parentage, quarantine
++and anchor continuity must survive the later reviewed retention procedure.
++
++## 7. Review controls and honest evidence
++
++All physical controls below are NOT RUN. Each needs a valid positive control,
++exact before/after protected state and independent process/contact observations.
++
++| ID | Falsifier |
++| --- | --- |
++| AJ01 | Copy enrollment/owner/checkpoint/maintenance rows between distinct authorities/stores; reads deny independently of indexed columns. |
++| AJ02 | Bypass SQL constraints: duplicate epochs, install approvals, maintenance tuple or predecessor; split owner chains, gaps or orphaned witness; discovery denies. |
++| AJ03 | Lose each prepare/activate/retire response; no second creation, active owner or freed namespace. |
++| AJ04 | Restart anchor with an active durable owner and late old replies; no prior session/ready state resurrects. |
++| AJ05 | Restart supervisor with a live child, guest or host contact; no new owner from a PID/name, newly empty job or timeout. |
++| AJ06 | Keep a job observer handle after supervisor loss; kill-on-close assumption must NOT count as observed settlement. |
++| AJ07 | Crash after T1 before T2; reconnect/new epoch/new consent cannot invoke T2 or replace the intent. |
++| AJ08 | Commit T2, lose reply; exact witnessed discovery succeeds without a second append and without task permission. |
++| AJ09 | Roll back ledger only, then maintenance local files; unchanged protected authority retains consumed attempts and detects joined drift. |
++| AJ10 | Fill normal capacity, then require retirement; reserved logical event capacity remains; actual disk failure remains unknown/non-admitted. |
++| AJ11 | Clock regression, expired consent, anchor restart and stale monotonic numbers; no renewed timer or stale success promotion. |
++| AJ12 | Retain a local released row while retiring owner or losing authority; no workspace admission until physical checks and matching B are fresh. |
++
++Actual evidence in this checkpoint is source/design inspection and primary Windows
++documentation, not execution of this schema. The existing 53-prefix/212-cut model
++uses ordinary JavaScript memory and does not establish AJ01-AJ12. The next combined
++review must evaluate this protocol, peer/owner custody, enrollment, transactional
++ledger and recovery model together. Physical implementation is not authorized by
++writing these documents. Original W1-W5 and independent execution gates stay open.
++
++Local verification: refreshed the handoff documentation index without embeddings
++or AI/provider summaries at source `9f525e2`; inspected actual parser limits and
++the test-only recovery model. Self-review corrected the sample-versus-structural
++checkpoint distinction and retained genesis as a valid maintenance predecessor.
++Git whitespace check passed. Bounded source-pattern scan passed over 1,301 eligible
++files / 15,477,093 bytes before this verification note was added; no subject tests
++were rerun for the documentation-only delta. This is producer design work, not
++independent review or proof of a durable journal.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_CAPACITY.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_CAPACITY.md
+new file mode 100644
+index 0000000..d49eb95
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_CAPACITY.md
+@@ -0,0 +1,91 @@
++# Actual dormant coordinator capacity sample — synthetic ports only
++
++2026-09-17. This measures the real build-only coordinator/session/messages and
++snapshot code against the retained dense synthetic corpus. It is not the earlier
++pure-validator-only timing, nor a physical worker/storage/owner/IPC experiment.
++No production source changed. The published 71-file audit packet is unchanged;
++this later evidence is private and outside its frozen scope.
++
++## Method and predeclared controls
++
++One sequential fixed Node child, 512 MiB V8 old-space ceiling, 180-second parent
++guard, 64 KiB stdout/stderr byte caps, minimal SystemRoot/TEMP/TMP environment,
++no stdin or child-spawning branch in the child. These are test resource controls,
++not a sandbox or OS committed-memory/RSS limit. No task, real approval, VM,
++provider, privileged installation or OS change occurs.
++
++The deterministic corpus retains 1,000 execute/completed operations. Bootstrap
++sees 6,000 checkpoints with the last release pending; one append reaches 6,001.
++It is a dense valid-history workload, not an assertion of maximum admissible
++bytes, maximum cost, every lifecycle outcome or the 7,001 structural cap.
++
++The existing coordinator test fixture supplies in-memory string ledger and
++anchor ports, the actual validation session and exact read-back checks. Its
++ordinary fake clock is replaced for this probe by a getter using floored
++performance.now(), so deadlines advance during synchronous validation. No budget
++override is passed: bootstrap remains 30 seconds and append 10 seconds. Setting
++a frozen fake clock would have made the deadline result meaningless.
++
++After successful bootstrap, zero local/anchor assignments are required. After
++the final append, exact final identity/head/anchor equality and one assignment
++each are required. Coordinator status must show one bootstrap, one request, one
++commit, one anchor append, one promotion, zero pending ports and ready phase.
++These are synthetic call/assignment counts, not physical effect evidence.
++
++Both parent and child schedule 25 ms heartbeats. The child deliberately yields
++after the back-to-back bootstrap/append before reading the heartbeat result;
++otherwise zero callbacks during a blocked loop could be misreported as no lag.
++Its heartbeat is neither the actual dashboard nor a per-phase stall breakdown.
++
++## Observed result
++
++Base product: 3787b7e4db9632574a63eb12b5626bd5e65da04e.
++Node v24.14.0, win32 x64. UTC 20:45:44.714Z–20:46:16.782Z on 2026-09-17.
++One normal sample only; no percentile, minimum-hardware or concurrency claim.
++
++| Quantity | Observed |
++| --- | ---: |
++| Corpus setup, excluded from operation budgets | 13,949.6001 ms |
++| Actual coordinator bootstrap | 15,745.3998 ms |
++| Actual coordinator append | 1,642.4389 ms |
++| Final inventory | 6,819,063 bytes |
++| Bootstrap history | 5,379,600 bytes |
++| Bootstrap local snapshot | 13,586,477 bytes |
++| Child maximum heartbeat interval, back-to-back work | 17,491.2635 ms |
++| Separate parent maximum heartbeat interval | 45.9119 ms |
++| Child peak RSS, including setup | 498,792 KiB |
++
++The pair confirmed and the child closed with exit 0, no stderr, no timeout or
++output overflow. The exact final inventory, bootstrap history and final head
++match the retained earlier pure-validator corpus, checked from separate retained
++files. All 29 selected source/compiled/lock identities were unchanged before/after.
++
++The operation deadlines passed for THIS sample. Responsiveness did not: the
++in-process synthetic composition blocks its event loop for seconds. Do not run
++this whole workload on the dashboard/request/cancellation event loop, and do not
++label the parent heartbeat as evidence that doing so would be safe. Separating
++the validation process alone still requires measuring the coordinator's own
++encoding, hashing, snapshot parsing and read-back work. No worker or deployment
++choice is approved by this result.
++
++## Evidence and next gate
++
++docs/reports/v3-coordinator-capacity-20260917 retains measure.mjs, receipt.json,
++sample.stdout.jsonl and a separate check-artifacts.mjs read-back verifier.
++Raw sample SHA-256:
++1f681409c14cc287c81a30fdc22075f83bcd29b15fb062e7de748d125e3bc949
++Receipt SHA-256:
++dead8cbc4da2dff87e4b685db81291b6867b304e86e91cf69c39fa044e24ec05
++
++The verifier checks recorded exits/limits/counts, raw hashes, selected identities,
++earlier corpus equality and the observed responsiveness gap. It is producer
++read-back, not an independent execution or audit. The previous 143-focused /
++2,138-total offline suite was not rerun for these evidence/docs-only additions;
++selected executed code is unchanged from that checkpoint.
++
++C12 stays OPEN: actual responsive coordinator/dashboard hosting and cancellation,
++bounded authenticated transport, storage/anchor timing, OS-wide memory and
++descendant stop, high-cost/adversarial valid and invalid input, representative
++hardware and independent evidence are still missing. The pending external
++coordinator review is also not replaced by this measurement. No physical
++storage/owner/worker/consumer/installer or activation is enabled.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_STOP_PROBE.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_STOP_PROBE.md
+new file mode 100644
+index 0000000..b1ae16e
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_STOP_PROBE.md
+@@ -0,0 +1,76 @@
++# Dense coordinator direct-child stop probe — not physical settlement
++
++2026-09-17. Follow-up to V3_COORDINATOR_CAPACITY's 17.49-second same-event-loop
++stall. The parent stays in a separate process and stops the fixed synthetic
++child after observing entry to the actual validation port. No production code,
++budget, physical adapter, VM, provider, real approval or OS setting changed.
++This evidence is outside the unchanged published 71-file audit packet.
++
++## Method
++
++Two children run sequentially, never concurrently: one stops during bootstrap;
++the other completes bootstrap then stops during append validation. Each builds
++the same deterministic 1,000-operation dense corpus and uses the actual dormant
++coordinator/session with in-memory string ledger/anchor ports. Real monotonic
++milliseconds replace the ordinary fixture's frozen clock; the normal 30-second
++bootstrap and 10-second append budgets remain unchanged.
++
++The test-only port-entry hook emits a fixed numeric/phase message immediately
++before validation work. After receiving the requested phase, the parent schedules
++its kill call for 50 ms later, then waits for child `close`. Kill's return value
++alone never passes the check. The predeclared stop-to-close ceiling is 5,000 ms.
++Entry is a test seam, not authenticated evidence of exact CPU position at kill.
++
++Each fixed child has a 180-second parent timeout, 512 MiB V8 old-space setting,
++64 KiB stdout/stderr caps, minimal SystemRoot/TEMP/TMP environment, no stdin and
++no child-spawning code in its executed branch. These are bounded test controls,
++not a sandbox or OS-enforced total-process memory boundary. Only each probe's
++own child handle is terminated; no VM, other application or arbitrary PID is used.
++
++## Observations
++
++Base product d7f10ffa7502a6e39bce0b6737fe50a302ad1f73; Node v24.14.0, win32 x64.
++UTC window 2026-09-17T20:52:06.377Z–20:52:50.300Z. One sample per phase.
++
++| Stop phase | Entry receipt to kill | Kill to direct-child close | Parent maximum heartbeat interval |
++| --- | ---: | ---: | ---: |
++| Bootstrap validation | 62.4024 ms | 18.8569 ms | 45.7573 ms |
++| Append validation | 51.5664 ms | 31.4637 ms | 47.1669 ms |
++
++Both closes reported SIGTERM with no numeric exit code, stderr, outer timeout,
++protocol fault or output overflow. Neither emitted a final completed sample.
++The entry messages reported zero local and anchor assignments at that seam.
++This is not post-kill state discovery or a claim that arbitrary physical effects
++could not have happened. All fixture state was volatile and there were no
++filesystem/anchor/approval/task effects to reconcile in this experiment.
++
++The parent scheduler remained responsive to the stop request even though the
++child's JavaScript could be busy. This supports using a separately scheduled
++supervisor, but does not implement one for the product or prove UI cancellation.
++It also does not show that validation-only offload removes coordinator-side
++parsing/hashing stalls; that remains a separate placement/measurement question.
++
++## Evidence and limits
++
++docs/reports/v3-coordinator-stop-20260917 retains the exact measure.mjs, receipt,
++both raw stdout streams and check-artifacts.mjs. All 29 selected source/compiled/
++lock identities were unchanged before/after. Separate producer read-back
++(not an independent reviewer) verifies byte hashes, phase order, close results,
++stop budgets, sequential child lifetimes and absence of completion output.
++
++Receipt SHA-256:
++32412db5fd05c817c059d4521ae11324759872b9782218e713612255df928644
++Bootstrap stdout SHA-256:
++91f56cdb6004f881e8e81c8b87f0fd83aabc6a10f909ddf4894b6f0192395d9f
++Append stdout SHA-256:
++52a0f268425a0d0ed71a69aa2c9d8a00b0c593a500a17b811ccf745aac8dbcb2
++
++No production source or unit test changed; the preceding full suite was not
++rerun. Its selected identities still verify. These are two executed probe samples,
++not two added production tests or a Windows job-wide termination PASS.
++
++C12 remains open: descendant/job settlement, no-replacement-before-confirmation,
++authenticated request identity/transport, persistent owner fencing and recovery,
++actual dashboard responsiveness, physical storage/anchor and adverse/high-cost
++inputs remain unproved. Direct-child closure is insufficient for any of those.
++Do not authorize a new owner, worker, retry, task or release from this receipt.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN.md
+new file mode 100644
+index 0000000..9bb157f
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN.md
+@@ -0,0 +1,316 @@
++# V3 physical adapter, ownership and local-tail recovery contract
++
++2026-09-17. DESIGN PROPOSAL FOR REVIEW. No physical adapter, account, service,
++database, owner, key, IPC, task or installation is created or authorized here.
++Baseline inspected: `e9deceef998373d362b941dcc3bd8d2d9f0c09f7`.
++Inputs: V3_COORDINATOR_IMPLEMENTATION_REVIEW_DISPOSITION,
++V3_COORDINATOR_PAIR_DESIGN, V3_PERSISTENCE_DESIGN_DRAFT,
++V3_WORKER_MESSAGE_DESIGN and WINDOWS_ANCHOR_BACKEND_CANDIDATE.
++
++## 1. Decisions proposed, and the evidence boundary
++
++The current coordinator is retained unchanged with synthetic ports. It MUST NOT
++be activated by changing its ports.kind string or substituting a physical adapter.
++Its context and acknowledgment strings are unkeyed consistency claims. The
++physical composition needs separately reviewed authenticated sessions and a
++different construction/admission API, not a type assertion around the fixture.
++
++Proposed first physical composition keeps the ENTIRE heavy coordinator path in a
++dedicated supervised process, separate from Studio's event loop. Validation can
++remain a private module within that trusted process initially; it does not execute
++task commands. A second replay child is optional only after custody, request
++settlement and aggregate resource accounting are reviewed. Merely moving the pure
++validator out of process leaves repeated coordinator parsing/hashing on the UI
++thread (N-01) and does not meet the observed responsiveness requirement.
++
++The supervisor/control plane has an independent event loop/watchdog. It owns the
++physical process/job and channels; it can stop the coordinator while synchronous
++validation is busy. Studio never gets raw process handles, database paths or a
++generic command/pipe endpoint. Task execution remains a separate approved VM
++boundary, not this metadata worker. This is scheduling/custody design, not proof
++that a process boundary confines filesystem, network or arbitrary commands.
++
++Keep all existing canonical record/inventory/checkpoint formats and the outcome
++-> A -> released -> B sequence. No new authority is inserted into historical
++checkpoint fields. Existing parser ceilings and 1000-operation support do not
++change. Retention/archival and usable lifetime exhaustion remain release work.
++
++## 2. One physical owner, not one JavaScript object
++
++The physical enrollment authority must bind installation, namespace, exactly one
++store/domain, immutable genesis and current owner generation. The supervisor binds
++that generation to retained process/job and channel identities. The adapter binds
++it to the opened enrolled ledger and protected ancestor/storage custody. The
++anchor independently binds it to its current enrolled owner and head.
++
++An epoch UUID or successful compare-and-swap is NOT sufficient: old code may hold
++open writable handles or an in-flight request. The required replacement order is:
++
++1. Close forward admission and revoke the old channel's ability to begin work.
++2. Persist/observe the authority's retiring state without releasing spent IDs,
++   blocked workspaces, outstanding callbacks or unconfirmed local/anchor state.
++3. Stop and independently confirm settlement of the complete old relevant process
++   job AND host contacts/guest generation. Root exit, guest Off and Promise
++   rejection are individually insufficient. Retain uncertainty on any failure.
++4. Only then issue the new durable current generation and fresh authenticated
++   sessions, retaining genesis/history. Authenticate and replay current state.
++5. Grant normal readiness only after equal joined state and all other admission
++   checks. A wrapper/new process/new module cannot renew an unretired owner.
++
++Crashes between steps leave the namespace non-admitted. A lost acknowledgment
++does not justify another owner claim or a second mutation. Owner discovery is
++read-only; no automatic initialize/adopt/reset endpoint exists. Concrete Windows
++tokens, object rights, name ownership and stop evidence must be specified/tested
++under the existing backend candidate; this document does not pretend to provide
++them. No working-PC provisioning is authorized.
++
++## 3. Ledger storage and transaction obligation
++
++Propose a private, version-pinned SQLite adapter behind the protected coordinator
++boundary. Its schema is a separate reviewed input, not yet selected SQL. Storage
++must retain metadata, every operation and its contexts, the complete checkpoint
++stream and any reconciliation-intent record; no replace-all caller API, pruning,
++reset, ATTACH, arbitrary PRAGMA or arbitrary SQL channel is exposed.
++
++`readSnapshot` returns the existing canonical metadata/inventory/history transport
++from ONE bounded consistent read transaction, never separate row/head reads. It
++checks the enrolled store identity, exact schema, durability configuration and
++physical opened-file identity. It derives complete row/approval/workflow/workspace
++invariants independent of indexes. It returns bytes, not readiness or permission.
++
++`commitCandidate` accepts only immutable bounded primitive wires from the private
++pending request: expected complete pre-identity, exact candidate, bound authenticated
++context and cancellation/deadline state. It receives no callback, logger, worker,
++anchor client, consent function or task handle. Pre-parsing outside a transaction
++is allowed only as rejection/preparation, never as the transactional pre-state.
++
++Transaction sequence, owned entirely by the adapter:
++
++1. Acquire BEGIN IMMEDIATE before any writable-state decision; reject busy at a
++   bounded timeout, do not queue/retry under a renewed deadline.
++2. Under the retained physical fence, check schema/durability/store identity and
++   the adapter's locally enforced current owner binding. Reconstruct the COMPLETE
++   canonical local pre-snapshot from that transaction, including contexts/history,
++   and compare all four digests to the privately captured S. Count/head alone fails.
++3. Independently validate candidate byte identity and exactly one permitted
++   record/event plus checkpoint change. Re-derive cross-row invariants, retained
++   contexts and precise history relation; a pre-parsed snapshot tuple alone fails
++   N-02. No full-history replay on every transaction is silently introduced: the
++   reviewed full bootstrap/incremental result and complete pre/post checks have
++   distinct roles, with resource accounting required for all synchronous checks.
++4. Write that exact change and one checkpoint in the SAME local transaction.
++   Validate exact complete post-state and compare all candidate identities before
++   commit. Local tail is unconfirmed until independent anchor confirmation.
++5. Commit; only then take a separate fresh read transaction and reconstruct exact
++   post-state for acknowledgment. An acknowledgment derived solely from request
++   bytes is forbidden even if the request was validated earlier.
++
++No await, external call, user callback, worker round-trip or anchor access occurs
++inside that write transaction. Physical ownership excludes unauthorized external
++mutation while checks are used; database locks alone do not authenticate files.
++Anchor relation is checked outside the transaction before/after, not atomically
++with it. Concurrent anchor drift may leave a local tail and must close forward
++work. Do not report that cut as a no-write denial.
++
++Possible outcomes are known-pre-write-denial (only with proven zero effect),
++commit-unconfirmed, and exact committed read-back. Failure after attempted commit
++never maps to no-write. The coordinator closes on all failures; no advanced
++validation transcript is reused. The physical host retains uncertainty across
++object/process recreation. SQLITE WAL/FULL is a configured policy, not power-loss
++or hostile-filesystem proof; independent storage/kill/flush tests remain required.
++
++## 4. Acknowledgment and trust distinctions
++
++Separate types at the future boundary: byte-claimed snapshot identity;
++session-confirmed history claims; authenticated current physical observation;
++durably read-back ledger/anchor acknowledgment. None is task permission. A nominal
++TypeScript brand is misuse resistance, NOT a cryptographic/security boundary.
++Only the owning validation module creates session-confirmed claims; IPC must
++revalidate authenticated bytes rather than resurrect a brand through a cast.
++
++A physical acknowledgment binds protocol/version, operation, request digest,
++fresh nonce, lifetime/current generation, enrolled installation/namespace/store,
++expected pre-identity, exact post-identity and the original deadline/request
++number. Ledger and anchor operations have distinct domains. Its exact authenticity
++mechanism and key/channel custody must be selected and reviewed before code.
++Nonce echo + hash does not authenticate a peer; stored acknowledgment bytes are
++historical evidence, not a bearer capability or live freshness observation.
++
++An anchor append is compare-and-append for precisely the existing checkpoint,
++against a freshly authenticated expected predecessor and current owner. It runs
++outside ledger transactions. One response for another owner/store/request/nonce/
++operation or a late response denies; loss leaves uncertainty, not permission to
++send again. Discovery binds enrollment, epoch and entire retained stream in one
++authenticated observation. Separate stale replies may not be spliced together.
++
++For diagnostics, a closed coordinator may display a last-confirmed historical
++identity only with explicit closed/non-authorizing status. A live-use consumer
++needs ready phase AND fresh physical owner/fence checks; phase alone is not proof.
++No cached UI identity, boolean availability flag or local released column admits.
++
++## 5. Local-tail reconciliation proposal (N-04)
++
++Reconciliation is an operator-authorized maintenance operation, NOT a normal
++bootstrap option and NOT a task approval. The candidate must already exist in
++protected local storage. It may never be supplied from chat, a copied receipt,
++an arbitrary database, worker output or a user-entered root/head override.
++
++| Fresh authenticated relation | Permitted action; task contact always zero |
++| --- | --- |
++| Complete equal streams and valid full local replay | Record discovery; retire the uncertain attempt if its exact result is established. Fresh normal bootstrap/admission remains separate. No anchor append. |
++| Local equals complete anchor stream plus exactly one checkpoint | Consider the one-attempt protocol below; no normal append/readiness. |
++| Anchor ahead, shorter local, any divergence, two-ahead, missing genesis, changed enrollment/store | Closed forensic diagnosis only; no automatic rebuild, copy-back, deletion, anchor rewind or genesis creation. |
++| Peer/owner/custody/stop/deadline uncertain, malformed history or missing contexts | Closed; do not infer a trustworthy relation from hashes. |
++
++Before offering the operation, stop/fence old activity, establish the fresh
++maintenance generation/session and independently replay the COMPLETE current
++local inventory/history. The existing full-history parser replays record prefixes
++and verifies intermediate roots against the supplied final inventory; use that
++checked history to establish the exact old anchor prefix and sole candidate tail.
++Do not truncate records or fabricate a previous snapshot as a fallback. Missing
++context or an invalid historical root denies. Anchor/enrollment authentication
++remains separate from that parser's consistency result.
++
++The operator confirmation must bind the exact enrolled identities, current
++maintenance generation, both full stream digests, candidate checkpoint digest,
++read-back inventory identity and fresh bounded expiration. It explicitly states:
++"witness this already committed local checkpoint; do not run or repeat a task".
++No source/command/VM/approval-consumption or new history event can be requested.
++
++Persist a create-only maintenance intent BEFORE the append contact, binding those
++bytes and the original unresolved tail. Proposed authoritative placement is the
++independent anchor's maintenance journal, not the rollbackable ledger. Preparation
++is a distinct authenticated metadata operation with explicit maintenance consent;
++it neither advances the head nor renews task authority. Keep it separate from the
++one append attempt and charge/count its own contact. Preparation response loss
++permits read-only discovery of the exact existing intent, never a new ID fallback.
++
++The journal's proposed immutable identity is the tuple (installation, namespace,
++store, expected anchor predecessor digest, exact candidate checkpoint digest).
++Use a domain-separated canonical digest only as an index, not authentication.
++Store that tuple, local metadata/inventory/history digests, maintenance owner epoch,
++consent-evidence digest, original expiration and prepared timestamp, plus an
++monotone phase: prepared -> contact-possible -> witnessed. Unknown is a discovery
++disposition for a consumed contact-possible record without confirmed outcome, not
++an extra compensating terminal write after losing a reply. No delete/reset/relabel
++transition. A new operator request ID or epoch for the same
++tuple cannot create another logical attempt. A different payload for the same
++expected predecessor is a conflict requiring forensic disposition, not a race
++between two repairs. The final exact schema/wire and historical retention need
++review before implementation; these fields do not modify the V3 checkpoint.
++
++The authority durably marks contact-possible before its append handling, then
++atomically checks current epoch, unexpired consent, exact predecessor and exact
++payload and commits the checkpoint plus witnessed result in its own short
++transaction. A crash before that transaction leaves consumed/unknown rather than
++granting a second attempt. A lost result after commit is discoverable as witnessed.
++Fresh read-only discovery can establish equality; it never clears contact-possible
++or allocates a replacement intent. The choice trades availability for one-attempt
++integrity and must be explicitly accepted/reviewed; an unknown-but-not-appended
++case still requires a separately designed operator escalation, not ad-hoc SQL.
++
++This is a proposed persistent protocol, not an implemented authority or a boolean
++the caller can supply. Ledger-only rollback cannot reset this independent journal;
++whole-authority rollback has the unresolved whole-PC limitation in section 8.
++Until the protocol and real physical custody are reviewed and implemented,
++one-ahead recovery remains deliberately unavailable.
++
++Synthetic-model precision: preparation-only reply loss may be followed by exact
++discovery and the FIRST marker/append within the SAME still-current maintenance
++owner and unexpired consent. Reopening a transport handle is not replacing the
++physical owner. A changed owner, consumed marker or expired consent forbids that
++continuation. `ONOES_AGENT_V3_RECONCILIATION_MODEL.md` exercises these distinctions
++with the real pure history validator, but supplies no physical implementation.
++
++After intent read-back, recheck the full local candidate and authenticated anchor
++prefix under retained custody, the maintenance authority and remaining original
++budget. Contact the anchor at most once with the EXACT existing tail and fresh
++envelope. Never change historical producerGeneration to the new owner's epoch.
++Require authenticated durable read-back and exact equality of the complete local
++and anchor streams before reporting witnessed-pair. Retain the maintenance trail;
++do not add a task event, rewrite success/failure, clear quarantine or refund IDs.
++
++If the anchor may have appended but reply was lost, close. Subsequent authorized
++discovery can establish equality without another append. If still one-ahead with
++a consumed attempt, do NOT automatically mint another recovery ID and retry.
++An additional operator procedure would require its own reviewed authority and
++durable accounting, not an unbounded retry button. No successful maintenance
++receipt itself grants readiness or retries the earlier task.
++
++## 6. Watchdog, transport and capacity acceptance
++
++The supervisor must remain schedulable while the coordinator is busy. It tracks
++one bounded request and zero queued requests, starts the deadline before receipt/
++parsing, binds its own monotonic deadline to the actual pending request, and never
++trusts raw child clock values as comparable. Cross-process deadline translation
++requires an explicit protocol and tests. Late completions cannot revive a closed
++generation. On cancellation, invalidate admission and request stop, retaining
++every potentially live contact until independently settled.
++
++Retain proposed 30-second bootstrap, 10-second ordinary append and separate
++5-second stop-confirmation budgets for review. The two 2-GiB component budgets
++and 4-GiB combined ceiling from WORKER_MESSAGE_DESIGN are design maxima, not
++permission to allocate them or a claim that V8 old-space bounds process memory.
++If validation is co-located, its total fits within the coordinator budget rather
++than adding a second implicit allocation. Native/IPC/encoded/decoded/GC-retained
++copies and malformed near-cap inputs count. Resource-exhaustion denies safely;
++support is not silently reduced below 1000 operations to make tests pass.
++
++Later producer evidence bounds structurally valid snapshot bytes and measures a
++dense composed path, but does not yet cover worst-admissible/invalid input, cold
++minimum hardware, physical transport, memory enforcement or UI cancellation.
++The 17.49-second coordinator event-loop stall is a concrete reason for whole-path
++isolation, not evidence that the proposed production supervisor is implemented.
++
++## 7. Required adversarial controls (all physical cases NOT RUN)
++
++| ID | Falsifiable control before physical admission |
++| --- | --- |
++| PA01 | Race two real processes plus wrapper/module variants over one enrolled store; exactly one physical owner, loser no write/channel admission. |
++| PA02 | Hold an old write/channel contact through retirement; new owner stays denied until every relevant old contact is physically settled. |
++| PA03 | Drift unrelated row/context/history/schema/store identity between replay and transaction; zero writes despite same count/head where possible. |
++| PA04 | Hostile adapter echoes requested ack without writing, writes different bytes, or returns stale read-back; coordinator never promotes. |
++| PA05 | Fail before write, during transaction, after commit and before/after read-back; reopen distinguishes retained exact state/unknown without retry or compensation. |
++| PA06 | Change anchor inside local transaction; local tail stays non-admitted and no automatic anchor append or repair follows. |
++| PA07 | Corrupt/move/delete local records while leaving anchor unchanged; independent joined discovery denies, no empty fallback. |
++| PA08 | Present every relation in section 5, including equal final heads with divergent prefixes; only the exact one-ahead case can reach maintenance review. |
++| PA09 | Kill at maintenance intent creation/read-back/contact/anchor commit/reply; attempt accounting survives restart and no automatic second append occurs. |
++| PA10 | Reconcile a tail carrying old historical generation through a new maintenance epoch; preserve bytes; no task/approval/publication contacts. |
++| PA11 | Substitute store, epoch, nonce, operation, deadline, pre/post or replay a valid authenticated reply; reject before promotion. |
++| PA12 | Cancel/timeout with synchronous maximum valid and malformed near-cap workloads; responsive supervisor, enforced memory, no replacement on unconfirmed stop. |
++| PA13 | Interrupt outcome/A/release/B and owner changes; local released never admits without authenticated matching B and current physical authority. |
++| PA14 | Corrupt maintenance history or exhaust capacity; fail closed, no reset/namespace rotation/refund. |
++| PA15 | Upgrade/binary rollback while preserving current ledger/anchor/maintenance continuity; incompatible versions deny rather than rewrite history. |
++
++Each negative requires a positive reachability control and independent before/
++after bytes/identity, actual process/contact observations and no-effect counters.
++Test the physical adapter against a hostile boundary fixture, not only the current
++cooperative string-assignment ports. Producer execution is not independent audit.
++
++## 8. Open decisions and next sequence
++
++- Whole-PC coherent rollback: operator choice still pending. Local role separation
++  does not detect restoring every local authority together; do not silently waive
++  that requirement or claim an HMAC solves it.
++- Concrete protected identities, exact rights, authentication/key/channel custody,
++  store/fence authority and durable maintenance attempt schema remain required
++  design inputs. No file paths, service accounts or keys are selected here.
++  V3_WINDOWS_PEER_CHANNEL_DESIGN now narrows the candidate to distinct own-process
++  service peers, explicit query/client masks, mutual OS/channel authentication and
++  private child IPC. Its launcher, supervisor custody and physical tests remain
++  unimplemented; it does not select an installed account or waive this gate.
++  V3_AUTHORITY_JOURNAL_DESIGN specifies normalized durable owner/maintenance
++  invariants and two-transaction witness handling. It chooses non-admission after
++  lost physical custody rather than pretending a persisted active owner survives
++  restart. Exact SQL, supervisor reattachment and physical tests remain open.
++- Retention/lifetime capacity and supported recovery after irreparable corruption
++  must preserve approval/quarantine continuity; a permanent 1000-row ceiling is
++  not a finished long-lived personal agent.
++- Next: local self-review and pure adversarial design checks; then one scoped
++  outside review of the combined adapter/owner/reconciliation/hosting boundary.
++  Only after that review and required operator authority prepare the bounded
++  disposable-Windows physical implementation/probes. Do not infer host installation
++  or real task permission from approval to prepare a review packet.
++
++No production source changed for this design. No physical PA-case has run.
++Original Windows release W1-W5 requirements remain open and unchanged.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECONCILIATION_MODEL.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECONCILIATION_MODEL.md
+new file mode 100644
+index 0000000..3e11e5e
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_RECONCILIATION_MODEL.md
+@@ -0,0 +1,111 @@
++# V3 exact local-tail maintenance — test-only design model
++
++2026-09-17. Producer design evidence, NOT physical recovery or production code.
++Baseline: `5fb924fad14ba8c23dc317d9e53bbda7bcc1f154`.
++Read with V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN and the coordinator implementation
++review disposition. No new public packet or external review is claimed.
++
++## Purpose and actual scope
++
++The model in `tests/helpers/candidate-v3-reconciliation-model.ts` exercises the
++proposed one-attempt maintenance journal BEFORE physical implementation/review.
++It consumes real fixture inventory/history bytes and the existing full-reference
++history/pair validator. It does not grant permission to reconcile anything.
++
++All persistent-state words refer to ordinary JavaScript objects shared by model
++lifetimes. `crash()` drops only private continuation state; `open()` creates a
++new model handle over the same object. `rotateAfterSimulatedRetirement()` assumes
++retirement; it neither stops nor observes a real process. One object assignment
++models the REQUIRED atomic anchor+journal transaction. None of these establishes
++SQLite durability, power-loss handling, OS custody, IPC or authenticated consent.
++
++The host-controlled model clock and owner epoch stand for unresolved physical
++obligations. Clock high-water is retained in the shared model authority across
++client reopening, not reset in each client. Actual authority restart and clock
++domain conversion still need design and independent evidence; this memory field
++is not a persistent Windows clock or an anti-rollback mechanism.
++
++## Controls and falsifiability
++
++Four modeled persistent cuts: before preparation, preparation committed/reply
++lost, possible-contact marker committed/reply lost, anchor+journal committed/reply
++lost. Across all 53 fixture prefixes this yields 212 observations. These are four
++different retained states, not 212 independent failure modes or exhaustive
++concurrency schedules. Every prefix goes through the real full-history predicate;
++the positive control requires the exact pre-existing tail to produce equality.
++
++Fourteen top-level cases cover those cuts plus one active handle, absence of a
++marker, repeated/renewed intent, stale owner, malformed/noncanonical/active input,
++expiry at each stage, clock regression across reopening, local/anchor drift,
++forbidden full-stream relations, equal/genesis discovery and invalid inventory.
++Domain-specific errors are required on denial, rather than accepting arbitrary
++TypeErrors as successful rejection. No model API accepts a path, command, task
++callback, reset, delete, refund or new task approval.
++
++After a possible-contact marker, neither a new handle, new consent expiration
++nor a new epoch can allocate a second append. A lost successful append response
++is discoverable as an equal pair without contact. Failed handling consumes that
++handle's continuation even if a test later restores the old anchor. Discovery
++does not mutate journal/history and always reports `authority: none`.
++
++Preparation-only response loss is distinct: with the SAME still-current owner,
++unchanged candidate, unexpired consent and an unspent prepared record, exact
++discovery can precede the first possible-contact marker. It does not re-prepare,
++renew consent or consume a second attempt. This models reconnect within the same
++authority lifetime, NOT recovery after replacing a physical owner. A changed owner
++or expiration denies that continuation; further availability recovery is open.
++
++The test-only world holds one maintenance intent. It therefore does NOT test a
++multi-intent database's uniqueness indexes, corruption scanning, journal capacity,
++or retention. The physical design still requires independent uniqueness per
++enrolled predecessor/candidate and conflicting-payload exclusion. No journal
++schema or physical adapter is implemented by this helper.
++
++## Verification
++
++Test compilation passed. Initial final-source focused model run: 14/14 pass,
++zero failures/cancellations/skips, 1271.8564 ms. A preceding sandboxed compilation
++was denied generated-file write access; the approved canonical-workspace compile
++then exited zero. No Windows permissions or dependencies were changed.
++
++`docs/reports/v3-reconciliation-model-20260917/run.mjs` is a create-only producer
++runner for the combined focused and full offline regressions. It refuses to run
++until the reviewed source/harness is committed and the worktree is clean, pins
++the execution revision plus before/after source/compiled/config identities, and
++keeps raw TAP. The subsequent committed-source run completed at
++`65b6a833d8641eae3f1a645ba6f21dc347be0fce` with a clean starting worktree,
++Node v24.14.0 on win32 x64, 2026-09-17T22:15:53.186Z through
++2026-09-17T22:20:01.426Z. The selected 57 source/compiled/config identities
++were unchanged before/after and matched disk in the separate artifact read-back.
++
++| Run | Actual result | Duration | Raw TAP SHA-256 |
++| --- | --- | --- | --- |
++| Combined focused | 157 passed; zero failed/cancelled/skipped | 1777.6961 ms | `fed6eda5c639355f9773583526a3d872500e88db3670718b9a2a03075c7f5d99` |
++| Full offline | 2152 tests; 2150 passed; zero failed/cancelled; 2 skipped | 246312.6848 ms | `f2858e52c42a4a2028ee9656c0dd56a971beeb8a61def5636f8950cee596c8b3` |
++
++The raw files are 38,785 and 501,402 bytes respectively. Receipt SHA-256:
++`406ce68a15af7df3bf440e3a99fa77403ba7734238ea377810d905bb7f72228b`.
++`check-artifacts.mjs` independently re-reads those local artifacts, count summaries,
++selected inputs, runtime/helper identities and the 53-prefix/212-cut diagnostics.
++It is a producer consistency check, not an independent execution or audit.
++
++The full-run skips are the binary-symlink case (Windows link-creation privilege
++unavailable) and the deliberately non-Windows-only inspector-refusal case. The
++first is still missing physical acceptance evidence; the latter is inapplicable
++on this win32 run. Neither is a newly executed PASS.
++
++Only selected working/compiled inputs are pinned: this is NOT a packaged-product,
++installed-dependency, EXACT_TREE, Windows-native recovery or power-loss claim.
++No production `src`, native or runtime script changed relative to `5fb924f`.
++The follow-up design wording makes `unknown` a discovery disposition of a
++consumed/unconfirmed contact marker, not an extra compensating terminal write.
++This reconciles the design text with the tested three-phase model; it does not
++alter the executed helper or fixtures.
++
++## What remains
++
++Physical PA01-PA15, authentication, protected storage/anchor independence,
++store-wide fencing, maintenance durable schema, bounded resource supervision,
++original-report byte archival, whole-PC rollback scope and original W1-W5 release
++acceptance are all open. Next scoped review should challenge the combined design
++and this model, not mistake its test count for a built adapter or an installed Agent.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_STRUCTURAL_WIRE_BOUND.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_STRUCTURAL_WIRE_BOUND.md
+new file mode 100644
+index 0000000..ac2c0ab
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_STRUCTURAL_WIRE_BOUND.md
+@@ -0,0 +1,111 @@
++# V3 structural wire ceiling — producer derivation, not C12 acceptance
++
++2026-09-17. This follow-up addresses the arithmetic part of prior model finding
++M-6. It changes only research/tests and documentation. The published coordinator
++packet at 1cdadb6 remains frozen and does NOT contain this later work. No parser
++limit, runtime consumer, physical adapter, owner, worker or activation changes.
++
++## Question and scope
++
++Multiplying the three independent parser caps (32,768 + 8,192 + 4,096) by 1,000
++and assuming arbitrary escaping overstates what valid records can encode. These
++caps are rejection ceilings, not lengths that every schema can attain. Valid
++inner records contain no free-form text, paths, source, diagnostics or payloads.
++Their strict fields are fixed ASCII literals, UUIDs, digests, UTC timestamps,
++bounded integers, booleans and nulls. Canonical equality rejects whitespace,
++alternative escaping, omitted/unknown keys and alternate numeric spellings.
++
++This derivation upper-bounds schema-valid wire lengths. It does NOT replace
++input rejection caps: invalid attacker input can still reach the existing much
++larger pre-parse ceilings. Hostile-input allocation and CPU behavior remain a
++separate resource gate. Nor does a byte ceiling prove fast full-history replay.
++
++## Inspected assumptions and deliberately relaxed construction
++
++The test pins seven LF-normalized source files: effect primitives, V3 data,
++record, inventory, messages, local snapshot and canonical JSON. Schema changes
++require re-deriving/reviewing the bound, not merely updating a hash to pass.
++Normalization permits checkout newline conversion only; receipt identities
++separately hash actual executed bytes. AST checks cover every metadata, intent,
++event, record, settlement and checkpoint key, including both intent variants.
++
++- UUIDs have exactly 36 printable ASCII characters; digests 71; exact UTC times
++  24. None contains a quote, backslash or control character.
++- Use the larger publish intent (including executionOperationId/resultDigest),
++  six longest events, and the longest state/outcome literals. Both
++  source-delivery-possible and result-and-stop-observed are 24 characters;
++  stopped-without-result is the 22-character longest outcome.
++- Populate all nullable digests/UUIDs; use false (5 bytes) instead of true/null
++  (4). Checkpoint eventIndex deliberately uses null (4), not 0..6 (1).
++- Checkpoint sequence uses Number.MAX_SAFE_INTEGER (16 decimal digits), and
++  operationCount uses 1,000 (4). Use 7,001 checkpoints: one genesis plus at most
++  seven structural checkpoints per each of 1,000 rows (reservation + six events).
++- No lifecycle reduction is relied on. Six copies of the longest event, a
++  publish intent and every populated evidence field cannot coexist legally.
++  These objects are deliberate SUPERSETS, not admissible records or test claims.
++  Tests assert the real record/settlement/checkpoint parsers reject them.
++
++All inner keys/literals are printable ASCII and inner values need no escaping.
++For a canonical wire profile (bytes B, quote count Q, backslash count S), embedding
++it as a JSON string yields B' = B + Q + S + 2, Q' = Q + 2, S' = Q + 2S.
++Arrays add brackets and commas; objects add quoted fixed keys, colons, braces
++and commas. This explicitly accounts for repeated escaping of record strings
++inside inventory strings inside a local snapshot, not just one escaping level.
++Tests compare that recurrence with independent JSON.stringify on nested examples.
++
++## Conservative results
++
++| Wire | Derived ceiling in bytes | Existing rejection ceiling |
++| --- | ---: | ---: |
++| Metadata | 203 | 1,024 |
++| Record | 5,003 | 32,768 |
++| Settlement | 2,181 | 8,192 |
++| Checkpoint | 859 | 4,096 |
++| Encoded inventory row | 8,553 | No separate row-envelope cap |
++| 1,000-row inventory | 8,554,063 | 67,108,864 |
++| 7,001-checkpoint history | 6,384,978 | 67,108,864 |
++| Complete local snapshot | 16,569,477 | 268,500,992 |
++
++The full snapshot figure is for the local-snapshot envelope, NOT a measured
++bootstrap IPC request or a resident-memory ceiling. The test materializes all
++1,000 relaxed rows and 7,001 relaxed checkpoints, then calls the actual dormant
++local-snapshot encoder; exact byte/quote/backslash counts equal the arithmetic.
++That encoder bounds/transports strings; this is not acceptance by the real
++history validator. The materialized corpus is intentionally invalid.
++
++All 53 existing legal family prefixes, parsed through the real validators,
++separately fit the member profiles; this is regression corroboration, not an
++exhaustive proof. The universal bound rests on the inspected strict schemas,
++fixed scalar lengths, longest literals and bounded collection counts above.
++
++## Evidence and disposition
++
++Research: tests/helpers/candidate-v3-wire-bound.ts and
++tests/unit/windows-candidate-v3-wire-bound.test.ts (seven cases).
++Retained producer runs: docs/reports/v3-wire-bound-20260917, including exact raw
++focused/full TAP, selected source/compiled identities, runtime identity and UTC
++times. Execution results must be read from receipt.json, not inferred from this
++derivation. No independent execution or fresh external verdict is claimed.
++
++Executed on win32 x64, Node v24.14.0, source base
++527d0f720a9f4412953ccab760fb0b5e09e30c33 with the explicit research delta:
++compile passed; focused 143/143, zero skipped/failed (1,428.0258 ms); full 2,138
++tests / 2,136 passed / zero failed / two skipped (244,701.0819 ms), completed
++2026-09-17T20:40:03.530Z. Skips are unavailable Windows symlink-creation privilege
++and the deliberately non-Windows-only inspector refusal case. All 53 selected
++source/compiled/config identities were unchanged across both runs. The separate
++check-artifacts.mjs read-back verifies the raw TAP, counts, runtime and identities.
++Focused TAP SHA-256:
++cf12f75a920ecbeb57a7049a276720ad8fd4600bb206eddcaddd11eedd40843d
++Full TAP SHA-256:
++f03d8dbf068074597229ac13a1f5c5835228282032b8fa761f332f77b23442f7
++
++M-6 disposition: the prior independent-cap Cartesian-product concern is narrowed
++by this producer-side structural upper bound; the current valid schema need not
++overflow the inventory envelope at 1,000 operations. This is not a tight maximum
++admissible corpus, a full resource proof or an outside-reviewed closure.
++
++C12 remains open for valid high-cost/adversarial histories, worst-case invalid
++inputs, actual worker/process memory limits, cancellation and descendant stop,
++storage/anchor costs, dashboard responsiveness, representative hardware and
++independent verification. B-03/W1-W5 and all original release gates remain open.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WINDOWS_PEER_CHANNEL_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WINDOWS_PEER_CHANNEL_DESIGN.md
+new file mode 100644
+index 0000000..4f9fa8e
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WINDOWS_PEER_CHANNEL_DESIGN.md
+@@ -0,0 +1,240 @@
++# V3 Windows peer channels — concrete candidate for boundary review
++
++2026-09-17. DESIGN ONLY, based on product `6608b9f37119c30773aab1cc72b881bdbd805d66`.
++No account, token, key, pipe, database, service, child or VM was created. No new
++implementation/activation permission follows. This refines sections 2/4/6 of
++V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN; the persistence and maintenance contracts
++remain unchanged. Whole-PC rollback scope is still an unanswered operator choice.
++
++## 1. Specific candidate, not an installed topology
++
++Use separate own-process virtual-account services for the coordinator native host
++and anchor native host, with distinct service/account SIDs. The coordinator host
++supervises the fixed trusted TypeScript coordinator off the dashboard event loop;
++the anchor owns its independent storage. Neither role is a general command host.
++Keep privileged VM control/owner retirement in the separately scoped supervisor,
++not in either data service. Actual service names, immutable install roots and
++descriptors must be pinned by an explicitly approved installer, never HTTP input.
++
++The native coordinator host, NOT its Node child, connects to the anchor. This
++allows both pipe peers to be checked against their exact own-process SCM entries.
++Do not allow any process merely because its token contains the coordinator SID.
++The native host is part of the trusted producer boundary: it binds fixed verbs,
++enrollment, current owner and one pending child request before forwarding. It
++must not expose a generic byte relay or accept a caller-provided peer pin.
++
++The historical `WindowsWorkerJob.StartNode` inherits its caller's service token
++and deliberately passes `bInheritHandles=false`. It is NOT a launcher for a
++privileged supervisor to use unchanged: that would give the coordinator the
++supervisor identity. Nor can it already deliver private inherited IPC handles.
++Retain its job-at-creation/watchdog/zero-member-stop controls as source to review,
++not as an implemented cross-identity or channel solution. No existing helper is
++edited or activated by this proposal.
++
++Propose required-privilege reduction for both data services, with no impersonate,
++debug, backup, restore, take-ownership, load-driver or token-assignment privilege.
++Read back actual TokenPrivileges, user, groups, restrictions and elevation before
++admission. Do not describe the result as zero privileges: Windows retains
++SeChangeNotifyPrivilege even when not requested. Own-process placement avoids the
++union of requirements from colocated services. If the minimal set cannot support
++startup, record the exact denied operation; do not add broad privileges by trial.
++[Microsoft required-privileges contract](https://learn.microsoft.com/en-us/windows/win32/api/winsvc/ns-winsvc-service_required_privileges_infow)
++
++These identities are not a network sandbox. Network restrictions and installation
++custody remain separately tested gates. No work-PC service configuration or
++firewall changes are authorized.
++
++## 2. Local anchor pipe and proposed rights
++
++One retained duplex byte-mode named-pipe instance, created before startup success:
++FIRST_PIPE_INSTANCE, OVERLAPPED, REJECT_REMOTE_CLIENTS; explicit protected DACL;
++non-inherited server handle; no alternate name on failure. Reconnect uses that
++same retained instance only after all previous I/O completion is observed. Anchor
++restart requires a new authenticated session and owner discovery, not old pending
++request replay. Name squatting can deny availability; it cannot select a fallback.
++
++| Object / opener | Proposed requested mask | Intentionally absent |
++| --- | --- | --- |
++| Pipe client / exact coordinator host | FILE_READ_DATA + FILE_WRITE_DATA + SYNCHRONIZE = `0x00100003` | `0x4` pipe-instance creation; generic write/all; WRITE_DAC/OWNER; attribute mutation |
++| Other peer process / each service | PROCESS_QUERY_LIMITED_INFORMATION + SYNCHRONIZE = `0x00101000` | VM read/write/operation, DUP_HANDLE, terminate, create-thread, token mutation |
++| Other peer primary token / each service | TOKEN_QUERY = `0x8` | duplicate, impersonate, assign-primary, adjust rights |
++| SCM / each service | SC_MANAGER_CONNECT = `0x1` | create/configure service |
++| Exact other service / each service | SERVICE_QUERY_STATUS = `0x4` | START, STOP, CHANGE_CONFIG, DELETE |
++
++These are proposed client/query masks, NOT complete production SDDL. Server,
++installer and supervisor rights are separate, explicit ACEs, never inherited
++blanket access. Creating the pipe and connecting are different access checks.
++FILE_GENERIC_WRITE includes the bit that also permits pipe-instance creation;
++do not copy the historical managed `PipeAccessRights.ReadWrite` rule without
++checking its actual mask. Test the proposed individual rights with native opens;
++if a wrapper requests extras, reject that wrapper or review the exact extra right.
++[Microsoft pipe access rules](https://learn.microsoft.com/en-us/windows/win32/ipc/named-pipe-security-and-access-rights)
++
++SYNCHRONIZE enables actual process-handle waits. Require an unsignaled retained
++process object before and after an exchange; do not generalize the old fixture's
++`GetExitCodeProcess == 259` convention into production liveness. Never request
++PROCESS_ALL_ACCESS just to observe a peer.
++[Microsoft process rights](https://learn.microsoft.com/en-us/windows/win32/procthread/process-security-and-access-rights)
++
++## 3. Mutual authentication before protected bytes
++
++On each connection both native peers perform the following, failing closed on
++any inaccessible query. The client opens with explicit identification-level SQOS
++and never delegates impersonation authority. No ImpersonateNamedPipeClient or
++privilege escalation is proposed as a fallback.
++
++1. Resolve the OTHER role only from protected enrollment/configuration. Query its
++   exact SCM entry: Running, own-process, nonzero PID. Client obtains server PID
++   from the connected pipe; server obtains client PID from its connected instance.
++2. Require equality with that SCM PID. Open/retain the process object, inspect
++   its exact primary-token user and expected token profile, image identity under
++   separately established immutable runtime custody, and creation time. Recheck
++   SCM/pipe PID and unsignaled process. A path string/hash-before-spawn alone fails.
++3. Exchange bounded role/version challenges with fresh random nonces, then
++   confirm both challenges, both roles and the current enrolled session. Before
++   authentication these contain no ledger, namespace inventory, task or source.
++   A nonce is freshness binding inside an OS-authenticated channel, not a secret
++   credential or cryptographic proof by itself.
++4. Only after mutual confirmation accept a bounded protected frame. Bind both
++   connection nonces, request sequence/digest, verb, enrollment/store, original
++   deadline, owner generation and complete expected pre/post identities. Reject
++   an unsolicited, duplicated, out-of-order or differently bound response.
++5. Recheck both the retained peer lifetime and current owner before promoting any
++   result. Disconnection, timeout, peer replacement or failed recheck invalidates
++   the session and all pending replies. Never reconnect and resend an uncertain
++   mutation. Only fresh read-only discovery under the maintenance rules remains.
++
++The OS functions supply process IDs, not an authenticated approval or a portable
++process handle. PID reuse, relays and handles passed to another process are
++explicit adversarial tests; the retained process, SCM, token and challenge checks
++are a candidate composition, NOT a Microsoft guarantee of this whole protocol.
++[Pipe client PID](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getnamedpipeclientprocessid),
++[pipe server PID](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getnamedpipeserverprocessid)
++
++Propose live-channel authenticity for this narrow local exchange, with no new
++signing key. Saved bytes retain only historical consistency/evidence status;
++they cannot be replayed as an authenticated live acknowledgment. If another
++consumer must independently verify exported signatures, that key/enrollment
++protocol must be separately designed. This proposal does not satisfy or remove
++any existing signed-approval or protected-issuer requirement.
++
++## 4. Coordinator child channel and stop ownership
++
++Use private, explicitly inherited parent/child endpoints, not a discoverable
++public pipe accepted solely by PID or a secret in argv/environment. Inherit only
++the fixed IPC endpoints, never ledger/anchor, enrollment, job-control, tokens or
++supervisor handles. Use an explicit HANDLE_LIST together with creation-time job
++assignment; Microsoft requires inheritable listed handles and bInheritHandles
++TRUE for that attribute. Clear unnecessary inheritance after startup and test
++descendant leakage. This requires a new reviewed launcher contract, not changing
++the old helper's boolean and assuming containment.
++[Creation attributes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-updateprocthreadattribute)
++
++Keep parser/deadline/queue bounds from WORKER_MESSAGE_DESIGN. A native control
++loop must remain responsive while Node does synchronous validation. The external
++supervisor still needs independently retained exact job/process/contact evidence
++before owner replacement; a native host saying "stopped" is not enough. The
++handle-custody/duplication and supervisor-restart protocol remains an explicit
++unresolved design input; these channels alone do not close PA02 or PA12.
++V3_AUTHORITY_JOURNAL_DESIGN specifies how that unresolved custody is retained
++durably: restart cannot reuse an active record as readiness, and loss of the
++live trusted handle chain blocks replacement rather than adopting a name/PID.
++
++Cancellation retains buffers/OVERLAPPED state until actual completion. After
++CancelIoEx, normal completion is still possible and the function does not wait.
++An unconfirmed drain closes admission and forbids pipe-instance reuse or owner
++replacement; it is not a no-effect result. Use the existing separate stop budget,
++not an unbounded FlushFileBuffers/WaitForPipeDrain in the UI or authority path.
++[Microsoft cancellation semantics](https://learn.microsoft.com/en-us/windows/win32/api/ioapiset/nf-ioapiset-cancelioex)
++
++## 5. Required next evidence, all NOT RUN
++
++### Proposed supervisor custody transfer; no upward duplication right
++
++For the first bounded metadata-worker experiment, the native coordinator host
++creates/retains the unnamed job and suspended fixed child, assigned to that job
++at creation. BEFORE resuming the child, the authenticated supervisor PULLS
++non-inheritable duplicates of those exact job/root handles into itself. The host
++keeps both source handles stable until explicit handoff completion. This is not
++a UI/task RPC accepting a caller's arbitrary handle number.
++
++Propose a dedicated process DACL grant allowing ONLY the enrolled supervisor
++PROCESS_DUP_HANDLE plus query-limited/synchronize (`0x00101040`) on the native
++coordinator host. That right is deliberately stronger than peer identity queries
++and makes the supervisor part of the trusted custody boundary. The anchor and
++ordinary coordinator Node child receive no corresponding grant to the supervisor.
++In particular, do NOT grant the lower-privilege host PROCESS_DUP_HANDLE on the
++privileged supervisor merely so it can push a handle: that would permit access
++to other supervisor handles. The role-specific exception is downward only.
++
++For each pull, the supervisor uses its retained authenticated source-process
++handle, explicit desired access, `bInheritHandle=false`, and options zero. Do not
++use DUPLICATE_SAME_ACCESS or DUPLICATE_CLOSE_SOURCE. Proposed duplicate rights:
++job QUERY|TERMINATE (`0xC`), root process QUERY_LIMITED_INFORMATION|SYNCHRONIZE
++(`0x00101000`). Kernel duplication refers to the original object, but the numeric
++source handle is meaningful only in that retained process while the host holds
++it stable. Wrong type, closed/reused handle or failed validation denies launch.
++[DuplicateHandle contract](https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-duplicatehandle),
++[job rights](https://learn.microsoft.com/en-us/windows/win32/procthread/job-object-security-and-access-rights)
++
++The supervisor independently checks root membership in its exact duplicate job,
++expected process/token/image, suspended setup protocol, limits and live native
++host before acknowledging custody. The host must not resume until that bound
++acknowledgment and active setup authority arrive. On failure, terminate/observe
++the owned job without reporting successful admission. Before retirement is
++recorded, the supervisor explicitly terminates that job and observes both the
++root signaled and active count zero; it separately settles native-host/guest/
++external contacts. More than one retained job handle means KILL_ON_JOB_CLOSE is
++only a last-handle fallback, never proof that one host's death stopped the child.
++
++A restarted supervisor may, under retirement-only authority, investigate a
++SURVIVING authenticated native host that still retains the ORIGINAL handles and
++original owner context. Re-pulling supports fresh stop observation, not resuming
++old effects or re-creating an old private continuation. Same-process retained
++handles can be compared with CompareObjectHandles when both are available; that
++API cannot compare an old numeric handle saved in a database after its process
++died. Initial implementation should reject reattachment until its protocol is
++reviewed and physically tested. If both holders are gone, no named-job/PID
++fallback is introduced: AUTHORITY_JOURNAL_DESIGN's lost-custody gap remains.
++[Object-handle comparison](https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-compareobjecthandles)
++
++This is a concrete experimental candidate, NOT an implemented handle offer,
++observer or restart path. Test substitution/reuse, source death before/after
++duplication, lost handoff ack, supervisor death with host handle retained,
++wrong-object pull and attempted reverse duplication. Prove the positive custody
++path before interpreting access-denied controls. No raw handle is exported to
++Studio, persisted as proof, passed to task code or accepted as permission.
++
++Historical guest evidence demonstrates one-way server verification under a fixed
++LOCAL SERVICE client, not this mutually authenticated two-service protocol. No
++historical Defender-held harness is rerun or repackaged here.
++
++- Correct-peer positive control; wrong service/process/user/token/image; process
++  death/restart/PID reuse; child with same account but not SCM peer; duplicated
++  pipe handle; relay; delayed previous-generation reply. Deny before disclosure.
++- Native client mask positive control; same principal denied pipe-instance
++  creation and peer VM/handle/token/service mutation; process wait and token query
++  actually work. Inspect effective DACL and actual token, not SDDL text alone.
++- Same-name squatter, remote client, partial/oversized frame, idle peer, stalled
++  write, cancelled I/O completing normally and unconfirmed cancellation. No
++  alternate endpoint, queue growth, buffer reuse or mutation retry.
++- Child receives only listed handles under the coordinator identity, never the
++  privileged supervisor token. Root/descendant/job stop observed independently;
++  a failed or restarted native host cannot clear retirement uncertainty.
++
++Each requires bounded resources, a fresh authorized disposable Windows setup,
++positive reachability controls, before/after state and redacted numeric evidence.
++First complete the durable authority/schema and supervisor custody design and
++combine these questions in ONE outside boundary review. Do not request a separate
++audit for this text alone. No product source or existing signed bytes changed.
++
++## 6. Checks actually performed
++
++Read current native job-launcher and historical broker peer code, plus related
++handoffs; the code index did not cover these requested native paths, so direct
++source inspection controls. Checked the cited primary Microsoft API pages.
++Local source-pattern scan passed (1,300 eligible files, 15,457,078 bytes), with
++all four scanner regression cases passing in 911.5882 ms; git whitespace check
++passed. The scanner excludes some file types/oversize files and is not a proof
++of absence of every secret. No native compilation, physical test, full-regression
++rerun or independent review is claimed for this documentation-only follow-up.
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-reconciliation-model.ts b/product/companion-v1/tests/helpers/candidate-v3-reconciliation-model.ts
+new file mode 100644
+index 0000000..f21644d
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-reconciliation-model.ts
+@@ -0,0 +1,120 @@
++import { canonicalJson as wire, canonicalSha256Digest, sha256Digest } from "../../src/compatibility/canonical-json.js";
++import { inspectSyntheticPairClaims } from "./candidate-v3-pair-claims.js";
++import { pins, historyWire, type Frame } from "./candidate-v3-history-fixture.js";
++
++// TEST-ONLY DESIGN MODEL. All "durable" state below is ordinary JS memory.
++// No database, key, authentication, IPC, physical fence, task or effect exists.
++// Reopening shares one fixture world; rotating is a simulated retirement claim,
++// NEVER evidence that a real process or callback stopped. NOT a production port.
++type Snapshot = { metadata: string; inventory: string; history: string };
++type Journal = Readonly<{ key: string; confirmation: string; identity: readonly string[];
++  anchor: string; candidate: string; phase: "prepared" | "contact-possible" | "witnessed" }>;
++export class SyntheticRecoveryError extends Error {
++  constructor() { super("synthetic-reconciliation-denied"); }
++}
++const fail = (): never => { throw new SyntheticRecoveryError(); };
++export class SyntheticReconciliationWorld {
++  // Public ONLY so a test driver can inject corruption/drift at exact cuts.
++  local: Snapshot;
++  now = 0;
++  epoch = "synthetic-owner-1";
++  #state: { anchor: string; journal: Journal | null };
++  #active: { crash(): void } | null = null;
++  #lastNow = -1; // Simulated authority clock survives client-lifetime reopening.
++  preparations = 0;
++  possibleMarkers = 0;
++  anchorWrites = 0;
++  constructor(frame: Frame, anchor = historyWire(frame.history.slice(0, -1))) {
++    this.local = { metadata: pins, inventory: frame.input, history: historyWire(frame.history) };
++    this.#state = { anchor, journal: null };
++  }
++  snapshot() {
++    return Object.freeze({ kind: "synthetic-maintenance-state-not-persistence" as const,
++      authority: "none" as const, ...this.#state, preparations: this.preparations,
++      possibleMarkers: this.possibleMarkers, anchorWrites: this.anchorWrites });
++  }
++  corruptAnchorForTest(anchor: string) { this.#state = { ...this.#state, anchor }; }
++  rotateAfterSimulatedRetirement(epoch: string) { this.#active?.crash(); this.epoch = epoch; }
++  open() {
++    if (this.#active) return fail();
++    const epoch = this.epoch;
++    let closed = false, canCommit = false;
++    const crash = () => { closed = true; canCommit = false; if (this.#active === handle) this.#active = null; };
++    const check = () => {
++      if (closed || epoch !== this.epoch || !Number.isSafeInteger(this.now) || this.now < 0 || this.now < this.#lastNow) {
++        crash(); return fail();
++      }
++      this.#lastNow = this.now;
++    };
++    const claims = () => inspectSyntheticPairClaims(this.local.metadata, this.local.inventory,
++      this.local.history, this.#state.anchor);
++    const expected = (expiresAt: number) => {
++      check();
++      if (!Number.isSafeInteger(expiresAt) || expiresAt <= this.now || expiresAt - this.now > 30_000) return fail();
++      const pair = claims();
++      if (pair.relation !== "one-ahead-claims") return fail();
++      return wire({ domain: "synthetic-v3-maintenance-confirmation/v1", epoch, expiresAt,
++        acknowledgeWitnessOnly: true, identity: pair.identity,
++        anchorDigest: sha256Digest(this.#state.anchor), checkpointDigest: pair.identity[3] });
++    };
++    const checkedConfirmation = (input: unknown) => {
++      check();
++      if (typeof input !== "string" || Buffer.byteLength(input) > 4096) return fail();
++      let c: { expiresAt: number };
++      try { c = JSON.parse(input) as { expiresAt: number }; } catch { return fail(); }
++      if (!c || input !== expected(c.expiresAt)) return fail();
++      return input;
++    };
++    const currentJournal = (phase: Journal["phase"]) => {
++      check(); const j = this.#state.journal;
++      if (!j || j.phase !== phase) return fail();
++      checkedConfirmation(j.confirmation);
++      if (this.#state.anchor !== j.anchor || this.local.history !== j.candidate
++        || wire(claims().identity) !== wire(j.identity)) return fail();
++      return j;
++    };
++    const handle = Object.freeze({
++      offer: (expiresAt: number) => expected(expiresAt),
++      prepare: (input: unknown) => {
++        const confirmation = checkedConfirmation(input);
++        if (this.#state.journal) return fail(); // discover instead; new consent cannot reset a spent tuple
++        const pair = claims();
++        const key = canonicalSha256Digest({ domain: "synthetic-v3-maintenance-key/v1",
++          metadataDigest: sha256Digest(this.local.metadata), anchorDigest: sha256Digest(this.#state.anchor),
++          checkpointDigest: pair.identity[3] });
++        const journal: Journal = Object.freeze({ key, confirmation, identity: pair.identity,
++          anchor: this.#state.anchor, candidate: this.local.history, phase: "prepared" });
++        this.#state = { ...this.#state, journal }; this.preparations++;
++        return this.snapshot();
++      },
++      markPossible: () => {
++        const j = currentJournal("prepared");
++        this.#state = { ...this.#state, journal: Object.freeze({ ...j, phase: "contact-possible" }) };
++        this.possibleMarkers++; canCommit = true;
++        return this.snapshot();
++      },
++      commitExactTail: () => {
++        if (!canCommit) return fail();
++        canCommit = false; // failed handling also consumes this model lifetime's continuation
++        const j = currentJournal("contact-possible");
++        // One JS assignment models the REQUIRED atomic anchor+journal transaction.
++        // It does not prove SQLite, flush, crash, power-loss or any physical property.
++        this.#state = { anchor: j.candidate, journal: Object.freeze({ ...j, phase: "witnessed" }) };
++        this.anchorWrites++;
++        return this.snapshot();
++      },
++      discover: () => {
++        check(); const pair = claims(), j = this.#state.journal;
++        if (j && (wire(pair.identity) !== wire(j.identity) || this.local.history !== j.candidate
++          || (j.phase === "witnessed" && pair.relation !== "equal-claims"))) return fail();
++        return Object.freeze({ kind: "synthetic-discovery-not-owner-admission" as const, authority: "none" as const,
++          relation: pair.relation, journalPhase: j?.phase ?? null,
++          disposition: pair.relation === "equal-claims" ? "equal-claims-only" as const
++            : j?.phase === "contact-possible" ? "unknown-consumed-no-retry" as const : "one-ahead-claims-only" as const });
++      },
++      crash,
++    });
++    this.#active = handle;
++    return handle;
++  }
++}
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-wire-bound.ts b/product/companion-v1/tests/helpers/candidate-v3-wire-bound.ts
+new file mode 100644
+index 0000000..4528167
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-wire-bound.ts
+@@ -0,0 +1,81 @@
++import { canonicalJson } from "../../src/compatibility/canonical-json.js";
++
++// TEST/RESEARCH ONLY. Conservative structural supersets, NOT legal histories,
++// claims to authenticate, new parser limits or a runtime admission policy.
++// The associated test pins the inspected source and checks every object key.
++const id = "ffffffff-ffff-4fff-bfff-ffffffffffff", digest = "sha256:" + "f".repeat(64), at = "9999-12-31T23:59:59.999Z";
++const fields = (keys: string[], value: string) => Object.fromEntries(keys.map(k => [k, value]));
++export function maximumStructuralShapes() {
++  const metadata = { domain: "agent-candidate-effect-ledger/v3", ...fields(["installationId", "namespaceId", "storeId"], id) };
++  const intent = { schemaVersion: metadata.domain,
++    ...fields(["installationId", "namespaceId", "storeId", "operationId", "workflowId", "approvalId", "ownerGeneration", "guestGeneration", "executionOperationId"], id),
++    ...fields(["authorizationDigest", "workspaceDigest", "policyBindingDigest", "candidateDigest", "reviewMaterialDigest", "sourceManifestDigest",
++      "requestDigest", "guestImageDigest", "controllerIdentityDigest", "resourcePolicyDigest", "resultDigest"], digest),
++    expiresAt: at, kind: "publish" };
++  const event = { state: "result-and-stop-observed", recordedAt: at, evidenceDigest: digest, resultDigest: digest,
++    verificationPassed: false, outcome: "stopped-without-result", predecessorRecordDigest: digest, outcomeCheckpointDigest: digest };
++  const record = { intent, intentDigest: digest, approvalIdentityDigest: digest, reservedAt: at,
++    events: Array.from({ length: 6 }, () => ({ ...event })) };
++  const settlement = { domain: "agent-candidate-settlement-evidence/v1",
++    ...fields(["installationId", "namespaceId", "storeId", "operationId", "workflowId", "ownerGeneration", "guestGeneration"], id),
++    ...fields(["intentDigest", "requestDigest", "sourceManifestDigest", "workspaceDigest", "policyBindingDigest", "controllerIdentityDigest",
++      "resourcePolicyDigest", "priorOutcomeRecordDigest", "resultDigest", "contactAccountingDigest", "ownerFenceEvidenceDigest",
++      "processSettlementEvidenceDigest", "generationRetirementEvidenceDigest", "custodyReleaseEvidenceDigest", "publicationExclusionEvidenceDigest",
++      "workspaceSafetyEvidenceDigest"], digest),
++    kind: "execute", outcome: "stopped-without-result", verificationPassed: false, observedAt: at, validUntil: at };
++  const checkpoint = { domain: "agent-candidate-checkpoint/v1",
++    ...fields(["installationId", "namespaceId", "storeId", "producerGeneration", "operationId"], id),
++    ...fields(["previousCheckpointDigest", "recordDigest", "approvalIdentityDigest", "inventoryRootDigest", "checkpointDigest"], digest),
++    sequence: Number.MAX_SAFE_INTEGER, eventIndex: null, operationCount: 1000 };
++  // null (4 bytes) is larger than eventIndex 0..6 (1 byte). Do not assume
++  // the numeric maximum is the largest JSON encoding of a nullable field.
++  return { metadata, intent, event, record, settlement, checkpoint };
++}
++export interface JsonByteProfile { bytes: number; quotes: number; backslashes: number }
++export function profile(text: string): JsonByteProfile {
++  let quotes = 0, backslashes = 0;
++  for (let i = 0; i < text.length; i++) { if (text.charCodeAt(i) === 34) quotes++; else if (text.charCodeAt(i) === 92) backslashes++; }
++  return { bytes: Buffer.byteLength(text), quotes, backslashes };
++}
++const sum = (items: JsonByteProfile[]): JsonByteProfile => items.reduce((a, b) => ({ bytes: a.bytes + b.bytes,
++  quotes: a.quotes + b.quotes, backslashes: a.backslashes + b.backslashes }), { bytes: 0, quotes: 0, backslashes: 0 });
++export function embed(p: JsonByteProfile): JsonByteProfile {
++  // Inner canonical JSON is printable ASCII here. Quotes and backslashes
++  // are the ONLY characters re-escaped when it becomes a JSON string.
++  return { bytes: 2 + p.bytes + p.quotes + p.backslashes, quotes: 2 + p.quotes, backslashes: p.quotes + 2 * p.backslashes };
++}
++export function arrayBound(p: JsonByteProfile, n: number): JsonByteProfile {
++  if (!Number.isSafeInteger(n) || n < 0) throw Error("invalid-research-count");
++  return { bytes: 2 + Math.max(0, n - 1) + n * p.bytes, quotes: n * p.quotes, backslashes: n * p.backslashes };
++}
++export function objectBound(fields: Record<string, JsonByteProfile>): JsonByteProfile {
++  const keys = Object.keys(fields), all = sum(keys.flatMap(k => [profile(JSON.stringify(k)), fields[k]!]));
++  return { ...all, bytes: all.bytes + 2 + Math.max(0, keys.length - 1) + keys.length };
++}
++export function structuralWireBounds() {
++  const shapes = maximumStructuralShapes(), members = {
++    metadata: profile(canonicalJson(shapes.metadata)), record: profile(canonicalJson(shapes.record)),
++    settlement: profile(canonicalJson(shapes.settlement)), checkpoint: profile(canonicalJson(shapes.checkpoint)),
++  };
++  const row = objectBound({ recordWire: embed(members.record), settlementWire: embed(members.settlement), checkpointAWire: embed(members.checkpoint) });
++  const inventory = objectBound({ domain: profile(JSON.stringify("agent-candidate-inventory-transport/v1")), records: arrayBound(row, 1000) });
++  const history = objectBound({ domain: profile(JSON.stringify("agent-candidate-checkpoint-history/v1")), checkpoints: arrayBound(embed(members.checkpoint), 7001) });
++  const snapshot = objectBound({ domain: profile(JSON.stringify("agent-candidate-v3-local-snapshot/v1")), metadataWire: embed(members.metadata),
++    inventoryWire: embed(inventory), historyWire: embed(history) });
++  return { kind: "conservative-structural-byte-ceiling-not-admissible-corpus-or-resource-measurement" as const,
++    members, row, inventory, history, snapshot, operations: 1000, structuralEventsPerRow: 6, structuralCheckpoints: 7001 };
++}
++
++// Bound is valid only for these inspected definitions and canonicalization.
++// Pins use LF-normalized source so checkout CRLF conversion is not schema drift.
++// A change fails the research test and requires deriving/reviewing the bound
++// again; do not update these hashes merely to make the test green.
++export const BOUND_SOURCE_PINS = Object.freeze({
++  "src/build-only/windows-candidate-effect-state.ts": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
++  "src/build-only/windows-candidate-v3-data.ts": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
++  "src/build-only/windows-candidate-v3-record.ts": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
++  "src/build-only/windows-candidate-v3-inventory.ts": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
++  "src/build-only/windows-candidate-v3-messages.ts": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
++  "src/build-only/windows-candidate-v3-coordinator-data.ts": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
++  "src/compatibility/canonical-json.ts": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-reconciliation-model.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-reconciliation-model.test.ts
+new file mode 100644
+index 0000000..656fba7
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-reconciliation-model.test.ts
+@@ -0,0 +1,161 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { inspectSyntheticPairClaims } from "../helpers/candidate-v3-pair-claims.js";
++import { make, transcript, historyWire, envelope, genesis, type Frame } from "../helpers/candidate-v3-history-fixture.js";
++import { SyntheticReconciliationWorld as World, SyntheticRecoveryError } from "../helpers/candidate-v3-reconciliation-model.js";
++
++const frames = (family = 0): Frame[] => {
++  const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent), fs = parent ? [parent, f] : [f];
++  return transcript(fs, fs.flatMap((r, n) => Array(r.record.events.length + 1).fill(n) as number[]));
++};
++const denied = (fn: () => unknown) => assert.throws(fn, e => e instanceof SyntheticRecoveryError || e instanceof CandidateV3DataError);
++const fixture = () => { const world = new World(frames().at(-1)!); return { world, owner: world.open() }; };
++
++test("maintenance model: every family/prefix witnesses only its exact existing tail and has no admission", t => {
++  let prefixes = 0;
++  for (let family = 0; family < 8; family++) for (const frame of frames(family)) {
++    const w = new World(frame), h = w.open(), before = wire(w.local), offer = h.offer(100);
++    assert.equal(h.prepare(offer).journal?.phase, "prepared"); h.markPossible();
++    const ack = h.commitExactTail();
++    assert.equal(ack.journal?.phase, "witnessed"); assert.equal(ack.authority, "none");
++    assert.equal(ack.anchor, w.local.history); assert.equal(wire(w.local), before);
++    assert.equal(inspectSyntheticPairClaims(w.local.metadata, w.local.inventory, w.local.history, ack.anchor).relation, "equal-claims");
++    assert.equal(h.discover().kind, "synthetic-discovery-not-owner-admission");
++    denied(() => h.commitExactTail()); denied(() => h.prepare(offer));
++    assert.equal(w.anchorWrites, 1); assert.equal(w.possibleMarkers, 1); assert.equal(w.preparations, 1);
++    prefixes++;
++  }
++  assert.equal(prefixes, 53);
++  t.diagnostic("53 real-validator prefixes; synthetic JS state only; no physical recovery or effect API");
++});
++
++test("maintenance model: crash cuts preserve preparation, consumption and exact witnessed discovery", t => {
++  const cuts = ["before-prepare", "prepare-response-loss", "marker-response-loss", "append-response-loss"] as const;
++  let observed = 0;
++  for (let family = 0; family < 8; family++) for (const frame of frames(family)) for (const cut of cuts) {
++    const w = new World(frame), h = w.open(), consent = h.offer(100);
++    if (cut !== "before-prepare") h.prepare(consent);
++    if (cut === "marker-response-loss" || cut === "append-response-loss") h.markPossible();
++    if (cut === "append-response-loss") h.commitExactTail(); // response deliberately not consumed
++    const durableBeforeCrash = wire(w.snapshot()); h.crash();
++    const reopened = w.open(), discovery = reopened.discover();
++    assert.equal(wire(w.snapshot()), durableBeforeCrash, "discovery/reopen must not mutate history");
++    assert.equal(discovery.authority, "none");
++    if (cut === "before-prepare") assert.equal(discovery.journalPhase, null);
++    else if (cut === "prepare-response-loss") assert.equal(discovery.journalPhase, "prepared");
++    else if (cut === "append-response-loss") {
++      assert.equal(discovery.disposition, "equal-claims-only"); assert.equal(discovery.journalPhase, "witnessed");
++    } else assert.equal(discovery.disposition, "unknown-consumed-no-retry");
++    denied(() => reopened.commitExactTail());
++    if (cut !== "before-prepare") denied(() => reopened.prepare(consent));
++    assert.equal(w.anchorWrites, cut === "append-response-loss" ? 1 : 0); observed++;
++  }
++  assert.equal(observed, 212);
++  t.diagnostic("212 prefix x four distinct durable-model-state cuts; not actual crash/persistence/atomicity evidence");
++});
++
++test("maintenance model: two simultaneous lifetimes and append without durable marker deny", () => {
++  const { world: w, owner: h } = fixture(); denied(() => w.open());
++  denied(() => h.commitExactTail()); denied(() => h.markPossible());
++  h.prepare(h.offer(100)); denied(() => h.commitExactTail());
++  assert.equal(w.possibleMarkers, 0); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: another epoch/expiration cannot reset the existing logical attempt", () => {
++  const { world: w, owner: h } = fixture(); h.prepare(h.offer(100)); h.markPossible();
++  const identity = w.snapshot().journal!.key;
++  w.rotateAfterSimulatedRetirement("synthetic-owner-2"); const h2 = w.open();
++  denied(() => h.commitExactTail()); denied(() => h2.prepare(h2.offer(200))); denied(() => h2.markPossible());
++  denied(() => h2.commitExactTail()); assert.equal(w.snapshot().journal?.key, identity);
++  assert.equal(h2.discover().disposition, "unknown-consumed-no-retry"); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: unknown members, false consent, changed digest, owner, and noncanonical bytes deny before preparation", () => {
++  const { world: w, owner: h } = fixture(), consent = h.offer(100), c = JSON.parse(consent) as Record<string, unknown>;
++  for (const bad of [consent + "\n", "{}", "null", wire({ ...c, extra: true }), wire({ ...c, acknowledgeWitnessOnly: false }),
++    wire({ ...c, epoch: "old" }), wire({ ...c, anchorDigest: "sha256:" + "0".repeat(64) }),
++    wire({ ...c, identity: ["wrong"] }), wire({ ...c, expiresAt: 30_001 })]) denied(() => h.prepare(bad));
++  let touched = false;
++  denied(() => h.prepare(new Proxy({}, { get() { touched = true; throw Error("not inspected"); } })));
++  assert.equal(touched, false); assert.equal(w.preparations, 0); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: expiry at each forward stage denies with no renewed deadline", () => {
++  for (const stage of ["prepare", "mark", "commit"] as const) {
++    const { world: w, owner: h } = fixture(), consent = h.offer(100);
++    if (stage !== "prepare") h.prepare(consent);
++    if (stage === "commit") h.markPossible();
++    w.now = 100;
++    denied(() => stage === "prepare" ? h.prepare(consent) : stage === "mark" ? h.markPossible() : h.commitExactTail());
++    assert.equal(w.anchorWrites, 0); assert.equal(w.possibleMarkers, stage === "commit" ? 1 : 0);
++    if (stage === "commit") assert.equal(h.discover().disposition, "unknown-consumed-no-retry");
++  }
++});
++
++test("maintenance model: logical clock regression closes the lifetime rather than reviving consumption", () => {
++  const { world: w, owner: h } = fixture(); w.now = 10; h.prepare(h.offer(100)); h.markPossible();
++  w.now = 9; denied(() => h.commitExactTail()); w.now = 11; denied(() => h.discover());
++  const resumed = w.open(); assert.equal(resumed.discover().disposition, "unknown-consumed-no-retry");
++  denied(() => resumed.markPossible()); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: local drift after offer and after intent cannot witness another payload", () => {
++  for (const prepared of [false, true]) {
++    const { world: w, owner: h } = fixture(), consent = h.offer(100);
++    if (prepared) h.prepare(consent);
++    const other = frames(1).at(-1)!;
++    w.local.inventory = other.input; w.local.history = historyWire(other.history);
++    denied(() => prepared ? h.markPossible() : h.prepare(consent));
++    assert.equal(w.anchorWrites, 0); assert.equal(w.possibleMarkers, 0);
++  }
++});
++
++test("maintenance model: anchor drift after marker consumes handling but cannot produce an acknowledgment", () => {
++  const { world: w, owner: h } = fixture(); h.prepare(h.offer(100)); h.markPossible();
++  const previous = w.snapshot().anchor; w.corruptAnchorForTest(w.local.history);
++  denied(() => h.commitExactTail()); assert.equal(w.snapshot().journal?.phase, "contact-possible");
++  w.corruptAnchorForTest(previous); denied(() => h.commitExactTail()); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: all forbidden stream relations deny through the real full-history validator", () => {
++  const fs = frames(), frame = fs.at(-1)!, good = historyWire(frame.history.slice(0, -1));
++  const changed = structuredClone(frame.history.slice(0, -1)); changed[1]!.recordDigest = "sha256:" + "f".repeat(64);
++  for (const anchor of [historyWire([]), historyWire(frame.history.slice(0, -2)), historyWire(changed), good + " ", "{}"] ) {
++    const w = new World(frame, anchor), h = w.open(); denied(() => h.offer(100)); denied(() => h.discover());
++    assert.equal(w.anchorWrites, 0); assert.equal(w.preparations, 0);
++  }
++  const w = new World(fs[0]!, historyWire(frame.history)); denied(() => w.open().offer(100));
++});
++
++test("maintenance model: equality is discovery only; neither genesis nor equal pair offers a repair", () => {
++  const frame = frames().at(-1)!, w = new World(frame, historyWire(frame.history)), h = w.open();
++  assert.equal(h.discover().disposition, "equal-claims-only"); denied(() => h.offer(100));
++  assert.equal(w.anchorWrites, 0); assert.equal(w.preparations, 0);
++  const g = new World({ input: envelope([]), checkpoint: genesis, history: [genesis] }, historyWire([genesis])), gh = g.open();
++  assert.equal(gh.discover().disposition, "equal-claims-only"); denied(() => gh.offer(100));
++  assert.equal(g.preparations, 0); assert.equal(g.anchorWrites, 0);
++});
++
++test("maintenance model: preparation-only reply loss can continue the same unspent consent after discovery", () => {
++  const { world: w, owner: h } = fixture(); h.prepare(h.offer(100)); h.crash();
++  const reopened = w.open(); assert.equal(reopened.discover().journalPhase, "prepared");
++  reopened.markPossible(); reopened.commitExactTail();
++  assert.equal(w.preparations, 1); assert.equal(w.possibleMarkers, 1); assert.equal(w.anchorWrites, 1);
++  assert.equal(reopened.discover().authority, "none");
++});
++
++test("maintenance model: reopening cannot reset the simulated authority clock or renew prepared consent", () => {
++  const { world: w, owner: h } = fixture(); w.now = 50; h.prepare(h.offer(100)); h.crash();
++  w.now = 49; const regressed = w.open(); denied(() => regressed.markPossible());
++  w.now = 100; const expired = w.open(); denied(() => expired.markPossible());
++  denied(() => expired.prepare(expired.offer(200))); assert.equal(w.possibleMarkers, 0); assert.equal(w.anchorWrites, 0);
++});
++
++test("maintenance model: forged or missing inventory fails even with a matching history prefix", () => {
++  const { world: w, owner: h } = fixture(); w.local.inventory = "{}";
++  denied(() => h.offer(100)); denied(() => h.discover());
++  assert.equal(w.preparations, 0); assert.equal(w.possibleMarkers, 0); assert.equal(w.anchorWrites, 0);
++  assert.equal(new SyntheticRecoveryError().message, "synthetic-reconciliation-denied");
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-wire-bound.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-wire-bound.test.ts
+new file mode 100644
+index 0000000..92ddef1
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-wire-bound.test.ts
+@@ -0,0 +1,122 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { createHash } from "node:crypto";
++import { resolve } from "node:path";
++import ts from "typescript";
++import { canonicalJson as wire } from "../../src/compatibility/canonical-json.js";
++import { parseCandidateV3Metadata, parseCandidateSettlementCore, CANDIDATE_V3_META_MAX_BYTES, CANDIDATE_SETTLEMENT_MAX_BYTES } from "../../src/build-only/windows-candidate-v3-data.js";
++import { parseCandidateV3Record, parseCandidateV3Checkpoint, CANDIDATE_V3_MAX_RECORD_BYTES, CANDIDATE_V3_MAX_CHECKPOINT_BYTES } from "../../src/build-only/windows-candidate-v3-record.js";
++import { CANDIDATE_V3_MAX_OPERATIONS, CANDIDATE_V3_MAX_INVENTORY_BYTES } from "../../src/build-only/windows-candidate-v3-inventory.js";
++import { V3_MESSAGE_LIMITS } from "../../src/build-only/windows-candidate-v3-messages.js";
++import { encodeCandidateV3LocalSnapshot } from "../../src/build-only/windows-candidate-v3-coordinator-data.js";
++import { maximumStructuralShapes, structuralWireBounds, BOUND_SOURCE_PINS, profile, embed, arrayBound, objectBound } from "../helpers/candidate-v3-wire-bound.js";
++import { fixture, metadata } from "../helpers/candidate-v3-record-fixture.js";
++import { families, make, transcript, pins, recordsOf } from "../helpers/candidate-v3-history-fixture.js";
++
++const read = (p: string) => readFileSync(resolve(p));
++function sourceObjects(path: string) {
++  const sf = ts.createSourceFile(path, read(path).toString(), ts.ScriptTarget.Latest, true);
++  const declarations = new Map<string, ts.Expression>();
++  for (const statement of sf.statements) if (ts.isVariableStatement(statement)) {
++    for (const d of statement.declarationList.declarations) if (ts.isIdentifier(d.name) && d.initializer) declarations.set(d.name.text, d.initializer);
++  }
++  const keys = (expression: ts.Expression): string[] => {
++    if (ts.isIdentifier(expression)) { const value = declarations.get(expression.text); assert(value); return keys(value); }
++    if (ts.isCallExpression(expression) && ts.isPropertyAccessExpression(expression.expression)) {
++      const access = expression.expression;
++      if (access.name.text === "strict") return keys(access.expression);
++      if (access.name.text === "object") { assert(expression.arguments[0]); return keys(expression.arguments[0]); }
++    }
++    assert(ts.isObjectLiteralExpression(expression));
++    return expression.properties.flatMap(p => {
++      if (ts.isSpreadAssignment(p)) return keys(p.expression);
++      assert(ts.isPropertyAssignment(p) && (ts.isIdentifier(p.name) || ts.isStringLiteral(p.name))); return [p.name.text];
++    });
++  };
++  return { sf, declarations, keys, named: (name: string) => { const n = declarations.get(name); assert(n); return keys(n).sort(); } };
++}
++test("wire-bound research is pinned to unchanged inspected schema/canonical source", () => {
++  for (const [p, expected] of Object.entries(BOUND_SOURCE_PINS)) assert.equal(createHash("sha256").update(read(p).toString().replaceAll("\r\n", "\n")).digest("hex"), expected,
++    "Re-derive/review the structural bound after schema or parser changes: " + p);
++});
++
++test("structural supersets cover every strict schema field, including both intent variants", () => {
++  const shapes = maximumStructuralShapes(), data = sourceObjects("src/build-only/windows-candidate-v3-data.ts"), record = sourceObjects("src/build-only/windows-candidate-v3-record.ts");
++  for (const [name, sample] of [["metaSchema", shapes.metadata], ["settlementSchema", shapes.settlement]] as const) assert.deepEqual(data.named(name), Object.keys(sample).sort());
++  for (const [name, sample] of [["eventSchema", shapes.event], ["recordSchema", shapes.record], ["checkpointSchema", shapes.checkpoint]] as const) assert.deepEqual(record.named(name), Object.keys(sample).sort());
++  const intent = record.declarations.get("intentSchema"); assert(intent && ts.isCallExpression(intent));
++  const variants = intent.arguments[1]; assert(variants && ts.isArrayLiteralExpression(variants));
++  assert.equal(variants.elements.length, 2);
++  const maximum = Object.keys(shapes.intent).sort();
++  assert.deepEqual(record.keys(variants.elements[1]!).sort(), maximum);
++  assert.deepEqual(record.keys(variants.elements[0]!).sort(), maximum.filter(k => k !== "executionOperationId" && k !== "resultDigest"));
++  assert.match(record.declarations.get("recordSchema")!.getText(record.sf), /events: z\.array\(eventSchema\)\.max\(6\)/);
++});
++
++test("JSON string nesting arithmetic matches independent serialization including repeat escaping", () => {
++  for (const sample of ["{}", '"value"', wire({ text: 'a"b\\c' }), wire(maximumStructuralShapes().record)]) {
++    let value = sample, bound = profile(value);
++    for (let n = 0; n < 4; n++) { value = JSON.stringify(value); bound = embed(bound); assert.deepEqual(profile(value), bound); }
++  }
++  const value = { key: "abc" };
++  for (const n of [0, 1, 2, 1000]) assert.deepEqual(profile(JSON.stringify(Array.from({ length: n }, () => value))), arrayBound(profile(JSON.stringify(value)), n));
++  assert.deepEqual(profile(JSON.stringify({ a: value, b: null })), objectBound({ a: profile(JSON.stringify(value)), b: profile("null") }));
++});
++
++test("even the relaxed structural byte ceilings fit unchanged inner and outer caps", t => {
++  const b = structuralWireBounds(); assert.equal(CANDIDATE_V3_MAX_OPERATIONS, b.operations);
++  assert(b.members.metadata.bytes < CANDIDATE_V3_META_MAX_BYTES); assert(b.members.record.bytes < CANDIDATE_V3_MAX_RECORD_BYTES);
++  assert(b.members.settlement.bytes < CANDIDATE_SETTLEMENT_MAX_BYTES); assert(b.members.checkpoint.bytes < CANDIDATE_V3_MAX_CHECKPOINT_BYTES);
++  assert(b.inventory.bytes < CANDIDATE_V3_MAX_INVENTORY_BYTES); assert(b.history.bytes < CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  assert(b.snapshot.bytes < V3_MESSAGE_LIMITS.bootstrapBytes);
++  for (const p of Object.values(b.members)) assert.equal(p.backslashes, 0);
++  t.diagnostic(JSON.stringify(b));
++});
++
++test("structural ceiling objects are NOT passed off as valid or maximum-admissible histories", () => {
++  const s = maximumStructuralShapes(); parseCandidateV3Metadata(wire(s.metadata));
++  assert.throws(() => parseCandidateV3Record(wire(s.record), wire(s.metadata), wire(s.settlement), wire(s.checkpoint)));
++  assert.throws(() => parseCandidateSettlementCore(wire(s.settlement)));
++  assert.throws(() => parseCandidateV3Checkpoint(wire(s.checkpoint), wire(s.metadata)));
++  // It is a deliberate overapproximation: six longest events, all nullable
++  // digests present and longest outcomes cannot coexist in a legal row.
++  assert.equal(s.record.events.length, 6); assert.equal(JSON.stringify(null).length, 4);
++});
++
++test("materialized 1000-row structural superset and 7001 checkpoints exactly reproduce the arithmetic", () => {
++  // Deliberately invalid rows/checkpoints: this measures serialization equality,
++  // NOT accepted capacity, bootstrap speed, process memory or physical custody.
++  const s = maximumStructuralShapes(), b = structuralWireBounds();
++  const recordWire = wire(s.record), settlementWire = wire(s.settlement), checkpointAWire = wire(s.checkpoint);
++  const inventory = wire({ domain: "agent-candidate-inventory-transport/v1",
++    records: Array.from({ length: b.operations }, () => ({ recordWire, settlementWire, checkpointAWire })) });
++  const history = wire({ domain: "agent-candidate-checkpoint-history/v1",
++    checkpoints: Array.from({ length: b.structuralCheckpoints }, () => checkpointAWire) });
++  assert.deepEqual(profile(inventory), b.inventory); assert.deepEqual(profile(history), b.history);
++  const snapshot = encodeCandidateV3LocalSnapshot(wire(s.metadata), inventory, history);
++  assert.deepEqual(profile(snapshot), b.snapshot);
++});
++
++test("all 53 existing family prefixes and valid settlement/checkpoint samples fit the bound", () => {
++  const b = structuralWireBounds(); let count = 0;
++  const below = (text: string, bound: ReturnType<typeof profile>) => {
++    const actual = profile(text); for (const key of ["bytes", "quotes", "backslashes"] as const) assert(actual[key] <= bound[key]);
++    assert(/^[\x20-\x7e]+$/.test(text));
++  };
++  for (let family = 0; family < families.length; family++) {
++    const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent), fs = parent ? [parent, f] : [f];
++    for (const frame of transcript(fs, fs.flatMap((r, i) => Array(r.record.events.length + 1).fill(i) as number[]))) {
++      for (const row of recordsOf(frame.input)) {
++        parseCandidateV3Record(row.recordWire, pins, row.settlementWire, row.checkpointAWire); below(row.recordWire, b.members.record);
++        if (row.settlementWire) below(row.settlementWire, b.members.settlement);
++        if (row.checkpointAWire) below(row.checkpointAWire, b.members.checkpoint);
++      }
++      below(wire(frame.checkpoint), b.members.checkpoint); count++;
++    }
++  }
++  assert.equal(count, 53);
++  const failed = fixture("execute", "failed"); parseCandidateSettlementCore(wire(failed.core)); below(wire(failed.core), b.members.settlement);
++  const alternative = wire(failed.record).replace('"approvalId":"0', '"approvalId":"\\u0030');
++  assert.throws(() => parseCandidateV3Record(alternative, wire(metadata), wire(failed.core), wire(failed.checkpointA)));
++});

@@ -1,0 +1,201 @@
+{
+  "executionRevision": "65b6a833d8641eae3f1a645ba6f21dc347be0fce",
+  "packetSourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+  "matches": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "supplied": true,
+      "executedSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "currentSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "supplied": true,
+      "executedSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "currentSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "supplied": true,
+      "executedSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "currentSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "supplied": true,
+      "executedSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "currentSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-messages.ts",
+      "supplied": true,
+      "executedSha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "currentSha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "supplied": true,
+      "executedSha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "currentSha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "supplied": true,
+      "executedSha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "currentSha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "supplied": true,
+      "executedSha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "currentSha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "supplied": true,
+      "executedSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "currentSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "supplied": true,
+      "executedSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "currentSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteEqual": true
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "supplied": true,
+      "executedSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "currentSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "supplied": true,
+      "executedSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "currentSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "supplied": true,
+      "executedSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "currentSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-pair-claims.ts",
+      "supplied": true,
+      "executedSha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "currentSha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "supplied": false,
+      "executedSha256": "cc3ef09915bc1b76177949ecff7af734dbe9a7d7ff6c6c6e5703bec30461ec91",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "supplied": true,
+      "executedSha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "currentSha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-wire-bound.ts",
+      "supplied": true,
+      "executedSha256": "542e9176e747f16b008411b29f5b6baaf7255ba2343227aebf2d9dab7e3bb183",
+      "currentSha256": "542e9176e747f16b008411b29f5b6baaf7255ba2343227aebf2d9dab7e3bb183",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "supplied": true,
+      "executedSha256": "00fea39bd349e0c6478b12a8e85bc2e45c0265b612241f980261884df4f11fac",
+      "currentSha256": "00fea39bd349e0c6478b12a8e85bc2e45c0265b612241f980261884df4f11fac",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "supplied": false,
+      "executedSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "supplied": false,
+      "executedSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "supplied": false,
+      "executedSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "supplied": false,
+      "executedSha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "supplied": false,
+      "executedSha256": "45b2e60b521db243b9b7e7957e90d859b5fd7d1607ccb9712fdc957e4aaab4d0",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-validation-session.test.ts",
+      "supplied": false,
+      "executedSha256": "dad1063bf00b920d0078125c5dd9a73810b1bcc8717007217d1c54c71605aab5",
+      "currentSha256": null,
+      "byteEqual": null
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "supplied": true,
+      "executedSha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "currentSha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "supplied": true,
+      "executedSha256": "2e1998828b01802f0bfdb07f599d037c2596f04e561ab2e833ddbdf07f6b345d",
+      "currentSha256": "2e1998828b01802f0bfdb07f599d037c2596f04e561ab2e833ddbdf07f6b345d",
+      "byteEqual": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "supplied": true,
+      "executedSha256": "4f31788c1e7b120e98217f2fa20462a9ff36e6df38d90b36d3287aa2de87cbb1",
+      "currentSha256": "4f31788c1e7b120e98217f2fa20462a9ff36e6df38d90b36d3287aa2de87cbb1",
+      "byteEqual": true
+    }
+  ],
+  "limitations": [
+    "Producer-only execution. New physical designs were written AFTER this run; the run does not test them.",
+    "Selected compiled/config/runtime inputs are hashes only. No installed-dependency/EXACT_TREE claim.",
+    "Full TAP supplied for honest count/skip evidence; full-suite source is deliberately excluded.",
+    "Executed runner and compiled files omitted; this packet is non-runnable. Other capacity/broker metrics in docs are historical claims, not newly reproduced here."
+  ]
+}

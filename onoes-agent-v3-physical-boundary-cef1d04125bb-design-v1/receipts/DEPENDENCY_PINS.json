@@ -1,0 +1,23 @@
+{
+  "kind": "selected-lock-metadata-not-installed-integrity",
+  "lockSha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24",
+  "selected": [
+    {
+      "path": "node_modules/zod",
+      "version": "4.4.3",
+      "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ=="
+    },
+    {
+      "path": "node_modules/typescript",
+      "version": "5.9.3",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+    },
+    {
+      "path": "node_modules/@types/node",
+      "version": "24.13.3",
+      "integrity": "sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q=="
+    }
+  ],
+  "native": "C# references Windows/.NET system APIs; no binaries, build environment, framework or native dependencies shipped.",
+  "exclusions": "Full package manifest/lock, dependency bytes and native probe orchestrator are not supplied."
+}

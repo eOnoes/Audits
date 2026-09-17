@@ -1,0 +1,15 @@
+{
+  "auditId": "onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1",
+  "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+  "baseline": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+  "templateRevision": "94932dd9f0089044a014c98a90fcf64ef0447393",
+  "kind": "prepared-local-static-design-packet-not-published",
+  "report": {
+    "repository": "eOnoes/Audits",
+    "branch": "main",
+    "path": "onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1/reports/AUDIT_REPORT.md",
+    "contract": "Report repository: eOnoes/Audits. Branch: main. Exact report output: onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1/reports/AUDIT_REPORT.md. Sole write exception: add the completed sanitized report using existing authorized access, after checking workflow files AND activation state. If Actions could run or status is unknown, stop and obtain Eddie's specific approval. No input/source/manifest edits, branches, PRs, force-push, deletions, subject execution, installs, providers or charges. Preserve prior reports with the next numbered AUDIT_REPORT_ADDENDUM_N.md. Read back the committed report and return its immutable GitHub link and distinct output commit. Without write access return complete Markdown with REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS and the exact path. Public Git history persists after cleanup."
+  },
+  "authority": "No public transfer approval recorded for this new packet; no physical execution authorized.",
+  "scanException": "The one hard-coded Windows Sandbox WDAGUtilityAccount profile guard in the exact historical broker source is a disposable fixture path, not an operator profile; its original bytes are retained. No other user-profile path is allowed."
+}

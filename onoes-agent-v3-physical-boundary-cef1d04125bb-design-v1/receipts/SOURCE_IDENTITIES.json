@@ -1,0 +1,328 @@
+{
+  "auditId": "onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1",
+  "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+  "memberCount": 40,
+  "provenance": "publisher-local-git-not-independent-bundle",
+  "members": [
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_PHYSICAL_ADAPTER_CONTRACT_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "e8d5a747d8f59b2c4d656258877cc793ee79612434493ec18b416b022eb858d8",
+      "byteLength": 22186,
+      "gitBlobOid": "9bb157f34cbc5e551ca8b6eb94c34ee422241020"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_WINDOWS_PEER_CHANNEL_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_WINDOWS_PEER_CHANNEL_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "17151ea83a4da47c51b9ebc3bf93b0d71dcbda9846885a59c11111ff44d65aa7",
+      "byteLength": 16532,
+      "gitBlobOid": "4f9fa8ec16752c656b0a6705847b277f0157ead4"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_AUTHORITY_JOURNAL_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_AUTHORITY_JOURNAL_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "6c2f4c1a93e09e7424528db46577f5b2a940836895431010b814d65356cbee4b",
+      "byteLength": 19087,
+      "gitBlobOid": "fc84944949a1477ea2af015374cc9d4403f6343c"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_WINDOWS_ANCHOR_BACKEND_CANDIDATE.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_WINDOWS_ANCHOR_BACKEND_CANDIDATE.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "fb835177ed608a884a4a02b5f993ae0b973d47e15e318f34f8c51484b19ce7d9",
+      "byteLength": 15692,
+      "gitBlobOid": "e560b48e7509d7e010192bbeb12511d8172fd617"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_WINDOWS_ENROLLMENT_RECOVERY_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_WINDOWS_ENROLLMENT_RECOVERY_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "a1f08a01b4de02060ae035a0505f9286dcfcb3bbb6dc243db52660c319ea6d5f",
+      "byteLength": 13331,
+      "gitBlobOid": "d094ca0e6ae909d3bf7bb34172ded7e83273aa10"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_RECONCILIATION_MODEL.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_RECONCILIATION_MODEL.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "03f5b0bc9f8577a1586eb869b90472caa618660aa46a7243d8cac4952f8c91be",
+      "byteLength": 6858,
+      "gitBlobOid": "3e11e5e4f2f46d96fc9609f5ac2724a2a3e9fbe8"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "d5ed23e0d1b1aa7f8fde791c354d05add0cf69c5ba89194dc7baabc85342ca79",
+      "byteLength": 16791,
+      "gitBlobOid": "c816c26e6fe8b75eeeb121aa3109278444cc6b03"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "edeac994e9da470e2cfdb2895993b661bfc6bfa7b6cace605762bd8d69a968da",
+      "byteLength": 11176,
+      "gitBlobOid": "7dcd7bde4509f80b57447889b996cabdbd25827c"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_PERSISTENCE_DESIGN_DRAFT.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_PERSISTENCE_DESIGN_DRAFT.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "57e61b6cacb918dd21e0a1e9a0eb8e5c24b4d7ce423a2406b72fc74fa9553171",
+      "byteLength": 18136,
+      "gitBlobOid": "53b5afcb0aecf3825e125a225a554c9d03452d2b"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "14c368bc6a25307c5c73cd070e76b0b0c4954b86e9603d4f1a5197ea3e006ab6",
+      "byteLength": 27087,
+      "gitBlobOid": "3a8c5f20f168b2df9f3da4d0026368f6ccb7a4ec"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_STRUCTURAL_WIRE_BOUND.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_STRUCTURAL_WIRE_BOUND.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "0d3c468d96d47213e7663ccd8a8343f09033c071825c48d614e317da7bfea75d",
+      "byteLength": 6579,
+      "gitBlobOid": "ac2c0ab5e7e66fd0ba0e74008ce873247165099a"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_CAPACITY.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_CAPACITY.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "28fe9c8ef7b6e06d657907f898a27d7ae73d059399aca4771d09bb027ac7d374",
+      "byteLength": 5079,
+      "gitBlobOid": "d49eb9554c7135de4d6c9787549c9792ce1d672f"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_STOP_PROBE.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_STOP_PROBE.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "bf2263baa49a16e866f9f5f6d2fe4f00af1eb1871e1ece893316f05ba18beb2e",
+      "byteLength": 4323,
+      "gitBlobOid": "b1ae16e586e40b7cd3cf03c109435afa280dce4d"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_WINDOWS_GUEST_BROKER_IDENTITY.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_WINDOWS_GUEST_BROKER_IDENTITY.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "e1e2db8711968e7a858cbe5bc3c25c55a138538deff47219931f5ff39b74555a",
+      "byteLength": 13248,
+      "gitBlobOid": "f8a9816e8c9f2d5161b871a98e55e4999700f55c"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "b408342d8f6c4d47d9343543407740146fa45033546cba5a0eae733ff6ee13ca",
+      "byteLength": 10028,
+      "gitBlobOid": "b6b817b5d99c4d51e27a75e9e949d7f11bec51ce"
+    },
+    {
+      "productPath": "src/build-only/native/windows-worker-job.cs",
+      "packetPath": "source/src/build-only/native/windows-worker-job.cs",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "17873716286722ea3ddd68e8e44831da6864c050b5c13e1dbb1cc37b9bcc23dd",
+      "byteLength": 15223,
+      "gitBlobOid": "e0b6eed91a5fbb93e3d91df69a5317738aef4dc0"
+    },
+    {
+      "productPath": "tests/probes/windows-guest-broker.cs",
+      "packetPath": "tests/tests/probes/windows-guest-broker.cs",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "eb64d4a6ecefd5b3e228917d38bfbc5da1e3cd7beb7eaf557dd10fa8c04ade57",
+      "byteLength": 27683,
+      "gitBlobOid": "e3995bc86d81edd7c0de288802c23ad77c390972"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-coordinator.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "byteLength": 11846,
+      "gitBlobOid": "befae585148326d8bf077afbf8fe92566e53ff91"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-reconciliation-model.test.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "4f31788c1e7b120e98217f2fa20462a9ff36e6df38d90b36d3287aa2de87cbb1",
+      "byteLength": 10767,
+      "gitBlobOid": "656fba711f0d2ffd582834741d541c736d5a2f9b"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "byteLength": 21038,
+      "gitBlobOid": "aaa8cc5583c71a7a027e5381a3fa7007ae150386"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-wire-bound.test.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "2e1998828b01802f0bfdb07f599d037c2596f04e561ab2e833ddbdf07f6b345d",
+      "byteLength": 9274,
+      "gitBlobOid": "92ddef169150f44078b584a5d9dbb9a5de65ce4b"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "packetPath": "source/src/compatibility/canonical-json.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteLength": 4581,
+      "gitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "packetPath": "source/src/build-only/windows-candidate-effect-state.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "byteLength": 9092,
+      "gitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-inventory.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "byteLength": 13106,
+      "gitBlobOid": "d02251b4f8d4681353e74f01b5245564c6b533f3"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-record.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "byteLength": 11265,
+      "gitBlobOid": "5df15ac2ec527430c8cdc7de855f223d315e5632"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-messages.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-messages.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "byteLength": 10186,
+      "gitBlobOid": "a97f13ab8ba3581d04c709470f8066f869404de4"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "byteLength": 4578,
+      "gitBlobOid": "53e4a37657803493cac72280be200d0b76fc80f4"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-data.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "byteLength": 6084,
+      "gitBlobOid": "742967e6e54a69d1afed05f2c6eca7a0a3d76c7e"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-pair-claims.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-pair-claims.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "byteLength": 2693,
+      "gitBlobOid": "c120d1f6a705a44e9835124da25d1bb170246908"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-history-fixture.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "byteLength": 7610,
+      "gitBlobOid": "bd29fbec5ae5b76662b11087d7613a5b928f1652"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-reconciliation-model.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-reconciliation-model.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "00fea39bd349e0c6478b12a8e85bc2e45c0265b612241f980261884df4f11fac",
+      "byteLength": 6469,
+      "gitBlobOid": "f21644db2b3307723f885f5b314f6dfef243f38f"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-coordinator-ports.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "byteLength": 5294,
+      "gitBlobOid": "a609d53d4ed5f312dce943d99079ab7e4a6cf1a0"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-record-fixture.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "byteLength": 6284,
+      "gitBlobOid": "923fc068f172566a4c71bbcccb6e2ee1f07e0fd7"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-wire-bound.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-wire-bound.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "542e9176e747f16b008411b29f5b6baaf7255ba2343227aebf2d9dab7e3bb183",
+      "byteLength": 6970,
+      "gitBlobOid": "452816758b2d96cdbca7f8b13d2acd625966d85c"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "packetPath": "source/src/validation/deep-freeze.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteLength": 378,
+      "gitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-validation-session.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "byteLength": 5289,
+      "gitBlobOid": "112962a17d272709717bbb26acaf79da9536a044"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-incremental.ts",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "byteLength": 5539,
+      "gitBlobOid": "976f376e40102450380a3fe984f5aba4dd659556"
+    },
+    {
+      "productPath": "docs/reports/v3-reconciliation-model-20260917/receipt.json",
+      "packetPath": "receipts/RECONCILIATION_PRODUCER_RECEIPT.json",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "406ce68a15af7df3bf440e3a99fa77403ba7734238ea377810d905bb7f72228b",
+      "byteLength": 41616,
+      "gitBlobOid": "46bbcd7b1a8739743849a185b67c03e5d5ace9e9"
+    },
+    {
+      "productPath": "docs/reports/v3-reconciliation-model-20260917/focused.tap",
+      "packetPath": "receipts/focused.tap",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "fed6eda5c639355f9773583526a3d872500e88db3670718b9a2a03075c7f5d99",
+      "byteLength": 38785,
+      "gitBlobOid": "57e639d008530464369ccb63c30217fd54449cd3"
+    },
+    {
+      "productPath": "docs/reports/v3-reconciliation-model-20260917/full.tap",
+      "packetPath": "receipts/full.tap",
+      "sourceRevision": "cef1d04125bb82fb222ca1ff6deb613746daba69",
+      "sha256": "f2858e52c42a4a2028ee9656c0dd56a971beeb8a61def5636f8950cee596c8b3",
+      "byteLength": 501402,
+      "gitBlobOid": "af4b7fba38c8b09f8561c16e93c730b33cf19160"
+    }
+  ]
+}

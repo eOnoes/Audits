@@ -1,0 +1,9 @@
+# Locked scope
+
+onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1; publisher source cef1d04125bb82fb222ca1ff6deb613746daba69; comparison baseline 7e923956dd014f44e8eb20449499de31c3e4d7f7.
+
+Design review for a possible bounded disposable metadata-only experiment. NO physical implementation is in this delta. All selected relative TypeScript dependencies are supplied; Node and external libraries are not. Native job/broker files are historical source reference, not build closure or production authorization. Product paths are preserved under source/ or tests/; the tests/tests/unit placement is a transport layout, not a runnable project. No compile/install/reconstruction execution is authorized. Source identities and delta cover the selected documents too.
+
+The original private Claude implementation report is not included or replaced by a purported transcription. CURRENT_CONTEXT is a producer summary only. All new designs postdate that review. Full suite source, other historical artifacts, host paths/logs, credentials, images and runtime packages are excluded. This packet does not prove publisher full-commit membership.
+
+Report repository: eOnoes/Audits. Branch: main. Exact report output: onoes-agent-v3-physical-boundary-cef1d04125bb-design-v1/reports/AUDIT_REPORT.md. Sole write exception: add the completed sanitized report using existing authorized access, after checking workflow files AND activation state. If Actions could run or status is unknown, stop and obtain Eddie's specific approval. No input/source/manifest edits, branches, PRs, force-push, deletions, subject execution, installs, providers or charges. Preserve prior reports with the next numbered AUDIT_REPORT_ADDENDUM_N.md. Read back the committed report and return its immutable GitHub link and distinct output commit. Without write access return complete Markdown with REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS and the exact path. Public Git history persists after cleanup.
