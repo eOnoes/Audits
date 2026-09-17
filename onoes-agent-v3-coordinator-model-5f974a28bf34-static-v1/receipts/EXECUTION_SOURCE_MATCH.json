@@ -1,0 +1,122 @@
+{
+  "executions": [
+    {
+      "name": "messages",
+      "baseRevision": "09be9332f9274c71373d1ce9192a0a0e57fdfe3d",
+      "workingTreeDelta": true,
+      "sourceChecks": [
+        {
+          "path": "src/build-only/windows-candidate-v3-data.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-record.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-inventory.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-incremental.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-effect-state.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/compatibility/canonical-json.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/validation/deep-freeze.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-record-fixture.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-history-fixture.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-pair-claims.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-coordinator-model.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-data.test.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-record.test.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-inventory.test.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+          "matchesCurrentSource": true
+        }
+      ],
+      "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+      "fullProductIdentityNotEstablished": true
+    },
+    {
+      "name": "capacity",
+      "baseRevision": "09be9332f9274c71373d1ce9192a0a0e57fdfe3d",
+      "workingTreeDelta": true,
+      "sourceChecks": [
+        {
+          "path": "src/build-only/windows-candidate-v3-data.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-record.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-inventory.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-v3-incremental.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/build-only/windows-candidate-effect-state.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/compatibility/canonical-json.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "src/validation/deep-freeze.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-record-fixture.ts",
+          "matchesCurrentSource": true
+        },
+        {
+          "path": "tests/helpers/candidate-v3-history-fixture.ts",
+          "matchesCurrentSource": true
+        }
+      ],
+      "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+      "fullProductIdentityNotEstablished": true
+    }
+  ]
+}

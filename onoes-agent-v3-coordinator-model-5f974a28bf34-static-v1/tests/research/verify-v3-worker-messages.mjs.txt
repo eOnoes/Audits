@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { spawnSync, execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+const repo = '[PRIVATE_REPOSITORY_ROOT]', root = join(repo, 'product/companion-v1');
+const out = join(root, 'docs/reports/v3-worker-messages-20260917');
+const sha = b => createHash('sha256').update(b).digest('hex');
+assert(!existsSync(out), 'create-only evidence'); mkdirSync(out);
+const modules = ['data', 'record', 'inventory', 'incremental'];
+const sources = [...modules.map(n => `src/build-only/windows-candidate-v3-${n}.ts`),
+  'src/build-only/windows-candidate-effect-state.ts', 'src/compatibility/canonical-json.ts', 'src/validation/deep-freeze.ts',
+  ...['record-fixture', 'history-fixture', 'pair-claims', 'coordinator-model'].map(n => `tests/helpers/candidate-v3-${n}.ts`),
+  ...['data', 'record', 'inventory', 'pair-claims', 'coordinator-model'].map(n => `tests/unit/windows-candidate-v3-${n}.test.ts`)];
+const paths = [...sources, ...sources.map(p => '.test-dist/' + p.replace(/\.ts$/, '.js')), 'package-lock.json', 'tsconfig.json', 'tsconfig.test.json'];
+const identities = () => paths.map(path => { const b = readFileSync(join(root, path)); return { path, byteLength: b.length, sha256: sha(b) }; });
+const before = identities(), baseRevision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repo, windowsHide: true }).toString().trim();
+const all = []; function walk(dir) { for (const e of readdirSync(dir, { withFileTypes: true })) { const p = join(dir, e.name); if (e.isDirectory()) walk(p); else if (e.name.endsWith('.test.js')) all.push(p); } }
+walk(join(root, '.test-dist/tests')); all.sort();
+const runs = [];
+for (const [name, files] of [
+  ['focused', ['data', 'record', 'inventory', 'pair-claims', 'coordinator-model'].map(n => `.test-dist/tests/unit/windows-candidate-v3-${n}.test.js`)],
+  ['full', [...all, 'scripts/tests/candidate-review-http.test.mjs', 'scripts/tests/candidate-crash.test.mjs']],
+]) {
+  const args = ['--test', '--test-reporter=tap', '--test-concurrency=4', ...files], beganAtUtc = new Date().toISOString();
+  const result = spawnSync(process.execPath, args, { cwd: root, windowsHide: true, timeout: 480000, maxBuffer: 16000000 });
+  const raw = result.stdout ?? Buffer.alloc(0); writeFileSync(join(out, name + '.tap'), raw, { flag: 'wx' });
+  const run = { name, beganAtUtc, endedAtUtc: new Date().toISOString(), command: ['node', ...args], exitCode: result.status, signal: result.signal,
+    errorCode: result.error?.code ?? null, rawTap: { path: name + '.tap', byteLength: raw.length, sha256: sha(raw) },
+    stderrSha256: sha(result.stderr ?? Buffer.alloc(0)), summary: raw.toString().split('\n').filter(l => /^# (tests|pass|fail|cancelled|skipped|duration_ms) /.test(l)),
+    skipLines: raw.toString().split('\n').filter(l => /# SKIP/.test(l)) };
+  runs.push(run); console.log(JSON.stringify({ ...run, command: undefined })); if (result.status !== 0) break;
+}
+const after = identities();
+const receipt = { kind: 'producer-test-only-worker-message-model-not-physical-composition', baseRevision, workingTreeDelta: true,
+  node: process.version, platform: process.platform, arch: process.arch, nodeExecutableSha256: sha(readFileSync(process.execPath)),
+  helperSha256: sha(readFileSync(fileURLToPath(import.meta.url))), identitiesBefore: before, identitiesAfter: after,
+  unchanged: JSON.stringify(before) === JSON.stringify(after), runs,
+  limitations: ['Selected source/compiled dependency identities, not an independently executed exact full-product tree.',
+    'In-memory storage/owner/anchor and virtual deadlines; no actual coordinator worker, physical persistence, VM, provider or OS activation.',
+    'C12 maximum-history resource/stop/dashboard evidence and D3 physical transport are not covered.'] };
+writeFileSync(join(out, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n', { flag: 'wx' });
+assert(receipt.unchanged); assert.equal(runs.length, 2); assert(runs.every(r => r.exitCode === 0));

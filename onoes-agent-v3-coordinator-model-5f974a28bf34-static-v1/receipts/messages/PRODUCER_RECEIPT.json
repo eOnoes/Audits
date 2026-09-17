@@ -1,0 +1,671 @@
+{
+  "kind": "producer-test-only-worker-message-model-not-physical-composition",
+  "baseRevision": "09be9332f9274c71373d1ce9192a0a0e57fdfe3d",
+  "workingTreeDelta": true,
+  "node": "v24.14.0",
+  "platform": "win32",
+  "arch": "x64",
+  "nodeExecutableSha256": "63c259c81e5d472b5f11c8d506070130cb04a1ecf84b80377a34ed6ec9048088",
+  "helperSha256": "4c1f206db29479ffb0253b728601ec04b82c646689ed1af8d21467770ac7317e",
+  "identitiesBefore": [
+    {
+      "path": "src/build-only/windows-candidate-v3-data.ts",
+      "byteLength": 6084,
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-record.ts",
+      "byteLength": 11265,
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-inventory.ts",
+      "byteLength": 13106,
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-incremental.ts",
+      "byteLength": 5539,
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "path": "src/build-only/windows-candidate-effect-state.ts",
+      "byteLength": 9092,
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "path": "src/compatibility/canonical-json.ts",
+      "byteLength": 4581,
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "path": "src/validation/deep-freeze.ts",
+      "byteLength": 378,
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-record-fixture.ts",
+      "byteLength": 6284,
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-history-fixture.ts",
+      "byteLength": 7610,
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-pair-claims.ts",
+      "byteLength": 2693,
+      "sha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "byteLength": 15501,
+      "sha256": "25bd5c5c57feda2ef8c9bfff8828431064f78f3741203a751b61465b0e8b957e"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-data.test.ts",
+      "byteLength": 9936,
+      "sha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-record.test.ts",
+      "byteLength": 12586,
+      "sha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "byteLength": 29964,
+      "sha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "byteLength": 5542,
+      "sha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "byteLength": 19974,
+      "sha256": "4a683818d1d7bbcc99d6f0f76c0bfae352e98572dd2dd2980607a6ab9dd7c820"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-data.js",
+      "byteLength": 5992,
+      "sha256": "9d1273dc415dbe0666fc57f772a77cd8721758fed8d256e5e8f4cdf82ab453d8"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-record.js",
+      "byteLength": 11461,
+      "sha256": "8edfc334eaa48d4cea3f9f3b1ec030234dcf943bb3635bec57d81a28d566ced5"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-inventory.js",
+      "byteLength": 13866,
+      "sha256": "8763d7fac14353a02705ed9bb6a5d4905c5a40e822c741da409fa8babc21a062"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-incremental.js",
+      "byteLength": 5969,
+      "sha256": "0b4a13389cbb6413b36f189b0faa08973732e852f7c4171ed4e25d480c33b2be"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-effect-state.js",
+      "byteLength": 8622,
+      "sha256": "c8fce2699a76fddde58146a91a3b7d554e6a5757dc89db51039bbd30ba3db768"
+    },
+    {
+      "path": ".test-dist/src/compatibility/canonical-json.js",
+      "byteLength": 4763,
+      "sha256": "e52e71e9108e4a3dd570d0a2bb532128d667f5903eac139f5f0a4c17a4c3ae88"
+    },
+    {
+      "path": ".test-dist/src/validation/deep-freeze.js",
+      "byteLength": 382,
+      "sha256": "cba1333b655bee1ddb4b22cc2364edd582bcda419b8a76671c6323d9d671e785"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-record-fixture.js",
+      "byteLength": 6180,
+      "sha256": "56e75dd8f9b05addabe45be31ce68ecd9128db9b9ee406a71a399168a948ffda"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-history-fixture.js",
+      "byteLength": 7077,
+      "sha256": "13f5f299dd9227b3e973e70dd9626b99a91cf5c08f573fa0c03b0721f03224f0"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-pair-claims.js",
+      "byteLength": 2649,
+      "sha256": "e3cff89e7661836b6146e848109b22b99951293bf4809799c446588e4b136060"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-coordinator-model.js",
+      "byteLength": 16553,
+      "sha256": "a4814c2f655807798232f7b91acc301cd8835d9b77c9f5c165dafa51d968f0d7"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-data.test.js",
+      "byteLength": 10386,
+      "sha256": "14b33e9c121bae9b04132e71ec6f6b51d4a81d88d2b7215f37ef1af78baeaeb4"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-record.test.js",
+      "byteLength": 13335,
+      "sha256": "b4e6a77aff3ab61f9a8d713ce6d96e08e78e60ca8f3e4f1bf7ee35817466438c"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-inventory.test.js",
+      "byteLength": 31004,
+      "sha256": "ea8f11b9e5fb9fc79861db2aea30276aaf35d688ba5ea7e5672f36bc8dde8b91"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-pair-claims.test.js",
+      "byteLength": 5739,
+      "sha256": "bd58e1c736c5846d2407a5e9ed8c5bb33c45cff535ad626a1b9fe18fc502af6b"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-coordinator-model.test.js",
+      "byteLength": 21874,
+      "sha256": "3d220d271d5ea6f1d495c2311d4b1706da6fa2cc324aaeed673f2c86bf2e4714"
+    },
+    {
+      "path": "package-lock.json",
+      "byteLength": 18577,
+      "sha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24"
+    },
+    {
+      "path": "tsconfig.json",
+      "byteLength": 660,
+      "sha256": "b10f110554b786bbe630b64c84427b6a290549375f3bdead816fa9646f385ada"
+    },
+    {
+      "path": "tsconfig.test.json",
+      "byteLength": 163,
+      "sha256": "e62f07f54178b804c1fe238feee57ee0ca1ad239a2f065630fcc67ed56ffde92"
+    }
+  ],
+  "identitiesAfter": [
+    {
+      "path": "src/build-only/windows-candidate-v3-data.ts",
+      "byteLength": 6084,
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-record.ts",
+      "byteLength": 11265,
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-inventory.ts",
+      "byteLength": 13106,
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-incremental.ts",
+      "byteLength": 5539,
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "path": "src/build-only/windows-candidate-effect-state.ts",
+      "byteLength": 9092,
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "path": "src/compatibility/canonical-json.ts",
+      "byteLength": 4581,
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "path": "src/validation/deep-freeze.ts",
+      "byteLength": 378,
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-record-fixture.ts",
+      "byteLength": 6284,
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-history-fixture.ts",
+      "byteLength": 7610,
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-pair-claims.ts",
+      "byteLength": 2693,
+      "sha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "byteLength": 15501,
+      "sha256": "25bd5c5c57feda2ef8c9bfff8828431064f78f3741203a751b61465b0e8b957e"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-data.test.ts",
+      "byteLength": 9936,
+      "sha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-record.test.ts",
+      "byteLength": 12586,
+      "sha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "byteLength": 29964,
+      "sha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "byteLength": 5542,
+      "sha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "byteLength": 19974,
+      "sha256": "4a683818d1d7bbcc99d6f0f76c0bfae352e98572dd2dd2980607a6ab9dd7c820"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-data.js",
+      "byteLength": 5992,
+      "sha256": "9d1273dc415dbe0666fc57f772a77cd8721758fed8d256e5e8f4cdf82ab453d8"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-record.js",
+      "byteLength": 11461,
+      "sha256": "8edfc334eaa48d4cea3f9f3b1ec030234dcf943bb3635bec57d81a28d566ced5"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-inventory.js",
+      "byteLength": 13866,
+      "sha256": "8763d7fac14353a02705ed9bb6a5d4905c5a40e822c741da409fa8babc21a062"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-incremental.js",
+      "byteLength": 5969,
+      "sha256": "0b4a13389cbb6413b36f189b0faa08973732e852f7c4171ed4e25d480c33b2be"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-effect-state.js",
+      "byteLength": 8622,
+      "sha256": "c8fce2699a76fddde58146a91a3b7d554e6a5757dc89db51039bbd30ba3db768"
+    },
+    {
+      "path": ".test-dist/src/compatibility/canonical-json.js",
+      "byteLength": 4763,
+      "sha256": "e52e71e9108e4a3dd570d0a2bb532128d667f5903eac139f5f0a4c17a4c3ae88"
+    },
+    {
+      "path": ".test-dist/src/validation/deep-freeze.js",
+      "byteLength": 382,
+      "sha256": "cba1333b655bee1ddb4b22cc2364edd582bcda419b8a76671c6323d9d671e785"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-record-fixture.js",
+      "byteLength": 6180,
+      "sha256": "56e75dd8f9b05addabe45be31ce68ecd9128db9b9ee406a71a399168a948ffda"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-history-fixture.js",
+      "byteLength": 7077,
+      "sha256": "13f5f299dd9227b3e973e70dd9626b99a91cf5c08f573fa0c03b0721f03224f0"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-pair-claims.js",
+      "byteLength": 2649,
+      "sha256": "e3cff89e7661836b6146e848109b22b99951293bf4809799c446588e4b136060"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-coordinator-model.js",
+      "byteLength": 16553,
+      "sha256": "a4814c2f655807798232f7b91acc301cd8835d9b77c9f5c165dafa51d968f0d7"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-data.test.js",
+      "byteLength": 10386,
+      "sha256": "14b33e9c121bae9b04132e71ec6f6b51d4a81d88d2b7215f37ef1af78baeaeb4"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-record.test.js",
+      "byteLength": 13335,
+      "sha256": "b4e6a77aff3ab61f9a8d713ce6d96e08e78e60ca8f3e4f1bf7ee35817466438c"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-inventory.test.js",
+      "byteLength": 31004,
+      "sha256": "ea8f11b9e5fb9fc79861db2aea30276aaf35d688ba5ea7e5672f36bc8dde8b91"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-pair-claims.test.js",
+      "byteLength": 5739,
+      "sha256": "bd58e1c736c5846d2407a5e9ed8c5bb33c45cff535ad626a1b9fe18fc502af6b"
+    },
+    {
+      "path": ".test-dist/tests/unit/windows-candidate-v3-coordinator-model.test.js",
+      "byteLength": 21874,
+      "sha256": "3d220d271d5ea6f1d495c2311d4b1706da6fa2cc324aaeed673f2c86bf2e4714"
+    },
+    {
+      "path": "package-lock.json",
+      "byteLength": 18577,
+      "sha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24"
+    },
+    {
+      "path": "tsconfig.json",
+      "byteLength": 660,
+      "sha256": "b10f110554b786bbe630b64c84427b6a290549375f3bdead816fa9646f385ada"
+    },
+    {
+      "path": "tsconfig.test.json",
+      "byteLength": 163,
+      "sha256": "e62f07f54178b804c1fe238feee57ee0ca1ad239a2f065630fcc67ed56ffde92"
+    }
+  ],
+  "unchanged": true,
+  "runs": [
+    {
+      "name": "focused",
+      "beganAtUtc": "2026-09-17T03:06:06.213Z",
+      "endedAtUtc": "2026-09-17T03:06:07.655Z",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=4",
+        ".test-dist/tests/unit/windows-candidate-v3-data.test.js",
+        ".test-dist/tests/unit/windows-candidate-v3-record.test.js",
+        ".test-dist/tests/unit/windows-candidate-v3-inventory.test.js",
+        ".test-dist/tests/unit/windows-candidate-v3-pair-claims.test.js",
+        ".test-dist/tests/unit/windows-candidate-v3-coordinator-model.test.js"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "errorCode": null,
+      "rawTap": {
+        "path": "focused.tap",
+        "byteLength": 21518,
+        "sha256": "a960ec0397490af5f905e53641010f3f0bac4e9f236825acb55117757fcef39c"
+      },
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "# tests 92",
+        "# pass 92",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# duration_ms 1389.4636"
+      ],
+      "skipLines": []
+    },
+    {
+      "name": "full",
+      "beganAtUtc": "2026-09-17T03:06:07.656Z",
+      "endedAtUtc": "2026-09-17T03:10:14.660Z",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "--test-concurrency=4",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-admission-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-evidence-admission-v2-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-evidence-admission-v2-process.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-evidence-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-v2-byte-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-v2-ledger-faults.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-v2-migration-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-remediation-v2-sqlite-concurrency.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\agent-workflow-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-audit-model-worker-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-audit-review-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-audit-snapshot-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-audit-swarm-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\builder-delegation-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\control-seam-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\dashboard-credential-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\degraded-mode-adversarial.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\hermes-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\hermes-fake-transport.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\hermes-local-endpoint.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\hermes-preflight.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\hermes-transport-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\memory-deletion-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\memory-write-gate-adversarial.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\prior-package-upgrade-rollback-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\profile-runtime-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\profiles-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\relationship-immutability.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\rust-attested-event-schema-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\rust-authority-slice1-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\rust-ledger-authority-v3-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\soul-bond-stability.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\telegram-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\upgrade-rollback-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\v1-1-a2-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\adversarial\\v1-1-foundation-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\agent-remediation-workflow.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\agent-workflow.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\builder-audit-model-worker.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\builder-audit-review-dashboard.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\builder-audit-snapshot.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\dashboard-kernel.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\dashboard-process-lifecycle.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\memory-extraction.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\memory-lifecycle.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\memory-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\model-conversation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\offline-conversation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\relationship-storage.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\telegram-channel.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\telegram-commands.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\telegram-end-to-end.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\integration\\telegram-polling.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-admission-ledger.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-admission.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-bounded-child.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-bridge-guards.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-evidence-admission-v2.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-evidence-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation-git-blob-parser.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-remediation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\agent-workflow.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\audit-delivery-tooling.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\bootstrap-structure.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-failure-matrix.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-model-worker.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-review-fixture.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-review.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-snapshot.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-audit-swarm.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-bounded-read.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-capability-pack.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-delegation-fixture.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-delegation-ledger.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-delegation-reconciliation-fixture.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-delegation-reconciliation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-delegation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\builder-profile-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\ci-platform-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\companion-v1-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\config.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\control-seam.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\conversation-turn-admission.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-assets.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-attachments.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-http-lifecycle.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-observability.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-provider-catalog.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-provider-session.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-readiness.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-runtime.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-server.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-startup.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\dashboard-workspaces.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\database.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\event-spine.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\hermes-activation-gate.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\hermes-foundation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\hermes-transport.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\installed-package-acceptance.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\installed-package-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\kernel-contracts.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\kitchen-sink-profile-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-backup-restore.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-backup.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-correction-packet.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-dry-rehearsal.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-final-handoff-packet.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-handoff-summary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-log-lines.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-observations-review.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-operator-checklist.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-posttest-review.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-preflight.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-provider-check.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-readiness.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-report.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-restore.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-runtime-limit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-session-receipt.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-startup-preflight-receipt.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\live-triage.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\local-production-soak.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\mcp-broker.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\memory-write-gate.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\migrations.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\node-rust-shadow-channel.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\openai-responses-adapter.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\package-identity.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\plugin-manifest-v2.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\policy.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\prelive-verify-script.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\prior-package-upgrade-rollback-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\procedural-skills.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\profile-audits.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\profile-runtime.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\profiles.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\prompt-context-provider.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\provider-health.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\provider-response-cleanup.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\receipt-retention.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\relationship-reducer.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\release-attestation.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\release-candidate-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\release-package.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\release-provenance.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\release-trust-policy.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\run-telegram-startup.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\runtime-identity.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\runtime-load-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\runtime-load-recorder.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-attested-event-schema.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-attested-shadow-supervisor.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-authority-slice1-contract.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-ledger-authority-v3.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-ledger-authority.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-seam-contract.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\rust-shadow-supervisor.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\soul-bond-loaders.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\source-security-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\sqlite-trace-sink.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\studio-static-snapshot.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\telegram-allowlist.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\telegram-api-redaction.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\telegram-message-splitter.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\upgrade-rollback-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\v1-1-golden-fixtures.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\v1-1-release-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\v1-release-audit.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-artifact-read-hold.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-builder-effect-journal.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-builder-recovery-crash.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-builder-recovery-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-checkpoint-sequencer.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-effect-ledger.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-effect-snapshot.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-release-boundary.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-source-manifest.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-source-transfer.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-synthetic-execution.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-coordinator-model.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-data.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-incremental-negative.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-incremental.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-inventory.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-pair-claims.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-pairwise.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-candidate-v3-record.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-builder-approval.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-builder-executor.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-candidate-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-child-verification.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-copy-history-http.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-copy-intake.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-copy-task-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-draft-planning.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-executor-disk-workflow.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-import-session.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-import.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-model-budget.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-native-io.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-planning-context.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-proposal-disk-workflow.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-task-inspection.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-verification-artifacts.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-verification-catalog.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-verification-evidence.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-verification-launch-contract.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-vm-acquisition.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-vm-controller-channel.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-vm-verifier.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-work-plan.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-work-proposal.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-managed-workspace-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-browser-fixture.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-model-recovery.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-recovery-page.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-restart.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-session.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-settings-http.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-settings-page.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-task-history.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-task-intake.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-task-preview.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-operator-task-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-workspace-effect-intent.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-workspace-policy-crash.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-workspace-policy-store.test.js",
+        "[PRIVATE_PRODUCT_ROOT]\\.test-dist\\tests\\unit\\windows-workspace-policy.test.js",
+        "scripts/tests/candidate-review-http.test.mjs",
+        "scripts/tests/candidate-crash.test.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "errorCode": null,
+      "rawTap": {
+        "path": "full.tap",
+        "byteLength": 484000,
+        "sha256": "e9b31e6ed7f50497f79b7903639acbc24b6965257088e1ee7edb8a8d4feb34ee"
+      },
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "summary": [
+        "# tests 2087",
+        "# pass 2085",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 2",
+        "# duration_ms 246919.845"
+      ],
+      "skipLines": [
+        "ok 719 - symlinked binary paths are rejected where the host permits link creation # SKIP Windows link creation privilege unavailable",
+        "ok 1710 - managed inspector refuses unsupported hosts rather than claiming Windows evidence # SKIP"
+      ]
+    }
+  ],
+  "limitations": [
+    "Selected source/compiled dependency identities, not an independently executed exact full-product tree.",
+    "In-memory storage/owner/anchor and virtual deadlines; no actual coordinator worker, physical persistence, VM, provider or OS activation.",
+    "C12 maximum-history resource/stop/dashboard evidence and D3 physical transport are not covered."
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "members": [
+    {
+      "productPath": "docs/reports/v3-worker-messages-20260917/receipt.json",
+      "packetPath": "receipts/messages/PRODUCER_RECEIPT.json",
+      "originalSha256": "506c82ea56d638a033e7193f551f423a08356980edb6bd79fb66da3fb7821fc6",
+      "originalByteLength": 47786,
+      "originalGitBlobOid": "7bdbb5643df90d6e94442028b0bcb5c25e0027cf",
+      "derivedSha256": "0597a3fc05e29d0964c56e003f87f105dc7fcd5519736d7f3d8833bc9abfde1f",
+      "derivedByteLength": 38315,
+      "transform": "JSON parse; exact private-root replacements in strings; two-space LF serialization",
+      "byteIdentical": false
+    },
+    {
+      "productPath": "docs/reports/v3-worker-messages-20260917/verify-v3-worker-messages.mjs.txt",
+      "packetPath": "tests/research/verify-v3-worker-messages.mjs.txt",
+      "originalSha256": "4c1f206db29479ffb0253b728601ec04b82c646689ed1af8d21467770ac7317e",
+      "originalByteLength": 4184,
+      "originalGitBlobOid": "ca1afbc7d1c756cabeb9ed0fa68afb7821f2e3db",
+      "derivedSha256": "952b4c05458327d747b668a19d4f7898c2806af2aa22491201561752b9332259",
+      "derivedByteLength": 4171,
+      "transform": "Exact UTF-8 private-root replacement only",
+      "byteIdentical": false
+    },
+    {
+      "productPath": "docs/reports/v3-worker-capacity-20260917/receipt.json",
+      "packetPath": "receipts/capacity/PRODUCER_RECEIPT.json",
+      "originalSha256": "0a692bcaeba615384f6e7cfc57b1247d644a834954d9fe0116be41224363ee86",
+      "originalByteLength": 11102,
+      "originalGitBlobOid": "db6fd18ffd02e832f2d7b0cbd751e0d340384bf8",
+      "derivedSha256": "0a692bcaeba615384f6e7cfc57b1247d644a834954d9fe0116be41224363ee86",
+      "derivedByteLength": 11102,
+      "transform": "JSON parse; exact private-root replacements in strings; two-space LF serialization",
+      "byteIdentical": true
+    },
+    {
+      "productPath": "docs/reports/v3-worker-capacity-20260917/measure-v3-worker-capacity.mjs.txt",
+      "packetPath": "tests/research/measure-v3-worker-capacity.mjs.txt",
+      "originalSha256": "2d47b2c466fee1cd86c38a190a649f20266d12c93ca39cedf548fb8cbec14ad2",
+      "originalByteLength": 10958,
+      "originalGitBlobOid": "70d621bf0a3b3a29f99becd540cc5bd932251441",
+      "derivedSha256": "a9499cae78bb4918515d83d7ab794d8be398d1e80735af99452e173df9422ffb",
+      "derivedByteLength": 10945,
+      "transform": "Exact UTF-8 private-root replacement only",
+      "byteIdentical": false
+    }
+  ],
+  "limitations": [
+    "Original private-path receipts/helpers omitted; transformed bytes are labelled derivatives, not original executed inputs.",
+    "Exact source, prior report, TAP and probe stdout are unchanged. No subject execution authorized."
+  ]
+}

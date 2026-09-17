@@ -1,0 +1,134 @@
+{
+  "baseline": "8c22fcaea18088ab2118fe89959bf609878c92aa",
+  "revision": "5f974a28bf34e097713a17020e3b7b086102d22e",
+  "members": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "baselineGitBlobOid": "742967e6e54a69d1afed05f2c6eca7a0a3d76c7e",
+      "baselineByteLength": 6084,
+      "currentSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "baselineGitBlobOid": "5df15ac2ec527430c8cdc7de855f223d315e5632",
+      "baselineByteLength": 11265,
+      "currentSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "baselineGitBlobOid": "d02251b4f8d4681353e74f01b5245564c6b533f3",
+      "baselineByteLength": 13106,
+      "currentSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "baselineGitBlobOid": "976f376e40102450380a3fe984f5aba4dd659556",
+      "baselineByteLength": 5539,
+      "currentSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "baselineGitBlobOid": "4b6296a4958cabf6494dec475a09c81c5bb4c4d1",
+      "baselineByteLength": 9936,
+      "currentSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "baselineGitBlobOid": "8128fbb02ac6d7b256c0062676f2d6e8b26fa917",
+      "baselineByteLength": 12586,
+      "currentSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "baselineGitBlobOid": "e3c2d36491e274ebf54b6b7fb3de4d589060fc29",
+      "baselineByteLength": 29964,
+      "currentSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "status": "added",
+      "currentSha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "status": "added",
+      "currentSha256": "4a683818d1d7bbcc99d6f0f76c0bfae352e98572dd2dd2980607a6ab9dd7c820"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "baselineGitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7",
+      "baselineByteLength": 4581,
+      "currentSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "baselineGitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf",
+      "baselineByteLength": 378,
+      "currentSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "baselineGitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d",
+      "baselineByteLength": 9092,
+      "currentSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "baselineGitBlobOid": "923fc068f172566a4c71bbcccb6e2ee1f07e0fd7",
+      "baselineByteLength": 6284,
+      "currentSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-pair-claims.ts",
+      "status": "added",
+      "currentSha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "status": "unchanged",
+      "baselinePacketPath": null,
+      "baselineSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "baselineGitBlobOid": "bd29fbec5ae5b76662b11087d7613a5b928f1652",
+      "baselineByteLength": 7610,
+      "currentSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "status": "added",
+      "currentSha256": "25bd5c5c57feda2ef8c9bfff8828431064f78f3741203a751b61465b0e8b957e"
+    }
+  ]
+}

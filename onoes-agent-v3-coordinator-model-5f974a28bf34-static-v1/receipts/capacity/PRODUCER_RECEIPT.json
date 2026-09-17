@@ -1,0 +1,296 @@
+{
+  "kind": "producer-fixed-child-capacity-and-stop-not-product-worker",
+  "baseRevision": "09be9332f9274c71373d1ce9192a0a0e57fdfe3d",
+  "workingTreeDelta": true,
+  "node": "v24.14.0",
+  "platform": "win32",
+  "arch": "x64",
+  "nodeExecutableSha256": "63c259c81e5d472b5f11c8d506070130cb04a1ecf84b80377a34ed6ec9048088",
+  "helperSha256": "2d47b2c466fee1cd86c38a190a649f20266d12c93ca39cedf548fb8cbec14ad2",
+  "identitiesBefore": [
+    {
+      "path": "src/build-only/windows-candidate-v3-data.ts",
+      "byteLength": 6084,
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-record.ts",
+      "byteLength": 11265,
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-inventory.ts",
+      "byteLength": 13106,
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-incremental.ts",
+      "byteLength": 5539,
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "path": "src/build-only/windows-candidate-effect-state.ts",
+      "byteLength": 9092,
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "path": "src/compatibility/canonical-json.ts",
+      "byteLength": 4581,
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "path": "src/validation/deep-freeze.ts",
+      "byteLength": 378,
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-record-fixture.ts",
+      "byteLength": 6284,
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-history-fixture.ts",
+      "byteLength": 7610,
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-data.js",
+      "byteLength": 5992,
+      "sha256": "9d1273dc415dbe0666fc57f772a77cd8721758fed8d256e5e8f4cdf82ab453d8"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-record.js",
+      "byteLength": 11461,
+      "sha256": "8edfc334eaa48d4cea3f9f3b1ec030234dcf943bb3635bec57d81a28d566ced5"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-inventory.js",
+      "byteLength": 13866,
+      "sha256": "8763d7fac14353a02705ed9bb6a5d4905c5a40e822c741da409fa8babc21a062"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-incremental.js",
+      "byteLength": 5969,
+      "sha256": "0b4a13389cbb6413b36f189b0faa08973732e852f7c4171ed4e25d480c33b2be"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-effect-state.js",
+      "byteLength": 8622,
+      "sha256": "c8fce2699a76fddde58146a91a3b7d554e6a5757dc89db51039bbd30ba3db768"
+    },
+    {
+      "path": ".test-dist/src/compatibility/canonical-json.js",
+      "byteLength": 4763,
+      "sha256": "e52e71e9108e4a3dd570d0a2bb532128d667f5903eac139f5f0a4c17a4c3ae88"
+    },
+    {
+      "path": ".test-dist/src/validation/deep-freeze.js",
+      "byteLength": 382,
+      "sha256": "cba1333b655bee1ddb4b22cc2364edd582bcda419b8a76671c6323d9d671e785"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-record-fixture.js",
+      "byteLength": 6180,
+      "sha256": "56e75dd8f9b05addabe45be31ce68ecd9128db9b9ee406a71a399168a948ffda"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-history-fixture.js",
+      "byteLength": 7077,
+      "sha256": "13f5f299dd9227b3e973e70dd9626b99a91cf5c08f573fa0c03b0721f03224f0"
+    },
+    {
+      "path": "package-lock.json",
+      "byteLength": 18577,
+      "sha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24"
+    }
+  ],
+  "identitiesAfter": [
+    {
+      "path": "src/build-only/windows-candidate-v3-data.ts",
+      "byteLength": 6084,
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-record.ts",
+      "byteLength": 11265,
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-inventory.ts",
+      "byteLength": 13106,
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-incremental.ts",
+      "byteLength": 5539,
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636"
+    },
+    {
+      "path": "src/build-only/windows-candidate-effect-state.ts",
+      "byteLength": 9092,
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9"
+    },
+    {
+      "path": "src/compatibility/canonical-json.ts",
+      "byteLength": 4581,
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424"
+    },
+    {
+      "path": "src/validation/deep-freeze.ts",
+      "byteLength": 378,
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-record-fixture.ts",
+      "byteLength": 6284,
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-history-fixture.ts",
+      "byteLength": 7610,
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-data.js",
+      "byteLength": 5992,
+      "sha256": "9d1273dc415dbe0666fc57f772a77cd8721758fed8d256e5e8f4cdf82ab453d8"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-record.js",
+      "byteLength": 11461,
+      "sha256": "8edfc334eaa48d4cea3f9f3b1ec030234dcf943bb3635bec57d81a28d566ced5"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-inventory.js",
+      "byteLength": 13866,
+      "sha256": "8763d7fac14353a02705ed9bb6a5d4905c5a40e822c741da409fa8babc21a062"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-v3-incremental.js",
+      "byteLength": 5969,
+      "sha256": "0b4a13389cbb6413b36f189b0faa08973732e852f7c4171ed4e25d480c33b2be"
+    },
+    {
+      "path": ".test-dist/src/build-only/windows-candidate-effect-state.js",
+      "byteLength": 8622,
+      "sha256": "c8fce2699a76fddde58146a91a3b7d554e6a5757dc89db51039bbd30ba3db768"
+    },
+    {
+      "path": ".test-dist/src/compatibility/canonical-json.js",
+      "byteLength": 4763,
+      "sha256": "e52e71e9108e4a3dd570d0a2bb532128d667f5903eac139f5f0a4c17a4c3ae88"
+    },
+    {
+      "path": ".test-dist/src/validation/deep-freeze.js",
+      "byteLength": 382,
+      "sha256": "cba1333b655bee1ddb4b22cc2364edd582bcda419b8a76671c6323d9d671e785"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-record-fixture.js",
+      "byteLength": 6180,
+      "sha256": "56e75dd8f9b05addabe45be31ce68ecd9128db9b9ee406a71a399168a948ffda"
+    },
+    {
+      "path": ".test-dist/tests/helpers/candidate-v3-history-fixture.js",
+      "byteLength": 7077,
+      "sha256": "13f5f299dd9227b3e973e70dd9626b99a91cf5c08f573fa0c03b0721f03224f0"
+    },
+    {
+      "path": "package-lock.json",
+      "byteLength": 18577,
+      "sha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24"
+    }
+  ],
+  "unchanged": true,
+  "childOldSpaceLimitMiB": 512,
+  "childTimeoutMs": 180000,
+  "maximumConcurrentChildren": 1,
+  "sample": {
+    "mode": "--sample",
+    "beganAtUtc": "2026-09-17T03:02:18.544Z",
+    "endedAtUtc": "2026-09-17T03:03:00.142Z",
+    "exitCode": 0,
+    "signal": null,
+    "errorCode": null,
+    "timeout": false,
+    "protocolFault": false,
+    "elapsedMs": 41596.114,
+    "directChildCloseObserved": true,
+    "killReturned": null,
+    "stopToCloseMs": null,
+    "heartbeatPeriodMs": 25,
+    "heartbeatCount": 1308,
+    "maximumHeartbeatDelayMs": 47.19919999999547,
+    "stdoutSha256": "920ed8da7eeac84a872a0106def9297b7a76d7861746af34f28faf9bc7cbec92",
+    "stdoutBytes": 1021,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "messages": [
+      {
+        "phase": "bootstrap-entry",
+        "setupMs": 19001.4916,
+        "transportMs": 85.66939999999886
+      },
+      {
+        "status": "measured",
+        "operationCount": 1000,
+        "bootstrapCheckpoints": 6000,
+        "finalCheckpoints": 6001,
+        "inputBytes": 6819063,
+        "historyBytes": 5379600,
+        "encodedBootstrapBytes": 13586464,
+        "inventorySha256": "93f7c2aa885d318446efc6ae847715f2ba3f5caa13a628c874bee5b543bf1a3a",
+        "bootstrapInventorySha256": "8b44c379901c89ba7a0f37d2fadac6de75689c85d45c06503185b79619d6052f",
+        "bootstrapHistorySha256": "8999a663a572798110703a8cae5be4a679b5d3e4fa8b9a6d3df9c9ae633a8212",
+        "headDigest": "sha256:12d09f9680dde1f78f5180e95715abe4f2e2a745145e947f48e4400f3a3af2e6",
+        "setupMs": 19001.4916,
+        "transportRoundTripMs": 85.66939999999886,
+        "bootstrapMs": 21368.6174,
+        "appendMs": 618.3071999999956,
+        "syntheticReadBackValidationMs": 371.89890000000014,
+        "postIdentityHashMs": 8.302400000000489,
+        "measuredValidationAndTransportMs": 22452.795299999994,
+        "memoryAfter": {
+          "rss": 329596928,
+          "heapTotal": 275718144,
+          "heapUsed": 152086256,
+          "external": 2459744,
+          "arrayBuffers": 24819
+        },
+        "peakRssKiBIncludingSetup": 328572
+      }
+    ]
+  },
+  "cancellation": {
+    "mode": "--cancel-sample",
+    "beganAtUtc": "2026-09-17T03:03:00.142Z",
+    "endedAtUtc": "2026-09-17T03:03:19.561Z",
+    "exitCode": null,
+    "signal": "SIGTERM",
+    "errorCode": null,
+    "timeout": false,
+    "protocolFault": false,
+    "elapsedMs": 19418.338399999993,
+    "directChildCloseObserved": true,
+    "killReturned": true,
+    "stopToCloseMs": 12.950599999996484,
+    "heartbeatPeriodMs": 25,
+    "heartbeatCount": 609,
+    "maximumHeartbeatDelayMs": 46.302999999999884,
+    "stdoutSha256": "ced8cb500cabf474eb79bea0b66b087c2fac5157991ac873549383b468d91b0b",
+    "stdoutBytes": 89,
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "messages": [
+      {
+        "phase": "bootstrap-entry",
+        "setupMs": 19184.865999999998,
+        "transportMs": 87.85829999999987
+      }
+    ]
+  },
+  "limitations": [
+    "1000-operation dense 6001-checkpoint corpus, not the 7001 structural ceiling or maximum wire bytes/all histories.",
+    "Parent heartbeat is not a dashboard responsiveness test; heap cap is not OS process/RSS/committed-memory enforcement.",
+    "Measured direct child close after kill, NOT job-wide descendant termination or authenticated worker request settlement.",
+    "No SQLite, authenticated anchor/IPC, real coordinator pair, enrollment, VM, provider or activation."
+  ]
+}

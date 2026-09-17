@@ -1,0 +1,657 @@
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts b/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts
+new file mode 100644
+index 0000000..e221cd2
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts
+@@ -0,0 +1,232 @@
++import { z } from "zod";
++import { createHash } from "node:crypto";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { createCandidateV3IncrementalClaims } from "../../src/build-only/windows-candidate-v3-incremental.js";
++import { inspectSyntheticPairClaims, requireEqualSyntheticPair } from "./candidate-v3-pair-claims.js";
++import { pins, envelope, historyWire, genesis } from "./candidate-v3-history-fixture.js";
++import { uuid } from "./candidate-v3-record-fixture.js";
++
++// TEST-ONLY executable design model. All storage, ownership, time, settlement
++// and anchor facts below are mutable synthetic claims controlled by tests.
++// No filesystem, database, process, provider, task or production consumer port.
++export const MODEL_LIMITS = Object.freeze({ wireBytes: 256 * 1024, responseBytes: 16 * 1024, appendMs: 1_000, queuedRequests: 0 });
++export const rawDigest = (s: string) => "sha256:" + createHash("sha256").update(s, "utf8").digest("hex");
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/), id = z.string().uuid();
++const identity = z.tuple([digest, digest, digest, digest]);
++const lifetime = { lifetimeId: id, requestNumber: z.number().int().positive().safe(), nonce: id, epoch: id };
++const requestSchema = z.object({ domain: z.literal("synthetic-v3-append-request/v1"), operation: z.literal("append"), ...lifetime,
++  pre: identity, inputDigest: digest, checkpointDigest: digest, deadline: z.number().int().nonnegative().safe(),
++  inventoryWire: z.string(), checkpointWire: z.string() }).strict();
++const responseSchema = z.object({ domain: z.literal("synthetic-v3-append-response/v1"), operation: z.literal("append"), ...lifetime,
++  requestDigest: digest, pre: identity, inputDigest: digest, checkpointDigest: digest,
++  deadline: z.number().int().nonnegative().safe(), post: identity, resultDigest: digest }).strict();
++type Request = z.infer<typeof requestSchema>;
++type Response = z.infer<typeof responseSchema>;
++type Identity = z.infer<typeof identity>;
++export class ModelDenied extends Error { constructor() { super("synthetic-pair-closed"); } }
++const deny = (): never => { throw new ModelDenied(); };
++function bounded(s: unknown, cap: number = MODEL_LIMITS.wireBytes): string {
++  if (typeof s !== "string" || s.length > cap || Buffer.byteLength(s) > cap) return deny();
++  return s;
++}
++function parse<T>(schema: z.ZodType<T>, s: unknown, cap: number = MODEL_LIMITS.wireBytes): T {
++  try { const text = bounded(s, cap), value = schema.parse(JSON.parse(text)); if (wire(value) !== text) return deny(); return value; }
++  catch { return deny(); }
++}
++export function parseModelRequest(s: unknown) {
++  const r = parse(requestSchema, s);
++  if (r.inputDigest !== rawDigest(r.inventoryWire) || r.checkpointDigest !== rawDigest(r.checkpointWire)) return deny();
++  return r;
++}
++export function parseModelResponse(s: unknown, requestWire: string): Response {
++  const r = parse(responseSchema, s, MODEL_LIMITS.responseBytes), q = parseModelRequest(requestWire);
++  const { resultDigest, ...core } = r;
++  if (hash(core) !== resultDigest || r.requestDigest !== rawDigest(requestWire)
++    || r.nonce !== q.nonce || r.epoch !== q.epoch || r.deadline !== q.deadline
++    || r.lifetimeId !== q.lifetimeId || r.requestNumber !== q.requestNumber
++    || wire(r.pre) !== wire(q.pre) || r.inputDigest !== q.inputDigest || r.checkpointDigest !== q.checkpointDigest) return deny();
++  return r;
++}
++const bootstrapCommon = { lifetimeId: id, requestNumber: z.literal(0), nonce: id, epoch: id,
++  deadline: z.number().int().nonnegative().safe(), metadataDigest: digest, inventoryDigest: digest, historyDigest: digest, anchorHistoryDigest: digest };
++const bootstrapRequestSchema = z.object({ domain: z.literal("synthetic-v3-bootstrap-request/v1"), operation: z.literal("bootstrap"),
++  ...bootstrapCommon, metadataWire: z.string(), inventoryWire: z.string(), historyWire: z.string() }).strict();
++const bootstrapResponseSchema = z.object({ domain: z.literal("synthetic-v3-bootstrap-response/v1"), operation: z.literal("bootstrap"),
++  ...bootstrapCommon, requestDigest: digest, post: identity, resultDigest: digest }).strict();
++export function parseModelBootstrapRequest(s: unknown) {
++  const q = parse(bootstrapRequestSchema, s);
++  if (q.metadataDigest !== rawDigest(q.metadataWire) || q.inventoryDigest !== rawDigest(q.inventoryWire)
++    || q.historyDigest !== rawDigest(q.historyWire)) return deny();
++  return q;
++}
++export function parseModelBootstrapResponse(s: unknown, requestWire: string) {
++  const r = parse(bootstrapResponseSchema, s, MODEL_LIMITS.responseBytes), q = parseModelBootstrapRequest(requestWire), { resultDigest, ...core } = r;
++  if (resultDigest !== hash(core) || r.requestDigest !== rawDigest(requestWire)
++    || Object.keys(bootstrapCommon).some(k => r[k as keyof typeof bootstrapCommon] !== q[k as keyof typeof bootstrapCommon])) return deny();
++  return r;
++}
++export type Snapshot = Readonly<{ metadata: string; inventory: string; history: string }>;
++export type Cut = "captured" | "worker-settled" | "transaction-post" | "committed" | "read-back"
++  | "before-anchor" | "anchor-committed" | "before-promote";
++export class SyntheticPairWorld {
++  local: Snapshot = Object.freeze({ metadata: pins, inventory: envelope([]), history: historyWire([genesis]) });
++  anchor = this.local.history;
++  epoch = uuid(70);
++  lifetimeCounter = 200000;
++  now = 0;
++  clockListeners = new Set<() => void>();
++  advance(now: number) { this.now = now; for (const listener of [...this.clockListeners]) listener(); }
++  policy = true;
++  settlement = true;
++  fence = true;
++  schemaValid = true;
++  ownerHeld = false;
++  activity = 0;
++  inTransaction = false;
++  cut: (at: Cut) => void = () => {};
++  workerGate: () => Promise<void> = async () => {};
++  anchorGate: () => Promise<void> = async () => {};
++  reply: (response: string) => string = s => s;
++  bootstrapReply: (response: string) => string = s => s;
++  counts = { bootstraps: 0, worker: 0, transactions: 0, commits: 0, readBacks: 0, anchorAttempts: 0, anchorAppends: 0, promotions: 0 };
++  // Only an explicit test-driver retirement after ALL modeled activity settles
++  // may release this synthetic owner. This is not an OS termination witness.
++  retire() { if (this.activity !== 0) return deny(); this.ownerHeld = false; this.epoch = uuid(Number.parseInt(this.epoch.slice(-12), 16) + 1); }
++}
++const claim = (s: Snapshot) => inspectSyntheticPairClaims(s.metadata, s.inventory, s.history, s.history);
++const same = (a: readonly string[], b: readonly string[]) => wire(a) === wire(b);
++export class SyntheticPairCoordinator {
++  #phase: "ready" | "busy" | "closed" = "closed";
++  #s: Snapshot;
++  #identity: Identity;
++  #t: ReturnType<typeof createCandidateV3IncrementalClaims>;
++  #epoch: string;
++  #lifetime: string;
++  #requestNumber = 0;
++  #nonce = 1000;
++  #lastTime: number;
++  constructor(readonly world: SyntheticPairWorld) {
++    if (world.ownerHeld || world.activity || !world.fence || !world.schemaValid) throw new ModelDenied();
++    const s = world.local, pair = requireEqualSyntheticPair(s.metadata, s.inventory, s.history, world.anchor);
++    this.#s = Object.freeze({ ...s }); this.#identity = [...pair.identity]; this.#epoch = world.epoch;
++    this.#lastTime = world.now; this.#time();
++    if (!Number.isSafeInteger(world.lifetimeCounter) || world.lifetimeCounter < 0 || world.lifetimeCounter >= Number.MAX_SAFE_INTEGER) throw new ModelDenied();
++    this.#lifetime = uuid(++world.lifetimeCounter);
++    const common = { lifetimeId: this.#lifetime, requestNumber: 0, nonce: uuid(this.#nonce++), epoch: this.#epoch,
++      deadline: this.#time() + MODEL_LIMITS.appendMs, metadataDigest: rawDigest(s.metadata), inventoryDigest: rawDigest(s.inventory),
++      historyDigest: rawDigest(s.history), anchorHistoryDigest: rawDigest(world.anchor) };
++    const request = bounded(wire({ domain: "synthetic-v3-bootstrap-request/v1", operation: "bootstrap", ...common,
++      metadataWire: s.metadata, inventoryWire: s.inventory, historyWire: s.history }));
++    const q = parseModelBootstrapRequest(request);
++    this.#t = createCandidateV3IncrementalClaims(q.metadataWire, q.inventoryWire, q.historyWire);
++    try {
++      const core = { domain: "synthetic-v3-bootstrap-response/v1", operation: "bootstrap", ...common, requestDigest: rawDigest(request), post: pair.identity };
++      const result = parseModelBootstrapResponse(world.bootstrapReply(wire({ ...core, resultDigest: hash(core) })), request);
++      if (!same(result.post, pair.identity) || this.#time() >= common.deadline || world.epoch !== this.#epoch
++        || !world.fence || !world.schemaValid || !same(claim(world.local).identity, pair.identity)
++        || rawDigest(world.anchor) !== common.anchorHistoryDigest) return this.#closeBootstrap();
++    } catch { this.#t.invalidate(); throw new ModelDenied(); }
++    world.ownerHeld = true; world.counts.bootstraps++; this.#phase = "ready";
++  }
++  #closeBootstrap(): never { this.#t.invalidate(); throw new ModelDenied(); }
++  get phase() { return this.#phase; }
++  get confirmed() { return this.#s; }
++  #time() { const n = this.world.now; if (!Number.isSafeInteger(n) || n < 0 || n < this.#lastTime) return deny(); this.#lastTime = n; return n; }
++  #live(deadline: number, policy: boolean) {
++    if (this.#phase === "closed" || !this.world.ownerHeld || !this.world.fence || this.world.epoch !== this.#epoch
++      || this.#time() >= deadline || (policy ? !this.world.policy : !this.world.settlement)) return deny();
++  }
++  #close() { this.#phase = "closed"; this.#t.invalidate(); }
++  async #wait<T>(work: Promise<T>, signal: AbortSignal, deadline: number): Promise<T> {
++    let abort = () => {}, tick = () => {};
++    const stopped = new Promise<never>((_, reject) => {
++      abort = () => reject(new ModelDenied());
++      tick = () => { try { if (this.#time() >= deadline) abort(); } catch { abort(); } };
++      signal.addEventListener("abort", abort, { once: true }); this.world.clockListeners.add(tick);
++      if (signal.aborted) abort(); tick();
++    });
++    try { return await Promise.race([work, stopped]); }
++    finally { signal.removeEventListener("abort", abort); this.world.clockListeners.delete(tick); }
++  }
++  async append(inventoryWire: unknown, checkpointWire: unknown, signal: AbortSignal): Promise<void> {
++    // Busy loser does not poison the winner and cannot allocate a request/queue.
++    if (this.#phase !== "ready") return deny();
++    this.#phase = "busy";
++    const w = this.world;
++    try {
++      const inventory = bounded(inventoryWire), cp = bounded(checkpointWire), deadline = this.#time() + MODEL_LIMITS.appendMs;
++      this.#live(deadline, true); if (signal.aborted) return deny();
++      requireEqualSyntheticPair(w.local.metadata, w.local.inventory, w.local.history, w.anchor);
++      if (!same(claim(w.local).identity, this.#identity)) return deny();
++      const pre = [...this.#identity] as Identity, preHead = this.#t.snapshot().head.checkpointDigest;
++      if (preHead !== pre[3]) return deny();
++      const oldHistory = JSON.parse(this.#s.history) as { domain: string; checkpoints: string[] };
++      const candidate: Snapshot = Object.freeze({ metadata: this.#s.metadata, inventory,
++        history: wire({ domain: oldHistory.domain, checkpoints: [...oldHistory.checkpoints, cp] }) });
++      if (this.#requestNumber >= Number.MAX_SAFE_INTEGER) return deny();
++      const requestWire = bounded(wire({ domain: "synthetic-v3-append-request/v1", operation: "append", lifetimeId: this.#lifetime,
++        requestNumber: ++this.#requestNumber, nonce: uuid(this.#nonce++), epoch: this.#epoch,
++        pre, inputDigest: rawDigest(inventory), checkpointDigest: rawDigest(cp), deadline, inventoryWire: inventory, checkpointWire: cp }));
++      w.cut("captured");
++      this.#live(deadline, true); if (signal.aborted) return deny();
++      if (w.inTransaction) return deny();
++      w.counts.worker++; w.activity++;
++      const work = (async () => {
++        try {
++          await w.workerGate();
++          if (this.#phase === "closed") return deny();
++          const q: Request = parseModelRequest(requestWire);
++          if (q.lifetimeId !== this.#lifetime || q.requestNumber !== this.#requestNumber || q.epoch !== this.#epoch
++            || !same(q.pre, pre) || this.#t.snapshot().head.checkpointDigest !== q.pre[3]) return deny();
++          const result = this.#t.append(q.inventoryWire, q.checkpointWire), post = claim(candidate).identity;
++          if (result.head.checkpointDigest !== post[3]) return deny();
++          const core = { domain: "synthetic-v3-append-response/v1", operation: "append", lifetimeId: q.lifetimeId,
++            requestNumber: q.requestNumber, nonce: q.nonce, epoch: q.epoch,
++            requestDigest: rawDigest(requestWire), pre: q.pre, inputDigest: q.inputDigest, checkpointDigest: q.checkpointDigest,
++            deadline: q.deadline, post };
++          return w.reply(wire({ ...core, resultDigest: hash(core) }));
++        } finally { w.activity--; }
++      })();
++      const response = parseModelResponse(await this.#wait(work, signal, deadline), requestWire);
++      w.cut("worker-settled"); this.#live(deadline, true);
++      if (signal.aborted || w.anchor !== this.#s.history || !same(response.post, claim(candidate).identity)) return deny();
++      // The transaction's fault seam is synchronous test instrumentation only.
++      // No worker/anchor/consent/task callback is a production transaction API.
++      w.counts.transactions++; w.inTransaction = true;
++      try {
++        if (!w.schemaValid || !same(claim(w.local).identity, pre)) return deny();
++        const staged = Object.freeze({ ...candidate });
++        w.cut("transaction-post"); this.#live(deadline, true);
++        if (signal.aborted || !same(claim(w.local).identity, pre) || !same(claim(staged).identity, response.post)) return deny();
++        w.local = staged; w.counts.commits++;
++      } finally { w.inTransaction = false; }
++      w.cut("committed");
++      this.#live(deadline, false);
++      w.counts.readBacks++; w.cut("read-back");
++      if (!same(claim(w.local).identity, response.post)) return deny();
++      const pair = inspectSyntheticPairClaims(w.local.metadata, w.local.inventory, w.local.history, w.anchor);
++      if (pair.relation !== "one-ahead-claims") return deny();
++      w.cut("before-anchor"); this.#live(deadline, false);
++      if (signal.aborted || w.inTransaction || w.anchor !== this.#s.history) return deny();
++      w.counts.anchorAttempts++; w.activity++;
++      const anchorWork = (async () => {
++        try {
++          await w.anchorGate();
++          if (this.#phase === "closed") return deny();
++          this.#live(deadline, false);
++          if (w.anchor !== this.#s.history) return deny();
++          w.anchor = candidate.history; w.counts.anchorAppends++; w.cut("anchor-committed");
++          return candidate.history;
++        } finally { w.activity--; }
++      })();
++      const acknowledgment = await this.#wait(anchorWork, signal, deadline);
++      w.cut("before-promote"); this.#live(deadline, false);
++      if (signal.aborted || acknowledgment !== candidate.history || w.anchor !== candidate.history
++        || !same(claim(w.local).identity, response.post)) return deny();
++      this.#s = candidate; this.#identity = [...response.post]; w.counts.promotions++;
++      // Revocation may allow witnessing an old commit, never renewed readiness.
++      if (!w.policy) { this.#close(); return; }
++      this.#phase = "ready";
++    } catch { this.#close(); return deny(); }
++  }
++}
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-pair-claims.ts b/product/companion-v1/tests/helpers/candidate-v3-pair-claims.ts
+new file mode 100644
+index 0000000..c120d1f
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-pair-claims.ts
+@@ -0,0 +1,38 @@
++import { createHash } from "node:crypto";
++import { canonicalJson } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { parseCandidateV3CheckpointHistory } from "../../src/build-only/windows-candidate-v3-inventory.js";
++
++// TEST-ONLY groundwork for D-1/D-2/C13. These are unauthenticated strings, NOT
++// ledger reads, authenticated anchor discovery, coordinator state or admission.
++// No storage/worker/effect port exists here; physical C13 remains NOT RUN.
++const fail = (): never => { throw new CandidateV3DataError(); };
++const digest = (wire: string) => "sha256:" + createHash("sha256").update(wire, "utf8").digest("hex");
++export function inspectSyntheticPairClaims(metadataWire: unknown, inventoryWire: unknown, localHistoryWire: unknown, anchorHistoryWire: unknown) {
++  if (typeof metadataWire !== "string" || typeof inventoryWire !== "string"
++    || typeof localHistoryWire !== "string" || typeof anchorHistoryWire !== "string") return fail();
++  const local = parseCandidateV3CheckpointHistory(inventoryWire, metadataWire, localHistoryWire);
++  // The reference has validated the canonical envelope and every local prefix.
++  // Anchor claims must be byte-exact equal to that stream or its one-tail prefix;
++  // no normalization, head-only comparison or arbitrary anchor input parse.
++  const history = JSON.parse(localHistoryWire) as { domain: string; checkpoints: string[] };
++  const equal = anchorHistoryWire === localHistoryWire;
++  const oneAhead = history.checkpoints.length > 1 && anchorHistoryWire === canonicalJson({
++    domain: history.domain, checkpoints: history.checkpoints.slice(0, -1),
++  });
++  if (!equal && !oneAhead) return fail();
++  return Object.freeze({ kind: "synthetic-pair-claims-not-authenticated-not-admission" as const,
++    relation: equal ? "equal-claims" as const : "one-ahead-claims" as const,
++    identity: Object.freeze([digest(metadataWire), digest(inventoryWire), digest(localHistoryWire), local.head.checkpointDigest] as const),
++    localCheckpointCount: history.checkpoints.length,
++    claimedAnchorCheckpointCount: history.checkpoints.length - (equal ? 0 : 1),
++  });
++}
++
++// Even in the future harness, one-ahead is not normal forward readiness. This
++// predicate does not perform reconciliation, authenticate a stream or call effects.
++export function requireEqualSyntheticPair(metadataWire: unknown, inventoryWire: unknown, localHistoryWire: unknown, anchorHistoryWire: unknown) {
++  const pair = inspectSyntheticPairClaims(metadataWire, inventoryWire, localHistoryWire, anchorHistoryWire);
++  if (pair.relation !== "equal-claims") return fail();
++  return pair;
++}
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts
+new file mode 100644
+index 0000000..1d797f9
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts
+@@ -0,0 +1,280 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { SyntheticPairWorld as World, SyntheticPairCoordinator as Coordinator, ModelDenied, MODEL_LIMITS,
++  parseModelBootstrapRequest, parseModelRequest } from "../helpers/candidate-v3-coordinator-model.js";
++import type { Cut } from "../helpers/candidate-v3-coordinator-model.js";
++import { make, transcript, historyWire, genesis, envelope, recordsOf } from "../helpers/candidate-v3-history-fixture.js";
++import { uuid } from "../helpers/candidate-v3-record-fixture.js";
++const signal = () => new AbortController().signal;
++const frames = (family = 0) => { const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent), fs = parent ? [parent, f] : [f];
++  return transcript(fs, fs.flatMap((r, i) => Array(r.record.events.length + 1).fill(i) as number[])); };
++const first = () => frames()[0]!;
++const setup = () => { const w = new World(); return { w, c: new Coordinator(w), f: first() }; };
++const reject = (fn: () => Promise<unknown>) => assert.rejects(fn, e => e instanceof ModelDenied);
++const deferred = () => { let release!: () => void; const promise = new Promise<void>(r => { release = r; }); return { promise, release }; };
++const throwAt = (cut: Cut) => (at: Cut) => { if (at === cut) throw Error("synthetic crash: must not escape"); };
++const flush = () => new Promise<void>(resolve => setImmediate(resolve));
++
++test("model positive control: all eight families promote each exact local/anchor pair", async t => {
++  let appends = 0;
++  for (let family = 0; family < 8; family++) {
++    const w = new World(), c = new Coordinator(w);
++    for (const f of frames(family)) {
++      await c.append(f.input, wire(f.checkpoint), signal()); appends++;
++      assert.equal(c.phase, "ready"); assert.equal(c.confirmed.inventory, f.input);
++      assert.equal(w.local.history, historyWire(f.history)); assert.equal(w.anchor, w.local.history);
++    }
++    assert.equal(w.counts.worker, w.counts.commits); assert.equal(w.counts.commits, w.counts.promotions);
++    assert.equal(w.activity, 0); assert.equal(w.clockListeners.size, 0);
++  }
++  t.diagnostic(JSON.stringify({ syntheticPairedAppends: appends, physicalComposition: "NOT RUN", taskPort: "absent" }));
++});
++
++test("C01 model: advanced transcript plus pre-write rejection permanently closes the owner", async () => {
++  const { w, c, f } = setup(); w.cut = at => { if (at === "worker-settled") w.schemaValid = false; };
++  await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++  assert.equal(w.counts.worker, 1); assert.equal(w.counts.transactions, 1); assert.equal(w.counts.commits, 0);
++  w.schemaValid = true; w.cut = () => {}; await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++  assert.equal(w.counts.worker, 1); assert.equal(c.phase, "closed"); assert.throws(() => new Coordinator(w), ModelDenied);
++});
++
++test("C02 model: metadata/history/row/context changes deny before write with count unchanged", async () => {
++  for (const mutation of ["metadata", "history", "row", "context"] as const) {
++    const w = new World(), fs = frames(), before = fs[4]!, next = fs[5]!;
++    w.local = { metadata: w.local.metadata, inventory: before.input, history: historyWire(before.history) }; w.anchor = w.local.history;
++    const c = new Coordinator(w), original = c.confirmed;
++    w.cut = at => {
++      if (at !== "worker-settled") return;
++      const rows = recordsOf(w.local.inventory);
++      if (mutation === "metadata") w.local = { ...w.local, metadata: wire({ ...JSON.parse(w.local.metadata), storeId: uuid(99) }) };
++      if (mutation === "history") { const h = JSON.parse(w.local.history); h.checkpoints[0] = "{}"; w.local = { ...w.local, history: wire(h) }; }
++      if (mutation === "row") { const r = JSON.parse(rows[0]!.recordWire); r.intent.workflowId = uuid(88); rows[0]!.recordWire = wire(r); w.local = { ...w.local, inventory: envelope(rows) }; }
++      if (mutation === "context") { rows[0]!.checkpointAWire = wire(before.checkpoint); w.local = { ...w.local, inventory: envelope(rows) }; }
++    };
++    await reject(() => c.append(next.input, wire(next.checkpoint), signal()));
++    assert.equal(w.counts.transactions, 1, mutation); assert.equal(w.counts.commits, 0, mutation);
++    assert.deepEqual(c.confirmed, original); assert.equal(w.counts.anchorAttempts, 0);
++  }
++});
++
++test("C02 model: a different completed row changes while another subject is staged", async () => {
++  const done = make(0, 10), active = make(0, 11), order = [...Array(done.record.events.length + 1).fill(0), 1, 1] as number[];
++  const fs = transcript([done, active], order), before = fs.at(-2)!, next = fs.at(-1)!;
++  const w = new World(); w.local = { ...w.local, inventory: before.input, history: historyWire(before.history) }; w.anchor = w.local.history;
++  const c = new Coordinator(w); assert.notEqual(next.checkpoint.operationId, done.record.intent.operationId);
++  w.cut = at => {
++    if (at !== "worker-settled") return;
++    const rows = recordsOf(w.local.inventory), r = JSON.parse(rows[0]!.recordWire);
++    assert.equal(r.intent.operationId, done.record.intent.operationId);
++    r.events[0].evidenceDigest = "sha256:" + "f".repeat(64);
++    rows[0]!.recordWire = wire(r); w.local = { ...w.local, inventory: envelope(rows) };
++  };
++  await reject(() => c.append(next.input, wire(next.checkpoint), signal()));
++  assert.equal(recordsOf(w.local.inventory).length, 2); assert.equal(w.counts.transactions, 1); assert.equal(w.counts.commits, 0);
++  assert.equal(w.counts.anchorAttempts, 0); assert.equal(c.confirmed.inventory, before.input);
++});
++
++test("C03/D3 model: rehashed wrong reply identities deny before transaction", async () => {
++  for (const field of ["nonce", "epoch", "lifetimeId", "requestNumber", "operation", "requestDigest", "inputDigest", "checkpointDigest", "pre", "post", "deadline", "domain", "extra"] as const) {
++    const { w, c, f } = setup();
++    w.reply = text => { const { resultDigest: _ignored, ...core } = JSON.parse(text);
++      if (field === "nonce" || field === "epoch" || field === "lifetimeId") core[field] = uuid(999);
++      else if (field === "pre" || field === "post") core[field][3] = "sha256:" + "f".repeat(64);
++      else if (field === "deadline" || field === "requestNumber") core[field]++;
++      else if (field === "operation") core[field] = "bootstrap";
++      else if (field === "domain") core[field] = "synthetic-v3-append-response/v2";
++      else if (field === "extra") core[field] = true;
++      else core[field] = "sha256:" + "f".repeat(64);
++      return wire({ ...core, resultDigest: hash(core) }); };
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++    assert.equal(w.counts.transactions, 0, field); assert.equal(w.counts.anchorAttempts, 0); assert.equal(c.phase, "closed");
++  }
++});
++
++test("D3 bootstrap model: every echoed identity, operation and reconstructed post-state is bound", () => {
++  for (const field of ["nonce", "epoch", "lifetimeId", "requestNumber", "operation", "requestDigest", "metadataDigest",
++    "inventoryDigest", "historyDigest", "anchorHistoryDigest", "deadline", "post", "extra"] as const) {
++    const w = new World(); w.bootstrapReply = text => {
++      const { resultDigest: _ignored, ...core } = JSON.parse(text);
++      if (field === "nonce" || field === "epoch" || field === "lifetimeId") core[field] = uuid(999);
++      else if (field === "requestNumber" || field === "deadline") core[field]++;
++      else if (field === "operation") core[field] = "append";
++      else if (field === "post") core[field][3] = "sha256:" + "f".repeat(64);
++      else if (field === "extra") core[field] = true;
++      else core[field] = "sha256:" + "f".repeat(64);
++      return wire({ ...core, resultDigest: hash(core) });
++    };
++    assert.throws(() => new Coordinator(w), ModelDenied, field);
++    assert.equal(w.ownerHeld, false); assert.equal(w.counts.bootstraps, 0); assert.equal(w.counts.transactions, 0);
++  }
++});
++
++test("D3 bootstrap model: stale lifetime reply and drift during bootstrap cannot create a ready owner", () => {
++  const w = new World(); let oldReply = ""; w.bootstrapReply = text => { oldReply = text; return text; };
++  const old = new Coordinator(w); w.retire(); w.bootstrapReply = () => oldReply;
++  assert.throws(() => new Coordinator(w), ModelDenied); assert.equal(w.counts.bootstraps, 1);
++  assert.equal(old.confirmed.inventory, w.local.inventory);
++  for (const drift of ["epoch", "anchor", "deadline", "metadata"] as const) {
++    const changed = new World(); changed.bootstrapReply = text => {
++      if (drift === "epoch") changed.epoch = uuid(99);
++      if (drift === "anchor") changed.anchor = "{}";
++      if (drift === "deadline") changed.now = MODEL_LIMITS.appendMs;
++      if (drift === "metadata") changed.local = { ...changed.local, metadata: "{}" };
++      return text;
++    };
++    assert.throws(() => new Coordinator(changed), ModelDenied); assert.equal(changed.ownerHeld, false);
++  }
++});
++
++test("D3 model request parsing: no object coercion, alternate JSON, missing bootstrap or cross-operation fallback", () => {
++  const w = new World(); let reply = ""; w.bootstrapReply = text => { reply = text; return text; }; new Coordinator(w);
++  let reflected = false;
++  const active = new Proxy({}, { get() { reflected = true; throw Error("must not reflect"); }, ownKeys() { reflected = true; return []; } });
++  for (const parse of [parseModelBootstrapRequest, parseModelRequest]) {
++    for (const input of [active, "{}", reply, reply + "\n", "\uFEFF" + reply, "x".repeat(MODEL_LIMITS.wireBytes + 1)]) assert.throws(() => parse(input), ModelDenied);
++  }
++  assert.equal(reflected, false);
++});
++
++test("D3 model: request numbers increase only within one lifetime and bootstrap is zero", async () => {
++  const w = new World(), observed: Array<{ operation: string; lifetimeId: string; requestNumber: number }> = [];
++  w.bootstrapReply = text => { observed.push(JSON.parse(text)); return text; }; w.reply = text => { observed.push(JSON.parse(text)); return text; };
++  const c = new Coordinator(w);
++  for (const f of frames().slice(0, 2)) await c.append(f.input, wire(f.checkpoint), signal());
++  assert.deepEqual(observed.map(r => r.requestNumber), [0, 1, 2]); assert.equal(new Set(observed.map(r => r.lifetimeId)).size, 1);
++  assert.deepEqual(observed.map(r => r.operation), ["bootstrap", "append", "append"]);
++});
++
++test("C03/D4 model: live epoch/head change after worker settlement denies before transaction", async () => {
++  for (const field of ["epoch", "anchor"] as const) {
++    const { w, c, f } = setup(); w.cut = at => { if (at === "worker-settled") w[field] = field === "epoch" ? uuid(99) : historyWire(f.history); };
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(w.counts.transactions, 0); assert.equal(w.counts.commits, 0);
++  }
++});
++
++test("C04 model: caller container mutation cannot alter staged primitive bytes", async () => {
++  const { w, c, f } = setup(), gate = deferred(), caller = { input: f.input, cp: wire(f.checkpoint) };
++  w.workerGate = () => gate.promise;
++  const pending = c.append(caller.input, caller.cp, signal()); caller.input = "{}"; caller.cp = "{}";
++  gate.release(); await pending; assert.equal(w.local.inventory, f.input); assert.equal(w.anchor, historyWire(f.history));
++});
++
++test("C05 model: each commit/readback/anchor response-loss cut closes without compensation or repeat", async () => {
++  for (const [cut, commits, anchors] of [["transaction-post", 0, 0], ["committed", 1, 0], ["read-back", 1, 0],
++    ["before-anchor", 1, 0], ["anchor-committed", 1, 1], ["before-promote", 1, 1]] as const) {
++    const { w, c, f } = setup(), before = c.confirmed; w.cut = throwAt(cut);
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++    assert.equal(w.counts.commits, commits, cut); assert.equal(w.counts.anchorAppends, anchors, cut); assert.equal(w.counts.promotions, 0);
++    assert.equal(c.confirmed, before); assert.equal(c.phase, "closed"); assert.equal(w.inTransaction, false);
++    assert.equal(w.local.inventory, commits ? f.input : before.inventory);
++    const counts = { ...w.counts }; w.cut = () => {}; await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.deepEqual(w.counts, counts);
++  }
++});
++
++test("C06 model: virtual deadline closes while worker/anchor are unsettled; late success cannot promote", async () => {
++  for (const stage of ["worker", "anchor"] as const) {
++    const { w, c, f } = setup(), gate = deferred(); w[stage === "worker" ? "workerGate" : "anchorGate"] = () => gate.promise;
++    const pending = c.append(f.input, wire(f.checkpoint), signal()), denied = reject(() => pending);
++    await flush(); assert.equal(w.activity, 1);
++    w.advance(MODEL_LIMITS.appendMs); await denied; assert.equal(c.phase, "closed"); assert.equal(w.counts.promotions, 0);
++    assert.throws(() => w.retire(), ModelDenied); assert.throws(() => new Coordinator(w), ModelDenied);
++    gate.release(); await flush(); assert.equal(w.activity, 0); assert.equal(w.counts.anchorAppends, 0); assert.equal(w.counts.promotions, 0);
++    assert.equal(w.clockListeners.size, 0);
++  }
++});
++
++test("C06 model: abort is responsive while request is pending, without treating abort as settlement", async () => {
++  const { w, c, f } = setup(), gate = deferred(), controller = new AbortController(); w.workerGate = () => gate.promise;
++  const pending = c.append(f.input, wire(f.checkpoint), controller.signal), denied = reject(() => pending);
++  controller.abort(); await denied; assert.equal(w.activity, 1); assert.equal(w.counts.commits, 0);
++  gate.release(); await flush(); assert.equal(w.activity, 0); assert.equal(w.counts.promotions, 0);
++});
++
++test("C05/C13 model: corrupt fresh ledger read-back or anchor confirmation never promotes", async () => {
++  for (const target of ["read-back", "anchor-committed"] as const) {
++    const { w, c, f } = setup(), old = c.confirmed;
++    w.cut = at => { if (at === target) { if (target === "read-back") w.local = { ...w.local, inventory: envelope([]) }; else w.anchor = old.history; } };
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++    assert.equal(w.counts.commits, 1); assert.equal(w.counts.promotions, 0); assert.equal(c.confirmed, old);
++    assert.equal(w.counts.anchorAttempts, target === "read-back" ? 0 : 1);
++  }
++});
++
++test("D3 model: old valid response cannot be replayed for the next staged request", async () => {
++  const w = new World(), c = new Coordinator(w), fs = frames(); let oldReply = "";
++  w.reply = text => { oldReply = text; return text; };
++  await c.append(fs[0]!.input, wire(fs[0]!.checkpoint), signal());
++  w.reply = () => oldReply;
++  await reject(() => c.append(fs[1]!.input, wire(fs[1]!.checkpoint), signal()));
++  assert.equal(w.counts.worker, 2); assert.equal(w.counts.transactions, 1); assert.equal(w.counts.promotions, 1);
++});
++
++test("C07 model: post-commit revoke may settle exact pair but cannot reopen forward work", async () => {
++  for (const allowSettlement of [true, false]) {
++    const { w, c, f } = setup(); w.cut = at => { if (at === "committed") { w.policy = false; w.settlement = allowSettlement; } };
++    if (allowSettlement) await c.append(f.input, wire(f.checkpoint), signal()); else await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++    assert.equal(w.counts.commits, 1); assert.equal(w.counts.anchorAppends, Number(allowSettlement)); assert.equal(c.phase, "closed");
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(w.counts.commits, 1);
++  }
++});
++
++test("C08 model: restart at each cut cannot import a summary, duplicate an append or bypass discovery", async () => {
++  for (const cut of ["captured", "worker-settled", "transaction-post", "committed", "read-back", "before-anchor", "anchor-committed", "before-promote"] as const) {
++    const { w, c, f } = setup(); w.cut = throwAt(cut);
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.throws(() => new Coordinator(w), ModelDenied);
++    w.retire(); w.cut = () => {}; const counts = { ...w.counts };
++    if (w.local.history !== w.anchor) assert.throws(() => new Coordinator(w));
++    else { const restarted = new Coordinator(w); assert.equal(restarted.confirmed.inventory, w.local.inventory); assert.equal(restarted.phase, "ready"); }
++    assert.equal(w.counts.worker, counts.worker); assert.equal(w.counts.commits, counts.commits); assert.equal(w.counts.anchorAttempts, counts.anchorAttempts);
++  }
++});
++
++test("C09 model: two clients have one owner, one in-flight request, no queue", async () => {
++  const { w, c, f } = setup(), gate = deferred(); w.workerGate = () => gate.promise;
++  const pending = c.append(f.input, wire(f.checkpoint), signal());
++  assert.throws(() => new Coordinator(w), ModelDenied);
++  await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(w.counts.worker, 1);
++  gate.release(); await pending; assert.equal(w.counts.promotions, 1); assert.equal(c.phase, "ready");
++});
++
++test("C10/C13 model: bootstrap equal only; one-ahead never auto-reconciles or admits", () => {
++  const fs = frames();
++  for (const mode of ["one-ahead", "two-ahead", "shorter", "divergent", "missing-genesis"] as const) {
++    const w = new World(), f = fs[1]!; w.local = { ...w.local, inventory: f.input, history: historyWire(f.history) };
++    w.anchor = mode === "one-ahead" ? historyWire(fs[0]!.history) : mode === "two-ahead" ? historyWire([genesis])
++      : mode === "shorter" ? historyWire(fs[2]!.history) : mode === "divergent" ? historyWire(transcript([make(0, 9)], [0, 0])[1]!.history) : historyWire([]);
++    assert.throws(() => new Coordinator(w), mode); assert.equal(w.counts.bootstraps, 0); assert.equal(w.counts.commits, 0);
++  }
++});
++
++test("C11 model: loss around outcome A or release B never yields forward readiness", async () => {
++  for (const index of [4, 5]) for (const cut of ["committed", "anchor-committed"] as const) {
++    const w = new World(), c = new Coordinator(w), fs = frames();
++    for (const f of fs.slice(0, index)) await c.append(f.input, wire(f.checkpoint), signal());
++    const prior = c.confirmed, counts = { ...w.counts }, f = fs[index]!; w.cut = throwAt(cut);
++    await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(c.phase, "closed"); assert.equal(c.confirmed, prior);
++    assert.equal(w.counts.promotions, counts.promotions); await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++    assert.equal(w.counts.commits, counts.commits + 1);
++  }
++});
++
++test("model bounds: oversized/nonpassive input, regressed clock and malformed replies close without new contacts", async () => {
++  for (const input of ["x".repeat(MODEL_LIMITS.wireBytes + 1), new Proxy({}, { get() { throw Error("active input"); } }), null]) {
++    const { w, c, f } = setup(); await reject(() => c.append(input, wire(f.checkpoint), signal())); assert.equal(w.counts.worker, 0);
++  }
++  for (const reply of ["{}", " ", "x".repeat(MODEL_LIMITS.responseBytes + 1)]) {
++    const { w, c, f } = setup(); w.reply = () => reply; await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(w.counts.transactions, 0);
++  }
++  const { w, c, f } = setup(); w.cut = at => { if (at === "worker-settled") w.now = -1; };
++  await reject(() => c.append(f.input, wire(f.checkpoint), signal())); assert.equal(w.counts.transactions, 0);
++});
++
++test("D3 model: bootstrap response cap and non-finite request counters reject", () => {
++  const w = new World(); w.bootstrapReply = () => "x".repeat(MODEL_LIMITS.responseBytes + 1);
++  assert.throws(() => new Coordinator(w), ModelDenied);
++  for (const counter of [NaN, Infinity, -1, Number.MAX_SAFE_INTEGER]) {
++    const bad = new World(); bad.lifetimeCounter = counter; assert.throws(() => new Coordinator(bad), ModelDenied);
++    assert.equal(bad.counts.bootstraps, 0); assert.equal(bad.ownerHeld, false);
++  }
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-pair-claims.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-pair-claims.test.ts
+new file mode 100644
+index 0000000..80764dc
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-pair-claims.test.ts
+@@ -0,0 +1,83 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { createHash } from "node:crypto";
++import { canonicalJson as wire } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3DataError } from "../../src/build-only/windows-candidate-v3-data.js";
++import { parseCandidateV3CheckpointHistory } from "../../src/build-only/windows-candidate-v3-inventory.js";
++import { inspectSyntheticPairClaims as inspect, requireEqualSyntheticPair as ready } from "../helpers/candidate-v3-pair-claims.js";
++import { make, transcript, pins, envelope, historyWire, genesis } from "../helpers/candidate-v3-history-fixture.js";
++const denied = (fn: () => unknown) => assert.throws(fn, e => e instanceof CandidateV3DataError);
++const bytesDigest = (s: string) => "sha256:" + createHash("sha256").update(Buffer.from(s, "utf8")).digest("hex");
++const frames = () => { const f = make(0, 0); return transcript([f], Array(f.record.events.length + 1).fill(0) as number[]); };
++
++test("C13 claim groundwork: equal full histories and exactly one local tail for all eight families", t => {
++  let prefixes = 0;
++  for (let family = 0; family < 8; family++) {
++    const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent);
++    const fs = parent ? [parent, f] : [f];
++    const order = fs.flatMap((row, index) => Array(row.record.events.length + 1).fill(index) as number[]);
++    for (const frame of transcript(fs, order)) {
++      const local = historyWire(frame.history), previous = historyWire(frame.history.slice(0, -1));
++      const equal = ready(pins, frame.input, local, local);
++      assert.equal(equal.relation, "equal-claims"); assert.equal(equal.localCheckpointCount, frame.history.length);
++      const ahead = inspect(pins, frame.input, local, previous);
++      assert.equal(ahead.relation, "one-ahead-claims"); assert.equal(ahead.claimedAnchorCheckpointCount, frame.history.length - 1);
++      assert.deepEqual(ahead.identity, equal.identity); denied(() => ready(pins, frame.input, local, previous)); prefixes++;
++    }
++  }
++  t.diagnostic(JSON.stringify({ syntheticPrefixes: prefixes, physicalC13: "NOT RUN", effectPorts: "none" }));
++});
++
++test("C13 claim groundwork: genesis is required and never a one-ahead permission", () => {
++  const empty = envelope([]), g = historyWire([genesis]);
++  assert.equal(ready(pins, empty, g, g).relation, "equal-claims");
++  denied(() => inspect(pins, empty, g, historyWire([])));
++  denied(() => inspect(pins, empty, historyWire([]), g));
++});
++
++test("C13 claim groundwork: shorter local and two-ahead local close", () => {
++  const f = frames(), first = f[0]!, later = f[2]!;
++  denied(() => inspect(pins, first.input, historyWire(first.history), historyWire(later.history)));
++  denied(() => inspect(pins, later.input, historyWire(later.history), historyWire(first.history)));
++});
++
++test("C13 claim groundwork: independently valid but divergent anchor history closes", () => {
++  const a = frames()[0]!, b = transcript([make(0, 9)], [0])[0]!;
++  parseCandidateV3CheckpointHistory(b.input, pins, historyWire(b.history));
++  assert.equal(a.history.length, b.history.length);
++  denied(() => inspect(pins, a.input, historyWire(a.history), historyWire(b.history)));
++});
++
++test("C13 claim groundwork: matching head cannot conceal a changed earlier anchor checkpoint", () => {
++  const f = frames().at(-1)!, changed = structuredClone(f.history);
++  changed[1]!.recordDigest = "sha256:" + "f".repeat(64);
++  assert.deepEqual(changed.at(-1), f.history.at(-1));
++  denied(() => inspect(pins, f.input, historyWire(f.history), historyWire(changed)));
++});
++
++test("D2 claim groundwork: identity hashes exact canonical wires, including optional A context", () => {
++  const f = make(0, 0), order = Array(f.record.events.length + 1).fill(0) as number[];
++  const before = transcript([f], order, "release")[4]!, withA = transcript([f], order, "outcome")[4]!;
++  const local = historyWire(before.history), a = ready(pins, before.input, local, local), b = ready(pins, withA.input, local, local);
++  assert.deepEqual(a.identity, [bytesDigest(pins), bytesDigest(before.input), bytesDigest(local), before.checkpoint.checkpointDigest]);
++  assert.equal(before.checkpoint.inventoryRootDigest, withA.checkpoint.inventoryRootDigest);
++  assert.equal(a.identity[0], b.identity[0]); assert.equal(a.identity[2], b.identity[2]); assert.equal(a.identity[3], b.identity[3]);
++  assert.notEqual(a.identity[1], b.identity[1]); assert(Object.isFrozen(a)); assert(Object.isFrozen(a.identity));
++});
++
++test("D2 claim groundwork: history identity includes the unconfirmed tail", () => {
++  const f = frames(), first = f[0]!, second = f[1]!;
++  const a = inspect(pins, first.input, historyWire(first.history), historyWire([genesis]));
++  const b = inspect(pins, second.input, historyWire(second.history), historyWire(first.history));
++  assert.notEqual(a.identity[2], b.identity[2]); assert.notEqual(a.identity[3], b.identity[3]);
++});
++
++test("C13 claim groundwork: noncanonical, malformed and active inputs deny without coercion", () => {
++  const f = frames()[0]!, local = historyWire(f.history);
++  for (const bad of [local + "\n", "{}", "", null]) denied(() => inspect(pins, f.input, local, bad));
++  let called = false;
++  const active = { toString() { called = true; throw Error("must not coerce"); } };
++  denied(() => inspect(pins, f.input, local, active)); assert.equal(called, false);
++  denied(() => inspect(pins, f.input + " ", local, local));
++  denied(() => inspect(wire({ ...JSON.parse(pins), unexpected: true }), f.input, local, local));
++});

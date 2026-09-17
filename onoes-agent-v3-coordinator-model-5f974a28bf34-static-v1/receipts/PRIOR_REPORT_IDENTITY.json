@@ -1,0 +1,12 @@
+{
+  "reportCommit": "24291ea7d430942eea91b527e9eef552c250bbc3",
+  "inputCommit": "94932dd9f0089044a014c98a90fcf64ef0447393",
+  "sourceReviewed": "8c22fcaea18088ab2118fe89959bf609878c92aa",
+  "sha256": "6fc4ac66b0acc1a7c9ad84af2ca93a5b6a0b3931bbae7816f77b09708a8ab0e2",
+  "byteLength": 29586,
+  "limitations": [
+    "Same reviewer as earlier reviews, not a second independent opinion.",
+    "Advance expected manifest acknowledgment was absent; never retroactively repaired.",
+    "STATIC_SOURCE only."
+  ]
+}
