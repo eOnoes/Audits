@@ -1,0 +1,42 @@
+{
+  "members": [
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/receipt.json",
+      "packetPath": "receipts/current/PRODUCER_RECEIPT.json",
+      "originalSha256": "d3dda7803fff8d093b6ccbbe1529f396b61b85f0249a504f4f8d6a486f10aa5a",
+      "originalByteLength": 53803,
+      "originalGitBlobOid": "06c2ccced593759d9c74bb552a9744a1394867d5",
+      "derivedSha256": "9400017a524bf0493446baaa548d9d7644806defa4b33926f55cbdd515532efd",
+      "derivedByteLength": 44250,
+      "transform": "JSON parse; exact private-root replacements in strings; two-space LF serialization",
+      "byteIdentical": false
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/verify.mjs",
+      "packetPath": "tests/research/verify.mjs.txt",
+      "originalSha256": "98eb8f6c7667cecb988ca0734c7949851524f6aa95d8292dbebfc4aa82ad6875",
+      "originalByteLength": 4466,
+      "originalGitBlobOid": "7f88ced12b4f3ec1d40cca8a382e1671bc967cc1",
+      "derivedSha256": "4ee45528bc535cc1ee15b4e3421462eef91bf45cde978138f37993255388816e",
+      "derivedByteLength": 4453,
+      "transform": "Exact UTF-8 private-root replacement only",
+      "byteIdentical": false
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/check-artifacts.mjs",
+      "packetPath": "tests/research/check-artifacts.mjs.txt",
+      "originalSha256": "6a97de93d90abf68d1be916b7565ac13099501f9e6c794fef77951c7242f0750",
+      "originalByteLength": 3700,
+      "originalGitBlobOid": "8f7b93213f0ef05c513fce367192cffb12bbda54",
+      "derivedSha256": "e06ffe2e48d452fbd12319b3fb0ed1f8e04852fc0f79e5f5b4603d09c1f6be44",
+      "derivedByteLength": 3650,
+      "transform": "Exact UTF-8 private-root replacement only",
+      "byteIdentical": false
+    }
+  ],
+  "limitations": [
+    "Original private-path producer receipt/helpers omitted. Published derivatives are explicitly not original executed bytes.",
+    "Current subject TS/docs/configs, original prior report, raw TAP and executed config copies are exact pinned blobs.",
+    "No subject execution is authorized by supplying verification helpers as static evidence."
+  ]
+}

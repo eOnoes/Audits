@@ -1,0 +1,1827 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md
+index c024e9e..087cb84 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md
+@@ -47,6 +47,30 @@ its owner latch on faults; explicit test retirement is not authenticated fencing
+ 
+ ## Executed producer evidence
+ 
++### Model-review follow-up (M-1, M-2, M-3)
++
++The model now counts exact canonical UTF-8 string escaping before allocating a
++complete request, including combined payload size and fixed envelope overhead.
++requestEncodings increments only after this preflight. Tests cover individually
++small but jointly oversized strings, escaping expansion, invalid surrogates,
++and exact-cap versus cap-plus-one boundaries for ASCII/control/BMP/astral text.
++Failed bootstrap attempts are counted before work and latched on the world;
++constructor recreation cannot retry them. Only explicit synthetic retirement
++after activity settles permits a new epoch/attempt, never an automatic reset.
++
++A transaction-post anchor drift control deliberately observes one local commit,
++zero anchor attempts and zero promotions, with the owner closed. This distinguishes
++the pre-transaction/full-stream and post-commit relation checks from the local
++transaction's pre-state identity check. It does not invent a cross-store atomic
++snapshot or call the anchor inside the transaction.
++
++Current model suite: 27/27; focused regression: 96/96, zero failures/skips.
++Exact follow-up evidence and limitations are retained in
++docs/reports/v3-model-review-followup-20260917; see
++V3_MODEL_REVIEW_DISPOSITION for full-run status. Prior runs below remain historical,
++not receipts for the revised helper. These tests do not implement a production
++coordinator or close C12/physical admission.
++
+ ### Current bootstrap/lifetime follow-up
+ 
+ At base `09be9332f9274c71373d1ce9192a0a0e57fdfe3d` plus explicit working-tree
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
+index 58ecd55..c816c26 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
+@@ -147,6 +147,16 @@ host; parser caps do not constitute total-process limits.
+    staged bytes no longer needed. Release singleflight only into Ready or Closed,
+    never a half-promoted state. No part of S/S' is a bearer capability.
+ 
++Boundary precision (model review M-3): the anchor relation is checked before
++opening the ledger transaction and again after local commit/read-back, outside
++the transaction. Step 5 checks the complete LOCAL pre-state, not a simultaneous
++anchor snapshot. An anchor change during the local transaction may therefore
++leave a committed, unconfirmed local candidate and close this owner. It must
++never cause promotion, a second append or compensation. Do not describe this
++cut as a pre-write denial or add an anchor callback inside the transaction.
++Physical fencing must prevent concurrent unauthorized anchor changes; the
++synthetic model demonstrates the failure response, not that physical exclusion.
++
+ Atomic private assignment is not distributed atomicity. Physical F and the future
+ adapter must make concurrent/untrusted alteration impossible while the transaction
+ checks are used; an optimistic hash followed by an uncontrolled write is inadequate.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md
+new file mode 100644
+index 0000000..b6b817b
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md
+@@ -0,0 +1,157 @@
++# V3 dormant coordinator with synthetic ports
++
++2026-09-17. Implements the next dormant composition allowed by the full Claude
++coordinator-model report and V3_MODEL_REVIEW_DISPOSITION. This is actual build-only
++coordinator code around the retained pure validation session, not another model
++substitute. The ports used to test it are exclusively synthetic. No runtime
++barrel, dashboard, task consumer, VM, provider, physical ledger, authenticated
++anchor or worker process is connected. This is not release or activation approval.
++
++## Implemented contract
++
++`windows-candidate-v3-coordinator.ts` owns old confirmed S while the private
++validation session advances T and one candidate C awaits settlement. Its public
++surface is only bootstrap, append, close and redacted status. Callers cannot
++submit S, an expected pre-head, a worker reply, a consent callback or a retry.
++Append inputs are primitive bounded canonical inventory/checkpoint strings.
++Host binding, clock, AbortSignal and ports are trusted embedding inputs, not
++task-provided objects. A port object is consumed once by the factory; the same
++object cannot create a second owner, even after failure. Busy requests reject
++without queueing or poisoning the active winner.
++
++Bootstrap charges one attempt, obtains fresh ledger and anchor strings, requires
++exact full-history equality, drives the real full-replay session and checks its
++complete post-identity. It then refreshes both sources and current authority
++before assigning S. One-ahead, shorter, divergent, two-ahead and missing-genesis
++inputs close; this path does not implement or silently invoke reconciliation.
++
++An append captures S, obtains fresh pre-state/anchor reads, stages exact candidate
++bytes, and sends a request with a fresh Node randomUUID nonce, private request
++number, lifetime/epoch, complete pre-identity and one absolute deadline. Every
++worker response field is bound to that pending request; all four returned post
++components are also compared against locally staged bytes, including the two
++components the message parser cannot derive on its own.
++
++The commit port takes data only: canonical pre-identity, candidate snapshot,
++bound context and a cancellation signal. It must own the entire short synchronous
++transaction, independently checking current schema/durability/physical store,
++complete pre-state and exact post-state under that transaction. No coordinator,
++worker, anchor, authorization or task callback is passed into a transaction.
++The test fixture simulates this with a synchronous string assignment; it does
++not supply the required real transactional implementation.
++
++After exact commit acknowledgment, the coordinator separately reads back the
++candidate and checks that the anchor remains the old stream. It then contacts
++the anchor once, outside the transaction, with exact predecessor/history and
++checkpoint plus the original request/deadline context. Acknowledgments must be
++exact canonical text with the expected context digest and full post tuple.
++Fresh ledger/anchor reads and current authority are required before promotion.
++The acknowledgment format is a consistency contract, NOT authentication.
++
++Each commit/anchor attempt counter increments immediately before its actual
++port call, after the final step-level cancellation/deadline check. Attempted
++does not mean written. If a contacted port rejects or its reply is lost, the
++coordinator conservatively treats that attempt as uncertain; it does not infer
++no-write, compensate, retry or rewind the advanced session. Known no-write versus
++commit-uncertain diagnostics for a physical adapter remain part of that adapter's
++reviewed contract; the current public error intentionally makes no such claim.
++
++## Snapshot transport and identities
++
++`windows-candidate-v3-coordinator-data.ts` wraps the existing metadata, inventory
++and retained-history canonical strings in a strict local transport envelope.
++It defines no new ledger schema or authority. The four identity components remain
++the exact SHA-256 of each existing wire and the last checkpoint's declared digest.
++The byte-claim parser checks envelope/history shape and metadata/last checkpoint;
++it deliberately does NOT validate the whole inventory/history. Only the session's
++real pure validator can validate those claims. Tests preserve that distinction.
++
++Encoding charges exact escaped bytes before composing the envelope; inner limits
++remain 1,024 bytes metadata, 64 MiB inventory/history, 4,096 bytes checkpoint.
++Staging verifies predecessor/sequence and appends one canonical checkpoint string
++after checking the total history budget. The envelope uses the existing bootstrap
++outer cap. Returned snapshots/identities are frozen; no proxy/getter/Buffer or
++boxed string is accepted at the candidate transport boundary.
++
++## Cancellation, revocation and uncertainty
++
++One overall budget begins before candidate byte checks: 30 s bootstrap or 10 s
++append, with test-only host narrowing supported but never widening. There is no
++per-port budget reset. Safe nonnegative integer clock values must not regress.
++Every asynchronous port step checks time/cancellation before contact and after
++settlement; a timer races unresolved calls. Any failure closes the coordinator,
++aborts the private signal and requests one validation invalidation.
++
++`pendingPorts` counts unsettled promises even after the public request rejects.
++It is NOT a process/descendant stop witness. A dedicated test lets an uncooperative
++synthetic commit write after cancellation: the write can happen, but no later
++anchor call, promotion or port-object replacement is allowed. Physical exclusion,
++termination and separately authorized fresh-owner recovery remain mandatory.
++
++Post-commit forward revocation can still allow witnessing the exact old pair
++under separately retained settlement authority and the unchanged deadline. The
++final forward check nevertheless denies a new Ready owner. If settlement itself
++expires/revokes, no anchor contact occurs. Last confirmed S remains old on every
++failure, even when local or both synthetic writes are already observed.
++
++## Evidence and coverage
++
++The 22-case coordinator suite uses the actual message/session/incremental modules
++through asynchronous synthetic ports. It checks 53 sequential prefixes across
++all eight outcome families against a full-reference oracle, complete nonempty
++bootstrap, transaction/pre-state drift (including removal of an unrelated row's
++context), anchor drift during local commit, lost replies, forged responses/acks,
++corrupt read-back, busy callers, epoch/clock loss and post-commit revocation.
++
++Cancellation is swept over 32 before/after append seams and 18 bootstrap seams;
++expiry is swept over all 16 settled append seams. Pending validation, commit and
++anchor responses are separately canceled/closed. A 500 ms test-only timer case
++checks rejection while a port remains unresolved; it is not a throughput or OS
++watchdog benchmark. The fixture checks that async port contacts never occur
++inside its simulated transaction. Its fault hooks exist only in test code.
++
++Selected source/compiled/config identities, exact commands, raw focused/full TAP
++and producer receipt are retained in `docs/reports/v3-coordinator-20260917`.
++Compilation and no-emit typecheck passed. Focused: 136/136, zero fail/skip,
++1430.4192 ms; TAP SHA-256
++`f81277ffd6ee92cc211b909b4f2a3492ee905ef3e29f67e2291d4fe8e6c3f98a`.
++Full offline: 2,131 tests / 2,129 passed / zero failed / two skipped,
++241363.9444 ms, UTC 2026-09-17T19:52:41.498Z--19:56:42.947Z; TAP SHA-256
++`25f65dc8d982701f652afcf14c72b2574304ce98b2118c87b9476428597f8f51`.
++The skips remain Windows symlink-creation privilege and the deliberately
++non-Windows-only inspector refusal case. A separate artifact read-back checked
++all 49 selected identities, both raw TAP files, counts and seam diagnostics.
++Receipt SHA-256:
++`d3dda7803fff8d093b6ccbbe1529f396b61b85f0249a504f4f8d6a486f10aa5a`.
++The staged-source check found all 23 selected TypeScript files and the lockfile
++byte-identical to executed inputs. The two existing tsconfigs were read as CRLF
++locally and are LF in Git: exact CRLF-to-LF comparison and parsed JSON equality
++both pass. Their actual executed bytes and the explicit mapping are retained as
++`EXECUTED_*.json.txt` and `EXECUTION_INDEX_MATCH.json`; the original receipt is
++unchanged. Do not collapse that distinction into an EXACT_TREE assertion.
++This is producer evidence, not independent execution, exact full-product
++provenance or Windows-native proof.
++
++## Open gates and next action
++
++- Real store-wide ownership/fencing is NOT a WeakSet. Cloning/recreating ports or
++  loading another module copy can bypass this local object-identity guard. A host
++  must retain one port bundle and cannot treat a new object as authorization.
++- Real transaction durability, protected file/WAL/SHM custody, enrollment,
++  authenticated anchor discovery/append and anti-rollback B-03/W1-W5 are absent.
++- Real validation worker/IPC, shared clock conversion, executable custody,
++  request quiescence and descendant termination are absent. In-process callbacks
++  and promises cannot establish any of these facts.
++- Synchronous parsing/hashing may block this dedicated future host. The timer
++  cannot preempt synchronous JavaScript. Repeated complete snapshot parsing and
++  allocation need measurement at the maximum admissible history. M-6/C12 remain
++  OPEN; the small-fixture pass is not a maximum-capacity or dashboard claim.
++- A one-ahead bootstrap closes; no retirement, reconciliation, effect or task
++  API has been activated. Public status never grants admission or claims that
++  an uncertain write did not happen.
++
++Next: prepare one combined narrow review of the message/session/coordinator
++implementation and these synthetic fault controls, including their residual host
++contracts. Obtain the selected service and exact sanitized scope approval before
++new external source transfer. Do not wire physical storage/worker/task consumers
++or equate this checkpoint with the Windows release goal being complete.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_MODEL_REVIEW_DISPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_MODEL_REVIEW_DISPOSITION.md
+new file mode 100644
+index 0000000..b9ffa87
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_MODEL_REVIEW_DISPOSITION.md
+@@ -0,0 +1,83 @@
++# V3 coordinator model review: receipt and follow-up
++
++2026-09-17. The complete Claude STATIC_SOURCE report for product
++5f974a28bf34e097713a17020e3b7b086102d22e and packet input
++1f84e1ab6db1834e108070b1a1febfa5717e551e has been received.
++The reviewer identifies the same model family as the prior reviewer, a different
++session with general project context: this is not a fresh independent second
++opinion. Subject tests were NOT RUN by that reviewer.
++
++## Exact retained report
++
++Private original: docs/reports/CLAUDE_V3_COORDINATOR_MODEL_5F974A2_2026_09_17.md.
++57,152 bytes; SHA-256
++662275b632d38487f206c17042c0bb879e495caa0f058ed66ca70d3aecf13012.
++The complete Markdown was captured from the operator-selected Claude artifact;
++the supplied Drive report also matched its text. Neither route sent source or
++issued a new model request. Private retrieval/session metadata is not published.
++
++Publisher report-only delivery (not a rewrite of the reviewer's delivery claim):
++https://github.com/eOnoes/Audits/blob/45ae8a600d7ef091fb173d5e17f3f1aea99d5bad/onoes-agent-v3-coordinator-model-5f974a28bf34-static-v1/reports/AUDIT_REPORT.md
++
++This commit changes exactly one report file. Current workflow files and registered
++workflows were both empty before push. Independent raw GitHub read-back matched
++the exact length and hash above. Frozen input files/manifests were unchanged.
++The report's BLOCKED_NO_GITHUB_WRITE_ACCESS describes the reviewer session; this
++publisher delivery resolves transport only, not any finding. Active source
++packet cleanup is deferred until findings/evidence are resolved and retained;
++cleanup cannot erase public Git history.
++
++Verdicts: PASS_WITH_FINDINGS / NEEDS_REVIEW / PARTIAL. Advancement permits the
++next dormant coordinator/adapter with synthetic ports. Real storage, owner,
++worker, consumer, task, installer and activation remain excluded. This replaces
++the missing-report wait, not physical B-03/W1-W5 or release acceptance.
++
++## Finding disposition
++
++| Finding | Current action / remaining boundary |
++| --- | --- |
++| B-01 physical B-03/W1-W5 | OPEN for real admission. No physical activation or new authority is inferred. |
++| M-1 composite allocation | Corrected in the test model: exact escaped-size preflight before full request encoding, plus combined-cap and exact-boundary tests. Carry the same rule into the dormant implementation. No total-process memory proof. |
++| M-2 bootstrap attempts | Corrected in model: one counted attempt per explicitly retired epoch, including failed snapshot/reply/clock/fence cases; object recreation cannot reset it. Physical lifetime enforcement remains open. |
++| M-3 anchor boundary | Accepted precision issue. Documents now separate local transactional identity from pre-/post-transaction anchor checks. New fault test shows one unconfirmed local commit, no anchor attempt/promotion, closed owner. |
++| M-4 expected manifest pin | Accepted historical limitation, NOT retroactively closed. Next handoff must deliver size/hash in chat before link/source review and record actual reviewer acknowledgment. Producer tests remain producer evidence. |
++| M-5 missing doc delta | Supplemented privately with exact historical DOC_DELTA.json/patch for all eight handoff docs at baseline 8c22fca -> reviewed 5f974a2: one modified, four added, three unchanged. SHA-256, length, blob OID and Git patch retained without editing the frozen packet. Include this supplement in the next approved delta review. |
++| M-6 capacity arithmetic | OPEN for worst-admissible capacity evidence. Message design now explicitly defines aggregate budget precedence and exact 1,000-row arithmetic; per-member maxima are not joint capacity promises. No limits raised/lowered. Derive strict-schema bounds and measure worst admissible workloads before reusing maximum-capacity claims. |
++
++## Local execution
++
++Base main 5332caa277c56747da4e6cd11e0f808831c2570c plus explicit working-tree
++model/test changes. Compilation passed. The 27 model cases pass; the retained
++focused run is 96/96, zero failures/skips, 1429.0157 ms, SHA-256
++bd9f553817ec994159a3c5260f63ea0c0317b1862a5fdf887a8704ee70f8d3c3.
++No-emit typecheck passed. Full offline run: 2,091 tests / 2,089 pass / zero fail /
++two known platform skips, 245240.7833 ms; UTC 18:58:09.088--19:02:14.419.
++The skips are unavailable Windows symlink privilege and the intentionally
++non-Windows-only inspector denial test. Raw full output SHA-256:
++25f2530a71b6ffe202da1e8e6f95c74515dca962195da554d195042d3ec00899.
++Exact selected before/after source and compiled identities match; both test
++runs and typecheck exited zero with empty stderr. Full dated commands, skip
++lines and identities are in docs/reports/v3-model-review-followup-20260917/receipt.json.
++These are producer-only executions with synthetic ports, not independent
++execution, physical confinement or Windows release acceptance.
++
++The historical documentation supplement is derived from actual local Git blobs,
++not a reconstruction from this working tree. Patch SHA-256:
++cca3d14c414671140496f513f684f3eeb558730107a2666791dad777910042f2.
++It does not claim that Claude reviewed the newly supplied delta.
++Separate producer read-back reconstructed all five added/modified documents
++from their baseline plus patch, confirmed the three unchanged documents, and
++rechecked all 35 selected source/compiled/config identities and six run artifacts.
++The receipt SHA-256 is
++644e7ac3469cbf2f9f7f78bb998ea18b80d003fd31d86936a54b7d2aa01ccc73.
++
++## Next work
++
++Continue into the reviewed dormant coordinator/adapter using synthetic ports,
++without exporting the test-world flags as trusted host interfaces. Keep request
++encoding and failed-bootstrap accounting bounded, retain pre-state capture and
++the confirmed/staged distinction, and fail closed on uncertain settlement.
++Carry M-6 resource evidence and physical B-03/W1-W5 as explicit unfinished gates.
++A narrow delta re-review is warranted when the implementation boundary is ready,
++not a separate external audit for each model test. No operator audit action is
++needed to continue this scoped work now.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_VALIDATION_SESSION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_VALIDATION_SESSION.md
+new file mode 100644
+index 0000000..fe7e9de
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_VALIDATION_SESSION.md
+@@ -0,0 +1,121 @@
++# Dormant V3 message and validation-session implementation
++
++2026-09-17. Implementation under the scoped coordinator-model review permission
++recorded in V3_MODEL_REVIEW_DISPOSITION. This is the message/validation portion
++of the next coordinator, not the completed coordinator or a physical worker.
++No runtime barrel, dashboard, task, storage, VM, provider or process-launch
++consumer imports these new build-only modules.
++
++Follow-up: V3_DORMANT_COORDINATOR records the subsequent actual coordinator with
++synthetic ports. The verification below remains the historical session-only run;
++the newer composition has separate source-bound evidence and no physical adapter.
++
++## Implemented boundary
++
++`windows-candidate-v3-messages.ts` implements distinct versioned bootstrap and
++append requests/responses. External values are primitive canonical text only;
++no caller object, Buffer, getter, proxy or toJSON is inspected. A private caller
++phase selects the expected operation and its outer byte cap before JSON.parse.
++Headers have a separate 4 KiB cap, responses 16 KiB, and existing metadata,
++inventory/history and checkpoint caps still apply independently. Strict schemas
++reject unknown keys, alternate encodings, duplicate keys, wrong domains and
++cross-operation fallback. Inputs are copied by parsing and deeply frozen.
++
++Request builders take a bounded canonical header and primitive inner strings.
++They count the complete JSON envelope, including exact UTF-8 escaping, before
++allocating its serialization. The counter rejects unpaired surrogates and stops
++as soon as the remaining budget is exceeded. A header/tuple may be encoded
++separately because its schema and small cap already bound it. This is not a
++total-process memory guarantee: decoded copies, hashing, retained state and
++native/V8 allocations still require physical C12 measurement and enforcement.
++
++Each response binds the exact raw UTF-8 request digest, operation, lifetime,
++request number, nonce, current epoch, original deadline, all inner digests and
++the append pre-identity. It carries a four-digest post-identity and self-digest.
++Correctly rehashing a stale/substituted echo cannot make it match the pending
++request. Known post-components are independently checked: bootstrap metadata,
++inventory and history digests must equal the request's exact input identities;
++append metadata must equal the pre-state and inventory its exact input digest.
++Unknown post-components remain CLAIMS: the coordinator must
++compare it against its staged bytes and complete the separate durable-pair
++protocol. The test suite explicitly preserves this negative control.
++
++`windows-candidate-v3-validation-session.ts` keeps one private real incremental
++validator for one supplied lifetime/epoch. Bootstrap does a full replay; no
++summary import exists. Anchor-history equality is a supplied digest consistency
++check, not authenticated discovery. Appends require the exact retained pre-state
++tuple and the next request number, then use the existing incremental predicate.
++The history wire grows by one bounded canonical checkpoint string; existing
++history is not reparsed/re-encoded or full-reference-replayed on every append.
++The aggregate history budget is checked before allocating the new string.
++
++Any failed request permanently invalidates that session and clears its retained
++strings/transcript. A failed bootstrap is charged once; repeated requests cannot
++clear it. Busy re-entrant requests are refused with no queue and do not poison
++the winner. Explicit close is one-way and idempotent. Clock values must be safe
++nonnegative monotonic integers; a request cannot set a larger relative budget
++than the proposed 30 s bootstrap / 10 s append limits. Expiry/cancellation are
++checked before work and after validation and response encoding.
++
++## Limits and deliberate non-claims
++
++- This synchronous core belongs in future off-dashboard hosting. Post-work time
++  checks cannot interrupt synchronous CPU work, enforce a watchdog, or make UI
++  cancellation responsive. No shared host/worker clock conversion is implemented.
++- `ready` in this session means ready to validate another request, NOT a confirmed
++  ledger/anchor pair. The coordinator must retain old S while this session's T
++  is advanced, and prohibit another request until the prior pair is confirmed.
++- Session closure/attempt accounting is per retained session. Calling the factory
++  again does not establish fresh ownership. The future coordinator/worker owner
++  must retain one instance, block unauthenticated replacement and require the
++  separately reviewed retirement/fencing/discovery procedure. No global string
++  registry pretends to enforce physical lifetime identity.
++- Host-supplied lifetime/epoch and nonce strings are descriptive bindings only.
++  The future host must mint fresh nonces with a cryptographically secure source,
++  hold protected IPC/executable custody, and establish authorization separately.
++- No OS process, binary framing/UTF-8 byte decoder, error-frame transport,
++  request-settlement witness, child termination, storage transaction or anchor
++  protocol is implemented. Local failures throw one fixed redacted error.
++- Parser/profile caps are unchanged. M-6 worst-admissible capacity and all physical
++  B-03/W1-W5/C12 evidence remain open. No real effect or approval was consumed.
++
++## Verification and next step
++
++The new suite has 18 cases, including all eight outcome families/53 incremental
++prefixes against a separate full-reference identity, nonempty bootstrap/restart,
++missing genesis, stale/rehashed response bindings, wrong pre-state/counters,
++permanent failure, time/abort seams, re-entrancy, primitive-only inputs and exact
++UTF-8 size arithmetic. Both implementations share existing canonical/schema
++primitives; this is producer differential evidence, not independent proof.
++
++Compilation and no-emit typecheck pass. Final focused regression is 114/114, zero
++failures/skips, 2360.8122 ms; raw TAP SHA-256
++10ce777526909d73ee03dc6e182d98125cf1f1a04e38bdc10d89747372894bd4.
++Final full offline verification: 2,109 tests / 2,107 pass / zero fail / two known
++platform skips, 250691.4793 ms; UTC 2026-09-17T19:28:03.785Z--19:32:14.563Z.
++The skips are unavailable Windows symlink privilege and the non-Windows-only
++inspector refusal case. Final full TAP SHA-256:
++f61828f282d830f2e574af3531fb34164f647cedc0f4f8955824b944662a8694.
++Exact commands and matching selected before/after source/compiled identities are retained in
++docs/reports/v3-validation-session-final-20260917.
++The earlier test-only model remains separate and uses its own synthetic domains.
++
++Self-review found that known post-state components were initially delegated to
++the future coordinator. A new test independently rehashed contradictory replies
++and failed with Missing expected exception before the correction; it now passes.
++The actual failing TAP, source/compiled identities and an exact SHA-matched
++reconstruction of the before-fix message module are retained separately in
++docs/reports/v3-validation-session-post-binding-regression-20260917.
++Before-fix source SHA-256:
++c5fb76eccf50eed77ace2ef48984df9213367b6e8cf8ccd3e38f440b6e1e672b;
++failing TAP SHA-256:
++26a34bf201987ccf07189640659f38ee7241c206a8705a882d20494004062642.
++The earlier 113-test / 2108-test run in v3-validation-session-20260917 is retained
++as historical evidence only; it does not cover the final known-post correction.
++
++Next: implement the dormant coordinator's one-owner/single-flight lifetime and
++trusted synthetic ledger/anchor ports around this session, retaining complete
++pre-state transaction comparisons, post-commit read-back, exact anchor confirmation,
++and closed-state handling of uncertainty. This is unfinished work, not another
++operator audit request. Request the narrow delta review when that composition
++is ready; do not activate physical storage/worker/task consumers first.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md
+index e754c17..7dcd7bd 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md
+@@ -6,6 +6,16 @@ IPC protocol. Existing canonical record, inventory and history wires do not chan
+ The executable test model uses a distinct `synthetic-*` domain and smaller fixture
+ limits; it must never become an implicitly authorized production adapter.
+ 
++Implementation follow-up: V3_VALIDATION_SESSION describes the new dormant
++`agent-candidate-v3-*-request/response/v1` message contracts and retained pure
++validation-session core. The host coordinator, physical worker, IPC, owner,
++storage and anchor composition remain unimplemented; this does not activate
++the proposed physical protocol or change the synthetic model's domains.
++
++Subsequent dormant composition: V3_DORMANT_COORDINATOR implements the host-side
++ordering against synthetic ports. The physical worker, IPC, owner, storage and
++authenticated anchor remain absent; no physical protocol is activated.
++
+ ## Identity and framing
+ 
+ A future pinned worker belongs to one coordinator lifetime/current owner epoch.
+@@ -77,6 +87,15 @@ independently confirmed; losing the IPC channel is not a stop witness. Replaceme
+ requires confirmed termination of relevant work, fresh ownership/fencing/discovery
+ and full replay. The protocol has no message that clears a poisoned lifetime.
+ 
++Bootstrap-attempt rule (M-2): charge an attempt before parsing or validation and
++permit at most one bootstrap per owned lifetime. Any failure consumes that
++attempt. Recreating the coordinator object cannot reset the accounting or retry
++Uninitialized work. A further attempt requires explicit retirement, all relevant
++activity settled, and fresh ownership/discovery under a new epoch; there is no
++automatic backoff/retry loop. In the test model this is a private world-owned
++latch plus a monotonic bootstrapAttempts counter. Its explicit test-driver
++retire() operation is NOT physical fencing or authority to replace a real owner.
++
+ ## Numeric ceilings selected for review, NOT capacity evidence
+ 
+ Proposed production admission profile: one worker per owned store, one pending
+@@ -91,6 +110,27 @@ metadata. Both inner and outer caps apply, so available envelope space cannot
+ increase an inner limit. Encoding must reject before exceeding the envelope;
+ streaming bounded transport does not mean unbounded buffering is allowed.
+ 
++Capacity precision (M-6): independent per-member maxima are rejection limits,
++not a promise that their Cartesian product fits. The 64 MiB inventory limit
++also applies to the complete canonical encoded envelope. For n nonempty rows,
++its exact size is 64 + (n - 1) + sum(encodedRowBytes). At 1,000 rows an equal
++allocation is at most 67,107 encoded bytes per row; different row sizes may share
++the remaining budget. A row with three non-null empty wire strings costs 58
++bytes; a conservative sufficient uniform raw-member sum is 33,524 bytes if
++every raw canonical byte expands by at most two. This is budget arithmetic,
++not a new restriction on accepted schemas or a supported-capacity reduction.
++The independent member maxima sum to 45,056, and that hypothetical worst-case
++cross-product would need 90,171,063 bytes including scaffolding: it must reject,
++not silently raise the envelope cap. Future encoders must charge actual escaped
++row bytes against the remaining aggregate budget before composing the envelope.
++
++This does not prove such maximal strings satisfy the strict inner schemas:
++their fixed UUID/digest/time/enum fields and legal history graph impose smaller
++constraints. Conversely, the existing dense 6,001-checkpoint probe is not proof
++of the worst admissible byte shape. Deriving and testing that bound, maximum
++aggregate allocation and physical C12 behavior remain OPEN. No existing parser
++constant is raised/lowered and no maximum-byte performance claim is made here.
++
+ Absolute budgets proposed for measurement: bootstrap **30 seconds**, ordinary
+ append/pair **10 seconds** overall with no phase reset, stop confirmation **5
+ seconds** separately. Expiration denies rather than stretching a lease. A host
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-coordinator-data.ts b/product/companion-v1/src/build-only/windows-candidate-v3-coordinator-data.ts
+new file mode 100644
+index 0000000..53e4a37
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-coordinator-data.ts
+@@ -0,0 +1,56 @@
++import { z } from "zod";
++import { canonicalJson as wire, sha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN, CANDIDATE_V3_META_MAX_BYTES, parseCandidateV3Metadata } from "./windows-candidate-v3-data.js";
++import { CANDIDATE_V3_MAX_INVENTORY_BYTES, CANDIDATE_V3_MAX_OPERATIONS } from "./windows-candidate-v3-inventory.js";
++import { CANDIDATE_V3_MAX_CHECKPOINT_BYTES, parseCandidateV3Checkpoint } from "./windows-candidate-v3-record.js";
++import { CandidateV3MessageError, V3_MESSAGE_LIMITS, boundedV3Text, candidateV3EscapedBytes } from "./windows-candidate-v3-messages.js";
++
++// DORMANT local snapshot transport, not new ledger/record/history formats or
++// evidence that any storage exists. Full inventory/history validity belongs to
++// the private validation session; this layer independently binds exact bytes.
++const domain = "agent-candidate-v3-local-snapshot/v1";
++const snapshotSchema = z.object({ domain: z.literal(domain), metadataWire: z.string(), inventoryWire: z.string(), historyWire: z.string() }).strict();
++const historySchema = z.object({ domain: z.literal(CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN),
++  checkpoints: z.array(z.string().max(CANDIDATE_V3_MAX_CHECKPOINT_BYTES)).min(1).max(7 * CANDIDATE_V3_MAX_OPERATIONS + 1) }).strict();
++const fail = (): never => { throw new CandidateV3MessageError(); };
++export function encodeCandidateV3LocalSnapshot(metadata: unknown, inventory: unknown, history: unknown): string {
++  const metadataWire = boundedV3Text(metadata, CANDIDATE_V3_META_MAX_BYTES);
++  const inventoryWire = boundedV3Text(inventory, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  const historyWire = boundedV3Text(history, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  let bytes = Buffer.byteLength(wire({ domain, metadataWire: "", inventoryWire: "", historyWire: "" }));
++  for (const s of [metadataWire, inventoryWire, historyWire]) bytes += candidateV3EscapedBytes(s, V3_MESSAGE_LIMITS.bootstrapBytes - bytes);
++  const result = wire({ domain, metadataWire, inventoryWire, historyWire });
++  if (Buffer.byteLength(result) !== bytes) return fail();
++  return result;
++}
++export function parseCandidateV3LocalSnapshot(input: unknown) {
++  try {
++    const snapshotWire = boundedV3Text(input, V3_MESSAGE_LIMITS.bootstrapBytes);
++    const s = snapshotSchema.parse(JSON.parse(snapshotWire));
++    boundedV3Text(s.metadataWire, CANDIDATE_V3_META_MAX_BYTES); boundedV3Text(s.inventoryWire, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++    boundedV3Text(s.historyWire, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++    if (wire(s) !== snapshotWire) return fail();
++    parseCandidateV3Metadata(s.metadataWire);
++    const decoded: unknown = JSON.parse(s.historyWire);
++    if (decoded === null || typeof decoded !== "object" || Array.isArray(decoded)
++      || !Array.isArray((decoded as { checkpoints?: unknown }).checkpoints)
++      || (decoded as { checkpoints: unknown[] }).checkpoints.length > 7 * CANDIDATE_V3_MAX_OPERATIONS + 1) return fail();
++    const history = historySchema.parse(decoded);
++    if (wire(history) !== s.historyWire) return fail();
++    const head = parseCandidateV3Checkpoint(history.checkpoints.at(-1), s.metadataWire);
++    return deepFreeze({ kind: "local-snapshot-byte-claims-not-validated-history" as const, ...s, snapshotWire, head,
++      identity: [sha256Digest(s.metadataWire), sha256Digest(s.inventoryWire), sha256Digest(s.historyWire), head.checkpointDigest] as const });
++  } catch { return fail(); }
++}
++export function stageCandidateV3LocalSnapshot(beforeWire: unknown, inventory: unknown, checkpoint: unknown) {
++  const before = parseCandidateV3LocalSnapshot(beforeWire), inventoryWire = boundedV3Text(inventory, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  const checkpointWire = boundedV3Text(checkpoint, CANDIDATE_V3_MAX_CHECKPOINT_BYTES), cp = parseCandidateV3Checkpoint(checkpointWire, before.metadataWire);
++  if (cp.sequence !== before.head.sequence + 1 || cp.previousCheckpointDigest !== before.head.checkpointDigest) return fail();
++  const suffix = '],"domain":' + wire(CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN) + '}';
++  if (!before.historyWire.endsWith(suffix)) return fail();
++  const encodedCp = wire(checkpointWire), size = Buffer.byteLength(before.historyWire) + 1 + Buffer.byteLength(encodedCp);
++  if (size > CANDIDATE_V3_MAX_INVENTORY_BYTES) return fail();
++  const history = before.historyWire.slice(0, -suffix.length) + ',' + encodedCp + suffix;
++  return parseCandidateV3LocalSnapshot(encodeCandidateV3LocalSnapshot(before.metadataWire, inventoryWire, history));
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-coordinator.ts b/product/companion-v1/src/build-only/windows-candidate-v3-coordinator.ts
+new file mode 100644
+index 0000000..befae58
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-coordinator.ts
+@@ -0,0 +1,154 @@
++import { randomUUID } from "node:crypto";
++import { z } from "zod";
++import { canonicalJson as wire, sha256Digest } from "../compatibility/canonical-json.js";
++import { effectUuid } from "./windows-candidate-effect-state.js";
++import { CANDIDATE_V3_MAX_INVENTORY_BYTES } from "./windows-candidate-v3-inventory.js";
++import { CANDIDATE_V3_MAX_CHECKPOINT_BYTES } from "./windows-candidate-v3-record.js";
++import { V3_MESSAGE_LIMITS, boundedV3Text, encodeCandidateV3BootstrapRequest, encodeCandidateV3AppendRequest, parseCandidateV3Response } from "./windows-candidate-v3-messages.js";
++import { parseCandidateV3LocalSnapshot, stageCandidateV3LocalSnapshot } from "./windows-candidate-v3-coordinator-data.js";
++
++// DORMANT composition. Trusted embedding ports, tested ONLY synthetically.
++// No physical adapter, task/effect API, runtime consumer or admission exists.
++// Promise settlement and the counters below do NOT prove OS quiescence.
++export interface CandidateV3CoordinatorPorts {
++  readonly kind: "synthetic-v3-coordinator-ports-not-physical";
++  assertCurrent(contextWire: string, signal: AbortSignal): Promise<void>;
++  readLedger(signal: AbortSignal): Promise<unknown>;
++  readAnchor(signal: AbortSignal): Promise<unknown>;
++  validate(requestWire: string, signal: AbortSignal): Promise<unknown>;
++  // Must own a single short transaction: check schema/durability/store identity
++  // and complete pre-identity, write exact candidate, validate post, commit.
++  // Receives data only, never a callback to execute inside its transaction.
++  commit(preIdentityWire: string, candidateSnapshotWire: string, contextWire: string, signal: AbortSignal): Promise<unknown>;
++  appendAnchor(previousHistoryWire: string, checkpointWire: string, contextWire: string, signal: AbortSignal): Promise<unknown>;
++  invalidateValidation(): void; // Request invalidation, NOT a termination witness.
++}
++const usedPorts = new WeakSet<object>();
++const bindingSchema = z.object({ lifetimeId: effectUuid, epoch: effectUuid }).strict();
++const budgetsSchema = z.object({ bootstrapMs: z.number().int().min(1).max(V3_MESSAGE_LIMITS.bootstrapMs),
++  appendMs: z.number().int().min(1).max(V3_MESSAGE_LIMITS.appendMs) }).strict();
++export class CandidateV3CoordinatorError extends Error {
++  constructor() { super("candidate-v3-coordinator-closed"); this.name = "CandidateV3CoordinatorError"; }
++}
++const fail = (): never => { throw new CandidateV3CoordinatorError(); };
++type Snapshot = ReturnType<typeof parseCandidateV3LocalSnapshot>;
++const same = (a: readonly string[], b: readonly string[]) => wire(a) === wire(b);
++
++export function createCandidateV3Coordinator(bindingWire: unknown, ports: CandidateV3CoordinatorPorts, clock: () => number,
++  budgetsWire: unknown = wire({ bootstrapMs: V3_MESSAGE_LIMITS.bootstrapMs, appendMs: V3_MESSAGE_LIMITS.appendMs })) {
++  // This prevents same-port-object re-instantiation, not two malicious physical
++  // adapters for one store. Real store-wide ownership/fencing remains a gate.
++  if (!ports || ports.kind !== "synthetic-v3-coordinator-ports-not-physical" || usedPorts.has(ports)) return fail();
++  usedPorts.add(ports);
++  let binding: z.infer<typeof bindingSchema>, budgets: z.infer<typeof budgetsSchema>;
++  try {
++    const b = boundedV3Text(bindingWire, V3_MESSAGE_LIMITS.headerBytes), t = boundedV3Text(budgetsWire, V3_MESSAGE_LIMITS.headerBytes);
++    binding = bindingSchema.parse(JSON.parse(b)); budgets = budgetsSchema.parse(JSON.parse(t));
++    if (wire(binding) !== b || wire(budgets) !== t) return fail();
++  } catch { return fail(); }
++  let phase: "uninitialized" | "bootstrapping" | "ready" | "appending" | "closed" = "uninitialized";
++  let confirmed: Snapshot | null = null, lastTime = -1, requestNumber = 0, pendingPorts = 0, bootstrapAttempts = 0;
++  let commitAttempts = 0, anchorAttempts = 0, promotions = 0, invalidated = false, active: AbortController | null = null;
++  const close = () => {
++    phase = "closed"; active?.abort();
++    if (!invalidated) { invalidated = true; try { ports.invalidateValidation(); } catch { /* Keep closed; never expose diagnostics. */ } }
++  };
++  const time = () => { const n = clock(); if (!Number.isSafeInteger(n) || n < 0 || n < lastTime) return fail(); lastTime = n; return n; };
++  const begin = (signal: AbortSignal, ms: number) => {
++    const controller = new AbortController(); active = controller;
++    const deadline = time() + ms; if (!Number.isSafeInteger(deadline)) return fail();
++    const abort = () => controller.abort();
++    let rejectStop!: (e: Error) => void;
++    const stopped = new Promise<never>((_, reject) => { rejectStop = reject; });
++    void stopped.catch(() => {});
++    const stop = () => rejectStop(new CandidateV3CoordinatorError());
++    controller.signal.addEventListener("abort", stop, { once: true });
++    signal.addEventListener("abort", abort, { once: true });
++    const timer = setTimeout(abort, ms);
++    if (signal.aborted) abort();
++    const check = () => { if (phase === "closed" || controller.signal.aborted || time() >= deadline) return fail(); };
++    const step = async <T>(call: (s: AbortSignal) => Promise<T>): Promise<T> => {
++      check(); pendingPorts++;
++      const work = Promise.resolve().then(() => { check(); return call(controller.signal); }).finally(() => { pendingPorts--; });
++      const result = await Promise.race([work, stopped]); check(); return result;
++    };
++    const finish = () => { clearTimeout(timer); signal.removeEventListener("abort", abort); controller.signal.removeEventListener("abort", stop); active = null; };
++    return { deadline, check, step, finish, nonce: randomUUID() };
++  };
++  const context = (operation: "bootstrap" | "append", deadline: number, nonce: string, authorization: "forward" | "settlement") =>
++    wire({ domain: "agent-candidate-v3-coordinator-context/v1", operation, ...binding, requestNumber, nonce, deadline, authorization });
++  const ack = (domain: string, contextWire: string, identity: readonly string[]) => wire({ domain, contextDigest: sha256Digest(contextWire), post: identity });
++  const readSnapshot = async (run: ReturnType<typeof begin>) => parseCandidateV3LocalSnapshot(await run.step(s => ports.readLedger(s)));
++  const readAnchor = async (run: ReturnType<typeof begin>) => boundedV3Text(await run.step(s => ports.readAnchor(s)), CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  const result = (disposition: "bootstrapped-claims" | "pair-confirmed-claims") => Object.freeze({
++    kind: "dormant-v3-coordination-not-admission" as const, disposition, identity: confirmed!.identity });
++  return Object.freeze({
++    status: () => Object.freeze({ kind: "dormant-v3-coordinator-status-not-custody" as const,
++      phase, bootstrapAttempts, requestNumber, pendingPorts, commitAttempts, anchorAttempts, promotions,
++      confirmedIdentity: confirmed?.identity ?? null }),
++    close,
++    bootstrap: async (signal: AbortSignal) => {
++      if (phase !== "uninitialized") return fail();
++      phase = "bootstrapping"; bootstrapAttempts++;
++      let run: ReturnType<typeof begin> | undefined;
++      try {
++        run = begin(signal, budgets.bootstrapMs);
++        const ctx = context("bootstrap", run.deadline, run.nonce, "forward");
++        await run.step(s => ports.assertCurrent(ctx, s));
++        const snapshot = await readSnapshot(run), anchor = await readAnchor(run);
++        if (anchor !== snapshot.historyWire) return fail();
++        const request = encodeCandidateV3BootstrapRequest(wire({ domain: "agent-candidate-v3-bootstrap-request/v1", operation: "bootstrap",
++          ...binding, nonce: run.nonce, requestNumber: 0, deadline: run.deadline, anchorHistoryDigest: sha256Digest(anchor) }),
++        snapshot.metadataWire, snapshot.inventoryWire, snapshot.historyWire);
++        await run.step(s => ports.assertCurrent(ctx, s));
++        const response = parseCandidateV3Response("bootstrap", await run.step(s => ports.validate(request, s)), request);
++        if (!same(response.post, snapshot.identity)) return fail();
++        await run.step(s => ports.assertCurrent(ctx, s));
++        if (!same((await readSnapshot(run)).identity, snapshot.identity) || await readAnchor(run) !== snapshot.historyWire) return fail();
++        await run.step(s => ports.assertCurrent(ctx, s)); run.check();
++        confirmed = snapshot; phase = "ready";
++        return result("bootstrapped-claims");
++      } catch { close(); return fail(); } finally { run?.finish(); }
++    },
++    append: async (inventory: unknown, checkpoint: unknown, signal: AbortSignal) => {
++      // Busy losers cannot allocate candidates or reset/poison the winner.
++      if (phase !== "ready" || confirmed === null) return fail();
++      phase = "appending";
++      let run: ReturnType<typeof begin> | undefined;
++      try {
++        run = begin(signal, budgets.appendMs);
++        const inventoryWire = boundedV3Text(inventory, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++        const checkpointWire = boundedV3Text(checkpoint, CANDIDATE_V3_MAX_CHECKPOINT_BYTES), before = confirmed;
++        if (requestNumber >= Number.MAX_SAFE_INTEGER) return fail(); requestNumber++;
++        const forward = context("append", run.deadline, run.nonce, "forward"), settlement = context("append", run.deadline, run.nonce, "settlement");
++        await run.step(s => ports.assertCurrent(forward, s));
++        if (!same((await readSnapshot(run)).identity, before.identity) || await readAnchor(run) !== before.historyWire) return fail();
++        const request = encodeCandidateV3AppendRequest(wire({ domain: "agent-candidate-v3-append-request/v1", operation: "append", ...binding,
++          nonce: run.nonce, requestNumber, pre: before.identity, deadline: run.deadline }), inventoryWire, checkpointWire);
++        const candidate = stageCandidateV3LocalSnapshot(before.snapshotWire, inventoryWire, checkpointWire);
++        await run.step(s => ports.assertCurrent(forward, s));
++        const response = parseCandidateV3Response("append", await run.step(s => ports.validate(request, s)), request);
++        if (!same(response.post, candidate.identity)) return fail();
++        await run.step(s => ports.assertCurrent(forward, s));
++        if (await readAnchor(run) !== before.historyWire) return fail();
++        const commitAck = ack("agent-candidate-v3-local-commit-ack/v1", forward, candidate.identity);
++        const committed = await run.step(s => { commitAttempts++; return ports.commit(wire(before.identity), candidate.snapshotWire, forward, s); });
++        if (boundedV3Text(committed, V3_MESSAGE_LIMITS.responseBytes) !== commitAck) return fail();
++        await run.step(s => ports.assertCurrent(settlement, s));
++        if (!same((await readSnapshot(run)).identity, candidate.identity) || await readAnchor(run) !== before.historyWire) return fail();
++        // No anchor contact occurs inside a ledger transaction. Drift during
++        // commit may leave a local unconfirmed tail; it closes, never retries.
++        const anchorAck = ack("agent-candidate-v3-anchor-append-ack/v1", settlement, candidate.identity);
++        const anchored = await run.step(s => { anchorAttempts++; return ports.appendAnchor(before.historyWire, checkpointWire, settlement, s); });
++        if (boundedV3Text(anchored, V3_MESSAGE_LIMITS.responseBytes) !== anchorAck) return fail();
++        await run.step(s => ports.assertCurrent(settlement, s));
++        if (await readAnchor(run) !== candidate.historyWire || !same((await readSnapshot(run)).identity, candidate.identity)) return fail();
++        // A revoked forward grant can witness the old pair under settlement
++        // authority, but cannot promote a new Ready owner. Deny conservatively.
++        await run.step(s => ports.assertCurrent(forward, s)); run.check();
++        confirmed = candidate; promotions++; phase = "ready";
++        return result("pair-confirmed-claims");
++      } catch { close(); return fail(); } finally { run?.finish(); }
++    },
++  });
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-messages.ts b/product/companion-v1/src/build-only/windows-candidate-v3-messages.ts
+new file mode 100644
+index 0000000..a97f13a
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-messages.ts
+@@ -0,0 +1,152 @@
++import { z } from "zod";
++import { canonicalJson as wire, canonicalSha256Digest as hash, sha256Digest } from "../compatibility/canonical-json.js";
++import { deepFreeze } from "../validation/deep-freeze.js";
++import { effectUuid } from "./windows-candidate-effect-state.js";
++import { CANDIDATE_V3_META_MAX_BYTES } from "./windows-candidate-v3-data.js";
++import { CANDIDATE_V3_MAX_INVENTORY_BYTES } from "./windows-candidate-v3-inventory.js";
++import { CANDIDATE_V3_MAX_CHECKPOINT_BYTES } from "./windows-candidate-v3-record.js";
++
++// DORMANT DATA CONTRACT. No IPC, process, clock, authentication, custody or
++// task authority. These hashes bind supplied bytes, not their truthful origin.
++export const V3_MESSAGE_LIMITS = Object.freeze({ headerBytes: 4_096, responseBytes: 16_384,
++  bootstrapBytes: 256 * 1024 * 1024 + 65_536, appendBytes: 128 * 1024 * 1024 + 65_536,
++  bootstrapMs: 30_000, appendMs: 10_000 });
++export type CandidateV3Operation = "bootstrap" | "append";
++export class CandidateV3MessageError extends Error {
++  constructor() { super("candidate-v3-message-invalid"); this.name = "CandidateV3MessageError"; }
++}
++const fail = (): never => { throw new CandidateV3MessageError(); };
++const digest = z.string().regex(/^sha256:[a-f0-9]{64}$/);
++const identity = z.tuple([digest, digest, digest, digest]);
++export type CandidateV3Identity = Readonly<z.infer<typeof identity>>;
++const common = { lifetimeId: effectUuid, nonce: effectUuid, epoch: effectUuid, deadline: z.number().int().nonnegative().safe() };
++const bootstrapHeader = z.object({ domain: z.literal("agent-candidate-v3-bootstrap-request/v1"), operation: z.literal("bootstrap"),
++  ...common, requestNumber: z.literal(0), anchorHistoryDigest: digest }).strict();
++const appendHeader = z.object({ domain: z.literal("agent-candidate-v3-append-request/v1"), operation: z.literal("append"),
++  ...common, requestNumber: z.number().int().positive().safe(), pre: identity }).strict();
++const bootstrapBindings = bootstrapHeader.extend({ metadataDigest: digest, inventoryDigest: digest, historyDigest: digest });
++const appendBindings = appendHeader.extend({ inputDigest: digest, checkpointDigest: digest });
++const bootstrapRequest = bootstrapBindings.extend({ metadataWire: z.string(), inventoryWire: z.string(), historyWire: z.string() });
++const appendRequest = appendBindings.extend({ inventoryWire: z.string(), checkpointWire: z.string() });
++const bootstrapResponse = bootstrapBindings.omit({ domain: true }).extend({ domain: z.literal("agent-candidate-v3-bootstrap-response/v1"),
++  requestDigest: digest, post: identity, resultDigest: digest });
++const appendResponse = appendBindings.omit({ domain: true }).extend({ domain: z.literal("agent-candidate-v3-append-response/v1"),
++  requestDigest: digest, post: identity, resultDigest: digest });
++type BootstrapRequest = z.infer<typeof bootstrapRequest>;
++type AppendRequest = z.infer<typeof appendRequest>;
++export type CandidateV3Request = Readonly<BootstrapRequest | AppendRequest>;
++
++export function boundedV3Text(value: unknown, cap: number): string {
++  if (!Number.isSafeInteger(cap) || cap < 0 || cap > V3_MESSAGE_LIMITS.bootstrapBytes
++    || typeof value !== "string" || value.length > cap || Buffer.byteLength(value, "utf8") > cap) return fail();
++  return value;
++}
++
++/** Exact JSON string-content UTF-8 size, excluding enclosing quotes. No encoded
++ * copy or user-object reflection. Early denial once the remaining budget ends. */
++export function candidateV3EscapedBytes(value: unknown, remaining: number): number {
++  const text = boundedV3Text(value, remaining);
++  let bytes = 0;
++  for (let i = 0; i < text.length; i++) {
++    const n = text.charCodeAt(i);
++    if (n >= 0xd800 && n <= 0xdbff) {
++      const next = text.charCodeAt(++i);
++      if (!(next >= 0xdc00 && next <= 0xdfff)) return fail();
++      bytes += 4;
++    } else if (n >= 0xdc00 && n <= 0xdfff) return fail();
++    else if (n === 34 || n === 92 || n === 8 || n === 9 || n === 10 || n === 12 || n === 13) bytes += 2;
++    else if (n < 32) bytes += 6;
++    else bytes += n < 128 ? 1 : n < 2048 ? 2 : 3;
++    if (bytes > remaining) return fail();
++  }
++  return bytes;
++}
++
++// Only parsed headers and internally constructed primitive payload fields reach
++// this helper. Complete envelope serialization happens AFTER exact preflight.
++function encode(header: Record<string, unknown>, fields: Record<string, string>, cap: number): string {
++  const empty = { ...header, ...Object.fromEntries(Object.keys(fields).map(k => [k, ""])) };
++  let bytes = Buffer.byteLength(wire(empty));
++  if (bytes > cap) return fail();
++  for (const value of Object.values(fields)) bytes += candidateV3EscapedBytes(value, cap - bytes);
++  const result = wire({ ...header, ...fields });
++  if (Buffer.byteLength(result) !== bytes) return fail();
++  return boundedV3Text(result, cap);
++}
++function parse<T>(schema: z.ZodType<T>, input: unknown, cap: number): T {
++  try {
++    const text = boundedV3Text(input, cap), parsed = schema.parse(JSON.parse(text));
++    if (wire(parsed) !== text) return fail();
++    return deepFreeze(parsed);
++  } catch { return fail(); }
++}
++export function encodeCandidateV3BootstrapRequest(headerWire: unknown, metadata: unknown, inventory: unknown, history: unknown): string {
++  const header = parse(bootstrapHeader, headerWire, V3_MESSAGE_LIMITS.headerBytes);
++  const metadataWire = boundedV3Text(metadata, CANDIDATE_V3_META_MAX_BYTES);
++  const inventoryWire = boundedV3Text(inventory, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  const historyWire = boundedV3Text(history, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  return encode({ ...header, metadataDigest: sha256Digest(metadataWire), inventoryDigest: sha256Digest(inventoryWire), historyDigest: sha256Digest(historyWire) },
++    { metadataWire, inventoryWire, historyWire }, V3_MESSAGE_LIMITS.bootstrapBytes);
++}
++export function encodeCandidateV3AppendRequest(headerWire: unknown, inventory: unknown, checkpoint: unknown): string {
++  const header = parse(appendHeader, headerWire, V3_MESSAGE_LIMITS.headerBytes);
++  const inventoryWire = boundedV3Text(inventory, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++  const checkpointWire = boundedV3Text(checkpoint, CANDIDATE_V3_MAX_CHECKPOINT_BYTES);
++  return encode({ ...header, inputDigest: sha256Digest(inventoryWire), checkpointDigest: sha256Digest(checkpointWire) },
++    { inventoryWire, checkpointWire }, V3_MESSAGE_LIMITS.appendBytes);
++}
++export function parseCandidateV3Request(operation: CandidateV3Operation, input: unknown): CandidateV3Request {
++  // Expected operation comes from the caller's private phase, not a field in
++  // the unparsed transport. Enforce its own cap BEFORE JSON.parse.
++  try {
++    if (operation !== "bootstrap" && operation !== "append") return fail();
++    const cap = operation === "bootstrap" ? V3_MESSAGE_LIMITS.bootstrapBytes : V3_MESSAGE_LIMITS.appendBytes;
++    const text = boundedV3Text(input, cap), decoded: unknown = JSON.parse(text);
++    const value = operation === "bootstrap" ? bootstrapRequest.parse(decoded) : appendRequest.parse(decoded);
++    boundedV3Text(value.inventoryWire, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++    if (value.operation === "bootstrap") {
++      boundedV3Text(value.metadataWire, CANDIDATE_V3_META_MAX_BYTES); boundedV3Text(value.historyWire, CANDIDATE_V3_MAX_INVENTORY_BYTES);
++      if (value.metadataDigest !== sha256Digest(value.metadataWire) || value.inventoryDigest !== sha256Digest(value.inventoryWire)
++        || value.historyDigest !== sha256Digest(value.historyWire)) return fail();
++    } else {
++      boundedV3Text(value.checkpointWire, CANDIDATE_V3_MAX_CHECKPOINT_BYTES);
++      if (value.inputDigest !== sha256Digest(value.inventoryWire) || value.checkpointDigest !== sha256Digest(value.checkpointWire)) return fail();
++    }
++    if (wire(value) !== text) return fail();
++    return deepFreeze(value);
++  } catch { return fail(); }
++}
++function responseCore(q: CandidateV3Request, requestDigest: string, post: z.infer<typeof identity>) {
++  if (q.operation === "bootstrap") {
++    const { metadataWire: _m, inventoryWire: _i, historyWire: _h, domain: _d, ...bindings } = q;
++    return { ...bindings, domain: "agent-candidate-v3-bootstrap-response/v1" as const, requestDigest, post };
++  }
++  const { inventoryWire: _i, checkpointWire: _c, domain: _d, ...bindings } = q;
++  return { ...bindings, domain: "agent-candidate-v3-append-response/v1" as const, requestDigest, post };
++}
++function checkKnownPost(q: CandidateV3Request, post: CandidateV3Identity): void {
++  if (q.operation === "bootstrap") {
++    if (post[0] !== q.metadataDigest || post[1] !== q.inventoryDigest || post[2] !== q.historyDigest) return fail();
++  } else if (post[0] !== q.pre[0] || post[1] !== q.inputDigest) return fail();
++  // Remaining components still require the coordinator's staged-state check;
++  // this does not replace pure history validation or durable-pair confirmation.
++}
++/** All public inputs are primitive canonical strings, including the identity.
++ * This encodes a CLAIM, not proof the caller validated or durably committed it. */
++export function encodeCandidateV3Response(operation: CandidateV3Operation, requestWire: unknown, postIdentityWire: unknown): string {
++  const q = parseCandidateV3Request(operation, requestWire), post = parse(identity, postIdentityWire, V3_MESSAGE_LIMITS.headerBytes);
++  checkKnownPost(q, post);
++  const core = responseCore(q, sha256Digest(requestWire as string), post);
++  return boundedV3Text(wire({ ...core, resultDigest: hash(core) }), V3_MESSAGE_LIMITS.responseBytes);
++}
++export function parseCandidateV3Response(operation: CandidateV3Operation, input: unknown, requestWire: unknown) {
++  // Reject oversized or active responses before touching the pending request.
++  const text = boundedV3Text(input, V3_MESSAGE_LIMITS.responseBytes);
++  const q = parseCandidateV3Request(operation, requestWire);
++  const r = q.operation === "bootstrap" ? parse(bootstrapResponse, text, V3_MESSAGE_LIMITS.responseBytes)
++    : parse(appendResponse, text, V3_MESSAGE_LIMITS.responseBytes);
++  const { resultDigest, ...core } = r;
++  if (hash(core) !== resultDigest || wire(core) !== wire(responseCore(q, sha256Digest(requestWire as string), r.post))) return fail();
++  checkKnownPost(q, r.post);
++  return r;
++}
+diff --git a/product/companion-v1/src/build-only/windows-candidate-v3-validation-session.ts b/product/companion-v1/src/build-only/windows-candidate-v3-validation-session.ts
+new file mode 100644
+index 0000000..112962a
+--- /dev/null
++++ b/product/companion-v1/src/build-only/windows-candidate-v3-validation-session.ts
+@@ -0,0 +1,75 @@
++import { z } from "zod";
++import { canonicalJson as wire, sha256Digest } from "../compatibility/canonical-json.js";
++import { effectUuid } from "./windows-candidate-effect-state.js";
++import { CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN } from "./windows-candidate-v3-data.js";
++import { CANDIDATE_V3_MAX_INVENTORY_BYTES } from "./windows-candidate-v3-inventory.js";
++import { createCandidateV3IncrementalClaims } from "./windows-candidate-v3-incremental.js";
++import { boundedV3Text, CandidateV3MessageError, parseCandidateV3Request, encodeCandidateV3Response, V3_MESSAGE_LIMITS } from "./windows-candidate-v3-messages.js";
++import type { CandidateV3Identity } from "./windows-candidate-v3-messages.js";
++
++// DORMANT synchronous validation core for future off-dashboard hosting. NO
++// worker/process, physical storage/anchor, admission, settlement or effect port.
++// The trusted embedding must own this one session for its whole lifetime and
++// enforce physical deadlines/termination; JS cannot interrupt synchronous replay.
++const bindingSchema = z.object({ lifetimeId: effectUuid, epoch: effectUuid }).strict();
++const fail = (): never => { throw new CandidateV3MessageError(); };
++export function createCandidateV3ValidationSession(bindingWire: unknown, clock: () => number) {
++  let binding: z.infer<typeof bindingSchema>;
++  try {
++    const raw = boundedV3Text(bindingWire, V3_MESSAGE_LIMITS.headerBytes);
++    binding = bindingSchema.parse(JSON.parse(raw)); if (wire(binding) !== raw) return fail();
++  } catch { return fail(); }
++  let phase: "uninitialized" | "validating" | "ready" | "closed" = "uninitialized";
++  let transcript: ReturnType<typeof createCandidateV3IncrementalClaims> | null = null;
++  let metadata = "", history = "", identity: CandidateV3Identity | null = null;
++  let requestNumber = 0, bootstrapAttempts = 0, lastTime = -1;
++  const close = () => { phase = "closed"; transcript?.invalidate(); transcript = null; metadata = ""; history = ""; identity = null; };
++  const now = () => { const n = clock(); if (!Number.isSafeInteger(n) || n < 0 || n < lastTime) return fail(); lastTime = n; return n; };
++  return Object.freeze({
++    status: () => Object.freeze({ kind: "dormant-v3-validation-status-not-custody" as const, phase, bootstrapAttempts, requestNumber }),
++    close,
++    request: (requestWire: unknown, signal: AbortSignal): string => {
++      // Busy re-entrancy cannot poison an in-flight winner or queue a request.
++      if (phase === "closed" || phase === "validating") return fail();
++      const first = phase === "uninitialized";
++      phase = "validating";
++      if (first) bootstrapAttempts++;
++      try {
++        if (signal.aborted) return fail(); const start = now();
++        const q = parseCandidateV3Request(first ? "bootstrap" : "append", requestWire);
++        if (q.lifetimeId !== binding.lifetimeId || q.epoch !== binding.epoch || now() >= q.deadline
++          || q.deadline - start > (first ? V3_MESSAGE_LIMITS.bootstrapMs : V3_MESSAGE_LIMITS.appendMs)) return fail();
++        let post: CandidateV3Identity;
++        if (first) {
++          if (q.operation !== "bootstrap" || bootstrapAttempts !== 1 || q.anchorHistoryDigest !== q.historyDigest) return fail();
++          metadata = q.metadataWire; history = q.historyWire;
++          transcript = createCandidateV3IncrementalClaims(metadata, q.inventoryWire, history);
++          post = Object.freeze([q.metadataDigest, q.inventoryDigest, q.historyDigest, transcript.snapshot().head.checkpointDigest]);
++        } else {
++          if (q.operation !== "append" || transcript === null || identity === null || requestNumber >= Number.MAX_SAFE_INTEGER
++            || q.requestNumber !== requestNumber + 1 || wire(q.pre) !== wire(identity)) return fail();
++          // Full bootstrap already validated this canonical history. Appending
++          // one bounded encoded string preserves its layout without re-encoding
++          // all historical checkpoints or reparsing the complete stream.
++          const suffix = '],"domain":' + wire(CANDIDATE_V3_CHECKPOINT_HISTORY_DOMAIN) + '}';
++          if (!history.endsWith(suffix)) return fail();
++          const cp = wire(q.checkpointWire);
++          const bytes = Buffer.byteLength(history) + 1 + Buffer.byteLength(cp);
++          if (bytes > CANDIDATE_V3_MAX_INVENTORY_BYTES) return fail();
++          const result = transcript.append(q.inventoryWire, q.checkpointWire);
++          const nextHistory = history.slice(0, -suffix.length) + ',' + cp + suffix;
++          if (Buffer.byteLength(nextHistory) !== bytes) return fail();
++          post = Object.freeze([identity[0], q.inputDigest, sha256Digest(nextHistory), result.head.checkpointDigest]);
++          history = nextHistory;
++        }
++        if (signal.aborted || now() >= q.deadline || phase !== "validating") return fail();
++        const response = encodeCandidateV3Response(q.operation, requestWire, wire(post));
++        if (signal.aborted || now() >= q.deadline || phase !== "validating") return fail();
++        // Validation progress only. The coordinator must retain old confirmed S
++        // until its distinct local read-back / anchor confirmation completes.
++        identity = post; requestNumber = q.requestNumber; phase = "ready";
++        return response;
++      } catch { close(); return fail(); }
++    },
++  });
++}
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts b/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts
+index e221cd2..c85a54c 100644
+--- a/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts
++++ b/product/companion-v1/tests/helpers/candidate-v3-coordinator-model.ts
+@@ -29,6 +29,34 @@ function bounded(s: unknown, cap: number = MODEL_LIMITS.wireBytes): string {
+   if (typeof s !== "string" || s.length > cap || Buffer.byteLength(s) > cap) return deny();
+   return s;
+ }
++// Count canonical JSON string bytes without allocating an escaped copy. Headers
++// and payload keys are small, passive, internally constructed model values.
++function escapedBytes(s: string, remaining: number): number {
++  let bytes = 0;
++  for (let i = 0; i < s.length; i++) {
++    const n = s.charCodeAt(i);
++    if (n >= 0xd800 && n <= 0xdbff) {
++      const next = s.charCodeAt(++i);
++      if (!(next >= 0xdc00 && next <= 0xdfff)) return deny();
++      bytes += 4;
++    } else if (n >= 0xdc00 && n <= 0xdfff) return deny();
++    else if (n === 34 || n === 92 || n === 8 || n === 9 || n === 10 || n === 12 || n === 13) bytes += 2;
++    else if (n < 32) bytes += 6;
++    else bytes += n < 128 ? 1 : n < 2048 ? 2 : 3;
++    if (bytes > remaining) return deny();
++  }
++  return bytes;
++}
++function encodeEnvelope(header: Record<string, unknown>, payload: Record<string, string>, counts: { requestEncodings: number }): string {
++  const skeleton = { ...header, ...Object.fromEntries(Object.keys(payload).map(k => [k, ""])) };
++  let bytes = Buffer.byteLength(wire(skeleton));
++  if (bytes > MODEL_LIMITS.wireBytes) return deny();
++  for (const s of Object.values(payload)) bytes += escapedBytes(bounded(s), MODEL_LIMITS.wireBytes - bytes);
++  counts.requestEncodings++;
++  const result = wire({ ...header, ...payload });
++  if (Buffer.byteLength(result) !== bytes) return deny();
++  return bounded(result);
++}
+ function parse<T>(schema: z.ZodType<T>, s: unknown, cap: number = MODEL_LIMITS.wireBytes): T {
+   try { const text = bounded(s, cap), value = schema.parse(JSON.parse(text)); if (wire(value) !== text) return deny(); return value; }
+   catch { return deny(); }
+@@ -69,6 +97,7 @@ export type Snapshot = Readonly<{ metadata: string; inventory: string; history:
+ export type Cut = "captured" | "worker-settled" | "transaction-post" | "committed" | "read-back"
+   | "before-anchor" | "anchor-committed" | "before-promote";
+ export class SyntheticPairWorld {
++  #bootstrapAttempted = false;
+   local: Snapshot = Object.freeze({ metadata: pins, inventory: envelope([]), history: historyWire([genesis]) });
+   anchor = this.local.history;
+   epoch = uuid(70);
+@@ -88,10 +117,14 @@ export class SyntheticPairWorld {
+   anchorGate: () => Promise<void> = async () => {};
+   reply: (response: string) => string = s => s;
+   bootstrapReply: (response: string) => string = s => s;
+-  counts = { bootstraps: 0, worker: 0, transactions: 0, commits: 0, readBacks: 0, anchorAttempts: 0, anchorAppends: 0, promotions: 0 };
++  counts = { bootstrapAttempts: 0, bootstraps: 0, requestEncodings: 0, worker: 0, transactions: 0, commits: 0, readBacks: 0, anchorAttempts: 0, anchorAppends: 0, promotions: 0 };
++  beginBootstrap() {
++    if (this.ownerHeld || this.activity || this.#bootstrapAttempted) return deny();
++    this.#bootstrapAttempted = true; this.counts.bootstrapAttempts++;
++  }
+   // Only an explicit test-driver retirement after ALL modeled activity settles
+   // may release this synthetic owner. This is not an OS termination witness.
+-  retire() { if (this.activity !== 0) return deny(); this.ownerHeld = false; this.epoch = uuid(Number.parseInt(this.epoch.slice(-12), 16) + 1); }
++  retire() { if (this.activity !== 0) return deny(); this.ownerHeld = false; this.epoch = uuid(Number.parseInt(this.epoch.slice(-12), 16) + 1); this.#bootstrapAttempted = false; }
+ }
+ const claim = (s: Snapshot) => inspectSyntheticPairClaims(s.metadata, s.inventory, s.history, s.history);
+ const same = (a: readonly string[], b: readonly string[]) => wire(a) === wire(b);
+@@ -106,17 +139,23 @@ export class SyntheticPairCoordinator {
+   #nonce = 1000;
+   #lastTime: number;
+   constructor(readonly world: SyntheticPairWorld) {
+-    if (world.ownerHeld || world.activity || !world.fence || !world.schemaValid) throw new ModelDenied();
+-    const s = world.local, pair = requireEqualSyntheticPair(s.metadata, s.inventory, s.history, world.anchor);
+-    this.#s = Object.freeze({ ...s }); this.#identity = [...pair.identity]; this.#epoch = world.epoch;
++    // One attempt per explicitly retired synthetic epoch, including failures.
++    // Reconstructing this object does not clear the world-owned latch.
++    world.beginBootstrap();
++    if (!world.fence || !world.schemaValid) throw new ModelDenied();
++    const s = world.local;
++    bounded(s.metadata); bounded(s.inventory); bounded(s.history); bounded(world.anchor);
++    this.#s = Object.freeze({ ...s }); this.#epoch = world.epoch;
+     this.#lastTime = world.now; this.#time();
+     if (!Number.isSafeInteger(world.lifetimeCounter) || world.lifetimeCounter < 0 || world.lifetimeCounter >= Number.MAX_SAFE_INTEGER) throw new ModelDenied();
+     this.#lifetime = uuid(++world.lifetimeCounter);
+     const common = { lifetimeId: this.#lifetime, requestNumber: 0, nonce: uuid(this.#nonce++), epoch: this.#epoch,
+       deadline: this.#time() + MODEL_LIMITS.appendMs, metadataDigest: rawDigest(s.metadata), inventoryDigest: rawDigest(s.inventory),
+       historyDigest: rawDigest(s.history), anchorHistoryDigest: rawDigest(world.anchor) };
+-    const request = bounded(wire({ domain: "synthetic-v3-bootstrap-request/v1", operation: "bootstrap", ...common,
+-      metadataWire: s.metadata, inventoryWire: s.inventory, historyWire: s.history }));
++    const request = encodeEnvelope({ domain: "synthetic-v3-bootstrap-request/v1", operation: "bootstrap", ...common },
++      { metadataWire: s.metadata, inventoryWire: s.inventory, historyWire: s.history }, world.counts);
++    const pair = requireEqualSyntheticPair(s.metadata, s.inventory, s.history, world.anchor);
++    this.#identity = [...pair.identity];
+     const q = parseModelBootstrapRequest(request);
+     this.#t = createCandidateV3IncrementalClaims(q.metadataWire, q.inventoryWire, q.historyWire);
+     try {
+@@ -160,13 +199,14 @@ export class SyntheticPairCoordinator {
+       if (!same(claim(w.local).identity, this.#identity)) return deny();
+       const pre = [...this.#identity] as Identity, preHead = this.#t.snapshot().head.checkpointDigest;
+       if (preHead !== pre[3]) return deny();
++      if (this.#requestNumber >= Number.MAX_SAFE_INTEGER) return deny();
++      const requestWire = encodeEnvelope({ domain: "synthetic-v3-append-request/v1", operation: "append", lifetimeId: this.#lifetime,
++        requestNumber: ++this.#requestNumber, nonce: uuid(this.#nonce++), epoch: this.#epoch,
++        pre, inputDigest: rawDigest(inventory), checkpointDigest: rawDigest(cp), deadline },
++        { inventoryWire: inventory, checkpointWire: cp }, w.counts);
+       const oldHistory = JSON.parse(this.#s.history) as { domain: string; checkpoints: string[] };
+       const candidate: Snapshot = Object.freeze({ metadata: this.#s.metadata, inventory,
+         history: wire({ domain: oldHistory.domain, checkpoints: [...oldHistory.checkpoints, cp] }) });
+-      if (this.#requestNumber >= Number.MAX_SAFE_INTEGER) return deny();
+-      const requestWire = bounded(wire({ domain: "synthetic-v3-append-request/v1", operation: "append", lifetimeId: this.#lifetime,
+-        requestNumber: ++this.#requestNumber, nonce: uuid(this.#nonce++), epoch: this.#epoch,
+-        pre, inputDigest: rawDigest(inventory), checkpointDigest: rawDigest(cp), deadline, inventoryWire: inventory, checkpointWire: cp }));
+       w.cut("captured");
+       this.#live(deadline, true); if (signal.aborted) return deny();
+       if (w.inTransaction) return deny();
+diff --git a/product/companion-v1/tests/helpers/candidate-v3-coordinator-ports.ts b/product/companion-v1/tests/helpers/candidate-v3-coordinator-ports.ts
+new file mode 100644
+index 0000000..a609d53
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/candidate-v3-coordinator-ports.ts
+@@ -0,0 +1,82 @@
++import assert from "node:assert/strict";
++import { canonicalJson as wire, sha256Digest } from "../../src/compatibility/canonical-json.js";
++import { createCandidateV3Coordinator, type CandidateV3CoordinatorPorts } from "../../src/build-only/windows-candidate-v3-coordinator.js";
++import { encodeCandidateV3LocalSnapshot, parseCandidateV3LocalSnapshot } from "../../src/build-only/windows-candidate-v3-coordinator-data.js";
++import { createCandidateV3ValidationSession } from "../../src/build-only/windows-candidate-v3-validation-session.js";
++import { pins, envelope, historyWire, genesis, type Frame } from "./candidate-v3-history-fixture.js";
++import { uuid } from "./candidate-v3-record-fixture.js";
++
++// TEST ONLY: strings and synchronous assignments, not SQLite/IPC/physical custody.
++// Every async seam can be suspended or faulted by the test driver. No hook is
++// handed into the product's commit API. A real adapter remains unimplemented.
++export const coordinatorBinding = wire({ lifetimeId: uuid(8000), epoch: uuid(8001) });
++export type PortName = "current" | "ledger" | "anchor" | "validate" | "commit" | "append-anchor";
++export function coordinatorFixture(initial?: Frame, budgets?: { bootstrapMs: number; appendMs: number }) {
++  const local = initial ? encodeCandidateV3LocalSnapshot(pins, initial.input, historyWire(initial.history))
++    : encodeCandidateV3LocalSnapshot(pins, envelope([]), historyWire([genesis]));
++  const state = { ledger: local, anchor: parseCandidateV3LocalSnapshot(local).historyWire,
++    now: 0, epoch: uuid(8001), forward: true, settlement: true, schema: true, transaction: false,
++    writes: 0, anchorWrites: 0, invalidations: 0 };
++  const trace: string[] = [];
++  const hooks: {
++    before?: (name: PortName, signal: AbortSignal) => void | Promise<void>;
++    after?: (name: PortName, signal: AbortSignal) => void | Promise<void>;
++    reply?: (name: PortName, value: unknown) => unknown;
++    transactionCut?: () => void;
++  } = {};
++  const clock = () => state.now;
++  const session = createCandidateV3ValidationSession(coordinatorBinding, clock);
++  const context = (text: string, signal: AbortSignal, kind?: string) => {
++    const c = JSON.parse(text) as { lifetimeId: string; epoch: string; deadline: number; authorization: string; operation: string };
++    assert.equal(signal.aborted, false); assert.equal(c.lifetimeId, uuid(8000)); assert.equal(c.epoch, state.epoch);
++    assert(state.now < c.deadline); if (kind) assert.equal(c.authorization, kind);
++    assert(c.authorization === "forward" ? state.forward : c.authorization === "settlement" && state.settlement);
++    return c;
++  };
++  const call = async <T>(name: PortName, signal: AbortSignal, work: () => T): Promise<T> => {
++    assert.equal(state.transaction, false); trace.push("before:" + name);
++    await hooks.before?.(name, signal); assert.equal(signal.aborted, false);
++    const value = work(); trace.push("after:" + name);
++    await hooks.after?.(name, signal);
++    return (hooks.reply ? hooks.reply(name, value) : value) as T;
++  };
++  const ack = (domain: string, ctx: string) => wire({ domain, contextDigest: sha256Digest(ctx),
++    post: parseCandidateV3LocalSnapshot(state.ledger).identity });
++  const ports: CandidateV3CoordinatorPorts = {
++    kind: "synthetic-v3-coordinator-ports-not-physical",
++    assertCurrent: (ctx, s) => call("current", s, () => { context(ctx, s); }),
++    readLedger: s => call("ledger", s, () => state.ledger),
++    readAnchor: s => call("anchor", s, () => state.anchor),
++    validate: (q, s) => call("validate", s, () => session.request(q, s)),
++    commit: (pre, candidate, ctx, s) => call("commit", s, () => {
++      state.transaction = true;
++      try {
++        hooks.transactionCut?.(); // Test driver only; deliberately synchronous.
++        context(ctx, s, "forward"); assert(state.schema);
++        assert.equal(wire(parseCandidateV3LocalSnapshot(state.ledger).identity), pre);
++        const next = parseCandidateV3LocalSnapshot(candidate);
++        state.ledger = next.snapshotWire; state.writes++;
++        assert.equal(state.ledger, candidate);
++        return ack("agent-candidate-v3-local-commit-ack/v1", ctx);
++      } finally { state.transaction = false; }
++    }),
++    appendAnchor: (prior, cp, ctx, s) => call("append-anchor", s, () => {
++      context(ctx, s, "settlement"); assert.equal(state.anchor, prior);
++      const h = JSON.parse(prior) as { domain: string; checkpoints: string[] };
++      const next = wire({ domain: h.domain, checkpoints: [...h.checkpoints, cp] });
++      assert.equal(next, parseCandidateV3LocalSnapshot(state.ledger).historyWire);
++      state.anchor = next; state.anchorWrites++;
++      return ack("agent-candidate-v3-anchor-append-ack/v1", ctx);
++    }),
++    invalidateValidation: () => { state.invalidations++; session.close(); },
++  };
++  const coordinator = createCandidateV3Coordinator(coordinatorBinding, ports, clock, budgets ? wire(budgets) : undefined);
++  return { state, trace, hooks, ports, coordinator, session, clock };
++}
++
++export function deferredGate() {
++  let release!: () => void, entered!: () => void;
++  const waiting = new Promise<void>(resolve => { entered = resolve; });
++  const pending = new Promise<void>(resolve => { release = resolve; });
++  return { waiting, release, hold: async () => { entered(); await pending; } };
++}
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts
+index 1d797f9..d63f039 100644
+--- a/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator-model.test.ts
+@@ -278,3 +278,69 @@ test("D3 model: bootstrap response cap and non-finite request counters reject",
+     assert.equal(bad.counts.bootstraps, 0); assert.equal(bad.ownerHeld, false);
+   }
+ });
++
++test("M1 model: individually bounded payloads exceeding the composite cap never reach encoding or worker", async () => {
++  for (const [inventory, cp] of [["x".repeat(200 * 1024), "y".repeat(200 * 1024)],
++    ['"'.repeat(90 * 1024), "\\".repeat(90 * 1024)], ["\u0000".repeat(50 * 1024), "x"]]) {
++    const { w, c } = setup(), encoded = w.counts.requestEncodings;
++    await reject(() => c.append(inventory, cp, signal()));
++    assert.equal(w.counts.requestEncodings, encoded); assert.equal(w.counts.worker, 0);
++    assert.equal(w.counts.transactions, 0); assert.equal(c.phase, "closed");
++  }
++  const w = new World(); w.local = { ...w.local, inventory: "x".repeat(200 * 1024), history: "y".repeat(200 * 1024) };
++  w.anchor = w.local.history;
++  assert.throws(() => new Coordinator(w), ModelDenied);
++  assert.equal(w.counts.requestEncodings, 0); assert.equal(w.counts.bootstrapAttempts, 1);
++});
++
++test("M1 model: preflight agrees with canonical UTF-8 escaping at the exact composite boundary", async () => {
++  const digest = "sha256:" + "a".repeat(64);
++  const skeleton = { domain: "synthetic-v3-append-request/v1", operation: "append", lifetimeId: uuid(200001),
++    requestNumber: 1, nonce: uuid(1001), epoch: uuid(70), pre: [digest, digest, digest, digest],
++    inputDigest: digest, checkpointDigest: digest, deadline: MODEL_LIMITS.appendMs, inventoryWire: "", checkpointWire: "" };
++  const room = MODEL_LIMITS.wireBytes - Buffer.byteLength(wire(skeleton));
++  for (const scalar of ['x', '"', "\\", "\b\t\n\f\r", "\u0000\u001f", "é", "漢", "😀", "\u2028\u2029"]) {
++    const content = scalar.repeat(100), escaped = Buffer.byteLength(wire(content)) - 2;
++    for (const excess of [0, 1]) {
++      const input = content + "x".repeat(room - escaped + excess), { w, c } = setup();
++      const expected = Buffer.byteLength(wire({ ...skeleton, inventoryWire: input }));
++      assert.equal(expected, MODEL_LIMITS.wireBytes + excess);
++      await reject(() => c.append(input, "", signal())); // Invalid inner JSON, never a valid append.
++      assert.equal(w.counts.requestEncodings, excess ? 1 : 2, scalar);
++      assert.equal(w.counts.worker, excess ? 0 : 1, scalar);
++      assert.equal(w.counts.commits, 0);
++    }
++  }
++  for (const invalid of ["\ud800", "\udc00", "\ud800x"]) {
++    const { w, c } = setup(); await reject(() => c.append(invalid, "", signal()));
++    assert.equal(w.counts.requestEncodings, 1); assert.equal(w.counts.worker, 0);
++  }
++});
++
++test("M2 model: failed bootstrap counts once and cannot be retried by constructor recreation", () => {
++  for (const fault of ["reply", "snapshot", "clock", "fence"] as const) {
++    const w = new World(), original = w.local;
++    if (fault === "reply") w.bootstrapReply = () => "{}";
++    if (fault === "snapshot") w.local = { ...w.local, inventory: "{}" };
++    if (fault === "clock") w.now = -1;
++    if (fault === "fence") w.fence = false;
++    assert.throws(() => new Coordinator(w));
++    assert.equal(w.counts.bootstrapAttempts, 1); assert.equal(w.counts.bootstraps, 0);
++    w.bootstrapReply = s => s; w.local = original; w.now = 0; w.fence = true;
++    const counts = { ...w.counts };
++    for (let i = 0; i < 10; i++) assert.throws(() => new Coordinator(w), ModelDenied);
++    assert.deepEqual(w.counts, counts); assert.equal(w.ownerHeld, false);
++    const oldEpoch = w.epoch; w.retire(); assert.notEqual(w.epoch, oldEpoch);
++    assert.equal(new Coordinator(w).phase, "ready"); assert.equal(w.counts.bootstrapAttempts, 2);
++  }
++});
++
++test("M3/C13 model: anchor drift inside the local transaction may commit but never appends or promotes", async () => {
++  const { w, c, f } = setup(), prior = c.confirmed;
++  w.cut = at => { if (at === "transaction-post") { assert.equal(w.inTransaction, true); w.anchor = historyWire(f.history); } };
++  await reject(() => c.append(f.input, wire(f.checkpoint), signal()));
++  assert.equal(w.counts.transactions, 1); assert.equal(w.counts.commits, 1); assert.equal(w.counts.readBacks, 1);
++  assert.equal(w.counts.anchorAttempts, 0); assert.equal(w.counts.promotions, 0);
++  assert.equal(c.confirmed, prior); assert.equal(c.phase, "closed"); assert.equal(w.ownerHeld, true);
++  assert.equal(w.local.inventory, f.input); assert.throws(() => new Coordinator(w), ModelDenied);
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-coordinator.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator.test.ts
+new file mode 100644
+index 0000000..aaa8cc5
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-coordinator.test.ts
+@@ -0,0 +1,316 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { setImmediate as nextTurn } from "node:timers/promises";
++import { canonicalJson as wire, canonicalSha256Digest as hash } from "../../src/compatibility/canonical-json.js";
++import { createCandidateV3Coordinator, CandidateV3CoordinatorError } from "../../src/build-only/windows-candidate-v3-coordinator.js";
++import { encodeCandidateV3LocalSnapshot, parseCandidateV3LocalSnapshot, stageCandidateV3LocalSnapshot } from "../../src/build-only/windows-candidate-v3-coordinator-data.js";
++import { inspectSyntheticPairClaims } from "../helpers/candidate-v3-pair-claims.js";
++import { make, transcript, pins, envelope, historyWire, genesis } from "../helpers/candidate-v3-history-fixture.js";
++import { coordinatorFixture, coordinatorBinding, deferredGate } from "../helpers/candidate-v3-coordinator-ports.js";
++import { uuid } from "../helpers/candidate-v3-record-fixture.js";
++const signal = () => new AbortController().signal;
++const frames = (family = 0) => {
++  const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent), fs = parent ? [parent, f] : [f];
++  return transcript(fs, fs.flatMap((r, i) => Array(r.record.events.length + 1).fill(i) as number[]));
++};
++const first = frames()[0]!;
++const started = async () => { const f = coordinatorFixture(); await f.coordinator.bootstrap(signal()); f.trace.length = 0; return f; };
++const append = (f: ReturnType<typeof coordinatorFixture>) => f.coordinator.append(first.input, wire(first.checkpoint), signal());
++const closed = (f: ReturnType<typeof coordinatorFixture>) => {
++  assert.equal(f.coordinator.status().phase, "closed"); assert.equal(f.state.invalidations, 1);
++  assert.equal(f.session.status().phase, "closed");
++  assert.throws(() => createCandidateV3Coordinator(coordinatorBinding, f.ports, f.clock), CandidateV3CoordinatorError);
++};
++
++test("coordinator: 53 paired prefixes use the real session and match full-reference identities", async t => {
++  let count = 0;
++  for (let family = 0; family < 8; family++) {
++    const f = await started(); let n = 0;
++    for (const frame of frames(family)) {
++      const result = await f.coordinator.append(frame.input, wire(frame.checkpoint), signal());
++      const h = historyWire(frame.history), expected = inspectSyntheticPairClaims(pins, frame.input, h, h);
++      assert.deepEqual(result.identity, expected.identity); assert.equal(result.kind, "dormant-v3-coordination-not-admission");
++      assert.equal(result.disposition, "pair-confirmed-claims"); assert.equal(f.state.anchor, h);
++      assert.deepEqual(parseCandidateV3LocalSnapshot(f.state.ledger).identity, expected.identity);
++      n++; count++; assert.equal(f.state.writes, n); assert.equal(f.state.anchorWrites, n);
++      assert.equal(f.coordinator.status().promotions, n); assert.equal(f.coordinator.status().pendingPorts, 0);
++      assert.equal(f.coordinator.status().phase, "ready");
++    }
++    assert.equal(f.coordinator.status().bootstrapAttempts, 1); f.coordinator.close();
++  }
++  assert.equal(count, 53); t.diagnostic("53 synthetic paired appends; no real ledger, anchor, worker, task or admission");
++});
++
++test("nonempty bootstrap fully replays, then accepts exactly the next prefix without importing a summary", async () => {
++  const fs = frames(), initial = fs[3]!, f = coordinatorFixture(initial);
++  const b = await f.coordinator.bootstrap(signal());
++  assert.deepEqual(b.identity, inspectSyntheticPairClaims(pins, initial.input, historyWire(initial.history), historyWire(initial.history)).identity);
++  assert.equal(f.coordinator.status().requestNumber, 0);
++  await f.coordinator.append(fs[4]!.input, wire(fs[4]!.checkpoint), signal());
++  assert.equal(f.coordinator.status().requestNumber, 1);
++  assert.deepEqual(Object.keys(f.coordinator).sort(), ["append", "bootstrap", "close", "status"]);
++});
++
++test("bootstrap rejects mismatched streams, missing genesis and invalid inventory once with no retry", async () => {
++  const fs = frames();
++  for (const fault of ["one-ahead", "two-ahead", "shorter", "divergent", "missing-genesis", "inventory", "malformed"] as const) {
++    const f = coordinatorFixture(fs[1]!);
++    if (fault === "one-ahead") f.state.anchor = historyWire(fs[0]!.history);
++    if (fault === "two-ahead") f.state.anchor = historyWire([genesis]);
++    if (fault === "shorter") f.state.anchor = historyWire(fs[2]!.history);
++    if (fault === "divergent") f.state.anchor = "{}";
++    if (fault === "missing-genesis") {
++      const h = historyWire(fs[1]!.history.slice(1)); f.state.anchor = h;
++      f.state.ledger = encodeCandidateV3LocalSnapshot(pins, fs[1]!.input, h);
++    }
++    if (fault === "inventory") f.state.ledger = encodeCandidateV3LocalSnapshot(pins, "{}", f.state.anchor);
++    if (fault === "malformed") f.state.ledger = "{}";
++    await assert.rejects(f.coordinator.bootstrap(signal()), CandidateV3CoordinatorError); closed(f);
++    const contacts = f.trace.length;
++    await assert.rejects(f.coordinator.bootstrap(signal()), CandidateV3CoordinatorError);
++    assert.equal(f.trace.length, contacts); assert.equal(f.coordinator.status().bootstrapAttempts, 1);
++    assert.equal(f.state.writes, 0); assert.equal(f.state.anchorWrites, 0);
++  }
++});
++
++test("bootstrap refresh rejects drift after a correct worker reply", async () => {
++  for (const target of ["ledger", "anchor", "epoch"] as const) {
++    const f = coordinatorFixture(); f.hooks.after = name => {
++      if (name === "validate") {
++        if (target === "ledger") f.state.ledger = encodeCandidateV3LocalSnapshot(pins, first.input, historyWire(first.history));
++        if (target === "anchor") f.state.anchor = historyWire(first.history);
++        if (target === "epoch") f.state.epoch = uuid(9999);
++      }
++    };
++    await assert.rejects(f.coordinator.bootstrap(signal()), CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.coordinator.status().confirmedIdentity, null); assert.equal(f.state.writes, 0);
++  }
++});
++
++test("primitive candidate boundary rejects active objects and oversized checkpoints before port contact", async () => {
++  let touches = 0; const p = new Proxy({}, { get() { touches++; throw Error("secret"); }, ownKeys() { touches++; return []; } });
++  for (const [inventory, cp] of [[p, wire(first.checkpoint)], [first.input, p], [first.input, "x".repeat(4097)],
++    [Buffer.from(first.input), wire(first.checkpoint)], [new String(first.input), wire(first.checkpoint)]]) {
++    const f = await started(); await assert.rejects(f.coordinator.append(inventory, cp, signal()), CandidateV3CoordinatorError);
++    closed(f); assert.equal(f.trace.length, 0); assert.equal(f.state.writes, 0);
++  }
++  assert.equal(touches, 0);
++});
++
++test("snapshot parsing is exact and staging binds the predecessor without claiming full history validity", () => {
++  const base = encodeCandidateV3LocalSnapshot(pins, envelope([]), historyWire([genesis]));
++  for (const bad of [base + "\n", "\uFEFF" + base, "{}", new String(base), Buffer.from(base)]) assert.throws(() => parseCandidateV3LocalSnapshot(bad));
++  const staged = stageCandidateV3LocalSnapshot(base, first.input, wire(first.checkpoint));
++  assert.equal(staged.historyWire, historyWire(first.history)); assert(Object.isFrozen(staged.identity));
++  assert.throws(() => stageCandidateV3LocalSnapshot(base, frames()[1]!.input, wire(frames()[1]!.checkpoint)));
++  // Byte-claim parser deliberately does NOT substitute for the session validator.
++  assert.equal(parseCandidateV3LocalSnapshot(encodeCandidateV3LocalSnapshot(pins, "{}", historyWire([genesis]))).inventoryWire, "{}");
++});
++
++test("rehashed wrong worker post, nonce and request identity never contact commit", async () => {
++  for (const operation of ["bootstrap", "append"] as const) for (const field of ["post-history", "post-head", "nonce", "requestDigest"]) {
++    const f = operation === "append" ? await started() : coordinatorFixture();
++    f.hooks.reply = (name, value) => {
++      if (name !== "validate") return value;
++      const { resultDigest: _ignored, ...core } = JSON.parse(value as string);
++      if (field.startsWith("post")) core.post[field === "post-history" ? 2 : 3] = "sha256:" + "f".repeat(64);
++      else core[field] = field === "nonce" ? uuid(999) : "sha256:" + "f".repeat(64);
++      return wire({ ...core, resultDigest: hash(core) });
++    };
++    await assert.rejects(operation === "append" ? append(f) : f.coordinator.bootstrap(signal()), CandidateV3CoordinatorError);
++    closed(f); assert.equal(f.state.writes, 0); assert.equal(f.coordinator.status().commitAttempts, 0);
++  }
++});
++
++test("transaction rechecks complete pre-state and schema/epoch before any write", async () => {
++  for (const field of ["metadataWire", "inventoryWire", "historyWire", "schema", "epoch"] as const) {
++    const f = await started(); f.hooks.transactionCut = () => {
++      if (field === "schema") f.state.schema = false;
++      else if (field === "epoch") f.state.epoch = uuid(999);
++      else {
++        const s = parseCandidateV3LocalSnapshot(f.state.ledger);
++        const meta = { ...JSON.parse(s.metadataWire), storeId: uuid(999) };
++        f.state.ledger = encodeCandidateV3LocalSnapshot(field === "metadataWire" ? wire(meta) : s.metadataWire,
++          field === "inventoryWire" ? first.input : s.inventoryWire,
++          field === "historyWire" ? historyWire(first.history) : s.historyWire);
++      }
++    };
++    await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.state.writes, 0); assert.equal(f.state.anchorWrites, 0); assert.equal(f.coordinator.status().commitAttempts, 1);
++    await assert.rejects(append(f), CandidateV3CoordinatorError); assert.equal(f.coordinator.status().commitAttempts, 1);
++  }
++});
++
++test("optional context disappearing on an unrelated row is pre-state drift even with identical record bytes", async () => {
++  const a = make(0, 1), b = make(0, 2), fs = transcript([a, b], [0, 0, 0, 0, 0, 0, 1]);
++  const prior = fs[5]!, next = fs[6]!, f = coordinatorFixture(prior); await f.coordinator.bootstrap(signal());
++  f.hooks.transactionCut = () => {
++    const s = parseCandidateV3LocalSnapshot(f.state.ledger), inventory = JSON.parse(s.inventoryWire);
++    assert.notEqual(inventory.records[0].checkpointAWire, null); inventory.records[0].checkpointAWire = null;
++    f.state.ledger = encodeCandidateV3LocalSnapshot(s.metadataWire, wire(inventory), s.historyWire);
++  };
++  await assert.rejects(f.coordinator.append(next.input, wire(next.checkpoint), signal()), CandidateV3CoordinatorError);
++  closed(f); assert.equal(f.state.writes, 0); assert.equal(f.state.anchorWrites, 0);
++});
++
++test("anchor drift inside commit leaves only a local unconfirmed tail, never promotion or compensation", async () => {
++  const f = await started(), before = f.coordinator.status().confirmedIdentity;
++  f.hooks.transactionCut = () => { f.state.anchor = "{}"; };
++  await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++  assert.equal(f.state.writes, 1); assert.equal(f.state.anchorWrites, 0);
++  assert.equal(f.coordinator.status().anchorAttempts, 0); assert.equal(f.coordinator.status().promotions, 0);
++  assert.deepEqual(f.coordinator.status().confirmedIdentity, before);
++});
++
++test("lost commit and anchor replies retain observed writes and never repeat either attempt", async () => {
++  for (const port of ["commit", "append-anchor"] as const) {
++    const f = await started(), before = f.coordinator.status().confirmedIdentity;
++    f.hooks.after = name => { if (name === port) throw Error("private adapter diagnostic"); };
++    await assert.rejects(append(f), e => e instanceof CandidateV3CoordinatorError && !e.message.includes("private")); closed(f);
++    assert.equal(f.state.writes, 1); assert.equal(f.state.anchorWrites, port === "commit" ? 0 : 1);
++    assert.equal(f.coordinator.status().promotions, 0); assert.deepEqual(f.coordinator.status().confirmedIdentity, before);
++    const n = f.trace.length; await assert.rejects(append(f), CandidateV3CoordinatorError); assert.equal(f.trace.length, n);
++  }
++});
++
++test("ack substitution and corrupt post-commit readback deny anchor or promotion", async () => {
++  for (const fault of ["commit-ack", "anchor-ack", "ledger-readback", "anchor-readback"] as const) {
++    const f = await started(); f.hooks.reply = (name, value) => {
++      if ((fault === "commit-ack" && name === "commit") || (fault === "anchor-ack" && name === "append-anchor")) {
++        const ack = JSON.parse(value as string); ack.contextDigest = "sha256:" + "f".repeat(64); return wire(ack);
++      }
++      if (fault === "ledger-readback" && name === "ledger" && f.state.writes) return "{}";
++      if (fault === "anchor-readback" && name === "anchor" && f.state.anchorWrites) return "{}";
++      return value;
++    };
++    await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.state.writes, 1); assert.equal(f.state.anchorWrites, fault.startsWith("anchor") ? 1 : 0);
++    assert.equal(f.coordinator.status().promotions, 0);
++  }
++});
++
++test("revocation after commit may witness old pair under settlement only, never promote new readiness", async () => {
++  for (const settlement of [true, false]) {
++    const f = await started(); f.hooks.after = name => {
++      if (name === "commit") { f.state.forward = false; f.state.settlement = settlement; }
++    };
++    await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.state.writes, 1); assert.equal(f.state.anchorWrites, settlement ? 1 : 0);
++    assert.equal(f.coordinator.status().promotions, 0);
++  }
++});
++
++test("busy loser rejects without queue or poisoning winner; same ports cannot construct a second owner", async () => {
++  const f = await started(), gate = deferredGate();
++  f.hooks.before = name => name === "validate" ? gate.hold() : undefined;
++  const winner = append(f); await gate.waiting;
++  await assert.rejects(append(f), CandidateV3CoordinatorError);
++  assert.throws(() => createCandidateV3Coordinator(coordinatorBinding, f.ports, f.clock), CandidateV3CoordinatorError);
++  assert.equal(f.coordinator.status().phase, "appending"); assert.equal(f.state.invalidations, 0);
++  gate.release(); await winner; assert.equal(f.state.writes, 1); assert.equal(f.state.anchorWrites, 1);
++  assert.equal(f.coordinator.status().requestNumber, 1);
++});
++
++test("abort every before/after await seam closes with no additional contacts, including late success", async t => {
++  const reference = await started(); await append(reference); const names = [...reference.trace];
++  for (let cut = 0; cut < names.length; cut++) {
++    const f = await started(), controller = new AbortController(); let n = 0;
++    const hook = () => { if (n++ === cut) controller.abort(); };
++    f.hooks.before = hook; f.hooks.after = hook;
++    await assert.rejects(f.coordinator.append(first.input, wire(first.checkpoint), controller.signal), CandidateV3CoordinatorError);
++    await nextTurn(); closed(f); assert.equal(f.trace.length, cut + 1, names[cut]);
++    assert.equal(f.coordinator.status().promotions, 0); assert.equal(f.coordinator.status().pendingPorts, 0);
++    assert.equal(f.coordinator.status().commitAttempts, f.trace.filter(x => x === "before:commit").length);
++    assert.equal(f.coordinator.status().anchorAttempts, f.trace.filter(x => x === "before:append-anchor").length);
++  }
++  t.diagnostic(`${names.length} before/after append seam abort cuts`);
++});
++
++test("absolute deadline at every settled seam denies further work, including final promotion", async t => {
++  const reference = await started(); await append(reference);
++  const count = reference.trace.filter(x => x.startsWith("after:")).length;
++  for (let cut = 0; cut < count; cut++) {
++    const f = await started(); let n = 0;
++    f.hooks.after = () => { if (n++ === cut) f.state.now = 10_000; };
++    await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++    assert.equal(n, cut + 1); assert.equal(f.coordinator.status().promotions, 0);
++  }
++  t.diagnostic(`${count} settled append seam deadline cuts; one overall budget, not reset per port`);
++});
++
++test("pending work stays counted after abort/close; late response cannot promote or reuse the ports", async () => {
++  for (const port of ["validate", "commit", "append-anchor"] as const) for (const mode of ["abort", "close"] as const) {
++    const f = await started(), gate = deferredGate(), controller = new AbortController();
++    f.hooks.after = name => name === port ? gate.hold() : undefined;
++    const p = f.coordinator.append(first.input, wire(first.checkpoint), controller.signal); await gate.waiting;
++    if (mode === "abort") controller.abort(); else f.coordinator.close();
++    await assert.rejects(p, CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.coordinator.status().pendingPorts, 1); const contacts = f.trace.length;
++    gate.release(); await nextTurn(); assert.equal(f.coordinator.status().pendingPorts, 0);
++    assert.equal(f.trace.length, contacts); assert.equal(f.coordinator.status().promotions, 0);
++    assert.equal(f.state.writes, port === "validate" ? 0 : 1); assert.equal(f.state.anchorWrites, port === "append-anchor" ? 1 : 0);
++  }
++});
++
++test("real timer expires while a port is unresolved rather than waiting for its reply", async () => {
++  const f = coordinatorFixture(undefined, { bootstrapMs: 30_000, appendMs: 500 });
++  await f.coordinator.bootstrap(signal()); const gate = deferredGate();
++  f.hooks.before = name => name === "validate" ? gate.hold() : undefined;
++  const p = append(f); await Promise.race([gate.waiting, p.then(() => assert.fail("must remain pending"))]);
++  await assert.rejects(p, CandidateV3CoordinatorError); closed(f);
++  assert.equal(f.coordinator.status().pendingPorts, 1); assert.equal(f.state.writes, 0);
++  gate.release(); await nextTurn(); assert.equal(f.coordinator.status().pendingPorts, 0);
++});
++
++test("pre-aborted bootstrap and invalid clocks close permanently without port contact", async () => {
++  for (const time of [NaN, Infinity, -1, 0.5, Number.MAX_SAFE_INTEGER]) {
++    const f = coordinatorFixture(); f.state.now = time;
++    await assert.rejects(f.coordinator.bootstrap(signal()), CandidateV3CoordinatorError); closed(f); assert.equal(f.trace.length, 0);
++  }
++  const f = coordinatorFixture(), c = new AbortController(); c.abort();
++  await assert.rejects(f.coordinator.bootstrap(c.signal), CandidateV3CoordinatorError); closed(f); assert.equal(f.trace.length, 0);
++});
++
++test("bootstrap cancellation at every await seam cannot publish a confirmed snapshot or retry", async t => {
++  const baseline = coordinatorFixture(); await baseline.coordinator.bootstrap(signal());
++  for (let cut = 0; cut < baseline.trace.length; cut++) {
++    const f = coordinatorFixture(), c = new AbortController(); let n = 0;
++    const hook = () => { if (n++ === cut) c.abort(); }; f.hooks.before = hook; f.hooks.after = hook;
++    await assert.rejects(f.coordinator.bootstrap(c.signal), CandidateV3CoordinatorError); await nextTurn(); closed(f);
++    assert.equal(f.trace.length, cut + 1); assert.equal(f.coordinator.status().confirmedIdentity, null);
++    assert.equal(f.coordinator.status().bootstrapAttempts, 1); assert.equal(f.state.writes, 0);
++  }
++  t.diagnostic(`${baseline.trace.length} before/after bootstrap seam abort cuts`);
++});
++
++test("regressing clock and lost epoch after worker validation close before commit", async () => {
++  for (const fault of ["clock", "epoch", "authority"] as const) {
++    const f = await started(); f.state.now = 10;
++    f.hooks.after = name => {
++      if (name === "validate") {
++        if (fault === "clock") f.state.now = 9;
++        if (fault === "epoch") f.state.epoch = uuid(999);
++        if (fault === "authority") f.state.forward = false;
++      }
++    };
++    await assert.rejects(append(f), CandidateV3CoordinatorError); closed(f);
++    assert.equal(f.coordinator.status().commitAttempts, 0); assert.equal(f.state.writes, 0);
++  }
++});
++
++test("an uncooperative late commit can still change storage, but never reopens the closed coordinator", async () => {
++  const f = await started(), gate = deferredGate(), c = new AbortController();
++  // Intentionally violate cancellation cooperation to model already-queued work.
++  // No real effect occurs: only this fixture's in-memory string changes.
++  f.ports.commit = async (_pre, candidate, ctx, _signal) => {
++    await gate.hold(); f.state.ledger = candidate; f.state.writes++;
++    return wire({ domain: "agent-candidate-v3-local-commit-ack/v1", contextDigest: hash(JSON.parse(ctx)),
++      post: parseCandidateV3LocalSnapshot(candidate).identity });
++  };
++  const p = f.coordinator.append(first.input, wire(first.checkpoint), c.signal); await gate.waiting;
++  c.abort(); await assert.rejects(p, CandidateV3CoordinatorError); closed(f);
++  assert.equal(f.state.writes, 0); assert.equal(f.coordinator.status().pendingPorts, 1);
++  gate.release(); await nextTurn(); assert.equal(f.state.writes, 1);
++  assert.equal(f.coordinator.status().pendingPorts, 0); assert.equal(f.state.anchorWrites, 0);
++  assert.equal(f.coordinator.status().promotions, 0); assert.equal(f.coordinator.status().phase, "closed");
++});
+diff --git a/product/companion-v1/tests/unit/windows-candidate-v3-validation-session.test.ts b/product/companion-v1/tests/unit/windows-candidate-v3-validation-session.test.ts
+new file mode 100644
+index 0000000..884e904
+--- /dev/null
++++ b/product/companion-v1/tests/unit/windows-candidate-v3-validation-session.test.ts
+@@ -0,0 +1,264 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { canonicalJson as wire, canonicalSha256Digest as hash, sha256Digest } from "../../src/compatibility/canonical-json.js";
++import { CandidateV3MessageError, V3_MESSAGE_LIMITS, candidateV3EscapedBytes, boundedV3Text,
++  encodeCandidateV3BootstrapRequest, encodeCandidateV3AppendRequest, parseCandidateV3Request,
++  encodeCandidateV3Response, parseCandidateV3Response } from "../../src/build-only/windows-candidate-v3-messages.js";
++import { createCandidateV3ValidationSession } from "../../src/build-only/windows-candidate-v3-validation-session.js";
++import { inspectSyntheticPairClaims } from "../helpers/candidate-v3-pair-claims.js";
++import { make, transcript, pins, envelope, historyWire, genesis } from "../helpers/candidate-v3-history-fixture.js";
++import { uuid } from "../helpers/candidate-v3-record-fixture.js";
++const lifetimeId = uuid(9000), epoch = uuid(9001), nonce = uuid(9002), binding = wire({ lifetimeId, epoch });
++const signal = () => new AbortController().signal;
++const empty = { inventory: envelope([]), history: historyWire([genesis]) };
++const bootstrapHeader = () => ({ domain: "agent-candidate-v3-bootstrap-request/v1", operation: "bootstrap", lifetimeId, epoch, nonce,
++  requestNumber: 0, deadline: V3_MESSAGE_LIMITS.bootstrapMs, anchorHistoryDigest: sha256Digest(empty.history) });
++const boot = () => encodeCandidateV3BootstrapRequest(wire(bootstrapHeader()), pins, empty.inventory, empty.history);
++const frames = (family = 0) => {
++  const parent = family >= 5 ? make(0, 0) : undefined, f = make(family, 1, parent), fs = parent ? [parent, f] : [f];
++  return transcript(fs, fs.flatMap((r, i) => Array(r.record.events.length + 1).fill(i) as number[]));
++};
++const appendHeader = (pre: readonly string[], requestNumber = 1) => ({ domain: "agent-candidate-v3-append-request/v1", operation: "append",
++  lifetimeId, epoch, nonce: uuid(9002 + requestNumber), requestNumber, deadline: V3_MESSAGE_LIMITS.appendMs, pre });
++const started = (clock = () => 0) => {
++  const session = createCandidateV3ValidationSession(binding, clock), request = boot();
++  const response = parseCandidateV3Response("bootstrap", session.request(request, signal()), request);
++  return { session, response };
++};
++const rehash = (text: string, edit: (core: Record<string, any>) => void) => {
++  const { resultDigest: _ignored, ...core } = JSON.parse(text); edit(core); return wire({ ...core, resultDigest: hash(core) });
++};
++
++test("dormant validation session: full bootstrap and all 53 family prefixes match the separate full-reference identity", t => {
++  let appends = 0;
++  for (let family = 0; family < 8; family++) {
++    const { session, response } = started(); let pre = response.post, n = 0;
++    assert.deepEqual(pre, inspectSyntheticPairClaims(pins, empty.inventory, empty.history, empty.history).identity);
++    for (const f of frames(family)) {
++      const request = encodeCandidateV3AppendRequest(wire(appendHeader(pre, ++n)), f.input, wire(f.checkpoint));
++      const result = parseCandidateV3Response("append", session.request(request, signal()), request);
++      const history = historyWire(f.history), expected = inspectSyntheticPairClaims(pins, f.input, history, history);
++      assert.deepEqual(result.post, expected.identity); pre = result.post; appends++;
++      assert.equal(session.status().phase, "ready"); assert.equal(session.status().requestNumber, n);
++    }
++    assert.equal(session.status().bootstrapAttempts, 1);
++  }
++  assert.equal(appends, 53);
++  t.diagnostic("53 validation prefixes; zero storage/anchor/effect ports; not confirmed durable pairs");
++});
++
++test("message parser accepts only exact primitive canonical transport and expected operation", () => {
++  let reflected = 0;
++  const active = new Proxy({}, { get() { reflected++; throw Error("active"); }, ownKeys() { reflected++; return []; } });
++  const request = boot();
++  for (const bad of [active, new String(request), Buffer.from(request), null, "{}", request + "\n", "\uFEFF" + request,
++    request.replace('"operation":"bootstrap"', '"operation":"bootstrap","operation":"bootstrap"')]) {
++    assert.throws(() => parseCandidateV3Request("bootstrap", bad), CandidateV3MessageError);
++  }
++  assert.throws(() => parseCandidateV3Request("append", request), CandidateV3MessageError);
++  assert.equal(reflected, 0);
++  assert(Object.isFrozen(parseCandidateV3Request("bootstrap", request)));
++});
++
++test("request digests bind every inner wire and unknown keys never survive canonical parsing", () => {
++  const bootstrap = JSON.parse(boot());
++  for (const field of ["metadataWire", "inventoryWire", "historyWire", "metadataDigest", "inventoryDigest", "historyDigest", "extra"]) {
++    const q = { ...bootstrap, [field]: field.endsWith("Digest") ? "sha256:" + "f".repeat(64) : "{}" };
++    assert.throws(() => parseCandidateV3Request("bootstrap", wire(q)), CandidateV3MessageError, field);
++  }
++  const { response } = started(), f = frames()[0]!;
++  const request = encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), f.input, wire(f.checkpoint));
++  for (const field of ["inventoryWire", "checkpointWire", "inputDigest", "checkpointDigest", "extra"]) {
++    const q = { ...JSON.parse(request), [field]: field.endsWith("Digest") ? "sha256:" + "f".repeat(64) : "{}" };
++    assert.throws(() => parseCandidateV3Request("append", wire(q)), CandidateV3MessageError, field);
++  }
++});
++
++test("response parsing binds every echoed field even if an attacker recomputes resultDigest", () => {
++  const request = boot(), session = createCandidateV3ValidationSession(binding, () => 0), result = session.request(request, signal());
++  for (const field of ["lifetimeId", "epoch", "nonce", "deadline", "requestNumber", "anchorHistoryDigest", "metadataDigest",
++    "inventoryDigest", "historyDigest", "requestDigest", "domain", "operation", "extra"]) {
++    const bad = rehash(result, core => {
++      if (["lifetimeId", "epoch", "nonce"].includes(field)) core[field] = uuid(999);
++      else if (["deadline", "requestNumber"].includes(field)) core[field]++;
++      else if (field.endsWith("Digest")) core[field] = "sha256:" + "f".repeat(64);
++      else core[field] = "wrong";
++    });
++    assert.throws(() => parseCandidateV3Response("bootstrap", bad, request), CandidateV3MessageError, field);
++  }
++  assert.throws(() => parseCandidateV3Response("bootstrap", result + " ", request), CandidateV3MessageError);
++  // A structurally valid post is a CLAIM. Caller/coordinator must compare it to
++  // its staged snapshot: response validation alone is deliberately not proof.
++  const alteredPost = rehash(result, core => { core["post"][3] = "sha256:" + "f".repeat(64); });
++  assert.notDeepEqual(parseCandidateV3Response("bootstrap", alteredPost, request).post, JSON.parse(result).post);
++});
++
++test("append response for a previous request cannot satisfy the new private pending request", () => {
++  const { session, response } = started(), fs = frames();
++  const first = encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), fs[0]!.input, wire(fs[0]!.checkpoint));
++  const old = session.request(first, signal()), nextPre = parseCandidateV3Response("append", old, first).post;
++  const next = encodeCandidateV3AppendRequest(wire(appendHeader(nextPre, 2)), fs[1]!.input, wire(fs[1]!.checkpoint));
++  assert.throws(() => parseCandidateV3Response("append", old, next), CandidateV3MessageError);
++  for (const field of ["pre", "inputDigest", "checkpointDigest"]) {
++    const bad = rehash(old, core => { if (field === "pre") core[field][3] = "sha256:" + "f".repeat(64); else core[field] = "sha256:" + "f".repeat(64); });
++    assert.throws(() => parseCandidateV3Response("append", bad, first), CandidateV3MessageError);
++  }
++});
++
++test("failed bootstrap counts exactly once, closes permanently, and has no reset/import API", () => {
++  let clocks = 0;
++  for (const bad of ["{}", "", wire({ summary: "ready" }), boot() + "\n"]) {
++    const s = createCandidateV3ValidationSession(binding, () => { clocks++; return 0; });
++    assert.throws(() => s.request(bad, signal()), CandidateV3MessageError);
++    assert.equal(s.status().phase, "closed"); assert.equal(s.status().bootstrapAttempts, 1);
++    const before = clocks;
++    for (let i = 0; i < 10; i++) assert.throws(() => s.request(boot(), signal()), CandidateV3MessageError);
++    assert.equal(clocks, before); assert.equal(s.status().bootstrapAttempts, 1);
++    assert.deepEqual(Object.keys(s).sort(), ["close", "request", "status"]);
++  }
++});
++
++test("binding mismatch and one-ahead bootstrap claims close before any successful transcript", () => {
++  for (const field of ["lifetimeId", "epoch", "anchorHistoryDigest"]) {
++    const header = { ...bootstrapHeader(), [field]: field.endsWith("Digest") ? "sha256:" + "f".repeat(64) : uuid(111) };
++    const request = encodeCandidateV3BootstrapRequest(wire(header), pins, empty.inventory, empty.history);
++    const s = createCandidateV3ValidationSession(binding, () => 0);
++    assert.throws(() => s.request(request, signal()), CandidateV3MessageError); assert.equal(s.status().phase, "closed");
++  }
++});
++
++test("counter gaps, duplicate bootstrap and pre-state substitution close the persistent session", () => {
++  for (const fault of ["counter", "bootstrap", "pre", "epoch", "lifetime"] as const) {
++    const { session, response } = started(), f = frames()[0]!, h = appendHeader(response.post);
++    if (fault === "counter") h.requestNumber = 2;
++    if (fault === "pre") h.pre = [response.post[0], response.post[1], response.post[2], "sha256:" + "f".repeat(64)];
++    if (fault === "epoch") h.epoch = uuid(111);
++    if (fault === "lifetime") h.lifetimeId = uuid(111);
++    const q = fault === "bootstrap" ? boot() : encodeCandidateV3AppendRequest(wire(h), f.input, wire(f.checkpoint));
++    assert.throws(() => session.request(q, signal()), CandidateV3MessageError); assert.equal(session.status().phase, "closed");
++    assert.throws(() => session.request(boot(), signal()), CandidateV3MessageError);
++  }
++});
++
++test("coherent message with invalid record bytes poisons transcript rather than offering a retry", () => {
++  const { session, response } = started(), f = frames()[0]!;
++  const bad = encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), "{}", wire(f.checkpoint));
++  assert.throws(() => session.request(bad, signal()), CandidateV3MessageError);
++  const good = encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), f.input, wire(f.checkpoint));
++  assert.throws(() => session.request(good, signal()), CandidateV3MessageError);
++  assert.equal(session.status().requestNumber, 0); assert.equal(session.status().phase, "closed");
++});
++
++test("expiry before or after replay/encoding and invalid clocks close without a successful reply", () => {
++  for (const expiryAt of [1, 2, 3, 4]) {
++    let calls = 0; const s = createCandidateV3ValidationSession(binding, () => ++calls >= expiryAt ? V3_MESSAGE_LIMITS.bootstrapMs : 0);
++    assert.throws(() => s.request(boot(), signal()), CandidateV3MessageError); assert.equal(s.status().phase, "closed");
++  }
++  for (const bad of [-1, NaN, Infinity, 0.5]) {
++    const s = createCandidateV3ValidationSession(binding, () => bad);
++    assert.throws(() => s.request(boot(), signal()), CandidateV3MessageError);
++  }
++  let time = 5; const { session, response } = started(() => time); time = 4;
++  const f = frames()[0]!, q = encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), f.input, wire(f.checkpoint));
++  assert.throws(() => session.request(q, signal()), CandidateV3MessageError);
++  const long = encodeCandidateV3BootstrapRequest(wire({ ...bootstrapHeader(), deadline: V3_MESSAGE_LIMITS.bootstrapMs + 1 }), pins, empty.inventory, empty.history);
++  assert.throws(() => createCandidateV3ValidationSession(binding, () => 0).request(long, signal()), CandidateV3MessageError);
++});
++
++test("abort and explicit close cannot be revived by a later valid request", () => {
++  for (const before of [true, false]) {
++    const controller = new AbortController(); let calls = 0;
++    const s = createCandidateV3ValidationSession(binding, () => { if (++calls === 3 && !before) controller.abort(); return 0; });
++    if (before) controller.abort();
++    assert.throws(() => s.request(boot(), controller.signal), CandidateV3MessageError);
++    assert.equal(s.status().phase, "closed"); assert.throws(() => s.request(boot(), signal()), CandidateV3MessageError);
++  }
++  const { session } = started(); session.close(); session.close();
++  assert.throws(() => session.request(boot(), signal()), CandidateV3MessageError);
++});
++
++test("reentrant busy request has no queue and does not poison the valid winner", () => {
++  let reentered = false, loser = false;
++  const s = createCandidateV3ValidationSession(binding, () => {
++    if (!reentered) { reentered = true; assert.throws(() => s.request(boot(), signal()), CandidateV3MessageError); loser = true; }
++    return 0;
++  });
++  const request = boot(); assert.equal(parseCandidateV3Response("bootstrap", s.request(request, signal()), request).requestNumber, 0);
++  assert(loser); assert.equal(s.status().phase, "ready"); assert.equal(s.status().bootstrapAttempts, 1);
++});
++
++test("size preflight matches canonical UTF-8 escaping with exact cap, cap-minus-one and no active input inspection", () => {
++  const samples = [...Array.from({ length: 256 }, (_, n) => String.fromCharCode(n)), "", "漢", "😀", "\u2028\u2029", '\\"\u0000😀é'];
++  for (const s of samples) {
++    const bytes = Buffer.byteLength(wire(s)) - 2;
++    assert.equal(candidateV3EscapedBytes(s, bytes), bytes);
++    if (bytes > 0) assert.throws(() => candidateV3EscapedBytes(s, bytes - 1), CandidateV3MessageError);
++  }
++  let reflected = false; const active = new Proxy({}, { get() { reflected = true; throw Error("active"); } });
++  for (const value of [active, "\ud800", "\udc00", "\ud800x"]) assert.throws(() => candidateV3EscapedBytes(value, 100), CandidateV3MessageError);
++  for (const budget of [-1, NaN, Infinity, 0.5, V3_MESSAGE_LIMITS.bootstrapBytes + 1]) assert.throws(() => candidateV3EscapedBytes("", budget), CandidateV3MessageError);
++  assert.equal(reflected, false);
++});
++
++test("inner, header and response caps cannot be widened by the outer profile", () => {
++  assert.throws(() => encodeCandidateV3BootstrapRequest(wire(bootstrapHeader()), "x".repeat(1025), empty.inventory, empty.history), CandidateV3MessageError);
++  assert.throws(() => encodeCandidateV3AppendRequest("{}", "{}", "x".repeat(4097)), CandidateV3MessageError);
++  const { response } = started();
++  assert.throws(() => encodeCandidateV3AppendRequest(wire(appendHeader(response.post)), "{}", "x".repeat(4097)), CandidateV3MessageError);
++  assert.throws(() => encodeCandidateV3BootstrapRequest("x".repeat(V3_MESSAGE_LIMITS.headerBytes + 1), pins, empty.inventory, empty.history), CandidateV3MessageError);
++  assert.throws(() => parseCandidateV3Response("bootstrap", "x".repeat(V3_MESSAGE_LIMITS.responseBytes + 1), new Proxy({}, {})), CandidateV3MessageError);
++  assert.throws(() => boundedV3Text("a".repeat(V3_MESSAGE_LIMITS.appendBytes + 1), V3_MESSAGE_LIMITS.appendBytes), CandidateV3MessageError);
++});
++
++test("public encoders do not inspect proxies, getters or toJSON inputs", () => {
++  let touched = false; const active = new Proxy({}, { get() { touched = true; throw Error("active"); }, ownKeys() { touched = true; return []; } });
++  assert.throws(() => encodeCandidateV3BootstrapRequest(active, pins, empty.inventory, empty.history), CandidateV3MessageError);
++  assert.throws(() => encodeCandidateV3BootstrapRequest(wire(bootstrapHeader()), active, empty.inventory, empty.history), CandidateV3MessageError);
++  assert.throws(() => encodeCandidateV3Response("bootstrap", boot(), active), CandidateV3MessageError);
++  assert.throws(() => createCandidateV3ValidationSession(active, () => 0), CandidateV3MessageError);
++  assert.equal(touched, false);
++});
++
++test("fresh nonempty bootstrap replays complete history then starts a new request counter at one", () => {
++  const fs = frames(), prior = fs[3]!, next = fs[4]!, history = historyWire(prior.history);
++  const header = { ...bootstrapHeader(), anchorHistoryDigest: sha256Digest(history) };
++  const request = encodeCandidateV3BootstrapRequest(wire(header), pins, prior.input, history);
++  const s = createCandidateV3ValidationSession(binding, () => 0);
++  const b = parseCandidateV3Response("bootstrap", s.request(request, signal()), request);
++  assert.deepEqual(b.post, inspectSyntheticPairClaims(pins, prior.input, history, history).identity);
++  const append = encodeCandidateV3AppendRequest(wire(appendHeader(b.post)), next.input, wire(next.checkpoint));
++  const r = parseCandidateV3Response("append", s.request(append, signal()), append), after = historyWire(next.history);
++  assert.deepEqual(r.post, inspectSyntheticPairClaims(pins, next.input, after, after).identity);
++  const missing = wire({ ...JSON.parse(history), checkpoints: JSON.parse(history).checkpoints.slice(1) });
++  const bad = encodeCandidateV3BootstrapRequest(wire({ ...header, anchorHistoryDigest: sha256Digest(missing) }), pins, prior.input, missing);
++  assert.throws(() => createCandidateV3ValidationSession(binding, () => 0).request(bad, signal()), CandidateV3MessageError);
++});
++
++test("response post-identity encoding requires an exact bounded four-tuple and carries no effect authority", () => {
++  const q = boot(), d = "sha256:" + "0".repeat(64);
++  for (const post of [wire([]), wire([d, d, d]), wire([d, d, d, d, d]), wire([d, d, d, "wrong"]), "x".repeat(4097)]) {
++    assert.throws(() => encodeCandidateV3Response("bootstrap", q, post), CandidateV3MessageError);
++  }
++  const known = JSON.parse(q);
++  const response = parseCandidateV3Response("bootstrap", encodeCandidateV3Response("bootstrap", q,
++    wire([known.metadataDigest, known.inventoryDigest, known.historyDigest, d])), q);
++  for (const key of ["authorized", "safeToExecute", "processStopped", "committed", "anchorConfirmed"]) assert.equal(key in response, false);
++});
++
++test("known post-state identities are checked independently of worker claims", () => {
++  const q = boot(), s = createCandidateV3ValidationSession(binding, () => 0), r = s.request(q, signal());
++  for (const index of [0, 1, 2]) {
++    const bad = rehash(r, core => { core["post"][index] = "sha256:" + "f".repeat(64); });
++    assert.throws(() => parseCandidateV3Response("bootstrap", bad, q), CandidateV3MessageError);
++    const post = [...JSON.parse(r).post]; post[index] = "sha256:" + "f".repeat(64);
++    assert.throws(() => encodeCandidateV3Response("bootstrap", q, wire(post)), CandidateV3MessageError);
++  }
++  const pre = parseCandidateV3Response("bootstrap", r, q).post, f = frames()[0]!;
++  const a = encodeCandidateV3AppendRequest(wire(appendHeader(pre)), f.input, wire(f.checkpoint)), ar = s.request(a, signal());
++  for (const index of [0, 1]) {
++    const bad = rehash(ar, core => { core["post"][index] = "sha256:" + "f".repeat(64); });
++    assert.throws(() => parseCandidateV3Response("append", bad, a), CandidateV3MessageError);
++    const post = [...JSON.parse(ar).post]; post[index] = "sha256:" + "f".repeat(64);
++    assert.throws(() => encodeCandidateV3Response("append", a, wire(post)), CandidateV3MessageError);
++  }
++});

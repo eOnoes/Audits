@@ -1,0 +1,833 @@
+TAP version 13
+# Subtest: model positive control: all eight families promote each exact local/anchor pair
+ok 1 - model positive control: all eight families promote each exact local/anchor pair
+  ---
+  duration_ms: 422.4682
+  type: 'test'
+  ...
+# {"syntheticPairedAppends":53,"physicalComposition":"NOT RUN","taskPort":"absent"}
+# Subtest: C01 model: advanced transcript plus pre-write rejection permanently closes the owner
+ok 2 - C01 model: advanced transcript plus pre-write rejection permanently closes the owner
+  ---
+  duration_ms: 5.6953
+  type: 'test'
+  ...
+# Subtest: C02 model: metadata/history/row/context changes deny before write with count unchanged
+ok 3 - C02 model: metadata/history/row/context changes deny before write with count unchanged
+  ---
+  duration_ms: 38.8282
+  type: 'test'
+  ...
+# Subtest: C02 model: a different completed row changes while another subject is staged
+ok 4 - C02 model: a different completed row changes while another subject is staged
+  ---
+  duration_ms: 10.7437
+  type: 'test'
+  ...
+# Subtest: C03/D3 model: rehashed wrong reply identities deny before transaction
+ok 5 - C03/D3 model: rehashed wrong reply identities deny before transaction
+  ---
+  duration_ms: 48.4218
+  type: 'test'
+  ...
+# Subtest: D3 bootstrap model: every echoed identity, operation and reconstructed post-state is bound
+ok 6 - D3 bootstrap model: every echoed identity, operation and reconstructed post-state is bound
+  ---
+  duration_ms: 7.2745
+  type: 'test'
+  ...
+# Subtest: D3 bootstrap model: stale lifetime reply and drift during bootstrap cannot create a ready owner
+ok 7 - D3 bootstrap model: stale lifetime reply and drift during bootstrap cannot create a ready owner
+  ---
+  duration_ms: 3.1734
+  type: 'test'
+  ...
+# Subtest: D3 model request parsing: no object coercion, alternate JSON, missing bootstrap or cross-operation fallback
+ok 8 - D3 model request parsing: no object coercion, alternate JSON, missing bootstrap or cross-operation fallback
+  ---
+  duration_ms: 1.5733
+  type: 'test'
+  ...
+# Subtest: D3 model: request numbers increase only within one lifetime and bootstrap is zero
+ok 9 - D3 model: request numbers increase only within one lifetime and bootstrap is zero
+  ---
+  duration_ms: 9.2699
+  type: 'test'
+  ...
+# Subtest: C03/D4 model: live epoch/head change after worker settlement denies before transaction
+ok 10 - C03/D4 model: live epoch/head change after worker settlement denies before transaction
+  ---
+  duration_ms: 6.9389
+  type: 'test'
+  ...
+# Subtest: C04 model: caller container mutation cannot alter staged primitive bytes
+ok 11 - C04 model: caller container mutation cannot alter staged primitive bytes
+  ---
+  duration_ms: 8.4214
+  type: 'test'
+  ...
+# Subtest: C05 model: each commit/readback/anchor response-loss cut closes without compensation or repeat
+ok 12 - C05 model: each commit/readback/anchor response-loss cut closes without compensation or repeat
+  ---
+  duration_ms: 28.4121
+  type: 'test'
+  ...
+# Subtest: C06 model: virtual deadline closes while worker/anchor are unsettled; late success cannot promote
+ok 13 - C06 model: virtual deadline closes while worker/anchor are unsettled; late success cannot promote
+  ---
+  duration_ms: 16.3467
+  type: 'test'
+  ...
+# Subtest: C06 model: abort is responsive while request is pending, without treating abort as settlement
+ok 14 - C06 model: abort is responsive while request is pending, without treating abort as settlement
+  ---
+  duration_ms: 3.377
+  type: 'test'
+  ...
+# Subtest: C05/C13 model: corrupt fresh ledger read-back or anchor confirmation never promotes
+ok 15 - C05/C13 model: corrupt fresh ledger read-back or anchor confirmation never promotes
+  ---
+  duration_ms: 9.9274
+  type: 'test'
+  ...
+# Subtest: D3 model: old valid response cannot be replayed for the next staged request
+ok 16 - D3 model: old valid response cannot be replayed for the next staged request
+  ---
+  duration_ms: 6.5212
+  type: 'test'
+  ...
+# Subtest: C07 model: post-commit revoke may settle exact pair but cannot reopen forward work
+ok 17 - C07 model: post-commit revoke may settle exact pair but cannot reopen forward work
+  ---
+  duration_ms: 11.2319
+  type: 'test'
+  ...
+# Subtest: C08 model: restart at each cut cannot import a summary, duplicate an append or bypass discovery
+ok 18 - C08 model: restart at each cut cannot import a summary, duplicate an append or bypass discovery
+  ---
+  duration_ms: 42.3529
+  type: 'test'
+  ...
+# Subtest: C09 model: two clients have one owner, one in-flight request, no queue
+ok 19 - C09 model: two clients have one owner, one in-flight request, no queue
+  ---
+  duration_ms: 5.231
+  type: 'test'
+  ...
+# Subtest: C10/C13 model: bootstrap equal only; one-ahead never auto-reconciles or admits
+ok 20 - C10/C13 model: bootstrap equal only; one-ahead never auto-reconciles or admits
+  ---
+  duration_ms: 5.1872
+  type: 'test'
+  ...
+# Subtest: C11 model: loss around outcome A or release B never yields forward readiness
+ok 21 - C11 model: loss around outcome A or release B never yields forward readiness
+  ---
+  duration_ms: 110.1099
+  type: 'test'
+  ...
+# Subtest: model bounds: oversized/nonpassive input, regressed clock and malformed replies close without new contacts
+ok 22 - model bounds: oversized/nonpassive input, regressed clock and malformed replies close without new contacts
+  ---
+  duration_ms: 23.0226
+  type: 'test'
+  ...
+# Subtest: D3 model: bootstrap response cap and non-finite request counters reject
+ok 23 - D3 model: bootstrap response cap and non-finite request counters reject
+  ---
+  duration_ms: 0.6344
+  type: 'test'
+  ...
+# Subtest: M1 model: individually bounded payloads exceeding the composite cap never reach encoding or worker
+ok 24 - M1 model: individually bounded payloads exceeding the composite cap never reach encoding or worker
+  ---
+  duration_ms: 11.8076
+  type: 'test'
+  ...
+# Subtest: M1 model: preflight agrees with canonical UTF-8 escaping at the exact composite boundary
+ok 25 - M1 model: preflight agrees with canonical UTF-8 escaping at the exact composite boundary
+  ---
+  duration_ms: 121.3022
+  type: 'test'
+  ...
+# Subtest: M2 model: failed bootstrap counts once and cannot be retried by constructor recreation
+ok 26 - M2 model: failed bootstrap counts once and cannot be retried by constructor recreation
+  ---
+  duration_ms: 7.4301
+  type: 'test'
+  ...
+# Subtest: M3/C13 model: anchor drift inside the local transaction may commit but never appends or promotes
+ok 27 - M3/C13 model: anchor drift inside the local transaction may commit but never appends or promotes
+  ---
+  duration_ms: 6.2796
+  type: 'test'
+  ...
+# Subtest: coordinator: 53 paired prefixes use the real session and match full-reference identities
+ok 28 - coordinator: 53 paired prefixes use the real session and match full-reference identities
+  ---
+  duration_ms: 218.1154
+  type: 'test'
+  ...
+# 53 synthetic paired appends; no real ledger, anchor, worker, task or admission
+# Subtest: nonempty bootstrap fully replays, then accepts exactly the next prefix without importing a summary
+ok 29 - nonempty bootstrap fully replays, then accepts exactly the next prefix without importing a summary
+  ---
+  duration_ms: 6.5188
+  type: 'test'
+  ...
+# Subtest: bootstrap rejects mismatched streams, missing genesis and invalid inventory once with no retry
+ok 30 - bootstrap rejects mismatched streams, missing genesis and invalid inventory once with no retry
+  ---
+  duration_ms: 9.5483
+  type: 'test'
+  ...
+# Subtest: bootstrap refresh rejects drift after a correct worker reply
+ok 31 - bootstrap refresh rejects drift after a correct worker reply
+  ---
+  duration_ms: 5.838
+  type: 'test'
+  ...
+# Subtest: primitive candidate boundary rejects active objects and oversized checkpoints before port contact
+ok 32 - primitive candidate boundary rejects active objects and oversized checkpoints before port contact
+  ---
+  duration_ms: 5.4182
+  type: 'test'
+  ...
+# Subtest: snapshot parsing is exact and staging binds the predecessor without claiming full history validity
+ok 33 - snapshot parsing is exact and staging binds the predecessor without claiming full history validity
+  ---
+  duration_ms: 4.5753
+  type: 'test'
+  ...
+# Subtest: rehashed wrong worker post, nonce and request identity never contact commit
+ok 34 - rehashed wrong worker post, nonce and request identity never contact commit
+  ---
+  duration_ms: 9.4623
+  type: 'test'
+  ...
+# Subtest: transaction rechecks complete pre-state and schema/epoch before any write
+ok 35 - transaction rechecks complete pre-state and schema/epoch before any write
+  ---
+  duration_ms: 10.4088
+  type: 'test'
+  ...
+# Subtest: optional context disappearing on an unrelated row is pre-state drift even with identical record bytes
+ok 36 - optional context disappearing on an unrelated row is pre-state drift even with identical record bytes
+  ---
+  duration_ms: 7.997
+  type: 'test'
+  ...
+# Subtest: anchor drift inside commit leaves only a local unconfirmed tail, never promotion or compensation
+ok 37 - anchor drift inside commit leaves only a local unconfirmed tail, never promotion or compensation
+  ---
+  duration_ms: 1.8194
+  type: 'test'
+  ...
+# Subtest: lost commit and anchor replies retain observed writes and never repeat either attempt
+ok 38 - lost commit and anchor replies retain observed writes and never repeat either attempt
+  ---
+  duration_ms: 3.8146
+  type: 'test'
+  ...
+# Subtest: ack substitution and corrupt post-commit readback deny anchor or promotion
+ok 39 - ack substitution and corrupt post-commit readback deny anchor or promotion
+  ---
+  duration_ms: 7.5605
+  type: 'test'
+  ...
+# Subtest: revocation after commit may witness old pair under settlement only, never promote new readiness
+ok 40 - revocation after commit may witness old pair under settlement only, never promote new readiness
+  ---
+  duration_ms: 5.2973
+  type: 'test'
+  ...
+# Subtest: busy loser rejects without queue or poisoning winner; same ports cannot construct a second owner
+ok 41 - busy loser rejects without queue or poisoning winner; same ports cannot construct a second owner
+  ---
+  duration_ms: 2.1284
+  type: 'test'
+  ...
+# Subtest: abort every before/after await seam closes with no additional contacts, including late success
+ok 42 - abort every before/after await seam closes with no additional contacts, including late success
+  ---
+  duration_ms: 57.6124
+  type: 'test'
+  ...
+# 32 before/after append seam abort cuts
+# Subtest: absolute deadline at every settled seam denies further work, including final promotion
+ok 43 - absolute deadline at every settled seam denies further work, including final promotion
+  ---
+  duration_ms: 27.837
+  type: 'test'
+  ...
+# 16 settled append seam deadline cuts; one overall budget, not reset per port
+# Subtest: pending work stays counted after abort/close; late response cannot promote or reuse the ports
+ok 44 - pending work stays counted after abort/close; late response cannot promote or reuse the ports
+  ---
+  duration_ms: 10.3984
+  type: 'test'
+  ...
+# Subtest: real timer expires while a port is unresolved rather than waiting for its reply
+ok 45 - real timer expires while a port is unresolved rather than waiting for its reply
+  ---
+  duration_ms: 509.3386
+  type: 'test'
+  ...
+# Subtest: pre-aborted bootstrap and invalid clocks close permanently without port contact
+ok 46 - pre-aborted bootstrap and invalid clocks close permanently without port contact
+  ---
+  duration_ms: 1.0322
+  type: 'test'
+  ...
+# Subtest: bootstrap cancellation at every await seam cannot publish a confirmed snapshot or retry
+ok 47 - bootstrap cancellation at every await seam cannot publish a confirmed snapshot or retry
+  ---
+  duration_ms: 8.8194
+  type: 'test'
+  ...
+# 18 before/after bootstrap seam abort cuts
+# Subtest: regressing clock and lost epoch after worker validation close before commit
+ok 48 - regressing clock and lost epoch after worker validation close before commit
+  ---
+  duration_ms: 4.1315
+  type: 'test'
+  ...
+# Subtest: an uncooperative late commit can still change storage, but never reopens the closed coordinator
+ok 49 - an uncooperative late commit can still change storage, but never reopens the closed coordinator
+  ---
+  duration_ms: 3.0551
+  type: 'test'
+  ...
+# Subtest: v3 metadata binds exact installation/namespace/store/domain without creating authority
+ok 50 - v3 metadata binds exact installation/namespace/store/domain without creating authority
+  ---
+  duration_ms: 2.8278
+  type: 'test'
+  ...
+# Subtest: v3 approval identity stays identical to v2 across stores and schema domains
+ok 51 - v3 approval identity stays identical to v2 across stores and schema domains
+  ---
+  duration_ms: 2.4418
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/completed
+ok 52 - settlement kind/outcome/null matrix: execute/completed
+  ---
+  duration_ms: 1.7921
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/failed
+ok 53 - settlement kind/outcome/null matrix: execute/failed
+  ---
+  duration_ms: 0.7748
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/cancelled
+ok 54 - settlement kind/outcome/null matrix: execute/cancelled
+  ---
+  duration_ms: 0.5644
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/restored
+ok 55 - settlement kind/outcome/null matrix: execute/restored
+  ---
+  duration_ms: 0.4529
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/stopped-without-result
+ok 56 - settlement kind/outcome/null matrix: execute/stopped-without-result
+  ---
+  duration_ms: 1.0292
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: execute/quarantined
+ok 57 - settlement kind/outcome/null matrix: execute/quarantined
+  ---
+  duration_ms: 0.6141
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/completed
+ok 58 - settlement kind/outcome/null matrix: publish/completed
+  ---
+  duration_ms: 0.4382
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/failed
+ok 59 - settlement kind/outcome/null matrix: publish/failed
+  ---
+  duration_ms: 0.4456
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/cancelled
+ok 60 - settlement kind/outcome/null matrix: publish/cancelled
+  ---
+  duration_ms: 0.41
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/restored
+ok 61 - settlement kind/outcome/null matrix: publish/restored
+  ---
+  duration_ms: 0.486
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/stopped-without-result
+ok 62 - settlement kind/outcome/null matrix: publish/stopped-without-result
+  ---
+  duration_ms: 0.3753
+  type: 'test'
+  ...
+# Subtest: settlement kind/outcome/null matrix: publish/quarantined
+ok 63 - settlement kind/outcome/null matrix: publish/quarantined
+  ---
+  duration_ms: 0.401
+  type: 'test'
+  ...
+# Subtest: every settlement field is required, strictly typed and part of the digest
+ok 64 - every settlement field is required, strictly typed and part of the digest
+  ---
+  duration_ms: 9.8447
+  type: 'test'
+  ...
+# Subtest: canonical primitive-wire parsing rejects alternate spelling and oversize before parsing
+ok 65 - canonical primitive-wire parsing rejects alternate spelling and oversize before parsing
+  ---
+  duration_ms: 0.6175
+  type: 'test'
+  ...
+# Subtest: non-text and proxy/accessor inputs are rejected without running caller code
+ok 66 - non-text and proxy/accessor inputs are rejected without running caller code
+  ---
+  duration_ms: 1.0301
+  type: 'test'
+  ...
+# Subtest: settlement observation and release bounds are exact, with no clock or renewal claim
+ok 67 - settlement observation and release bounds are exact, with no clock or renewal claim
+  ---
+  duration_ms: 0.9949
+  type: 'test'
+  ...
+# Subtest: v3 centralized domains retain independently pinned historical wire literals
+ok 68 - v3 centralized domains retain independently pinned historical wire literals
+  ---
+  duration_ms: 0.6084
+  type: 'test'
+  ...
+# Subtest: v3 canonical complete inventory and checkpoint claims have no admission surface
+ok 69 - v3 canonical complete inventory and checkpoint claims have no admission surface
+  ---
+  duration_ms: 9.0024
+  type: 'test'
+  ...
+# Subtest: v3 re-derives cross-row invariants independently from indexes and rehashed records
+ok 70 - v3 re-derives cross-row invariants independently from indexes and rehashed records
+  ---
+  duration_ms: 5.4969
+  type: 'test'
+  ...
+# Subtest: v3 supplied snapshot omission, replacement, stale sequence and wrong checkpoint subject deny
+ok 71 - v3 supplied snapshot omission, replacement, stale sequence and wrong checkpoint subject deny
+  ---
+  duration_ms: 7.0198
+  type: 'test'
+  ...
+# Subtest: v3 release A and B join exact complete before/after inventories with only one release append
+ok 72 - v3 release A and B join exact complete before/after inventories with only one release append
+  ---
+  duration_ms: 8.4427
+  type: 'test'
+  ...
+# Subtest: v3 publication requires the released passed execution with separate approval and exact subject
+ok 73 - v3 publication requires the released passed execution with separate approval and exact subject
+  ---
+  duration_ms: 7.1707
+  type: 'test'
+  ...
+# Subtest: v3 inventory limits include all 1000 rows, rejecting 1001, hostile inputs and noncanonical envelopes
+ok 74 - v3 inventory limits include all 1000 rows, rejecting 1001, hostile inputs and noncanonical envelopes
+  ---
+  duration_ms: 340.5635
+  type: 'test'
+  ...
+# Subtest: v3 coherent omitted history plus a recomputed checkpoint remains a claim, never authenticated completeness
+ok 75 - v3 coherent omitted history plus a recomputed checkpoint remains a claim, never authenticated completeness
+  ---
+  duration_ms: 0.7819
+  type: 'test'
+  ...
+# Subtest: v3 release pair rejects an unrelated rehashed row change despite individually matching snapshots
+ok 76 - v3 release pair rejects an unrelated rehashed row change despite individually matching snapshots
+  ---
+  duration_ms: 4.7977
+  type: 'test'
+  ...
+# Subtest: v3 full released-history inventory at 1000 rows uses bounded tuple hashing
+ok 77 - v3 full released-history inventory at 1000 rows uses bounded tuple hashing
+  ---
+  duration_ms: 696.589
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap returns frozen historical A and lastAt at every prefix without requiring supplied A
+ok 78 - v3 bootstrap returns frozen historical A and lastAt at every prefix without requiring supplied A
+  ---
+  duration_ms: 9.281
+  type: 'test'
+  ...
+# Subtest: v3 historical row generation differs from genesis epoch and cannot be relabeled to a new coordinator epoch
+ok 79 - v3 historical row generation differs from genesis epoch and cannot be relabeled to a new coordinator epoch
+  ---
+  duration_ms: 4.1301
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap extracts each execution outcome across cuts and retains A after quarantine
+ok 80 - v3 bootstrap extracts each execution outcome across cuts and retains A after quarantine
+  ---
+  duration_ms: 64.7675
+  type: 'test'
+  ...
+# Subtest: v3 history denies a publication reserved before its parent exists even when final inventory is valid
+ok 81 - v3 history denies a publication reserved before its parent exists even when final inventory is valid
+  ---
+  duration_ms: 9.8862
+  type: 'test'
+  ...
+# Subtest: v3 bootstrap extracts publication completed restored and cancelled A across cuts and quarantine
+ok 82 - v3 bootstrap extracts publication completed restored and cancelled A across cuts and quarantine
+  ---
+  duration_ms: 71.854
+  type: 'test'
+  ...
+# Subtest: v3 history accepts released execution then publication with unrelated work between publication A and B
+ok 83 - v3 history accepts released execution then publication with unrelated work between publication A and B
+  ---
+  duration_ms: 5.4056
+  type: 'test'
+  ...
+# Subtest: v3 history rejects publication reservation before equal-time parent release despite valid final inventory
+ok 84 - v3 history rejects publication reservation before equal-time parent release despite valid final inventory
+  ---
+  duration_ms: 9.0397
+  type: 'test'
+  ...
+# Subtest: v3 history rejects publication reservation before parent outcome with equal timestamps and rehashed roots
+ok 85 - v3 history rejects publication reservation before parent outcome with equal timestamps and rehashed roots
+  ---
+  duration_ms: 10.4356
+  type: 'test'
+  ...
+# Subtest: v3 unreleased terminal and quarantined rows retain workspace exclusion
+ok 86 - v3 unreleased terminal and quarantined rows retain workspace exclusion
+  ---
+  duration_ms: 2.321
+  type: 'test'
+  ...
+# Subtest: v3 publication parent lookup is independent of sorted operation identity order
+ok 87 - v3 publication parent lookup is independent of sorted operation identity order
+  ---
+  duration_ms: 4.9002
+  type: 'test'
+  ...
+# Subtest: v3 history rejects time regression with otherwise exact sequence chain subjects and roots
+ok 88 - v3 history rejects time regression with otherwise exact sequence chain subjects and roots
+  ---
+  duration_ms: 2.7195
+  type: 'test'
+  ...
+# Subtest: v3 full checkpoint history checks every root and A including intervening work before B
+ok 89 - v3 full checkpoint history checks every root and A including intervening work before B
+  ---
+  duration_ms: 7.555
+  type: 'test'
+  ...
+# Subtest: v3 historical workspace overlap denies even when final rows are individually released
+ok 90 - v3 historical workspace overlap denies even when final rows are individually released
+  ---
+  duration_ms: 5.6532
+  type: 'test'
+  ...
+# Subtest: v3 checkpoint history requires explicit genesis even for empty state and rejects non-text callers
+ok 91 - v3 checkpoint history requires explicit genesis even for empty state and rejects non-text callers
+  ---
+  duration_ms: 2.662
+  type: 'test'
+  ...
+# Subtest: C13 claim groundwork: equal full histories and exactly one local tail for all eight families
+ok 92 - C13 claim groundwork: equal full histories and exactly one local tail for all eight families
+  ---
+  duration_ms: 153.9636
+  type: 'test'
+  ...
+# {"syntheticPrefixes":53,"physicalC13":"NOT RUN","effectPorts":"none"}
+# Subtest: C13 claim groundwork: genesis is required and never a one-ahead permission
+ok 93 - C13 claim groundwork: genesis is required and never a one-ahead permission
+  ---
+  duration_ms: 0.982
+  type: 'test'
+  ...
+# Subtest: C13 claim groundwork: shorter local and two-ahead local close
+ok 94 - C13 claim groundwork: shorter local and two-ahead local close
+  ---
+  duration_ms: 3.2282
+  type: 'test'
+  ...
+# Subtest: C13 claim groundwork: independently valid but divergent anchor history closes
+ok 95 - C13 claim groundwork: independently valid but divergent anchor history closes
+  ---
+  duration_ms: 4.3836
+  type: 'test'
+  ...
+# Subtest: C13 claim groundwork: matching head cannot conceal a changed earlier anchor checkpoint
+ok 96 - C13 claim groundwork: matching head cannot conceal a changed earlier anchor checkpoint
+  ---
+  duration_ms: 3.3778
+  type: 'test'
+  ...
+# Subtest: D2 claim groundwork: identity hashes exact canonical wires, including optional A context
+ok 97 - D2 claim groundwork: identity hashes exact canonical wires, including optional A context
+  ---
+  duration_ms: 5.6348
+  type: 'test'
+  ...
+# Subtest: D2 claim groundwork: history identity includes the unconfirmed tail
+ok 98 - D2 claim groundwork: history identity includes the unconfirmed tail
+  ---
+  duration_ms: 3.528
+  type: 'test'
+  ...
+# Subtest: C13 claim groundwork: noncanonical, malformed and active inputs deny without coercion
+ok 99 - C13 claim groundwork: noncanonical, malformed and active inputs deny without coercion
+  ---
+  duration_ms: 3.2554
+  type: 'test'
+  ...
+# Subtest: v3 pre-outcome records reject supplied settlement or checkpoint context independently
+ok 100 - v3 pre-outcome records reject supplied settlement or checkpoint context independently
+  ---
+  duration_ms: 8.16
+  type: 'test'
+  ...
+# Subtest: v3 reservation itself must precede expiry even without any events
+ok 101 - v3 reservation itself must precede expiry even without any events
+  ---
+  duration_ms: 0.7256
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/completed/false
+ok 102 - v3 every history cut parses as data only: execute/completed/false
+  ---
+  duration_ms: 4.1151
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/failed/false
+ok 103 - v3 every history cut parses as data only: execute/failed/false
+  ---
+  duration_ms: 2.0625
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/cancelled/false
+ok 104 - v3 every history cut parses as data only: execute/cancelled/false
+  ---
+  duration_ms: 1.2382
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/stopped-without-result/false
+ok 105 - v3 every history cut parses as data only: execute/stopped-without-result/false
+  ---
+  duration_ms: 1.6715
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: execute/stopped-without-result/true
+ok 106 - v3 every history cut parses as data only: execute/stopped-without-result/true
+  ---
+  duration_ms: 1.3221
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/completed/false
+ok 107 - v3 every history cut parses as data only: publish/completed/false
+  ---
+  duration_ms: 1.8913
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/restored/false
+ok 108 - v3 every history cut parses as data only: publish/restored/false
+  ---
+  duration_ms: 1.5635
+  type: 'test'
+  ...
+# Subtest: v3 every history cut parses as data only: publish/cancelled/false
+ok 109 - v3 every history cut parses as data only: publish/cancelled/false
+  ---
+  duration_ms: 1.1523
+  type: 'test'
+  ...
+# Subtest: v3 rejects release before an outcome, changed predecessor, evidence or checkpoint-A digest
+ok 110 - v3 rejects release before an outcome, changed predecessor, evidence or checkpoint-A digest
+  ---
+  duration_ms: 2.7961
+  type: 'test'
+  ...
+# Subtest: v3 quarantine is absorbing at every prefix and has no release path
+ok 111 - v3 quarantine is absorbing at every prefix and has no release path
+  ---
+  duration_ms: 5.0907
+  type: 'test'
+  ...
+# Subtest: v3 evidence joins every subject even after downstream evidence and checkpoint hashes are recomputed
+ok 112 - v3 evidence joins every subject even after downstream evidence and checkpoint hashes are recomputed
+  ---
+  duration_ms: 13.4228
+  type: 'test'
+  ...
+# Subtest: v3 checkpoint A must name the exact historical subject and outcome prefix
+ok 113 - v3 checkpoint A must name the exact historical subject and outcome prefix
+  ---
+  duration_ms: 3.5038
+  type: 'test'
+  ...
+# Subtest: v3 transition replay rejects skipped/reordered/wrong-kind/result-bearing paths and seventh events
+ok 114 - v3 transition replay rejects skipped/reordered/wrong-kind/result-bearing paths and seventh events
+  ---
+  duration_ms: 3.5796
+  type: 'test'
+  ...
+# Subtest: v3 rejects identity/domain/hash drift, unknown/omitted fields and invalid wire without caller invocation
+ok 115 - v3 rejects identity/domain/hash drift, unknown/omitted fields and invalid wire without caller invocation
+  ---
+  duration_ms: 4.1544
+  type: 'test'
+  ...
+# Subtest: v3 timing permits bounded post-expiry outcome bookkeeping, never late forward effects or release
+ok 116 - v3 timing permits bounded post-expiry outcome bookkeeping, never late forward effects or release
+  ---
+  duration_ms: 5.3121
+  type: 'test'
+  ...
+# Subtest: checkpoint genesis is canonical empty data, not initialization or a missing-anchor fallback
+ok 117 - checkpoint genesis is canonical empty data, not initialization or a missing-anchor fallback
+  ---
+  duration_ms: 1.5846
+  type: 'test'
+  ...
+# Subtest: checkpoint sequence cannot precede its retained operations and subject events
+ok 118 - checkpoint sequence cannot precede its retained operations and subject events
+  ---
+  duration_ms: 0.4279
+  type: 'test'
+  ...
+# Subtest: dormant validation session: full bootstrap and all 53 family prefixes match the separate full-reference identity
+ok 119 - dormant validation session: full bootstrap and all 53 family prefixes match the separate full-reference identity
+  ---
+  duration_ms: 125.0898
+  type: 'test'
+  ...
+# 53 validation prefixes; zero storage/anchor/effect ports; not confirmed durable pairs
+# Subtest: message parser accepts only exact primitive canonical transport and expected operation
+ok 120 - message parser accepts only exact primitive canonical transport and expected operation
+  ---
+  duration_ms: 1.5246
+  type: 'test'
+  ...
+# Subtest: request digests bind every inner wire and unknown keys never survive canonical parsing
+ok 121 - request digests bind every inner wire and unknown keys never survive canonical parsing
+  ---
+  duration_ms: 3.3256
+  type: 'test'
+  ...
+# Subtest: response parsing binds every echoed field even if an attacker recomputes resultDigest
+ok 122 - response parsing binds every echoed field even if an attacker recomputes resultDigest
+  ---
+  duration_ms: 2.0384
+  type: 'test'
+  ...
+# Subtest: append response for a previous request cannot satisfy the new private pending request
+ok 123 - append response for a previous request cannot satisfy the new private pending request
+  ---
+  duration_ms: 4.0893
+  type: 'test'
+  ...
+# Subtest: failed bootstrap counts exactly once, closes permanently, and has no reset/import API
+ok 124 - failed bootstrap counts exactly once, closes permanently, and has no reset/import API
+  ---
+  duration_ms: 1.8467
+  type: 'test'
+  ...
+# Subtest: binding mismatch and one-ahead bootstrap claims close before any successful transcript
+ok 125 - binding mismatch and one-ahead bootstrap claims close before any successful transcript
+  ---
+  duration_ms: 0.3534
+  type: 'test'
+  ...
+# Subtest: counter gaps, duplicate bootstrap and pre-state substitution close the persistent session
+ok 126 - counter gaps, duplicate bootstrap and pre-state substitution close the persistent session
+  ---
+  duration_ms: 12.7649
+  type: 'test'
+  ...
+# Subtest: coherent message with invalid record bytes poisons transcript rather than offering a retry
+ok 127 - coherent message with invalid record bytes poisons transcript rather than offering a retry
+  ---
+  duration_ms: 2.82
+  type: 'test'
+  ...
+# Subtest: expiry before or after replay/encoding and invalid clocks close without a successful reply
+ok 128 - expiry before or after replay/encoding and invalid clocks close without a successful reply
+  ---
+  duration_ms: 3.5563
+  type: 'test'
+  ...
+# Subtest: abort and explicit close cannot be revived by a later valid request
+ok 129 - abort and explicit close cannot be revived by a later valid request
+  ---
+  duration_ms: 1.2228
+  type: 'test'
+  ...
+# Subtest: reentrant busy request has no queue and does not poison the valid winner
+ok 130 - reentrant busy request has no queue and does not poison the valid winner
+  ---
+  duration_ms: 0.5554
+  type: 'test'
+  ...
+# Subtest: size preflight matches canonical UTF-8 escaping with exact cap, cap-minus-one and no active input inspection
+ok 131 - size preflight matches canonical UTF-8 escaping with exact cap, cap-minus-one and no active input inspection
+  ---
+  duration_ms: 1.5544
+  type: 'test'
+  ...
+# Subtest: inner, header and response caps cannot be widened by the outer profile
+ok 132 - inner, header and response caps cannot be widened by the outer profile
+  ---
+  duration_ms: 0.8328
+  type: 'test'
+  ...
+# Subtest: public encoders do not inspect proxies, getters or toJSON inputs
+ok 133 - public encoders do not inspect proxies, getters or toJSON inputs
+  ---
+  duration_ms: 0.2649
+  type: 'test'
+  ...
+# Subtest: fresh nonempty bootstrap replays complete history then starts a new request counter at one
+ok 134 - fresh nonempty bootstrap replays complete history then starts a new request counter at one
+  ---
+  duration_ms: 8.9562
+  type: 'test'
+  ...
+# Subtest: response post-identity encoding requires an exact bounded four-tuple and carries no effect authority
+ok 135 - response post-identity encoding requires an exact bounded four-tuple and carries no effect authority
+  ---
+  duration_ms: 0.8087
+  type: 'test'
+  ...
+# Subtest: known post-state identities are checked independently of worker claims
+ok 136 - known post-state identities are checked independently of worker claims
+  ---
+  duration_ms: 3.9837
+  type: 'test'
+  ...
+1..136
+# tests 136
+# suites 0
+# pass 136
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1430.4192

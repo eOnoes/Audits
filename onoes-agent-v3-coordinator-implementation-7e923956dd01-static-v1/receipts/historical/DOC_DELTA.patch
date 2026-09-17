@@ -1,0 +1,503 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..c024e9e9b40c3b1be9f9e3e1244d939ddbd93449
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md
+@@ -0,0 +1,106 @@
++# V3 coordinator executable fault model
++
++2026-09-17. Test-only model, not the released coordinator. The real pure
++`createCandidateV3IncrementalClaims` participates in asynchronous staged/confirmed
++ordering. Ledger, anchor, owner, fence, authority and clocks are in-memory test
++stand-ins. They are intentionally mutable by a test driver; their booleans and
++strings prove no physical fact. No filesystem, SQL, process, provider, task or
++production consumer port is present. No claim of independent execution is made.
++
++`tests/helpers/candidate-v3-coordinator-model.ts` captures primitive candidate
++bytes and pre-state before advancing T, validates bound request/response messages,
++rechecks live epoch/head and complete pre-state, atomically assigns the modeled
++local inventory/history, reads it back, records an anchor attempt before contact,
++and promotes only after exact confirmation. A fault after staging closes T with
++no rewind. Fault cuts inside the simulated transaction are synchronous test
++instrumentation, not a proposed caller callback inside a real database transaction.
++
++The synthetic worker intentionally uses full reference history checks for its
++post-identity oracle as well as the actual incremental validator. This is useful
++for correctness testing, but is NOT the intended incremental worker's performance
++implementation. Repeated replay in this fixture must not be used to estimate the
++future worker's throughput or memory. The smaller message profile likewise is not
++the product's supported-capacity limit.
++
++## Controls exercised at model level
++
++| Controls | Executed failure seam / assertion |
++| --- | --- |
++| C01 | T advances, transactional preflight fails; later calls remain closed, no commit |
++| C02 | Changed metadata, history, same-count row, unrelated completed row, or optional A context rejects before write |
++| C03 / D4 | Wrong bound reply or live epoch/head drift after settlement rejects before transaction |
++| C04 | Caller container changes during await; persisted primitive bytes remain exactly staged |
++| C05 | Before/after local commit, read-back corruption/loss, before/after anchor append and pre-promotion loss; no compensating write or repeat |
++| C06 | Virtual deadline or abort returns while synthetic work is unsettled; replacement stays blocked, late success never promotes |
++| C07 | Revoked forward policy can witness a commit only with reserved settlement authority; owner remains closed afterward |
++| C08 | Crash at every named phase; existing owner blocks re-instantiation; explicit test retirement allows only fresh full equal-stream replay, no redispatch |
++| C09 | Competing client rejects with one pending request and no queue or second owner |
++| C10 / C13 | Full bootstrap stream relation; one-ahead, two-ahead, shorter, divergent and missing genesis reject normal startup; transaction identity covers the local tail |
++| C11 | Lost acknowledgment around outcome A / release B cannot yield forward readiness |
++| D3 message model | Strict bootstrap/append envelopes, operation/lifetime/request number, rehashed identity substitutions, stale bootstrap/prior append replies, result digest and distinct request/response caps |
++
++Eight outcome families have 53 successful sequential paired appends as positive
++controls. This is not exhaustive pairwise scheduling, independent verification,
++or proof that either physical side persists. Model crash leaves in-memory bytes
++available to inspection; it does not simulate OS power loss. The world retains
++its owner latch on faults; explicit test retirement is not authenticated fencing.
++
++## Executed producer evidence
++
++### Current bootstrap/lifetime follow-up
++
++At base `09be9332f9274c71373d1ce9192a0a0e57fdfe3d` plus explicit working-tree
++delta, test compilation/no-emit checks passed. The model now has **23** cases;
++focused data/record/inventory/pair/model **92/92**, zero failures/skips,
++1389.4636 ms. Full offline **2087 tests, 2085 pass, zero failures, two known
++skips**, 246919.845 ms. Window 2026-09-17T03:06:06Z–03:10:14Z, Node v24.14.0,
++win32 x64. Selected before/after source/compiled identities match. Exact evidence
++is `docs/reports/v3-worker-messages-20260917/` and supersedes the earlier run below
++for the current message-model bytes, without rewriting that historical receipt.
++Focused SHA-256: `a960ec0397490af5f905e53641010f3f0bac4e9f236825acb55117757fcef39c`.
++Full SHA-256: `e9b31e6ed7f50497f79b7903639acbc24b6965257088e1ee7edb8a8d4feb34ee`.
++The skips remain unavailable Windows symlink privilege and the non-Windows-only
++inspector refusal. The separate capacity probe has different exact source scope,
++commands and evidence; do not merge it into this test count.
++
++### Prior model-only checkpoint
++
++At base `2e1ec6db2c66df4d708b1b703000e09ff3199c07` plus the explicit new
++working-tree delta, direct test compilation and no-emit type checking passed.
++On win32 / Node v24.14.0, 2026-09-17T02:49:05Z–02:54:00Z:
++
++- Focused data/record/inventory/pair-claims/model: **87/87**, zero failures/skips,
++  1397.7352 ms. The model suite contributes 18 cases and 53 paired appends.
++- Full offline: **2082 tests, 2080 pass, zero failures, two skips**, 293148.7136 ms.
++  Skips are unavailable Windows symlink-creation privilege and the intentionally
++  non-Windows-only inspector refusal test. Neither proves link isolation.
++- Selected source/compiled dependency identities match before and after both
++  runs. Existing configured source-pattern scan passed; no secret-absence proof
++  beyond that scan is implied.
++
++Exact raw TAP, helper and receipt: `docs/reports/v3-coordinator-model-20260917/`.
++Focused TAP SHA-256:
++`9a1e7a464da4789a97362aa7e4a2307edfa8d2efbafc967264aa737d13d220e0`.
++Full TAP SHA-256:
++`f8e1a87384f0116bc454137a3127db7f8adcb20b551bc7964a1d7b811bf52305`.
++Receipt paths are private; any future public packet needs explicitly labelled
++sanitized derivatives and the operator's scoped transfer approval. These are
++producer executions, not independent verification or release acceptance.
++
++## Outstanding physical and capacity work
++
++C01-C13 physical composition remains NOT RUN. C12 maximum-history end-to-end
++allocation, deadline, stop and dashboard responsiveness is not covered even at
++model scale by the current small-fixture tests. True transactional isolation,
++cross-process ownership/races, storage protection, fresh authenticated anchor
++read-back, real worker request settlement, termination/descendants, persisted
++restart discovery and installer recovery require separately authorized physical
++tests. There is no one-ahead reconciliation implementation; the model denies it
++rather than creating an implicit repair path. D3 bootstrap JSON envelopes are now
++modeled; binary transport, authenticated lifetime and resource enforcement remain
++design-only. See WORKER_MESSAGE_DESIGN and the separate WORKER_CAPACITY_PROBE.
++
++This model is a combined-review input, not the production acceptance gate. Do not
++wire it through a runtime barrel or dashboard; do not convert test-world flags
++into trusted host APIs. Next work is the missing capacity/worker-boundary evidence
++and review of the proposed actual composition before activating any such boundary.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
+index 346eef7e92314f8d8671ca8153993501b5507a8a..58ecd556923850adee1381e0f129887debb3d0d3 100644
+--- a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md
+@@ -6,6 +6,11 @@ Source baseline `907f8962e92309675449bdc8d5a29e9bcb062089` plus separately ident
+ pairwise test additions. Read with V3_PERSISTENCE_DESIGN_DRAFT,
+ V3_INCREMENTAL_VALIDATION_DESIGN and WINDOWS_ENROLLMENT_RECOVERY_DESIGN.
+ 
++2026-09-17 follow-up: a test-only executable model now exercises staged/pair
++ordering against in-memory fault seams. See V3_COORDINATOR_MODEL and the proposed
++V3_WORKER_MESSAGE_DESIGN for D-3 fields/ceilings and exact unimplemented limits.
++This does not implement or close the physical controls in section 6.
++
+ ## 1. Scope of the proposed composition
+ 
+ The reviewed pure validator checks caller-supplied historical claims. This design
+@@ -37,17 +42,38 @@ fencing, capacity/retention and actual implementation are release blockers.
+   ledger, executable/worker, current coordinator and all relevant task contacts.
+   This is not an injected boolean or a UUID. Loss/uncertainty closes forward work.
+ 
+-Root and count alone are insufficient for transaction comparison. Bind the exact
+-canonical metadata, complete persisted inventory representation INCLUDING retained
+-settlement/A context, and complete checkpoint-history identity as well as head.
+-The proposed adapter must define a deterministic snapshot encoding; optional
+-context appearing/disappearing during that interval is drift, even if a record-only
+-root stays equal. Maintain private snapshot bytes/digests from bootstrap/confirmed
++Root and count alone are insufficient for transaction comparison. S's private
++pre-state identity is exactly the tuple <sha256(metadataWire),
++sha256(inventoryTransportWire), sha256(checkpointHistoryWire),
++head.checkpointDigest>. Hash the UTF-8 bytes of the existing strict canonical
++metadata wire, agent-candidate-inventory-transport/v1 wire (INCLUDING every
++recordWire, settlementWire and checkpointAWire), and
++agent-candidate-checkpoint-history/v1 wire. No adapter-selected encoding or new
++wire format is permitted. Reconstruct and compare this tuple from the ledger's
++complete transactional snapshot; compare the expected head digest separately as
++the fourth component. Optional context appearing/disappearing is drift even if a
++record-only root stays equal. Maintain private snapshot bytes/digests from bootstrap/confirmed
+ read-back; do not rely on snapshot() exposing the complete inventory (it does not).
+ No new canonical ledger wire or cryptographic authority is defined by these private
+ comparison identities. Hash equality assumes collision resistance and protected
+ source custody; coherent forged storage still requires the independent anchor.
+ 
++The ledger persists the complete retained checkpoint stream alongside its records
++in the same atomic local transaction. Step 6 appends C.checkpoint to that LOCAL
++stream before anchor confirmation; until step 7 succeeds, the local tail is an
++unconfirmed claim, not authority. The authenticated anchor stream is authoritative
++for confirmation. Bootstrap fully replays the local canonical history and compares
++every retained checkpoint to the authenticated anchor stream: either byte-identical
++streams, or local equals the full anchor prefix plus exactly ONE unconfirmed tail.
++The latter is closed to normal append/admission and can only enter the separately
++reviewed one-ahead reconciliation; it never permits a task. A shorter local stream,
++divergence anywhere (not just at the head), two-ahead state or missing genesis
++closes without repair. The in-transaction history identity always covers the whole
++local stream, including any unconfirmed tail. Confirmation is established by the
++stream comparison, not an extra local boolean or a new checkpoint field. A fresh
++normal append requires equal streams; a one-ahead result after local commit is
++only the current staged pair awaiting exact confirmation, never Ready(S').
++
+ The proposed validation worker is persistent for one coordinator lifetime so it
+ can retain T. Successful REQUEST settlement is distinct from PROCESS termination:
+ the fixed pinned worker must finish that bounded validation request with no
+@@ -72,8 +98,9 @@ cannot retain the claimed incremental composition or its measured cost.
+ 
+ There is no queue of future candidates and no concurrent append to T. Public
+ clients cannot submit an expected root/head or choose an alternate namespace to
+-override the private coordinator state. Proposed request sizes, total memory,
+-queue/connection and deadline ceilings must be selected before implementing this
++override the private coordinator state. V3_WORKER_MESSAGE_DESIGN now proposes
++numeric request, total memory, queue/connection and deadline ceilings for review.
++Measurement and OS enforcement remain required before implementing/admitting this
+ host; parser caps do not constitute total-process limits.
+ 
+ ## 4. One append from Ready(S)
+@@ -100,7 +127,10 @@ host; parser caps do not constitute total-process limits.
+    remain required. Drift, added contexts, deletion, replacement or changed history
+    deny before any write. Do not merely compare row count, final sequence or the
+    checkpoint subject. Do not call worker, anchor, consent or task callbacks here.
+-6. Apply only C's exact single change/checkpoint. Construct and validate the exact
++6. Apply only C's exact single change and append C.checkpoint to the ledger's
++   retained local checkpoint stream in that SAME local transaction. This creates
++   an unconfirmed tail until the independent anchor confirms the exact bytes.
++   Construct and validate the exact
+    post-state and compare to C inside the transaction, then commit. After commit,
+    obtain a fresh complete read-back in a separate bounded read transaction and
+    require exact C identity. The method must distinguish a known no-write rejection
+@@ -160,7 +190,7 @@ source, credentials and serialized rejected inputs do not leave the boundary.
+ | --- | --- |
+ | C01 | T advances to C but transaction rejects pre-write drift; next valid request still denies until fresh complete bootstrap, with zero effect calls. |
+ | C02 | Change an unrelated record, context A, metadata or history between capture and transaction while preserving count; each change denies before write. |
+-| C03 | Return a valid-shaped result for another request/epoch/pre-head; deny without commit/anchor/effect contact. |
++| C03 | Return a valid-shaped result for another request/epoch/pre-head, OR change the live head/epoch after worker settlement; deny before opening a transaction, with no commit/anchor/effect contact. |
+ | C04 | Mutate caller input after capture; persisted bytes must be exactly the privately staged candidate, or deny before contact. |
+ | C05 | Fail before commit, after durable commit/before response, during read-back and after anchor commit/before response; each cut yields the proper observed/unknown state, never compensation or repeat. |
+ | C06 | Delay worker settlement or anchor reply past deadline; no promotion/new effect even if a late reply says success. Unsettled physical activity keeps replacement blocked. |
+@@ -170,8 +200,9 @@ source, credentials and serialized rejected inputs do not leave the boundary.
+ | C10 | Ledger and anchor disagree in every allowed/forbidden direction; only exact reviewed one-ahead recovery can be considered, and it never performs a task. |
+ | C11 | Corrupt or lose acknowledgment between outcome/A/release/B; workspace stays unavailable until the exact required pair is confirmed. |
+ | C12 | At maximum history, enforce measured end-to-end allocation/deadline/stop bounds while dashboard cancellation remains responsive; do not substitute parser timing alone. |
++| C13 | At bootstrap and each append boundary compare complete local/anchor streams: equality permits only further admission checks; exactly one unconfirmed local tail permits only reviewed reconciliation/current staged settlement, never a new append/task; shorter local, any prefix divergence, two-ahead or missing genesis closes. Transactional history identity includes the unconfirmed tail. |
+ 
+-Pure predicate tests cannot close C01-C12. Start with a separately reviewed dormant
++Pure predicate tests cannot close C01-C13. Start with a separately reviewed dormant
+ composition and fault harness only after review of this design, and require real
+ physical evidence before consumer admission. Installation recovery, owner rotation,
+ retention and independent execution remain separate open requirements, not optional
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..8a90b31c70b0bd787c13f3f3f8d65697d9db2fc1
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md
+@@ -0,0 +1,61 @@
++# V3 coordinator review — receipt and bounded follow-up
++
++Received report from public report commit
++`24291ea7d430942eea91b527e9eef552c250bbc3`, whose parent is the exact audited
++packet commit `94932dd9f0089044a014c98a90fcf64ef0447393`. The report is the sole
++changed file. Both Git blob extraction and independent GitHub content read-back
++match 29,586 bytes, SHA-256
++`6fc4ac66b0acc1a7c9ad84af2ca93a5b6a0b3931bbae7816f77b09708a8ab0e2`.
++Exact original retained as `docs/reports/CLAUDE_V3_COORDINATOR_8C22FCA_2026_09_17.md`.
++Report text and dates are preserved, not normalized or rewritten by the producer.
++
++STATIC_SOURCE only; same Claude reviewer as the prior two reviews, not a second
++independent opinion. The reviewer did not execute subject tests. It permits the
++next dormant synthetic composition/fault harness after D-1/D-2 corrections, not
++real storage, authenticated owner, worker, consumer, task, installer or activation.
++The report explicitly says the advance expected manifest pin was not received.
++The operator was supplied that pin in chat, but no advance reviewer acknowledgment
++is evidenced; do not overwrite the report or retroactively call the ordering PASS.
++
++## Local follow-up evidence
++
++Direct TypeScript test compilation and no-emit type checking passed. The new
++test-only pair-claims suite passed 8/8 and checked 53 synthetic history prefixes
++across eight outcome families. The combined data/record/inventory/pair-claims
++regression run passed 69/69, zero failures or skips, in 1442.5997 ms. Raw TAP and
++before/after selected source and compiled identities are retained in
++`docs/reports/v3-pair-claims-20260917/`; all selected bytes were unchanged.
++TAP SHA-256: `bea356fa6fd79e00e1ba8e07da02600baa67e107bde10c473187bdbf0d819d5a`.
++These are producer-run claim-relation/identity checks, not a complete C01-C13
++composition harness, authenticated anchor, ledger transaction, worker, owner or
++effect execution. No production module changed in this follow-up.
++
++## Finding disposition
++
++- D-1: coordinator design now specifies the complete checkpoint stream persisted
++  atomically beside local records, a local unconfirmed tail before anchor append,
++  full local replay and comparison against the confirmed anchor stream. Exactly
++  one extra local tail allows only reviewed reconciliation/current settlement,
++  never ordinary append or a task. C13 names equal/shorter/divergent/two-ahead cuts.
++- D-2: pre-state identity explicitly hashes the existing canonical UTF-8 metadata,
++  complete inventory transport (including optional contexts), and history wires,
++  with head.checkpointDigest as the fourth component. No adapter-defined encoding.
++- D-3: proposed fields, lifecycle and numeric limits are now specified in
++  V3_WORKER_MESSAGE_DESIGN for the combined review. The executable model now checks
++  bootstrap/append envelopes and lifetime/request-number bindings. Independent disposition, physical bootstrap transport,
++  authenticated lifetime/IPC, physical worker implementation, termination and
++  resource enforcement remain OPEN; the specification alone does not close D-3.
++- D-4: C03 now also denies a live head/epoch change after worker settlement and
++  before any transaction, not only a mismatched response.
++- N-7: accepted evidence limitation; producer runtime/compiled claims and missing
++  advance-pin ordering stay distinct from static source inspection.
++- B-01 / B-03 / W1-W5: OPEN. Neither the report nor this follow-up grants physical
++  admission, reconciles real state, selects an anchor backend or resolves the
++  whole-PC rollback scope decision.
++
++The original 49-file public packet remains frozen. Its report can now be found at
++the exact requested GitHub path, which makes pickup unambiguous. No new audit is
++needed for the text edits alone: the requested next narrow review combines the
++corrected design, the C01-C13 synthetic composition harness and D-3 worker contract.
++Retain the current packet while its follow-up is unresolved; cleanup of the live
++tree later cannot remove public Git history.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..2928fc1fd3f0d9f6ced48b14f098918735a1004e
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md
+@@ -0,0 +1,80 @@
++# Fixed-child capacity/stop probe — not the product worker
++
++2026-09-17. Producer execution of fixed synthetic data validation in two sequential
++Node test children. No product worker, storage adapter, authenticated anchor, VM,
++provider, approval, task, installer or Windows configuration was activated.
++
++## Method and limits
++
++One normal sample, then one cancellation sample. Each child has a 180-second
++parent timeout and `--max-old-space-size=512` (V8 old-space, **not** OS/RSS/total
++process memory enforcement). There is at most one child, with a fixed script and
++minimal SystemRoot/TEMP/TMP environment, no stdin, bounded 64 KiB stdout, and no
++child-spawning code in its executed measurement branch. This is not a sandbox.
++
++The corpus is 1000 execute/completed operations: all reservations, then all five
++event rounds. Bootstrap sees 6000 checkpoints, then one final release reaches
++6001. This fills the operation ceiling, NOT the 7001 structural history ceiling,
++maximum permitted wire bytes, all event shapes or worst-case histories. Corpus
++generation is separate from validation timing. All original metadata, records,
++checkpoints, roots and historical generations use the existing pure contracts.
++
++The probe JSON-encodes/decodes bootstrap strings, performs full-reference
++bootstrap, one incremental append, a synthetic read-back snapshot validation,
++and hashes the post-state wires. It does not transmit a real IPC request or
++write/read SQLite/anchor storage. Parent 25 ms heartbeats measure the probe host's
++event-loop scheduling, not the real dashboard. No minimum-hardware or percentile
++result is claimed; compiler activity elsewhere overlapped part of this run.
++
++Cancellation is triggered 50 ms after the child reports bootstrap entry. The
++parent records the return from kill and then waits for **close**, not merely the
++kill return or stdout. This demonstrates direct test-child closure only; it is
++not authenticated request settlement, job-wide descendant termination, nor a
++replacement-worker admission witness.
++
++## Observed sample
++
++Node v24.14.0 / win32 x64; source base `09be9332f9274c71373d1ce9192a0a0e57fdfe3d`
++with the explicit working-tree delta recorded, selected source/compiled
++identities unchanged before/after. Window 2026-09-17T03:02:18Z–03:03:19Z.
++
++| Quantity | Observation |
++| --- | --- |
++| Final inventory | 6,819,063 bytes |
++| Bootstrap history | 5,379,600 bytes |
++| Encoded bootstrap probe envelope | 13,586,464 bytes |
++| Corpus setup (excluded below) | 19001.4916 ms |
++| JSON encode/decode | 85.6694 ms |
++| Full bootstrap | 21368.6174 ms |
++| Final incremental append | 618.3072 ms |
++| Synthetic read-back validation | 371.8989 ms |
++| Post-identity hashing | 8.3024 ms |
++| Sum of those measured validation/transport pieces | 22452.7953 ms |
++| Peak RSS including setup (Node-reported) | 328572 KiB |
++| Largest parent heartbeat interval, normal/cancel sample | 47.1992 / 46.3030 ms |
++| Cancellation kill-to-direct-child-close | 12.9506 ms |
++
++The normal child exited zero with no stderr; the cancellation child closed with
++SIGTERM and emitted no completion result. Neither hit the 180-second guard.
++The normal bootstrap sample fits the proposed 30-second bootstrap target, but
++one sample cannot establish usable margin or worst-case support. The 10-second
++ordinary-pair target is **not** verified by a 0.62-second pure append: database,
++authenticated IPC/anchor, checks and scheduling are missing.
++
++## Exact evidence and remaining acceptance
++
++`docs/reports/v3-worker-capacity-20260917/receipt.json` binds the helper, runtime,
++selected input identities, timestamps, both exits, raw stdout and byte hashes.
++Normal stdout SHA-256:
++`920ed8da7eeac84a872a0106def9297b7a76d7861746af34f28faf9bc7cbec92`.
++Cancelled stdout SHA-256:
++`ced8cb500cabf474eb79bea0b66b087c2fac5157991ac873549383b468d91b0b`.
++Exact script retained as `measure-v3-worker-capacity.mjs.txt`; private checkout
++paths require labelled sanitization before any approved public transfer.
++
++C12 remains PARTIAL at probe level and NOT RUN for actual composition. Missing:
++maximum-byte/adversarial histories, repeated/concurrent representative workloads,
++real coordinator/dashboard responsiveness, whole-process resource enforcement,
++storage/anchor latencies, physical settlement/descendants and independent runs.
++Do not silently lower product capacity or increase its proposed budgets to claim
++completion. This evidence informs the combined design/harness review, not release.
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..e754c17f9af9ec384d770df20cef4c124089fe1a
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md
+@@ -0,0 +1,127 @@
++# V3 validation worker message contract — proposed, not activated
++
++2026-09-17. Response to coordinator review D-3. This is the proposed contract for
++the next combined review, not a physical worker implementation or an authenticated
++IPC protocol. Existing canonical record, inventory and history wires do not change.
++The executable test model uses a distinct `synthetic-*` domain and smaller fixture
++limits; it must never become an implicitly authorized production adapter.
++
++## Identity and framing
++
++A future pinned worker belongs to one coordinator lifetime/current owner epoch.
++Host selection of that executable, private IPC, physical fencing, trustworthy
++request settlement and descendant termination are separate mandatory gates.
++Only primitive canonical UTF-8 JSON messages enter the parser. Reject BOM,
++duplicate or unknown fields, alternative serialization, invalid UTF-8, trailing
++frames and over-limit bytes before parsing or copying. Bound both the advertised
++length and bytes actually received. A length field or request digest is not a MAC.
++No paths, commands, environment values, task callbacks or real approval objects
++are carried. No result says `authorized`, `safeToExecute` or `processStopped`.
++
++The proposed single-flight append request contains exactly:
++
++- domain/version and operation `append`;
++- lifetime ID and monotonically increasing request number (no wrapping), plus a
++  fresh host-generated 128-bit random nonce, never generated by task input;
++- current authenticated owner epoch as an envelope binding, NOT a rewrite of
++  historical row owner generations;
++- four-element pre-identity: SHA-256 of exact existing canonical metadata,
++  inventory transport, retained local checkpoint history, and the head digest;
++- complete candidate inventory wire and checkpoint wire, each with SHA-256 of
++  its exact UTF-8 bytes (no JSON-string wrapping before hashing);
++- one absolute monotonic deadline in the lifetime's host clock domain.
++
++The request digest hashes the canonical complete request. The response echoes
++domain/version/operation, lifetime/request number/nonce, owner epoch, complete
++pre-identity, input/checkpoint digests, original deadline and request digest. It
++adds the four-element post-identity and a result digest over the complete response
++core excluding that digest. Response limits and canonical equality apply before
++any comparison. Every echo must match the private pending request; a correctly
++rehashed response for another request still fails. Worker-reported times never
++extend the host deadline. Shared monotonic clock conversion must be fixed and
++tested before physical implementation; raw clock values from unrelated processes
++are not assumed comparable.
++
++Bootstrap is a separate operation accepted only in Uninitialized: exact enrolled
++metadata, complete inventory/history wires, current epoch, independently discovered
++anchor stream identity, lifetime/request number/nonce/deadline. Full replay is
++mandatory; no cached-summary or serialized-T import is defined. The coordinator
++compares the full authenticated anchor stream itself; the worker cannot certify
++that caller-supplied discovery is authentic. Bootstrap response echoes all request
++bindings and the reconstructed identity/summary. Error output is a fixed bounded
++failure code with request binding, never rejected input, paths or raw exceptions.
++
++The harness now tests primitive canonical bootstrap and append envelopes,
++operation/lifetime/request-number/nonce/epoch echoes, all input identities,
++request/result digests, pre/post identity, deadline and strict version. Bootstrap
++is request zero; appends increase within that lifetime. Responses have a separate
++16 KiB cap. A stale bootstrap reply, rehashed wrong identity or bootstrap-state
++drift cannot create a ready owner. Its deterministic UUID counter is synthetic,
++NOT secure nonce generation. Physical binary transport/UTF-8 decoder, shared
++clock conversion and authenticated IPC are still not implemented by that helper.
++
++## Lifetime and late-message table
++
++| State | Accepted transition | Denial/stop behavior |
++| --- | --- | --- |
++| Uninitialized | One full bootstrap under fresh custody/discovery | Any append or summary import closes |
++| Ready/confirmed | One append captured from private S before T advances | Busy caller rejects, zero queue; no second T owner |
++| Validating | Exactly matching response and independently established request settlement | Mismatch, timeout, abort, worker loss or malformed transport closes |
++| Staged/T advanced | Local transaction, read-back, exact anchor append/confirmation | No second worker append while pair is unconfirmed |
++| Pair confirmed | Promote S and permit the next request if authority remains current | Revocation may settle the old pair but never grants new task authority |
++| Closed | Bounded diagnostics; termination and fresh-owner recovery only | Late/duplicate response discarded; no rewind, retry or replacement from a local reset |
++
++Request completion permits the fixed persistent worker to remain alive. It does
++not prove process exit. On close, outstanding activity remains unsettled until
++independently confirmed; losing the IPC channel is not a stop witness. Replacement
++requires confirmed termination of relevant work, fresh ownership/fencing/discovery
++and full replay. The protocol has no message that clears a poisoned lifetime.
++
++## Numeric ceilings selected for review, NOT capacity evidence
++
++Proposed production admission profile: one worker per owned store, one pending
++request, **zero queued requests**, one IPC connection, one complete response
++(16 KiB maximum). Inner metadata is at most 1,024 bytes; inventory and retained
++history each at most 64 MiB; a checkpoint at most 4,096 bytes; 1,000 operations
++and at most 7,001 retained checkpoints as already capped by the pure parser.
++
++Bootstrap envelope cap: **256 MiB + 64 KiB**; append envelope cap: **128 MiB +
++64 KiB**. These allow JSON re-escaping of the canonical inner strings plus fixed
++metadata. Both inner and outer caps apply, so available envelope space cannot
++increase an inner limit. Encoding must reject before exceeding the envelope;
++streaming bounded transport does not mean unbounded buffering is allowed.
++
++Absolute budgets proposed for measurement: bootstrap **30 seconds**, ordinary
++append/pair **10 seconds** overall with no phase reset, stop confirmation **5
++seconds** separately. Expiration denies rather than stretching a lease. A host
++watchdog must enforce deadlines while the worker is synchronously validating.
++Proposed process budgets: **2 GiB committed memory per validation worker**,
++**2 GiB per dedicated coordinator host**, **4 GiB combined**; a separate dashboard
++must stay responsive. OS/job enforcement and measured accounting of encoded,
++decoded, staged, retained, native and queued memory are prerequisites, not facts
++established by these numbers. Do not allocate these amounts on the operator's PC
++or alter its limits merely because this design names them.
++
++If maximum-history workloads cannot fit these limits, the gate fails. Do not
++lower supported capacity, skip full bootstrap, increase budgets silently, or
++activate a narrower product as if it met the requested release. Resolve the
++algorithm/retention/resource design with evidence and review first.
++
++Test-only profile: 256 KiB request cap, 16 KiB response cap, one pending/zero queued requests,
++1,000 ms **virtual** append deadline. Its immediate clock notifications exercise
++closure while a gate remains pending; they are not a real watchdog, memory cap,
++deadline benchmark or proof of dashboard responsiveness at maximum history.
++
++## Review and acceptance still required
++
++D-3 is specified for review, not independently closed. Review the corrected pair
++design, this proposed message contract and the fault model together. C12 real
++maximum-history allocation/deadline/stop behavior is still NOT RUN. Physical
++B-03/W1-W5, real owner/anchor authentication and IPC/executable custody are open.
++No installer, real storage, worker launch, OS setting, provider or task is enabled.
++
++The separate fixed-child capacity probe is recorded in V3_WORKER_CAPACITY_PROBE.
++It measures a 1000-operation dense corpus, encoding, reference bootstrap, pure
++append, synthetic read-back validation and direct test-child cancellation. It
++does not instantiate this product worker or implement the proposed IPC/storage
++pair. Its result cannot close C12 or authorize those physical components.

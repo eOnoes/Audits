@@ -1,0 +1,110 @@
+{
+  "kind": "historical-doc-delta-supplement-not-frozen-packet-edit",
+  "baseline": "8c22fcaea18088ab2118fe89959bf609878c92aa",
+  "sourceRevision": "5f974a28bf34e097713a17020e3b7b086102d22e",
+  "members": [
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md",
+      "status": "modified",
+      "baseline": {
+        "byteLength": 13472,
+        "sha256": "5e352bd541ce8e114807d0f800ba0ce5bd8d612a3a365feb5f1ce18fab6c4f23",
+        "gitBlobOid": "346eef7e92314f8d8671ca8153993501b5507a8a"
+      },
+      "current": {
+        "byteLength": 16093,
+        "sha256": "a79cb11ab1ace5301ccb3ca67e8ba5e94d0ae2f0a00e29a1946a1309c14e520e",
+        "gitBlobOid": "58ecd556923850adee1381e0f129887debb3d0d3"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "byteLength": 8449,
+        "sha256": "549ce7ddec0f5f24c5c0f1c12fc16b6963d18bbc80d5b8f0d5cee35951ff80ee",
+        "gitBlobOid": "e754c17f9af9ec384d770df20cef4c124089fe1a"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "byteLength": 7154,
+        "sha256": "1fa98e30ddbd6cf831b21beb87a055e1470ba8516ec679c6555e7a994a5542af",
+        "gitBlobOid": "c024e9e9b40c3b1be9f9e3e1244d939ddbd93449"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "byteLength": 4460,
+        "sha256": "2d8da6ca6e4c2417a9e21e981a9a4d5e251283d60acc3b4a121910fe39a4f058",
+        "gitBlobOid": "2928fc1fd3f0d9f6ced48b14f098918735a1004e"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md",
+      "status": "added",
+      "baseline": null,
+      "current": {
+        "byteLength": 4029,
+        "sha256": "1ee7fff3ff1c8cd8cf8b764b378817dfd48b0b1cbdd9ffc4226180a02ff42393",
+        "gitBlobOid": "8a90b31c70b0bd787c13f3f3f8d65697d9db2fc1"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "status": "unchanged",
+      "baseline": {
+        "byteLength": 27087,
+        "sha256": "14c368bc6a25307c5c73cd070e76b0b0c4954b86e9603d4f1a5197ea3e006ab6",
+        "gitBlobOid": "3a8c5f20f168b2df9f3da4d0026368f6ccb7a4ec"
+      },
+      "current": {
+        "byteLength": 27087,
+        "sha256": "14c368bc6a25307c5c73cd070e76b0b0c4954b86e9603d4f1a5197ea3e006ab6",
+        "gitBlobOid": "3a8c5f20f168b2df9f3da4d0026368f6ccb7a4ec"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_PERSISTENCE_DESIGN_DRAFT.md",
+      "status": "unchanged",
+      "baseline": {
+        "byteLength": 18136,
+        "sha256": "57e61b6cacb918dd21e0a1e9a0eb8e5c24b4d7ce423a2406b72fc74fa9553171",
+        "gitBlobOid": "53b5afcb0aecf3825e125a225a554c9d03452d2b"
+      },
+      "current": {
+        "byteLength": 18136,
+        "sha256": "57e61b6cacb918dd21e0a1e9a0eb8e5c24b4d7ce423a2406b72fc74fa9553171",
+        "gitBlobOid": "53b5afcb0aecf3825e125a225a554c9d03452d2b"
+      }
+    },
+    {
+      "path": "docs/handoff/ONOES_AGENT_V3_INCREMENTAL_VALIDATION_DESIGN.md",
+      "status": "unchanged",
+      "baseline": {
+        "byteLength": 14641,
+        "sha256": "96486e680869593372a9a038fd5d05c14b8da7dc57f515524bb362a5fcafa670",
+        "gitBlobOid": "6a651c0bb5cb8ba64c3d5333ee44ce0b2309ca0b"
+      },
+      "current": {
+        "byteLength": 14641,
+        "sha256": "96486e680869593372a9a038fd5d05c14b8da7dc57f515524bb362a5fcafa670",
+        "gitBlobOid": "6a651c0bb5cb8ba64c3d5333ee44ce0b2309ca0b"
+      }
+    }
+  ],
+  "patch": {
+    "path": "DOC_DELTA.patch",
+    "byteLength": 34898,
+    "sha256": "cca3d14c414671140496f513f684f3eeb558730107a2666791dad777910042f2",
+    "gitBlobOid": "2427ca32bffcb2409eecfdbac1a31076a9aca663"
+  },
+  "evidence": "Local Git blobs; not independent publisher membership proof."
+}

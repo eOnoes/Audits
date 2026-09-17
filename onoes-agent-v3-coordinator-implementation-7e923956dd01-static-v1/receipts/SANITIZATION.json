@@ -1,0 +1,15 @@
+{
+  "status": "configured tripwires pass",
+  "method": "minimum selected exact source plus explicit JSON/helper private-root replacements",
+  "excluded": [
+    "credentials",
+    "private logs",
+    "VM images",
+    "full project",
+    "private paths",
+    "runtime dependencies"
+  ],
+  "limitations": [
+    "Not proof of absence of every secret. No external transfer performed."
+  ]
+}

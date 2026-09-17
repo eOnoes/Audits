@@ -1,0 +1,149 @@
+{
+  "revision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+  "executionBase": "9643c6ee377f959f2cbedf2c4d9051fcec71651b",
+  "workingTreeDelta": true,
+  "executionMatches": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "byteLength": 6084,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "byteLength": 11265,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "byteLength": 13106,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "byteLength": 5539,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-messages.ts",
+      "sha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "byteLength": 10186,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "sha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "byteLength": 5289,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "sha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "byteLength": 4578,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "sha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "byteLength": 11846,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "byteLength": 9092,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteLength": 4581,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteLength": 378,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "byteLength": 6284,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "byteLength": 7610,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-pair-claims.ts",
+      "sha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "byteLength": 2693,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "sha256": "cc3ef09915bc1b76177949ecff7af734dbe9a7d7ff6c6c6e5703bec30461ec91",
+      "byteLength": 17460,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "sha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "byteLength": 5294,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "sha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "byteLength": 9936,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "sha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "byteLength": 12586,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "sha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "byteLength": 29964,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "sha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee",
+      "byteLength": 5542,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "sha256": "45b2e60b521db243b9b7e7957e90d859b5fd7d1607ccb9712fdc957e4aaab4d0",
+      "byteLength": 24217,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-validation-session.test.ts",
+      "sha256": "dad1063bf00b920d0078125c5dd9a73810b1bcc8717007217d1c54c71605aab5",
+      "byteLength": 19186,
+      "matchesCurrentSource": true
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "sha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "byteLength": 21038,
+      "matchesCurrentSource": true
+    }
+  ],
+  "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+  "fullProductIdentityNotEstablished": true,
+  "configRelation": "Exact executed CRLF copies supplied; selected Git configs differ ONLY by CRLF-to-LF. Not EXACT_TREE.",
+  "compiledDependencies": "Hashes only; runtime/compiled artifacts are not shipped."
+}

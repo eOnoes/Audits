@@ -1,0 +1,360 @@
+{
+  "auditId": "onoes-agent-v3-coordinator-implementation-7e923956dd01-static-v1",
+  "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+  "provenance": "publisher-local-git-not-independent-bundle",
+  "memberCount": 44,
+  "members": [
+    {
+      "productPath": "src/build-only/windows-candidate-v3-data.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-data.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "byteLength": 6084,
+      "gitBlobOid": "742967e6e54a69d1afed05f2c6eca7a0a3d76c7e"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-record.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-record.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "byteLength": 11265,
+      "gitBlobOid": "5df15ac2ec527430c8cdc7de855f223d315e5632"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-inventory.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-inventory.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "byteLength": 13106,
+      "gitBlobOid": "d02251b4f8d4681353e74f01b5245564c6b533f3"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-incremental.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-incremental.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "byteLength": 5539,
+      "gitBlobOid": "976f376e40102450380a3fe984f5aba4dd659556"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-messages.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-messages.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "byteLength": 10186,
+      "gitBlobOid": "a97f13ab8ba3581d04c709470f8066f869404de4"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-validation-session.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "byteLength": 5289,
+      "gitBlobOid": "112962a17d272709717bbb26acaf79da9536a044"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "byteLength": 4578,
+      "gitBlobOid": "53e4a37657803493cac72280be200d0b76fc80f4"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "packetPath": "source/src/build-only/windows-candidate-v3-coordinator.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "byteLength": 11846,
+      "gitBlobOid": "befae585148326d8bf077afbf8fe92566e53ff91"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-data.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-data.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "byteLength": 9936,
+      "gitBlobOid": "4b6296a4958cabf6494dec475a09c81c5bb4c4d1"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-record.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-record.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "byteLength": 12586,
+      "gitBlobOid": "8128fbb02ac6d7b256c0062676f2d6e8b26fa917"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-inventory.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "byteLength": 29964,
+      "gitBlobOid": "e3c2d36491e274ebf54b6b7fb3de4d589060fc29"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee",
+      "byteLength": 5542,
+      "gitBlobOid": "80764dcc40f58be47e23dd53085005de948ad29a"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "45b2e60b521db243b9b7e7957e90d859b5fd7d1607ccb9712fdc957e4aaab4d0",
+      "byteLength": 24217,
+      "gitBlobOid": "d63f03902089806a23b21c1de6ee415d37605d19"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-validation-session.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-validation-session.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "dad1063bf00b920d0078125c5dd9a73810b1bcc8717007217d1c54c71605aab5",
+      "byteLength": 19186,
+      "gitBlobOid": "884e904c90b7cb8e74a6ebee6f097f50808d667e"
+    },
+    {
+      "productPath": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "packetPath": "tests/tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "byteLength": 21038,
+      "gitBlobOid": "aaa8cc5583c71a7a027e5381a3fa7007ae150386"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_DORMANT_COORDINATOR.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "b408342d8f6c4d47d9343543407740146fa45033546cba5a0eae733ff6ee13ca",
+      "byteLength": 10028,
+      "gitBlobOid": "b6b817b5d99c4d51e27a75e9e949d7f11bec51ce"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_VALIDATION_SESSION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_VALIDATION_SESSION.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "630712cf47d8a573ba36d9d7f52550b485e3913bc9d1ada60fb8076caf9f86ba",
+      "byteLength": 7862,
+      "gitBlobOid": "fe7e9de5d83675ebf9900661277bb5f049e0dc0d"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_PAIR_DESIGN.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "d5ed23e0d1b1aa7f8fde791c354d05add0cf69c5ba89194dc7baabc85342ca79",
+      "byteLength": 16791,
+      "gitBlobOid": "c816c26e6fe8b75eeeb121aa3109278444cc6b03"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_WORKER_MESSAGE_DESIGN.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "edeac994e9da470e2cfdb2895993b661bfc6bfa7b6cace605762bd8d69a968da",
+      "byteLength": 11176,
+      "gitBlobOid": "7dcd7bde4509f80b57447889b996cabdbd25827c"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_MODEL.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "afbeb044c8c2f1dc4bbc8acf0ab1f26907145d9b4830aef38823b5914841cca0",
+      "byteLength": 8596,
+      "gitBlobOid": "087cb84c054eb55739456ef47ad161db0b314e88"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_WORKER_CAPACITY_PROBE.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "2d8da6ca6e4c2417a9e21e981a9a4d5e251283d60acc3b4a121910fe39a4f058",
+      "byteLength": 4460,
+      "gitBlobOid": "2928fc1fd3f0d9f6ced48b14f098918735a1004e"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_COORDINATOR_REVIEW_DISPOSITION.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "1ee7fff3ff1c8cd8cf8b764b378817dfd48b0b1cbdd9ffc4226180a02ff42393",
+      "byteLength": 4029,
+      "gitBlobOid": "8a90b31c70b0bd787c13f3f3f8d65697d9db2fc1"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_MODEL_REVIEW_DISPOSITION.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_MODEL_REVIEW_DISPOSITION.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "c0f592238e690a3208e4d5597f5d8d101dcba1e0ec76a3de3d722332d7f3666e",
+      "byteLength": 6067,
+      "gitBlobOid": "b9ffa87796e788cff3c1698f0f806aa8bac6d208"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_CANDIDATE_CONSUMER_CONTRACT_V3.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "14c368bc6a25307c5c73cd070e76b0b0c4954b86e9603d4f1a5197ea3e006ab6",
+      "byteLength": 27087,
+      "gitBlobOid": "3a8c5f20f168b2df9f3da4d0026368f6ccb7a4ec"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_PERSISTENCE_DESIGN_DRAFT.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_PERSISTENCE_DESIGN_DRAFT.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "57e61b6cacb918dd21e0a1e9a0eb8e5c24b4d7ce423a2406b72fc74fa9553171",
+      "byteLength": 18136,
+      "gitBlobOid": "53b5afcb0aecf3825e125a225a554c9d03452d2b"
+    },
+    {
+      "productPath": "docs/handoff/ONOES_AGENT_V3_INCREMENTAL_VALIDATION_DESIGN.md",
+      "packetPath": "source/docs/handoff/ONOES_AGENT_V3_INCREMENTAL_VALIDATION_DESIGN.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "96486e680869593372a9a038fd5d05c14b8da7dc57f515524bb362a5fcafa670",
+      "byteLength": 14641,
+      "gitBlobOid": "6a651c0bb5cb8ba64c3d5333ee44ce0b2309ca0b"
+    },
+    {
+      "productPath": "tsconfig.json",
+      "packetPath": "source/tsconfig.json",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "8c822198f0ad6733d8630470a5e12c41e9607a54b38ec8266a9818c27cb2065e",
+      "byteLength": 638,
+      "gitBlobOid": "0e4f41fae7583e14588a57b04bbacf9f87ed9b1e"
+    },
+    {
+      "productPath": "tsconfig.test.json",
+      "packetPath": "source/tsconfig.test.json",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "241e1941692ccede2c4a2a9f39cfc5fa6ce8de46aa1bf1c94361d0242a648295",
+      "byteLength": 154,
+      "gitBlobOid": "7c0f33a1a2c8a677ed9e7fea74be04849b787c2a"
+    },
+    {
+      "productPath": "src/compatibility/canonical-json.ts",
+      "packetPath": "source/src/compatibility/canonical-json.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "byteLength": 4581,
+      "gitBlobOid": "ac2bbf20f26a59742496063da80270b521d8a2f7"
+    },
+    {
+      "productPath": "src/validation/deep-freeze.ts",
+      "packetPath": "source/src/validation/deep-freeze.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "byteLength": 378,
+      "gitBlobOid": "80c50ff8ee793f6ff62dc619eae705a54b4dadcf"
+    },
+    {
+      "productPath": "src/build-only/windows-candidate-effect-state.ts",
+      "packetPath": "source/src/build-only/windows-candidate-effect-state.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "byteLength": 9092,
+      "gitBlobOid": "602eb30a5c7ac807df77947f78895031bd3b7c1d"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-record-fixture.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-record-fixture.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "byteLength": 6284,
+      "gitBlobOid": "923fc068f172566a4c71bbcccb6e2ee1f07e0fd7"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-pair-claims.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-pair-claims.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "byteLength": 2693,
+      "gitBlobOid": "c120d1f6a705a44e9835124da25d1bb170246908"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-history-fixture.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-history-fixture.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "byteLength": 7610,
+      "gitBlobOid": "bd29fbec5ae5b76662b11087d7613a5b928f1652"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-coordinator-model.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "cc3ef09915bc1b76177949ecff7af734dbe9a7d7ff6c6c6e5703bec30461ec91",
+      "byteLength": 17460,
+      "gitBlobOid": "c85a54c308312bd0e8ff3506b336233c1ca91889"
+    },
+    {
+      "productPath": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "packetPath": "tests/tests/helpers/candidate-v3-coordinator-ports.ts",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "byteLength": 5294,
+      "gitBlobOid": "a609d53d4ed5f312dce943d99079ab7e4a6cf1a0"
+    },
+    {
+      "productPath": "docs/reports/CLAUDE_V3_COORDINATOR_MODEL_5F974A2_2026_09_17.md",
+      "packetPath": "receipts/PRIOR_REPORT.md",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "662275b632d38487f206c17042c0bb879e495caa0f058ed66ca70d3aecf13012",
+      "byteLength": 57152,
+      "gitBlobOid": "2c776dd821f7e91068c9ab71fee48ad43c86b53b"
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/EXECUTION_INDEX_MATCH.json",
+      "packetPath": "receipts/current/EXECUTION_INDEX_MATCH.json",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "17056a4208b34c5529d5238c317398e5ebda66ca47a66b37f08fd7055a647412",
+      "byteLength": 8502,
+      "gitBlobOid": "5f2d738a83f9d2a80dfebdf0d8da8f81806b3617"
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/EXECUTED_tsconfig.json.txt",
+      "packetPath": "receipts/current/EXECUTED_tsconfig.json.txt",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "b10f110554b786bbe630b64c84427b6a290549375f3bdead816fa9646f385ada",
+      "byteLength": 660,
+      "gitBlobOid": "08a20cc966a8a82945725b734fef8671df5d716d"
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/EXECUTED_tsconfig.test.json.txt",
+      "packetPath": "receipts/current/EXECUTED_tsconfig.test.json.txt",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "e62f07f54178b804c1fe238feee57ee0ca1ad239a2f065630fcc67ed56ffde92",
+      "byteLength": 163,
+      "gitBlobOid": "af403dce314ef88b235ebb2cb025992789409214"
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/focused.tap",
+      "packetPath": "receipts/current/focused.tap",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "f81277ffd6ee92cc211b909b4f2a3492ee905ef3e29f67e2291d4fe8e6c3f98a",
+      "byteLength": 32616,
+      "gitBlobOid": "bc66d77894561c3f3e4a7fc3e4e975a3f7fd7986"
+    },
+    {
+      "productPath": "docs/reports/v3-coordinator-20260917/full.tap",
+      "packetPath": "receipts/current/full.tap",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "25f65dc8d982701f652afcf14c72b2574304ce98b2118c87b9476428597f8f51",
+      "byteLength": 495124,
+      "gitBlobOid": "6c9a253c59367d69fba625e5f07085ab3e0bb9d5"
+    },
+    {
+      "productPath": "docs/reports/v3-model-review-followup-20260917/DOC_DELTA.json",
+      "packetPath": "receipts/historical/DOC_DELTA.json",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "f16d579f9c137036f8476aefedc539f546d8802ea81d906e13304f5836f133b3",
+      "byteLength": 3994,
+      "gitBlobOid": "0c6d4a930eccbb5068cddab96a64d53edf3d8e8f"
+    },
+    {
+      "productPath": "docs/reports/v3-model-review-followup-20260917/DOC_DELTA.patch",
+      "packetPath": "receipts/historical/DOC_DELTA.patch",
+      "sourceRevision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+      "sha256": "cca3d14c414671140496f513f684f3eeb558730107a2666791dad777910042f2",
+      "byteLength": 34898,
+      "gitBlobOid": "2427ca32bffcb2409eecfdbac1a31076a9aca663"
+    }
+  ]
+}

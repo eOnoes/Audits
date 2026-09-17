@@ -1,0 +1,192 @@
+{
+  "result": "verified",
+  "identities": 49,
+  "indexMatches": [
+    {
+      "path": "src/build-only/windows-candidate-v3-data.ts",
+      "executedSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "indexSha256": "4731e9871acc8175b2b1a7ff09999aa2fe9d46e2d5cf32f978dfcd5b73bf27c2",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-record.ts",
+      "executedSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "indexSha256": "5c85cc13739f03b8daf1b1bae187732fac25431b044453598d99556fd842c8ef",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-inventory.ts",
+      "executedSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "indexSha256": "668599f256016ee5cf16f2c9c3ce1d1f9cca49fcb8593f9f1e89ae2fd62365ba",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-incremental.ts",
+      "executedSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "indexSha256": "4d2da371bc5c0d70ebd25cd6df75e3935c262cb3d62dd48e0d9d45ff7632d636",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-messages.ts",
+      "executedSha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "indexSha256": "4d53d888056084569ae7757b2f1cd9d5bd72127fe8ccf44146d870670bcbefb6",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-validation-session.ts",
+      "executedSha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "indexSha256": "b2b4fdf2fd8341625a3b2052df222e18a56a101f7dec017cc310459898bc2360",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-coordinator-data.ts",
+      "executedSha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "indexSha256": "170bdaa6c22e65d97e16d5de3b3aafa4fb15a69561e79e37e26ebcb9365d0869",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-v3-coordinator.ts",
+      "executedSha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "indexSha256": "135e0a98395374c35d1fccd00f06bba1506460f62211d40b12b70d38c8f7b5b8",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/build-only/windows-candidate-effect-state.ts",
+      "executedSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "indexSha256": "4ba88b9e8441856ef8a753ab01aa74c51097c38c1f0602a021448fbb955974d9",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/compatibility/canonical-json.ts",
+      "executedSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "indexSha256": "5615f2c1374bd71d1691527a1a970bb3d884540a642a980bf32b7e8ae5af5424",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "src/validation/deep-freeze.ts",
+      "executedSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "indexSha256": "dc94b0e018faa5b70f7277141e7b15a1da7d5e1b36ab34c4c2e5ca31004b53fc",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-record-fixture.ts",
+      "executedSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "indexSha256": "e96af09f77418a9aec79d411ccfa642da8e4b173be5ef4170fab0b527cb7b12d",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-history-fixture.ts",
+      "executedSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "indexSha256": "7f8f013def8c0784043dbe7147cfde9239da52a96581d3744e2afcebae62c5df",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-pair-claims.ts",
+      "executedSha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "indexSha256": "07cab32858056079ab3c00ea5207b010ae05f0c969919a0a0447c8d8b0c0339e",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-coordinator-model.ts",
+      "executedSha256": "cc3ef09915bc1b76177949ecff7af734dbe9a7d7ff6c6c6e5703bec30461ec91",
+      "indexSha256": "cc3ef09915bc1b76177949ecff7af734dbe9a7d7ff6c6c6e5703bec30461ec91",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/helpers/candidate-v3-coordinator-ports.ts",
+      "executedSha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "indexSha256": "83a671c91e51d8084af092f0c287dd12b07c7f2dca5da4186cf51801f380d231",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-data.test.ts",
+      "executedSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "indexSha256": "7f7301922da1a41138309840fc48b21dd27f30a5c410ea23612406f6ebc89067",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-record.test.ts",
+      "executedSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "indexSha256": "e2018d69120787968ac5cb4362d222eef83a44ecfcbb14e6874ae499ab07e97e",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-inventory.test.ts",
+      "executedSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "indexSha256": "20058e61017bc17fd205e62a52d52b56997674c2833436f3541c3d3942cfbeb8",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-pair-claims.test.ts",
+      "executedSha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee",
+      "indexSha256": "a6cc70ed126a2038534dd720834a8ddb2d8c37f94e1a48a8edf9df100c7fcdee",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-coordinator-model.test.ts",
+      "executedSha256": "45b2e60b521db243b9b7e7957e90d859b5fd7d1607ccb9712fdc957e4aaab4d0",
+      "indexSha256": "45b2e60b521db243b9b7e7957e90d859b5fd7d1607ccb9712fdc957e4aaab4d0",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-validation-session.test.ts",
+      "executedSha256": "dad1063bf00b920d0078125c5dd9a73810b1bcc8717007217d1c54c71605aab5",
+      "indexSha256": "dad1063bf00b920d0078125c5dd9a73810b1bcc8717007217d1c54c71605aab5",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tests/unit/windows-candidate-v3-coordinator.test.ts",
+      "executedSha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "indexSha256": "650b7388be7415b30be9b996472d79b9383cad1226ea272fe758f6535997c978",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "package-lock.json",
+      "executedSha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24",
+      "indexSha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24",
+      "relation": "byte-identical"
+    },
+    {
+      "path": "tsconfig.json",
+      "executedSha256": "b10f110554b786bbe630b64c84427b6a290549375f3bdead816fa9646f385ada",
+      "indexSha256": "8c822198f0ad6733d8630470a5e12c41e9607a54b38ec8266a9818c27cb2065e",
+      "relation": "executed-config-CRLF-index-LF-only"
+    },
+    {
+      "path": "tsconfig.test.json",
+      "executedSha256": "e62f07f54178b804c1fe238feee57ee0ca1ad239a2f065630fcc67ed56ffde92",
+      "indexSha256": "241e1941692ccede2c4a2a9f39cfc5fa6ce8de46aa1bf1c94361d0242a648295",
+      "relation": "executed-config-CRLF-index-LF-only"
+    }
+  ],
+  "runs": [
+    {
+      "name": "focused",
+      "summary": [
+        "# tests 136",
+        "# pass 136",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# duration_ms 1430.4192"
+      ],
+      "skipLines": []
+    },
+    {
+      "name": "full",
+      "summary": [
+        "# tests 2131",
+        "# pass 2129",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 2",
+        "# duration_ms 241363.9444"
+      ],
+      "skipLines": [
+        "ok 719 - symlinked binary paths are rejected where the host permits link creation # SKIP Windows link creation privilege unavailable",
+        "ok 1754 - managed inspector refuses unsupported hosts rather than claiming Windows evidence # SKIP"
+      ]
+    }
+  ],
+  "receiptSha256": "d3dda7803fff8d093b6ccbbe1529f396b61b85f0249a504f4f8d6a486f10aa5a"
+}

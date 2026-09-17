@@ -1,0 +1,5 @@
+# Awaiting external review
+
+No report exists for this input at preparation. The prior report is historical input only. New outputs are not added to the frozen input manifest. Do not overwrite that report or any existing output.
+
+Report repository: eOnoes/Audits. Branch: main. Exact output: onoes-agent-v3-coordinator-implementation-7e923956dd01-static-v1/reports/AUDIT_REPORT.md. Only add the sanitized completed Markdown report using existing authorized access. Check current workflow files AND activation state first; if Actions could run or status is unknown, stop and ask Eddie for specific approval. No subject/input/manifest edits, branches, PRs, force-push, deletion, builds, installs, subject execution, providers or charges. Preserve prior outputs with the next numbered AUDIT_REPORT_ADDENDUM_N.md. Read back the committed report bytes and return its immutable link/commit, distinct from the input commit. If write access is unavailable, return the complete Markdown with REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS and this exact output path. Never request secrets. Public history persists after cleanup.

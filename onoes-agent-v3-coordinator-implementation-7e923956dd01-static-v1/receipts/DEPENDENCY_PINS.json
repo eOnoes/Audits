@@ -1,0 +1,25 @@
+{
+  "kind": "selected-lock-data-not-installed-dependency-verification",
+  "lockSha256": "48466af46fba81d63121e53b354a0f4e0ff3e63ed65becffbb741b2a99254b24",
+  "lockGitBlobOid": "e7226a428c03ab0f2ffe412cd735a09a9c1ff080",
+  "lockByteLength": 18577,
+  "nodeVersion": "v24.14.0",
+  "selected": [
+    {
+      "path": "node_modules/zod",
+      "version": "4.4.3",
+      "integrity": "sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ=="
+    },
+    {
+      "path": "node_modules/typescript",
+      "version": "5.9.3",
+      "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="
+    },
+    {
+      "path": "node_modules/@types/node",
+      "version": "24.13.3",
+      "integrity": "sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q=="
+    }
+  ],
+  "exclusions": "Full product manifest/lock/scripts and third-party package bytes are deliberately not distributed. No runnable extract or installed integrity claim."
+}

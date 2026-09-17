@@ -1,0 +1,13 @@
+{
+  "auditId": "onoes-agent-v3-coordinator-implementation-7e923956dd01-static-v1",
+  "revision": "7e923956dd014f44e8eb20449499de31c3e4d7f7",
+  "baseline": "5f974a28bf34e097713a17020e3b7b086102d22e",
+  "templateRevision": "94932dd9f0089044a014c98a90fcf64ef0447393",
+  "statusAtPreparation": "prepared-local-not-published",
+  "proposedReviewer": "Claude via operator-mediated session; not confirmed for this new source transfer",
+  "reportPath": "onoes-agent-v3-coordinator-implementation-7e923956dd01-static-v1/reports/AUDIT_REPORT.md",
+  "reportRepository": "eOnoes/Audits",
+  "reportBranch": "main",
+  "allowedWrite": "Report repository: eOnoes/Audits. Branch: main. Exact output: onoes-agent-v3-coordinator-implementation-7e923956dd01-static-v1/reports/AUDIT_REPORT.md. Only add the sanitized completed Markdown report using existing authorized access. Check current workflow files AND activation state first; if Actions could run or status is unknown, stop and ask Eddie for specific approval. No subject/input/manifest edits, branches, PRs, force-push, deletion, builds, installs, subject execution, providers or charges. Preserve prior outputs with the next numbered AUDIT_REPORT_ADDENDUM_N.md. Read back the committed report bytes and return its immutable link/commit, distinct from the input commit. If write access is unavailable, return the complete Markdown with REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS and this exact output path. Never request secrets. Public history persists after cleanup.",
+  "publicHistoryPersists": true
+}
