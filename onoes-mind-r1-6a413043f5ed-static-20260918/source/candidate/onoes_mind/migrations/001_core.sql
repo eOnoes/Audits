@@ -1,0 +1,14 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, name TEXT NOT NULL);
+CREATE TABLE principals(principal_id TEXT PRIMARY KEY, kind TEXT NOT NULL, credential_epoch INTEGER NOT NULL DEFAULT 1);
+CREATE TABLE credentials(credential_id INTEGER PRIMARY KEY, principal_id TEXT NOT NULL REFERENCES principals, salt TEXT NOT NULL, verifier TEXT NOT NULL, epoch INTEGER NOT NULL, issued_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, revoked_at TEXT);
+CREATE TABLE scope_grants(principal_id TEXT NOT NULL REFERENCES principals, scope_id TEXT NOT NULL, can_read INTEGER NOT NULL, can_write INTEGER NOT NULL, PRIMARY KEY(principal_id,scope_id));
+CREATE TABLE submission_events(principal_id TEXT NOT NULL REFERENCES principals, event_id TEXT NOT NULL, status TEXT NOT NULL, payload_hash TEXT, record_id TEXT, incident_id TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(principal_id,event_id));
+CREATE TABLE memory_records(record_id TEXT PRIMARY KEY, scope_id TEXT NOT NULL, kind TEXT NOT NULL, project_id TEXT NOT NULL, payload_hash TEXT NOT NULL, state TEXT NOT NULL, principal_id TEXT NOT NULL REFERENCES principals, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX unique_active_fact ON memory_records(scope_id,kind,payload_hash) WHERE state IN ('active','promoted');
+CREATE TABLE memory_revisions(revision_id INTEGER PRIMARY KEY, record_id TEXT NOT NULL REFERENCES memory_records, claim TEXT NOT NULL, is_current INTEGER NOT NULL DEFAULT 1, source_class TEXT NOT NULL, observed_at TEXT NOT NULL);
+CREATE UNIQUE INDEX one_current_revision ON memory_revisions(record_id) WHERE is_current=1;
+CREATE TABLE evidence_refs(evidence_id INTEGER PRIMARY KEY, record_id TEXT NOT NULL REFERENCES memory_records, ref_json TEXT NOT NULL);
+CREATE TABLE secret_incidents(incident_id TEXT PRIMARY KEY, principal_id TEXT NOT NULL REFERENCES principals, category TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE audit_events(sequence INTEGER PRIMARY KEY, event_type TEXT NOT NULL, principal_id TEXT NOT NULL, event_id TEXT NOT NULL, previous_hash TEXT NOT NULL, chain_hash TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE VIRTUAL TABLE memory_fts USING fts5(record_id UNINDEXED, claim);

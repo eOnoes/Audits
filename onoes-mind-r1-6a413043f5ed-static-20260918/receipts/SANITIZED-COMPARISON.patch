@@ -1,0 +1,700 @@
+--- baseline/CODEX-CURRENT-BUILD-PLAN.md
++++ candidate/CODEX-CURRENT-BUILD-PLAN.md
+@@ -104,3 +104,33 @@
+ ## Drift check
+ 
+ Before every phase and at closure, compare plan claims against actual migrations, column names, state enums, imports, runtime entrypoints, API routes, tests, and current repository status. Record contradictions and stop rather than guessing.
++
++## September 18 shared-Mind reconciliation — proposed amendment
++
++This amendment is staged in an isolated review candidate against revision
++`6a413043f5ed18fe1f8e27b446971775cb5fe39c`. It requires independent review and
++an ownership/handoff disposition before promotion into the canonical tree.
++It does not close the historical protected-work receipt or authorize activation.
++
++`docs/SHARED-MIND-ROADMAP-2026-09-18.md` reconciles v4.2, DC-01 through DC-15,
++the September build audit, and the operator's latest requirements. Its R0–R7
++slices map to the original A/A.1/B/C/D/E phase responsibilities. The immediate
++implementation candidate is bounded to authentication replay, expired worker
++leases, retry transaction integrity, worker-result secret screening and
++missing active memory revision detection. Other audit findings remain open.
++
++Echo remains local and uses Hermes; Cyony uses Hermes in the cloud; Tripp uses
++OpenClaw. Onoes-Agent is a first-class separate client. Runtime family never
++substitutes for authenticated agent/device identity. Pi/Hermes/OpenClaw trial
++bindings require exact version and capability evidence before real use.
++
++The local recovery store continuously saves sessions/checkpoints. It remains
++distinct from the governed agent kernel, bounded canonical cache and pending
++synchronization journal. Session backups are not automatically approved facts.
++Mind remains the primary shared authority; cloud placement follows local
++qualification, and Echo's future model-server connection is independent.
++
++The trial inventory is `docs/TRIAL-AGENT-INVENTORY-2026-09-18.md`. Existing
++trial scripts target the legacy HTTP API and must pass a compatibility review;
++do not infer that they connect to this canonical build. Real trial agents run
++one at a time according to the existing harness rules.
+--- baseline/audits/final-candidate/FINAL_CANDIDATE_MANIFEST.json
++++ candidate/audits/final-candidate/FINAL_CANDIDATE_MANIFEST.json
+@@ -16,7 +16,7 @@
+     "10.9"
+   ],
+   "test_matrix": {
+-    "full_pytest_collected": 167,
++    "full_pytest_collected": 188,
+     "focused_phase10_collected": 73,
+     "focused_synthetic_collected": 19,
+     "pre_runtime_campaign_collected": 4,
+@@ -64,12 +64,12 @@
+     "evidence_hash": "sha256:27b18a9beb50ea86a89cde30feb4de99d87fec440f5951c3ba0134a874ef974f"
+   },
+   "artifacts": {
+-    "Onoes-Mind-Build-Plan-v4.1.md": "sha256:39f5db79f3337499a9ad8fd8c4a732bc6259fbdf623e76747286e3147ac8de70",
+-    "PHASE_10_IMPLEMENTATION_REPORT.md": "sha256:6f8e4411c6cfe30a3fe4cd139653cf5c4e2c5c65046ad2bcd067eae332c0919a",
+-    "CLOUD_READINESS_CHECKLIST.md": "sha256:80f65dd3aa5963e63831addf0500d2e14060fe6d663d831429f7e8073e855cd3",
+-    "PHASE_BRIDGE_CURRENT_STATE.md": "sha256:d44f0bf02461d606b2e13dc90c516cb53d6a23eb475fff81ed466b748aabce34",
+-    "audits/final-candidate/IMPLEMENTATION_SUMMARY.md": "sha256:299573188a12fc7931a5286256eacde80d19c33b2b23a5acd2e8c7adab4dee77",
+-    "audits/final-candidate/TEST_MATRIX.md": "sha256:3f65d7e555c8a1984590a0ef82bba51dbfd0c1f59af3b4881e4c6fafd86637b4",
++    "Onoes-Mind-Build-Plan-v4.1.md": "sha256:8fedce06e56a78ecfec3f76f02656d61296719cfcd270827e0a707c1e4cd2bd8",
++    "PHASE_10_IMPLEMENTATION_REPORT.md": "sha256:caeb2f59a5b13f8c0d6aafaf2c20441312d21b73e69399a56461697a1a5755c7",
++    "CLOUD_READINESS_CHECKLIST.md": "sha256:e00599143e15b9b7158ace798c0f106ea86c8d7e98e74d829a08f85f90824498",
++    "PHASE_BRIDGE_CURRENT_STATE.md": "sha256:885d690e65ffe906434bd9f9d2f8f77d866e808acb9aaeeb4a2826f52b21d1f6",
++    "audits/final-candidate/IMPLEMENTATION_SUMMARY.md": "sha256:b4251e0d4cf05a11f427c464d41c59dc8930f2fbbed885b012d322a9e880f0c5",
++    "audits/final-candidate/TEST_MATRIX.md": "sha256:927a1b6a046157396274cc8422014ea4ee1fed8ca2573d7d18ef5ced8ede4d4e",
+     "audits/final-candidate/SYNTHETIC_TRIAL_EVIDENCE.json": "sha256:cbae8d7fa6ba3e0400077f47de2cad359c53a1d161c6db0b90286f8bf14643ef",
+     "audits/final-candidate/SKILL_LIFECYCLE_EVIDENCE.json": "sha256:c07b4e69a44574e175c16c57cd99bee39f020d0f4963a784a87df94f529d1755",
+     "audits/final-candidate/FAILURE_ADVERSARIAL_EVIDENCE.json": "sha256:10befad50818cb19a4086a35ffd1e3b8f9d337376ee8aac8133968cee4e307cf",
+@@ -80,97 +80,106 @@
+     "audits/final-candidate/PRE_RUNTIME_SCENARIO_CATALOG.json": "sha256:560fba2d80c7f87b0ac4b7609f94113ad7b080c74b4e8c881c382691b4166b9f",
+     "audits/final-candidate/PRE_RUNTIME_CAMPAIGN_HANDOFF.html": "sha256:5a884f2cd4a190eab6cad1baf01b4dd9447103b289684e5a8e0cbefeb67f9aee",
+     "audits/final-candidate/PERFORMANCE_EVIDENCE.json": "sha256:f18fc9213b9850f79531ee02556e5a531a589a233145baa662c708e963ed815c",
+-    "audits/final-candidate/PERFORMANCE_SCENARIO_CATALOG.json": "sha256:185d618acad6b39f4c38f4deec381ceca10d60b8d63408853fd0ce0823ef39d6",
+-    "audits/final-candidate/PERFORMANCE_HANDOFF.html": "sha256:6957a471d99c07a9ab5daa4ea51db81713550c280d7d391d15f604a509ec5fb4",
+-    "audits/final-candidate/QUARANTINE_AUDIT_MATRIX.md": "sha256:c67ece6c624bb9abc2a15365a524e57577b12eaf6cbd2af95816a7fdefdb182a",
+-    "audits/final-candidate/QUARANTINE_OPERATOR_SIMULATION_RUNBOOK.md": "sha256:7baf2ca1ba14432a847f1a621b091be80fc7d558f20f1aa61987cac6edd7a0f3",
+-    "audits/final-candidate/LIFECYCLE_DEDUP_AUDIT_MATRIX.md": "sha256:1fc0ec9268fa36fbe08833720ec2316a041931db01c008842da061b99597e92d",
+-    "audits/final-candidate/CONCURRENT_SKILL_AUDIT_MATRIX.md": "sha256:2b3e56c36c43b99bfda2889806cb5fab708e3d20e5ee80920f7cca4140ba7813",
+-    "audits/final-candidate/DEPENDENCY_ENVIRONMENT_MANIFEST.json": "sha256:3214da79011cae3666b94b330926fdb83ba22be0884339e12476e7aa083e353a",
+-    "audits/final-candidate/THREAT_MATRIX.md": "sha256:0ff2e76d931dc271d35a7e635f160761680f414030bad22b8fab952ca3f22768",
+-    "audits/final-candidate/BACKUP_RECOVERY.md": "sha256:89e9169dbb1b774db9f8872b8c89ae4333a957abd919523a1519cd641f06eb63",
+-    "audits/final-candidate/OPERATOR_GATE_CHECKLIST.md": "sha256:214b2bbdbc4bab5738d177883e4555aaf9d4a786c16556a641f6a553713dc53f",
+-    "audits/final-candidate/KNOWN_LIMITATIONS.md": "sha256:5630c1ca5799f180cc228c771f091ae4daf063c708b96cb840b7552565c7bef3",
+-    "audits/final-candidate/ROLLBACK_STOP_RUNBOOK.md": "sha256:fc743b5d925976da48dabe57439aa8e9e10535cb9c79d22faeb3959404a3c948",
+-    "audits/final-candidate/VERIFICATION.json": "sha256:8952fc089ee2b0f2231da069096d2612ab30fb184f326f6f42db5967236316a8",
+-    "onoes_mind/__init__.py": "sha256:b80b587497631f4f96a4725f341dcbef246f69a3dc2b6603afd1ea9e63feee8d",
+-    "onoes_mind/bridge.py": "sha256:09e26577cc0867023a2b964a40e3937a0fbe6d227da9edccd06df02ee1e3d824",
+-    "onoes_mind/config_rollout.py": "sha256:8fae094f67aac3aa3dea4c04aec0c65d6d9e39e1a9d689c41982d1aca81363da",
+-    "onoes_mind/evidence.py": "sha256:8d5d2982fe57b6cf0a7491f92d72b27dae5de0b663ba192d5fcc36bc34b45a8e",
+-    "onoes_mind/ledger.py": "sha256:a61713d58ed84359f0f28567d05fef960739b8a55dbb09be1b70ecd6dfad4a4b",
+-    "onoes_mind/lifecycle_worker.py": "sha256:8a0172c96400ce1dbc279b7379fc8155e51cad38f9ada3cd5861603b57fba4e1",
+-    "onoes_mind/phase10_controls.py": "sha256:9aa1389756bbfa8e82b3b5c203f49b7468aa439b02d0a4bef4c75cc76e49dca8",
+-    "onoes_mind/phase10_fake_adapters.py": "sha256:d7983acfe813cf7c3669150a310e2ff45ba58f7b668666905786760f0edc2d0c",
+-    "onoes_mind/phase10_governance.py": "sha256:a5841b144f6ee35628fa67742c75d0421ba12d3712fca4165f37cae06c18a079",
+-    "onoes_mind/phase10_hardening.py": "sha256:c1b7c0036d71a8c89b1167942f89967a24f30fff0bac05f5a6925190bb4ac66f",
+-    "onoes_mind/pre_runtime_campaign.py": "sha256:5bb0eac93bec20ee4e221aa77c854f4d55768bfbe345bff89e1778b3d14b15df",
+-    "onoes_mind/quarantine_control.py": "sha256:a88dc2b7ba57ac7eaa9e3287c51a9e5a5afc76242e5eec4283e517bed2667e93",
+-    "onoes_mind/synthetic_trial.py": "sha256:2366c99fa9da7b48e3ff6b8c837bd050d44f338cf83ef4dba6f53e9fcce77241",
+-    "onoes_mind/worker.py": "sha256:2cb04b3e2a7c1f0d24b05843c39927cf3df0a9b7bf9b198e5addf236b4d2312f",
+-    "tests/test_bridge.py": "sha256:3eb5c7cf45ecb8ae67a75cb813625747d55a3b68e03903655a223133bf4ac536",
+-    "tests/test_concurrent_skill_audit.py": "sha256:00f7bbce54bda472bfcdc7dcf4fe0f3b0081c5d849985ff816657cc7f08038b8",
+-    "tests/test_config_rollout.py": "sha256:c8b366214bf28383e4ebfe9ddc286797dca593288143b2521d1b7343580a61d6",
+-    "tests/test_continuity.py": "sha256:1fad1e39d4e667988c20f7778aa1dfcc7c3a99daea9b0f58dbe9e3639d9fcbe0",
+-    "tests/test_final_candidate_manifest.py": "sha256:7b029e1f8d584130ee3897a9f6bd8ef2d39fd0b72b57d29c13174d3f0f945da7",
+-    "tests/test_lifecycle_worker.py": "sha256:17fcfcd7de29147a42f6e3a891aed91a782497be03bf3023712de80cf07cea96",
+-    "tests/test_performance_campaign.py": "sha256:fe58ca02787936393734730ea5c6ea707ce70d6d16af3baa6276a41f8235473e",
+-    "tests/test_phase10_concurrency_recovery.py": "sha256:e489a66b878311ed49a52182e39929c7df57f18e1fea67f53069749f21db072d",
+-    "tests/test_phase10_controls.py": "sha256:91a33014b2e84f4de39ac5abc27c510f5ef253a29b59813fc7f1fbf066fa1630",
+-    "tests/test_phase10_evidence.py": "sha256:dbb48adca6ead7234650c6415a8667ea9766d2352e24749a4676c3fb8af3a1f6",
+-    "tests/test_phase10_failure_injection.py": "sha256:44d958d22abf610a125f4459b5fde3b80d3ad0bddce7c0e6a7441d1986bc05b7",
+-    "tests/test_phase10_fake_adapters.py": "sha256:1272017b731c37c51dee2546cf70c86f2f2824ddba64b8e9d2cfbd4de9872e48",
+-    "tests/test_phase10_governance.py": "sha256:0a954913ea3ddc4edc6d1a45869372551bcf96560674a4bfcaf5bc8ed458fc4c",
+-    "tests/test_phase10_security_reproducibility.py": "sha256:e820da9e089366678388f0fcb5a9d2e77072f1cce450fbf3e4aa15fe223d5763",
+-    "tests/test_phase1a.py": "sha256:767d8c63f786de0ae37e8ad4a2c8065ac67f590b7e56acf8bd2a2717eb1ab7ce",
+-    "tests/test_phase1b.py": "sha256:c197802bc88c44a3bbb19433b31a53de2850be2f0c850097780467906f04aee2",
+-    "tests/test_phase2.py": "sha256:48f6b58ed932fe25c818daa8dbd6c8009e2758771a79ba37e75e246ce450ff62",
+-    "tests/test_phase3.py": "sha256:5c38cc1547c1efe7751631d45208a83a0fd43496fb0609d0e61fce11e63b78d3",
+-    "tests/test_phase4.py": "sha256:2c63bbff2ae889cb24b5730e325775f096abab67833a2ae0b6a8f20036c76d02",
+-    "tests/test_phase5.py": "sha256:7b61611ed94743268cf18e96fcda1626485651b74cce0aa1e58efdb890ddf32b",
+-    "tests/test_pre_runtime_campaign.py": "sha256:46a0a31d63789586321d22d0033cc02acc9dcbcbb44324010124a425324fc75e",
+-    "tests/test_quarantine_control.py": "sha256:75fa58ad385b749d616476d67ece7bd5f4bb6ac685464c58b1bc227a541c262f",
+-    "tests/test_synthetic_trial.py": "sha256:ea0d1de574d33a66351c82689f016344b8a4a601e7a28fed53c992e27b2e519d"
++    "audits/final-candidate/PERFORMANCE_SCENARIO_CATALOG.json": "sha256:e34b382516bf9fbd2912d9e6c5658c3578d94bd699d33d04285c2a1150d8603f",
++    "audits/final-candidate/PERFORMANCE_HANDOFF.html": "sha256:12e57123fadf3c32f63918268238011c4e5cd2b7e7a51bfad7a33dbaeed2e63e",
++    "audits/final-candidate/QUARANTINE_AUDIT_MATRIX.md": "sha256:31c49ac1ce9a87d4921fe45cda7065cff38ae466d2a9f66a7d7b9e19fba1075b",
++    "audits/final-candidate/QUARANTINE_OPERATOR_SIMULATION_RUNBOOK.md": "sha256:aa198849340517b7aeac4c68e6f4805ebdd111fcbff2b754eec143a074a0d380",
++    "audits/final-candidate/LIFECYCLE_DEDUP_AUDIT_MATRIX.md": "sha256:e0576add35267960dd87291faacc6a5ce799438e4ae70b91848a3d11a775152a",
++    "audits/final-candidate/CONCURRENT_SKILL_AUDIT_MATRIX.md": "sha256:41355251f3cef7908341c35e18b3b182cf7506977aab377cb5edf4bf7d9d3c24",
++    "audits/final-candidate/DEPENDENCY_ENVIRONMENT_MANIFEST.json": "sha256:9fd00472f8c0f382f89ec531e87381b7a8d76f5454b87b33e7a2dcb3068d7e80",
++    "audits/final-candidate/THREAT_MATRIX.md": "sha256:e8f02b8f35570a0db9198edd7baff9f3083351b80a610d62a1455a3199267829",
++    "audits/final-candidate/BACKUP_RECOVERY.md": "sha256:09ed5fe5d158250e8ce2666b940dffcdb5636be724d72688336534f52b394044",
++    "audits/final-candidate/OPERATOR_GATE_CHECKLIST.md": "sha256:d893bdffc62d29aece0ed9f1d6d4d7d7d9585689b98e28331d6492a5b32b14dd",
++    "audits/final-candidate/KNOWN_LIMITATIONS.md": "sha256:60f6cc832834f98eb63e120d6bedb4517ca2ed5564ffc683490fe0aa94b51e86",
++    "audits/final-candidate/ROLLBACK_STOP_RUNBOOK.md": "sha256:474ad12b82309b347ab7c0cf04d7f0d9978749a940f96a287d5a51c547dab722",
++    "audits/final-candidate/VERIFICATION.json": "sha256:5bacd4245916e663d1f7c5c3f002ed27e32a56703b63e61ac4c55d4653a7672d",
++    "onoes_mind/__init__.py": "sha256:1a37a7e180ddaea7b37b9069dfccb4174c716fc31728e9a8b7ba35701e077a7c",
++    "onoes_mind/bridge.py": "sha256:caab7be1f274cbca2f6464721f8f35e43f3c305fd9e212be5b52756049439ddd",
++    "onoes_mind/config_rollout.py": "sha256:c6bda7d5ac7591d001d4aa86a1d1a111d55c07ac86e4e6412ed231c6cf20304e",
++    "onoes_mind/evidence.py": "sha256:d56f25020e338f13876cd48e8deedd2dff019eba1e0ad2a091f2ed2efc1f857b",
++    "onoes_mind/ledger.py": "sha256:e5162ce7477bbef6f3ffe6b807ecec843f708e00239a0e6d700e17d17d2ac9c6",
++    "onoes_mind/lifecycle_worker.py": "sha256:dd5288db48eaa66093e00588f1e00e03d253169255b96d493a9ffdeab2bd3a60",
++    "onoes_mind/phase10_controls.py": "sha256:5611f45fb3f4d2142d53fafcce917fbb3b6dff88d8ab72281f62eb1fc481b300",
++    "onoes_mind/phase10_fake_adapters.py": "sha256:01895776be4999ba24e0f1d1ff6c1c360944694edaa4905e4b16c48f09536703",
++    "onoes_mind/phase10_governance.py": "sha256:9b0b29e174a595615506f01f593f287e4e5d20cc69538ba8f46cff6d06724ca9",
++    "onoes_mind/phase10_hardening.py": "sha256:efd9c00c10d04aee3dd7a61dfba9930c3f18e451b1be60b7b55d1fcf88258675",
++    "onoes_mind/pre_runtime_campaign.py": "sha256:58bb86b99dc03c5473c888aada57a61592ccab6315c035866133235c55723366",
++    "onoes_mind/quarantine_control.py": "sha256:8025ea0779f69e6fd59e77f6770aaca00e4e5f5e7b4f53efa47b8e637d66e67f",
++    "onoes_mind/synthetic_trial.py": "sha256:17e33582b3773c797e693688e88ea07f531cd5d21b4252d69acddd749646918b",
++    "onoes_mind/worker.py": "sha256:5d7c2934640e5db0a2e19d340a27fcbd5fb665ee5280f70ae2b709ba8945be1f",
++    "tests/test_bridge.py": "sha256:58e53d81c51b16f8b1e3e7988e11d389941059251f639acb5b4e3df7d58ceef8",
++    "tests/test_concurrent_skill_audit.py": "sha256:a62d5bfe42ffddb6596f5542326969b01b39dca16c9114a910a14809427c5edc",
++    "tests/test_config_rollout.py": "sha256:01d54b1159f5164326c43cd0a79a00e4cceeb9d9cae92cd667046f2650b6e7dc",
++    "tests/test_continuity.py": "sha256:f4200666d07eb14e33c6900ee49cad616c477cdafa59a95dddc34f78132ba981",
++    "tests/test_final_candidate_manifest.py": "sha256:27db6c8caca325df757774621b4c0e136478525f3ce28bfb235a0cbbc821a9fb",
++    "tests/test_lifecycle_worker.py": "sha256:bd3e6a5d162859e523fb1e97f39b0dd4fc947ff21a5e6fae6f172d7832efed94",
++    "tests/test_performance_campaign.py": "sha256:8cf733a6245c9b640f3b62e5387fb8ffe2f2d8013be165920656896d3571ecf8",
++    "tests/test_phase10_concurrency_recovery.py": "sha256:91a72fed0abe4f49ecc075dd7b0e827658d2fc8d6422d74f596a781bf6fd2586",
++    "tests/test_phase10_controls.py": "sha256:e7919225b99cdb2b225b31a3f5eed035c67090007947760d1ffa3364d59a5ef6",
++    "tests/test_phase10_evidence.py": "sha256:624385d6baaa1e55ac723e6e606a36308f43ec84cbbbae1f0d3f3a8caa0f63eb",
++    "tests/test_phase10_failure_injection.py": "sha256:0090af32ef4de4dde49f4e5c7273a1e60194bf7a768768677c94a3a2bc47341f",
++    "tests/test_phase10_fake_adapters.py": "sha256:05a9666ffdaea055e4cb08a8d5f432d1ed96436a308d265bea1c4ccd591e928c",
++    "tests/test_phase10_governance.py": "sha256:e4360fd333dbc0c32bc325a09f3a9f4b1ab2c49845db386b3a0930c5ee264397",
++    "tests/test_phase10_security_reproducibility.py": "sha256:cacdd49289dd9a2efa33fb0583e8fb99aa74d0c24a65ac238985d7c20a0741a3",
++    "tests/test_phase1a.py": "sha256:77b11c335bdb988ba86597c5d9e5ebe09468789bc9930f05d46b7afc5da8eb30",
++    "tests/test_phase1b.py": "sha256:e27fd392760c2d2a95e2485b8c8c318852a1a6f81c5a57afa959b799f5d890cc",
++    "tests/test_phase2.py": "sha256:b9507bd1855977f1603d2b0b8566f6f3638d15b74cf66b9cb92748ce8bac2293",
++    "tests/test_phase3.py": "sha256:43cb3f63d8a1e12c66fd6bf609ea6e380f56c5a5d9c82fff7bc201b2c562cfbb",
++    "tests/test_phase4.py": "sha256:375d764dd07a166d055a8b9e73de76475f577e54e9984557ce6bac3780173ca2",
++    "tests/test_phase5.py": "sha256:adaef5e54cc654f7f675e048ecbabe92309736d5db83107f40299dc075c3dc0d",
++    "tests/test_pre_runtime_campaign.py": "sha256:fd1aa0ecd4f3831541ea3d612e35befe677a2964e7926b92999481c3766cf949",
++    "tests/test_quarantine_control.py": "sha256:3326b65003fc3269667bf7754be46629546edc2d03caeb48617c87e673906c21",
++    "tests/test_synthetic_trial.py": "sha256:b342a61924518fc937068e2d3b37d10c330ccfea8fc42f87d032f1e1b8739f2e"
+   },
+   "source_files": {
+-    "onoes_mind/__init__.py": "sha256:b80b587497631f4f96a4725f341dcbef246f69a3dc2b6603afd1ea9e63feee8d",
+-    "onoes_mind/bridge.py": "sha256:09e26577cc0867023a2b964a40e3937a0fbe6d227da9edccd06df02ee1e3d824",
+-    "onoes_mind/config_rollout.py": "sha256:8fae094f67aac3aa3dea4c04aec0c65d6d9e39e1a9d689c41982d1aca81363da",
+-    "onoes_mind/evidence.py": "sha256:8d5d2982fe57b6cf0a7491f92d72b27dae5de0b663ba192d5fcc36bc34b45a8e",
+-    "onoes_mind/ledger.py": "sha256:a61713d58ed84359f0f28567d05fef960739b8a55dbb09be1b70ecd6dfad4a4b",
+-    "onoes_mind/lifecycle_worker.py": "sha256:8a0172c96400ce1dbc279b7379fc8155e51cad38f9ada3cd5861603b57fba4e1",
+-    "onoes_mind/phase10_controls.py": "sha256:9aa1389756bbfa8e82b3b5c203f49b7468aa439b02d0a4bef4c75cc76e49dca8",
+-    "onoes_mind/phase10_fake_adapters.py": "sha256:d7983acfe813cf7c3669150a310e2ff45ba58f7b668666905786760f0edc2d0c",
+-    "onoes_mind/phase10_governance.py": "sha256:a5841b144f6ee35628fa67742c75d0421ba12d3712fca4165f37cae06c18a079",
+-    "onoes_mind/phase10_hardening.py": "sha256:c1b7c0036d71a8c89b1167942f89967a24f30fff0bac05f5a6925190bb4ac66f",
+-    "onoes_mind/pre_runtime_campaign.py": "sha256:5bb0eac93bec20ee4e221aa77c854f4d55768bfbe345bff89e1778b3d14b15df",
+-    "onoes_mind/quarantine_control.py": "sha256:a88dc2b7ba57ac7eaa9e3287c51a9e5a5afc76242e5eec4283e517bed2667e93",
+-    "onoes_mind/synthetic_trial.py": "sha256:2366c99fa9da7b48e3ff6b8c837bd050d44f338cf83ef4dba6f53e9fcce77241",
+-    "onoes_mind/worker.py": "sha256:2cb04b3e2a7c1f0d24b05843c39927cf3df0a9b7bf9b198e5addf236b4d2312f"
++    "onoes_mind/__init__.py": "sha256:1a37a7e180ddaea7b37b9069dfccb4174c716fc31728e9a8b7ba35701e077a7c",
++    "onoes_mind/bridge.py": "sha256:caab7be1f274cbca2f6464721f8f35e43f3c305fd9e212be5b52756049439ddd",
++    "onoes_mind/config_rollout.py": "sha256:c6bda7d5ac7591d001d4aa86a1d1a111d55c07ac86e4e6412ed231c6cf20304e",
++    "onoes_mind/evidence.py": "sha256:d56f25020e338f13876cd48e8deedd2dff019eba1e0ad2a091f2ed2efc1f857b",
++    "onoes_mind/ledger.py": "sha256:e5162ce7477bbef6f3ffe6b807ecec843f708e00239a0e6d700e17d17d2ac9c6",
++    "onoes_mind/lifecycle_worker.py": "sha256:dd5288db48eaa66093e00588f1e00e03d253169255b96d493a9ffdeab2bd3a60",
++    "onoes_mind/phase10_controls.py": "sha256:5611f45fb3f4d2142d53fafcce917fbb3b6dff88d8ab72281f62eb1fc481b300",
++    "onoes_mind/phase10_fake_adapters.py": "sha256:01895776be4999ba24e0f1d1ff6c1c360944694edaa4905e4b16c48f09536703",
++    "onoes_mind/phase10_governance.py": "sha256:9b0b29e174a595615506f01f593f287e4e5d20cc69538ba8f46cff6d06724ca9",
++    "onoes_mind/phase10_hardening.py": "sha256:efd9c00c10d04aee3dd7a61dfba9930c3f18e451b1be60b7b55d1fcf88258675",
++    "onoes_mind/pre_runtime_campaign.py": "sha256:58bb86b99dc03c5473c888aada57a61592ccab6315c035866133235c55723366",
++    "onoes_mind/quarantine_control.py": "sha256:8025ea0779f69e6fd59e77f6770aaca00e4e5f5e7b4f53efa47b8e637d66e67f",
++    "onoes_mind/synthetic_trial.py": "sha256:17e33582b3773c797e693688e88ea07f531cd5d21b4252d69acddd749646918b",
++    "onoes_mind/worker.py": "sha256:5d7c2934640e5db0a2e19d340a27fcbd5fb665ee5280f70ae2b709ba8945be1f"
+   },
+   "test_files": {
+-    "tests/test_bridge.py": "sha256:3eb5c7cf45ecb8ae67a75cb813625747d55a3b68e03903655a223133bf4ac536",
+-    "tests/test_concurrent_skill_audit.py": "sha256:00f7bbce54bda472bfcdc7dcf4fe0f3b0081c5d849985ff816657cc7f08038b8",
+-    "tests/test_config_rollout.py": "sha256:c8b366214bf28383e4ebfe9ddc286797dca593288143b2521d1b7343580a61d6",
+-    "tests/test_continuity.py": "sha256:1fad1e39d4e667988c20f7778aa1dfcc7c3a99daea9b0f58dbe9e3639d9fcbe0",
+-    "tests/test_final_candidate_manifest.py": "sha256:7b029e1f8d584130ee3897a9f6bd8ef2d39fd0b72b57d29c13174d3f0f945da7",
+-    "tests/test_lifecycle_worker.py": "sha256:17fcfcd7de29147a42f6e3a891aed91a782497be03bf3023712de80cf07cea96",
+-    "tests/test_performance_campaign.py": "sha256:fe58ca02787936393734730ea5c6ea707ce70d6d16af3baa6276a41f8235473e",
+-    "tests/test_phase10_concurrency_recovery.py": "sha256:e489a66b878311ed49a52182e39929c7df57f18e1fea67f53069749f21db072d",
+-    "tests/test_phase10_controls.py": "sha256:91a33014b2e84f4de39ac5abc27c510f5ef253a29b59813fc7f1fbf066fa1630",
+-    "tests/test_phase10_evidence.py": "sha256:dbb48adca6ead7234650c6415a8667ea9766d2352e24749a4676c3fb8af3a1f6",
+-    "tests/test_phase10_failure_injection.py": "sha256:44d958d22abf610a125f4459b5fde3b80d3ad0bddce7c0e6a7441d1986bc05b7",
+-    "tests/test_phase10_fake_adapters.py": "sha256:1272017b731c37c51dee2546cf70c86f2f2824ddba64b8e9d2cfbd4de9872e48",
+-    "tests/test_phase10_governance.py": "sha256:0a954913ea3ddc4edc6d1a45869372551bcf96560674a4bfcaf5bc8ed458fc4c",
+-    "tests/test_phase10_security_reproducibility.py": "sha256:e820da9e089366678388f0fcb5a9d2e77072f1cce450fbf3e4aa15fe223d5763",
+-    "tests/test_phase1a.py": "sha256:767d8c63f786de0ae37e8ad4a2c8065ac67f590b7e56acf8bd2a2717eb1ab7ce",
+-    "tests/test_phase1b.py": "sha256:c197802bc88c44a3bbb19433b31a53de2850be2f0c850097780467906f04aee2",
+-    "tests/test_phase2.py": "sha256:48f6b58ed932fe25c818daa8dbd6c8009e2758771a79ba37e75e246ce450ff62",
+-    "tests/test_phase3.py": "sha256:5c38cc1547c1efe7751631d45208a83a0fd43496fb0609d0e61fce11e63b78d3",
+-    "tests/test_phase4.py": "sha256:2c63bbff2ae889cb24b5730e325775f096abab67833a2ae0b6a8f20036c76d02",
+-    "tests/test_phase5.py": "sha256:7b61611ed94743268cf18e96fcda1626485651b74cce0aa1e58efdb890ddf32b",
+-    "tests/test_pre_runtime_campaign.py": "sha256:46a0a31d63789586321d22d0033cc02acc9dcbcbb44324010124a425324fc75e",
+-    "tests/test_quarantine_control.py": "sha256:75fa58ad385b749d616476d67ece7bd5f4bb6ac685464c58b1bc227a541c262f",
+-    "tests/test_synthetic_trial.py": "sha256:ea0d1de574d33a66351c82689f016344b8a4a601e7a28fed53c992e27b2e519d"
++    "tests/test_bridge.py": "sha256:58e53d81c51b16f8b1e3e7988e11d389941059251f639acb5b4e3df7d58ceef8",
++    "tests/test_concurrent_skill_audit.py": "sha256:a62d5bfe42ffddb6596f5542326969b01b39dca16c9114a910a14809427c5edc",
++    "tests/test_config_rollout.py": "sha256:01d54b1159f5164326c43cd0a79a00e4cceeb9d9cae92cd667046f2650b6e7dc",
++    "tests/test_continuity.py": "sha256:f4200666d07eb14e33c6900ee49cad616c477cdafa59a95dddc34f78132ba981",
++    "tests/test_final_candidate_manifest.py": "sha256:27db6c8caca325df757774621b4c0e136478525f3ce28bfb235a0cbbc821a9fb",
++    "tests/test_lifecycle_worker.py": "sha256:bd3e6a5d162859e523fb1e97f39b0dd4fc947ff21a5e6fae6f172d7832efed94",
++    "tests/test_performance_campaign.py": "sha256:8cf733a6245c9b640f3b62e5387fb8ffe2f2d8013be165920656896d3571ecf8",
++    "tests/test_phase10_concurrency_recovery.py": "sha256:91a72fed0abe4f49ecc075dd7b0e827658d2fc8d6422d74f596a781bf6fd2586",
++    "tests/test_phase10_controls.py": "sha256:e7919225b99cdb2b225b31a3f5eed035c67090007947760d1ffa3364d59a5ef6",
++    "tests/test_phase10_evidence.py": "sha256:624385d6baaa1e55ac723e6e606a36308f43ec84cbbbae1f0d3f3a8caa0f63eb",
++    "tests/test_phase10_failure_injection.py": "sha256:0090af32ef4de4dde49f4e5c7273a1e60194bf7a768768677c94a3a2bc47341f",
++    "tests/test_phase10_fake_adapters.py": "sha256:05a9666ffdaea055e4cb08a8d5f432d1ed96436a308d265bea1c4ccd591e928c",
++    "tests/test_phase10_governance.py": "sha256:e4360fd333dbc0c32bc325a09f3a9f4b1ab2c49845db386b3a0930c5ee264397",
++    "tests/test_phase10_security_reproducibility.py": "sha256:cacdd49289dd9a2efa33fb0583e8fb99aa74d0c24a65ac238985d7c20a0741a3",
++    "tests/test_phase1a.py": "sha256:77b11c335bdb988ba86597c5d9e5ebe09468789bc9930f05d46b7afc5da8eb30",
++    "tests/test_phase1b.py": "sha256:e27fd392760c2d2a95e2485b8c8c318852a1a6f81c5a57afa959b799f5d890cc",
++    "tests/test_phase2.py": "sha256:b9507bd1855977f1603d2b0b8566f6f3638d15b74cf66b9cb92748ce8bac2293",
++    "tests/test_phase3.py": "sha256:43cb3f63d8a1e12c66fd6bf609ea6e380f56c5a5d9c82fff7bc201b2c562cfbb",
++    "tests/test_phase4.py": "sha256:375d764dd07a166d055a8b9e73de76475f577e54e9984557ce6bac3780173ca2",
++    "tests/test_phase5.py": "sha256:adaef5e54cc654f7f675e048ecbabe92309736d5db83107f40299dc075c3dc0d",
++    "tests/test_pre_runtime_campaign.py": "sha256:fd1aa0ecd4f3831541ea3d612e35befe677a2964e7926b92999481c3766cf949",
++    "tests/test_quarantine_control.py": "sha256:3326b65003fc3269667bf7754be46629546edc2d03caeb48617c87e673906c21",
++    "tests/test_synthetic_trial.py": "sha256:b342a61924518fc937068e2d3b37d10c330ccfea8fc42f87d032f1e1b8739f2e",
++    "tests/test_audit_repairs.py": "sha256:447a5d8cc24f98810811f9d929aa3389a921b1267b0627c7443783e4ef6315f4"
+   },
+-  "manifest_hash": "sha256:43cb211dad17258fdf12f32726cf1a00d9b573810d981072763ad3bc866169df"
++  "manifest_hash": "sha256:ebfea759ee7a357f4ac8fe1d6945bfee4fa9803fdcd61a91f17a4456d33e0478",
++  "repair_candidate": {
++    "baseline_revision": "6a413043f5ed18fe1f8e27b446971775cb5fe39c",
++    "status": "ISOLATED_REPAIR_CANDIDATE_REVIEW_REQUIRED",
++    "new_regression_cases": 21,
++    "historical_campaign_evidence": "Inherited unchanged from baseline; not re-executed by this manifest refresh.",
++    "test_execution_evidence": "See packet receipts; collection metadata is not execution proof.",
++    "canonical_files_applied": false
++  }
+ }
+--- baseline/docs/SHARED-MIND-ROADMAP-2026-09-18.md
++++ candidate/docs/SHARED-MIND-ROADMAP-2026-09-18.md
+@@ -0,0 +1,94 @@
++# Shared Mind roadmap and implementation contract proposal
++
++Status: REVIEW REQUIRED. This reconciles current operator requirements with v4.2 and the September audit. It is not a deployment approval or evidence that planned capabilities exist. The canonical plan remains unchanged until independent review. Source baseline: 6a413043f5ed18fe1f8e27b446971775cb5fe39c.
++
++## Agent identities and runtime families
++
++| Identity | Runtime family | Intended placement | Evidence |
++|---|---|---|---|
++| Echo | Hermes | User PC; stays there | Operator instruction |
++| Cyony | Hermes | Cloud | Operator instruction; deployment unverified |
++| Tripp | OpenClaw | Existing installation; exact active binding to verify | Operator instruction |
++| trial-hermes | Hermes trial adapter | X:/SANITIZED/LOCAL_PATH | Folder/docs inspected; real executable unverified |
++| trial-openclaw | OpenClaw trial adapter | X:/SANITIZED/LOCAL_PATH | Folder/docs inspected; real executable unverified |
++| trial-pi | Pi trial adapter | X:/SANITIZED/LOCAL_PATH | Folder/docs inspected; variant/executable unverified |
++| Onoes-Agent | Custom agent | Separately built client | Operator requirement; adapter contract to be implemented |
++
++Identity is independent of model, runtime family and device. Echo and Cyony must never share credentials, private memory, or session identity merely because both use Hermes. Trial identities must not reuse production principals. Pi's simple/coding/kitchen-sink variants are operator-described options; inventory and capability negotiation must establish the exact installed variant. Do not infer compatibility from its name or shared ancestry with Onoes-Agent.
++
++## Architecture and authority
++
++One Mind service owns canonical memory, revisions, project knowledge, reviewed skills, durable checkpoints and coordination receipts. Every client uses a versioned adapter. Model hosting is independent: Echo can stay on the PC and call the future LLM server while using the same Mind endpoint.
++
++Production destination preference: cloud primary once qualified. Local qualification comes first. Mind gets its own service identity and lifecycle, even if initially on Cyony's VM. That VM remains a shared failure domain until separated. SQLite resides on the service host; no shared-file database across PCs/cloud, and no simultaneous local/cloud canonical writers.
++
++Information categories:
++
++| Category | Authority | Local treatment |
++|---|---|---|
++| Identity and hard constraints | Governed agent kernel | Minimal protected boot material |
++| Session recovery | Agent session store, with synchronized verified checkpoints | Continuous local saves; not automatic trusted knowledge |
++| Project facts and build details | Scoped canonical memory; source files in Git/artifact storage | Relevant authorized cache and working files |
++| Universal skills | Reviewed skill registry with immutable versions | Verified compatible cached packages |
++| Custom skills | Agent-private until reviewed promotion | Agent-specific cache/package |
++| Uncommitted observations | Pending journal, never canonical until acknowledged | Bounded durable queue and visible pending status |
++
++The operator's continuous local session backups refine the former no-spill default. They do not authorize a second semantic-memory authority. Healthy-mode pending synchronization is a newly proposed bounded feature needing a contract, secret scanning, size/age limits and recovery tests. Full session transcripts remain local by default; curated facts and minimal task checkpoints may be synchronized according to policy. No real memory ingestion in the repair slice.
++
++Mind content never authorizes shell/browser/deployment operations. Agent/Control retains execution policy. The librarian proposes normalization, deduplication, review and retention; deterministic policy enforces state changes. No automatic deletion based only on an LLM judgment.
++
++## Sequence and acceptance matrix
++
++| Slice | Planned work | Acceptance gate | v4.2 ownership |
++|---|---|---|---|
++| R0 | Hash-bound baseline/ownership receipt, new plan, independent review | Existing protected work preserved; exact patch and report reviewed before promotion | Prerequisite |
++| R1 | Authentication replay, expiry, transaction atomicity, secret-write coverage, integrity | Reproducing regressions; no failed writes leak side effects; full local suite | A/A.1 |
++| R2 | One memory identity/revision contract across search/context/deletion; checkpoints | Submit/correct/delete consistent in every read path; restart restores objective and checkpoint | A |
++| R3 | Durable skills and scoped promotion | Same approved hash across clients; private isolation; restart/rollback/revocation | A and E governance |
++| R4 | Versioned service and adapters, resource bounds, deployment packaging | Installed runtime/version/capabilities verified; offline contract tests; Windows/Linux qualification | C |
++| R5 | Sequential runtime handoff trials | First trial stopped, second resumes from accessible artifacts; stale writes denied; roles rotated | C |
++| R6 | Cloud and distributed availability continuity | Backup/restore, partition, stolen-device revocation, replay/ack, recovery barrier, bounded cache | A.1/C |
++| R7 | Retrieval quality and controlled production onboarding | Measured retrieval/latency; narrow Echo pilot, then expansion with rollback evidence | D/E |
++
++Phase B remains an optional synthetic Supermemory comparison lane, with no dependency on it for storage, authority, skill registry or offline operation.
++
++Audit disposition: A01/A02/A06 are addressed by the first isolated repair candidate; A03 only gains a worker-result credential guard. Full cross-path admission, private result scope and authenticated provenance remain open. A04/A05 are next canonical-contract work. A07 requires service identity/transport changes. A08 belongs to the durable skill slice. A09 requires retrieval evaluation and serialization budgets. A10 requires portability/migration/restore closure. A11 requires this review and a current documentation index. No audit item is rejected.
++
++## Distributed continuity reconciliation
++
++Retain all DC-01 through DC-15 from the existing v4.2 reconciliation proposal. Their adoption remains architecture-level until their gates pass.
++
++- DC-01/02/03: mandatory primary routing, deterministic breaker, distinguish client partition from independently corroborated service outage. Authentication/schema failures do not activate offline privileges.
++- DC-04/05/06: bounded, signed/encrypted device capsules, content lineage, separate agent kernel/cache/journal. Session backups are separate from the capsule; they are not blanket authority to recall private/shared material.
++- DC-07/08: journal durability, stable event IDs, local acknowledgement distinct from canonical commit; no minting new IDs to evade conflict checks.
++- DC-09/10: enrollment, revocation, sensitivity TTLs, anti-rollback and per-device key roles. Offline revocation latency is bounded by expiry, not instant revocation claims.
++- DC-11: independent recovery/monitoring and documented cloud/agent failure domains.
++- DC-12/13: authorization before capsule selection; poisoned, invalid, expired or revoked content cannot be used as dynamic authority.
++- DC-14: recovery barrier reconciles pending outcomes, revocations/deletions, ownership and watermarks before healthy mode.
++- DC-15: preserve the three states `MIND_PRIMARY_HEALTHY`, `CONFIRMED_OUTAGE_CONTINUITY`, `RECOVERY_RECONCILIATION`; uncontrolled native semantic stores are never substitute shared authority.
++
++Breaker numbers, retention/TTL and byte/token budgets stay unset until measurements and operator decisions. A capsule and session backup must not each silently consume the entire local storage budget.
++
++## Handoff contract proposal
++
++Required durable information: task ID/revision, objective, acceptance criteria, project scope, owner/lease epoch, completed steps, latest checkpoint, next action, blockers, unresolved decisions, required capabilities, skill hashes, artifact logical URI/revision/hash, tests and pending external-operation status.
++
++Guarantee resumption from the last verified checkpoint, not recovery of unsaved model context. Save before and after consequential operations. Resolve an ambiguous operation status before retry. Cloud clients need accessible artifacts or separately authorized remote execution; a PC file path alone is insufficient.
++
++## Adapter contract proposal
++
++Future versioned operations: negotiate identity/schema/capabilities; submit/search/correct/forget memory; create/checkpoint/claim/heartbeat/release/complete task; retrieve approved skill/version; acknowledge canonical synchronization and report health. These are proposed semantic operations, not implemented endpoints.
++
++Every mutation carries a stable event ID, schema version and content digest. Server derives scope from authenticated agent/device/project permissions. Responses distinguish rejected, needs-correction, local-pending and canonical-committed, with IDs/versions/receipts. An adapter must not report saved-to-Mind on timeout or route errors. Cached data carries source revision, watermark, expiry and integrity metadata. Credential values never enter memory envelopes.
++
++For Onoes-Agent, implement a small contract client and fixture suite independently of its model/backend. Do not copy Mind storage or permission logic into Onoes-Agent. Integrating it is a separate bounded change in its own repository.
++
++## Review and remaining decisions
++
++The current operator instruction authorizes starting this work. It does not resolve the documented historical ownership gap or supply an independent reviewer. This candidate preserves the baseline and is not evidence that the inherited cloud-readiness slice has closed. First repair promotion requires review of the exact patch and an explicit ownership/handoff disposition.
++
++Before affected later slices: choose RPO/RTO and cloud topology, define default project-sharing policy, approve local backup/queue retention, define skill approvers and artifact accessibility. Credentials and live deployment remain separately gated.
++
++## Folder proposal
++
++Keep source/tests in X:/SANITIZED/LOCAL_PATH Current contracts/runbooks under docs/, dated receipts under audits/, historical plan versions retained. Place actual databases, local recovery stores, immutable artifacts and redacted logs outside source control in configured host data roots; backups off-host. No folder migration in this slice.
+--- baseline/docs/TRIAL-AGENT-INVENTORY-2026-09-18.md
++++ candidate/docs/TRIAL-AGENT-INVENTORY-2026-09-18.md
+@@ -0,0 +1,15 @@
++# Trial agent inventory and compatibility gap
++
++Read-only inventory. No launch, health request, credentials, configurations or native stores changed.
++
++Root: X:/SANITIZED/LOCAL_PATH Git HEAD: f7bd479580a59c3d1ea78a523917a6cc7050e84a. Tree is dirty: mind_memory.py and worker.py modified; multiple untracked governance/skill/result artifacts. Preserve all of it; this is not an Onoes-Mind implementation target.
++
++The README identifies h/, oc/, p/ as the managed Hermes/OpenClaw/Pi trial directories. Additional hermes-sandbox/, openclaw-sandbox/, pi-sandbox/ directories exist with config, memory, skills, scripts and backup directories. Existence alone does not prove which launcher owns an installed runtime. No .env or key files were opened.
++
++The README requires ONE test agent at a time and shutdown after testing. Preserve that sequencing during real runtime trials; concurrent service tests use synthetic fixtures instead.
++
++MIND_WIRING.md records an August 6 experiment against the older HTTP Mind implementation. mind_memory.py currently references /api/v1/memory/remember, /api/v1/memory/search and promotion routes. Its documented principal names herm/pi/claw differ from current canonical ledger principals. The current canonical bridge is a loopback JSON-line task protocol. The old adapter must not be launched against a guessed endpoint or treated as compatible.
++
++Production mapping supplied by operator: Echo=Hermes on PC; Cyony=Hermes in cloud; Tripp=OpenClaw. All require distinct principal/device/session identities. Onoes-Agent is a separate future client. Pi's simple, coding and kitchen-sink variants are user-described; exact installed variant and capabilities remain to be established.
++
++Before live trials: inspect launch scripts and owning runtime/package versions without executing them; establish sandbox config/session/skill roots without exposing secrets; verify isolated trial identities; implement the common adapter contract against synthetic server fixtures; only then choose one sandbox for an explicitly bounded real run. Existing runnable-looking scripts are not authorization to connect to their previously configured services.
+--- baseline/onoes_mind/bridge.py
++++ candidate/onoes_mind/bridge.py
+@@ -90,6 +90,8 @@
+                         raise BridgeError("bounded request required")
+                     request = json.loads(line)
+                     with owner._dispatch_lock:
++                        # Cached success still requires current authentication.
++                        owner._authenticate_request(request)
+                         fingerprint = owner._replay_fingerprint(request)
+                         request_id = request.get("request_id") if isinstance(request, dict) else None
+                         if request_id in owner._replay:
+@@ -129,7 +131,7 @@
+         unsigned = {k: v for k, v in request.items() if k != "auth"} if isinstance(request, dict) else request
+         return hashlib.sha256(_canonical(unsigned)).hexdigest()
+ 
+-    def dispatch(self, request: dict[str, Any]) -> dict[str, Any]:
++    def _authenticate_request(self, request: Any) -> dict[str, Any]:
+         if not isinstance(request, dict):
+             raise BridgeError("request must be an object")
+         if request.get("protocol_version") != PROTOCOL_VERSION:
+@@ -140,8 +142,13 @@
+         if identity.get("runtime_family") != RUNTIME_FAMILY or not identity.get("runtime_instance_id"):
+             raise BridgeError("incomplete runtime identity")
+         auth = request.get("auth")
+-        if not isinstance(auth, dict) or not hmac.compare_digest(auth.get("mac", ""), _mac(request, self.auth_key)):
++        mac = auth.get("mac") if isinstance(auth, dict) else None
++        if not isinstance(mac, str) or not hmac.compare_digest(mac, _mac(request, self.auth_key)):
+             raise BridgeError("authentication failed")
++        return identity
++
++    def dispatch(self, request: dict[str, Any]) -> dict[str, Any]:
++        identity = self._authenticate_request(request)
+         payload = request.get("payload", {})
+         _reject_unbounded(payload)
+         if len(_canonical(payload)) > MAX_PAYLOAD_BYTES:
+--- baseline/onoes_mind/ledger.py
++++ candidate/onoes_mind/ledger.py
+@@ -228,23 +228,25 @@
+         return self.get_stage(row["stage_execution_id"])
+ 
+     def heartbeat(self, stage_execution_id: str, worker_id: str, lease_version: int, lease_seconds: int = 60) -> dict[str, Any]:
+-        expires = time.time() + lease_seconds
+-        with self.db:
+-            changed = self.db.execute("UPDATE stage_executions SET lease_expires_at=?,row_version=row_version+1 WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=?",
+-                                      (expires, stage_execution_id, worker_id, lease_version)).rowcount
+-        if changed != 1:
+-            raise LedgerError("stale lease")
++        if not isinstance(lease_seconds, int) or isinstance(lease_seconds, bool) or not 1 <= lease_seconds <= 3600:
++            raise LedgerError("lease_seconds outside bound")
++        with self._transaction(immediate=True):
++            now = time.time()
++            changed = self.db.execute("UPDATE stage_executions SET lease_expires_at=?,row_version=row_version+1 WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=? AND lease_expires_at>?",
++                                      (now + lease_seconds, stage_execution_id, worker_id, lease_version, now)).rowcount
++            if changed != 1:
++                raise LedgerError("stale lease")
+         return self.get_stage(stage_execution_id)
+ 
+     def recover_expired_leases(self, now: float | None = None) -> int:
+-        now = time.time() if now is None else now
+-        with self.db:
+-            expired = self.db.execute("SELECT * FROM stage_executions WHERE state='RUNNING' AND lease_expires_at IS NOT NULL AND lease_expires_at<?", (now,)).fetchall()
++        with self._transaction(immediate=True):
++            now = time.time() if now is None else now
++            expired = self.db.execute("SELECT * FROM stage_executions WHERE state='RUNNING' AND lease_expires_at IS NOT NULL AND lease_expires_at<=?", (now,)).fetchall()
+             for row in expired:
+                 self.db.execute("UPDATE stage_executions SET state='FAILED',error_code='timeout',lease_owner=NULL,lease_expires_at=NULL,row_version=row_version+1,completed_at=? WHERE stage_execution_id=?", (_now(), row["stage_execution_id"]))
+                 attempt = row["attempt_no"] + 1
+                 retry_id = "stage_" + hashlib.sha256(f"{row['work_code']}\0{row['stage_code']}\0{attempt}".encode()).hexdigest()[:24]
+-                self.db.execute("INSERT OR IGNORE INTO stage_executions(stage_execution_id,work_code,stage_code,sequence_no,attempt_no,state,assigned_capability,next_attempt_at) VALUES (?,?,?,?,?,?,?,?)", (retry_id,row["work_code"],row["stage_code"],row["sequence_no"],attempt,"RECOVERABLE",row["assigned_capability"],time.time()))
++                self.db.execute("INSERT INTO stage_executions(stage_execution_id,work_code,stage_code,sequence_no,attempt_no,state,assigned_capability,next_attempt_at,input_context_ref) VALUES (?,?,?,?,?,?,?,?,?)", (retry_id,row["work_code"],row["stage_code"],row["sequence_no"],attempt,"RECOVERABLE",row["assigned_capability"],now,row["input_context_ref"]))
+             return len(expired)
+ 
+     def _lease_guard(self, stage_execution_id: str, worker_id: str, lease_version: int) -> dict[str, Any]:
+@@ -255,19 +257,23 @@
+             raise LedgerError("stage is not running")
+         if row["lease_owner"] != worker_id or row["lease_version"] != lease_version:
+             raise LedgerError("stale lease")
++        if row["lease_expires_at"] is None or row["lease_expires_at"] <= time.time():
++            raise LedgerError("stale lease")
+         return row
+ 
+     def complete_stage(self, stage_execution_id: str, worker_id: str, lease_version: int, payload: dict[str, Any]) -> dict[str, Any]:
+         row = self._lease_guard(stage_execution_id, worker_id, lease_version)
++        if _secret_category(payload):
++            raise LedgerError("worker output rejected: credential-like content")
+         encoded = _canonical(payload)
+         payload_hash = hashlib.sha256(encoded.encode()).hexdigest()
+         artifact_id = "art_" + payload_hash[:24]
+         neuron_id = None
+         receipt_id = "rcpt_stage_" + hashlib.sha256((stage_execution_id + ":" + str(lease_version)).encode()).hexdigest()[:24]
+-        with self._transaction():
++        with self._transaction(immediate=True):
+             # Recheck the fence inside the write transaction, after all work
+             # has been selected, so a late worker cannot commit evidence.
+-            current = self.db.execute("SELECT * FROM stage_executions WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=? AND row_version=?", (stage_execution_id, worker_id, lease_version, row["row_version"])).fetchone()
++            current = self.db.execute("SELECT * FROM stage_executions WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=? AND row_version=? AND lease_expires_at>?", (stage_execution_id, worker_id, lease_version, row["row_version"], time.time())).fetchone()
+             if not current:
+                 raise LedgerError("stale lease")
+             self.db.execute("INSERT OR IGNORE INTO artifacts(artifact_id,artifact_hash,payload_json) VALUES (?,?,?)", (artifact_id, payload_hash, encoded))
+@@ -298,8 +304,8 @@
+     def fail_stage(self, stage_execution_id: str, worker_id: str, lease_version: int, error_code: str,
+                    retryable: bool, max_attempts: int = 3, backoff_seconds: float = 1.0) -> dict[str, Any]:
+         row = self._lease_guard(stage_execution_id, worker_id, lease_version)
+-        with self.db:
+-            current = self.db.execute("SELECT * FROM stage_executions WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=? AND row_version=?", (stage_execution_id, worker_id, lease_version, row["row_version"])).fetchone()
++        with self._transaction(immediate=True):
++            current = self.db.execute("SELECT * FROM stage_executions WHERE stage_execution_id=? AND state='RUNNING' AND lease_owner=? AND lease_version=? AND row_version=? AND lease_expires_at>?", (stage_execution_id, worker_id, lease_version, row["row_version"], time.time())).fetchone()
+             if not current:
+                 raise LedgerError("stale lease")
+             can_retry = retryable and row["attempt_no"] < max_attempts
+@@ -307,7 +313,7 @@
+             if can_retry:
+                 attempt = row["attempt_no"] + 1
+                 retry_id = "stage_" + hashlib.sha256(f"{row['work_code']}\0{row['stage_code']}\0{attempt}".encode()).hexdigest()[:24]
+-                self.db.execute("INSERT INTO stage_executions(stage_execution_id,work_code,stage_code,sequence_no,attempt_no,state,assigned_capability,next_attempt_at) VALUES (?,?,?,?,?,?,?,?)", (retry_id,row["work_code"],row["stage_code"],row["sequence_no"],attempt,"RETRY_WAIT",row["assigned_capability"],time.time()+backoff_seconds*(2**(row["attempt_no"]-1))))
++                self.db.execute("INSERT INTO stage_executions(stage_execution_id,work_code,stage_code,sequence_no,attempt_no,state,assigned_capability,next_attempt_at,input_context_ref) VALUES (?,?,?,?,?,?,?,?,?)", (retry_id,row["work_code"],row["stage_code"],row["sequence_no"],attempt,"RETRY_WAIT",row["assigned_capability"],time.time()+backoff_seconds*(2**(row["attempt_no"]-1)),row["input_context_ref"]))
+                 state = "RETRY_WAIT"
+             else:
+                 state = "DEAD_LETTER" if retryable else "FAILED"
+@@ -923,7 +929,7 @@
+         try:
+             quick = self.db.execute("PRAGMA quick_check").fetchone()[0]
+             fk = self.db.execute("PRAGMA foreign_key_check").fetchall()
+-            current = self.db.execute("SELECT record_id,COUNT(*) FROM memory_revisions WHERE is_current=1 GROUP BY record_id HAVING COUNT(*) != 1").fetchall()
++            current = self.db.execute("SELECT r.record_id,COUNT(v.revision_id) FROM memory_records r LEFT JOIN memory_revisions v ON v.record_id=r.record_id AND v.is_current=1 WHERE r.state IN ('active','promoted') GROUP BY r.record_id HAVING COUNT(v.revision_id) != 1").fetchall()
+             audit = self.verify_audit_chain()
+             deletion = self.verify_deletion_ledger() if self.deletion_ledger_path else True
+             status = "PASS" if quick == "ok" and not fk and not current and audit and deletion else "BLOCKED"
+--- baseline/onoes_mind/pre_runtime_campaign.py
++++ candidate/onoes_mind/pre_runtime_campaign.py
+@@ -187,7 +187,7 @@
+         ledger.register_a2a_agent("echo", b"echo-phase10-key-0001", can_receive=True)
+         ledger.create_work_item("delivery", "tripp", "p", "pipe", "idem", "echo", "local")
+         stage = ledger.add_stage("delivery", "stage", 1, "worker")
+-        claim = ledger.claim_stage("worker", now=100.0)
++        claim = ledger.claim_stage("worker")
+         result = ledger.complete_stage(claim["stage_execution_id"], "worker", claim["lease_version"], {"safe": True})
+         envelope = json.loads(ledger.db.execute("SELECT envelope_json FROM outbox_messages").fetchone()[0])
+         attempts = {"count": 0}
+--- baseline/tests/test_audit_repairs.py
++++ candidate/tests/test_audit_repairs.py
+@@ -0,0 +1,149 @@
++"""Regression checks for the September audit; synthetic data only."""
++import json
++import socket
++import sqlite3
++from unittest.mock import patch
++
++import pytest
++
++from onoes_mind import BridgeClient, BridgeServer, Ledger, LedgerError
++from onoes_mind.bridge import PROTOCOL_VERSION, RUNTIME_FAMILY, _mac
++
++
++@pytest.fixture
++def ledger():
++    instance = Ledger()
++    for principal in ('operator', 'echo', 'cyony'):
++        instance.create_principal(principal)
++    yield instance
++    instance.close()
++
++
++def request(key):
++    envelope = {
++        'protocol_version': PROTOCOL_VERSION, 'request_id': 'audit-negotiation',
++        'runtime_identity': {'agent_id': 'echo', 'runtime_family': RUNTIME_FAMILY,
++                             'runtime_instance_id': 'synthetic-audit'},
++        'capabilities': ['task.start'], 'operation': 'negotiate', 'payload': {},
++    }
++    envelope['auth'] = {'mac': _mac(envelope, key)}
++    return envelope
++
++
++def send(address, envelope):
++    with socket.create_connection(address, timeout=3) as connection:
++        connection.sendall(json.dumps(envelope).encode() + b'\n')
++        return json.loads(connection.makefile('rb').readline())
++
++
++@pytest.mark.parametrize('bad_auth', [None, {}, {'mac': 'invalid'}, {'mac': 123}])
++def test_cached_replay_authenticates_before_returning_response(ledger, bad_auth):
++    key = b'synthetic-audit-bridge-key'
++    server = BridgeServer(ledger, auth_key=key)
++    server.start()
++    try:
++        envelope = request(key)
++        first = send(server.address, envelope)
++        assert first['ok']
++        assert send(server.address, envelope) == first
++        envelope['auth'] = bad_auth
++        denied = send(server.address, envelope)
++        assert denied == {'ok': False, 'error': 'authentication failed'}
++    finally:
++        server.close()
++
++
++def test_cached_replay_rechecks_current_key(ledger):
++    server = BridgeServer(ledger, auth_key=b'synthetic-before-key')
++    server.start()
++    try:
++        envelope = request(server.auth_key)
++        assert send(server.address, envelope)['ok']
++        server.auth_key = b'synthetic-after-key'
++        assert send(server.address, envelope)['ok'] is False
++        envelope['auth'] = {'mac': _mac(envelope, server.auth_key)}
++        assert send(server.address, envelope)['ok']
++    finally:
++        server.close()
++
++
++def claim(ledger):
++    ledger.create_work_item('audit-task', 'operator', 'onoes-mind', 'audit', 'audit-task')
++    ledger.add_stage('audit-task', 'main', 1, 'audit', input_context_ref='artifact:input')
++    return ledger.claim_stage('echo', lease_seconds=60)
++
++
++@pytest.mark.parametrize('operation', ['complete', 'heartbeat', 'fail'])
++@pytest.mark.parametrize('offset', [0, 1])
++def test_expiry_fences_mutation_without_recovery(ledger, operation, offset):
++    stage = claim(ledger)
++    before = '\n'.join(ledger.db.iterdump())
++    args = (stage['stage_execution_id'], 'echo', stage['lease_version'])
++    with patch('onoes_mind.ledger.time.time', return_value=stage['lease_expires_at'] + offset):
++        with pytest.raises(LedgerError, match='stale lease'):
++            if operation == 'complete':
++                ledger.complete_stage(*args, {'result': 'synthetic'})
++            elif operation == 'heartbeat':
++                ledger.heartbeat(*args)
++            else:
++                ledger.fail_stage(*args, 'interrupted', retryable=True)
++    assert '\n'.join(ledger.db.iterdump()) == before
++
++
++@pytest.mark.parametrize('operation', ['complete', 'fail'])
++def test_expiry_is_rechecked_inside_write_transaction(ledger, operation):
++    stage = claim(ledger)
++    before = '\n'.join(ledger.db.iterdump())
++    deadline = stage['lease_expires_at']
++    args = (stage['stage_execution_id'], 'echo', stage['lease_version'])
++    with patch('onoes_mind.ledger.time.time', side_effect=[deadline - 1, deadline]):
++        with pytest.raises(LedgerError, match='stale lease'):
++            if operation == 'complete':
++                ledger.complete_stage(*args, {'result': 'synthetic'})
++            else:
++                ledger.fail_stage(*args, 'interrupted', retryable=True)
++    assert '\n'.join(ledger.db.iterdump()) == before
++
++
++@pytest.mark.parametrize('recovery', [False, True])
++def test_retry_transition_is_atomic_and_preserves_input(ledger, recovery):
++    stage = claim(ledger)
++    ledger.db.execute("CREATE TEMP TRIGGER deny_retry BEFORE INSERT ON stage_executions WHEN NEW.attempt_no=2 BEGIN SELECT RAISE(ABORT, 'injected retry failure'); END")
++    before = '\n'.join(ledger.db.iterdump())
++    with pytest.raises(sqlite3.IntegrityError, match='injected retry failure'):
++        if recovery:
++            ledger.recover_expired_leases(now=stage['lease_expires_at'])
++        else:
++            ledger.fail_stage(stage['stage_execution_id'], 'echo', stage['lease_version'], 'interrupted', retryable=True, backoff_seconds=0)
++    assert '\n'.join(ledger.db.iterdump()) == before
++    ledger.db.execute('DROP TRIGGER deny_retry')
++    if recovery:
++        assert ledger.recover_expired_leases(now=stage['lease_expires_at']) == 1
++    else:
++        ledger.fail_stage(stage['stage_execution_id'], 'echo', stage['lease_version'], 'interrupted', retryable=True, backoff_seconds=0)
++    next_stage = ledger.claim_stage('cyony', now=stage['lease_expires_at'] + 1)
++    assert next_stage['input_context_ref'] == 'artifact:input'
++
++
++@pytest.mark.parametrize('payload_kind', ['value', 'nested', 'key'])
++def test_worker_secret_rejection_has_no_durable_side_effects(ledger, payload_kind):
++    stage = claim(ledger)
++    secret = 'sk-' + 'SyntheticAuditOnly' * 2
++    payload = {'value': secret} if payload_kind == 'value' else ({'nested': [{'value': secret}]} if payload_kind == 'nested' else {secret: 'value'})
++    before = '\n'.join(ledger.db.iterdump())
++    with pytest.raises(LedgerError, match='credential-like content') as error:
++        ledger.complete_stage(stage['stage_execution_id'], 'echo', stage['lease_version'], payload)
++    assert secret not in str(error.value)
++    assert '\n'.join(ledger.db.iterdump()) == before
++    result = ledger.complete_stage(stage['stage_execution_id'], 'echo', stage['lease_version'], {'result': 'sanitized'})
++    assert result['receipt_id']
++
++
++@pytest.mark.parametrize('state,expected', [('active', 'BLOCKED'), ('promoted', 'BLOCKED'), ('purged', 'PASS')])
++def test_integrity_requires_current_revision_for_live_records(ledger, state, expected):
++    token = ledger.issue_credential('echo', 'synthetic-audit-token')
++    record = ledger.remember(token, {'event_id': 'audit-memory', 'claim': 'synthetic fact', 'kind': 'knowledge', 'project_id': 'onoes-mind'})['record_id']
++    assert ledger.integrity_report()['status'] == 'PASS'
++    ledger.db.execute('UPDATE memory_records SET state=? WHERE record_id=?', (state, record))
++    ledger.db.execute('DELETE FROM memory_revisions WHERE record_id=?', (record,))
++    assert ledger.integrity_report()['status'] == expected
+--- baseline/tests/test_final_candidate_manifest.py
++++ candidate/tests/test_final_candidate_manifest.py
+@@ -30,7 +30,7 @@
+         for relative, expected in manifest[section].items():
+             assert _hash(ROOT / relative) == expected, relative
+     assert manifest["test_matrix"] == {
+-            "full_pytest_collected": 167,
++            "full_pytest_collected": 188,
+         "focused_phase10_collected": 73,
+         "focused_synthetic_collected": 19,
+         "pre_runtime_campaign_collected": 4,
+--- baseline/tests/test_phase10_security_reproducibility.py
++++ candidate/tests/test_phase10_security_reproducibility.py
+@@ -10,7 +10,7 @@
+     audit = boundary_audit(WORKSPACE)
+     assert audit["network"] == audit["native_store"] == "DENY"
+     assert audit["credentials"] == audit["runtime_contact"] == audit["provider_contact"] == "NONE"
+-    assert audit["workspace"].lower().endswith("onoes-mind")
++    assert Path(audit["workspace"]).resolve() == Path(__file__).resolve().parents[1]
+ 
+ 
+ def test_reproducibility_manifest_is_sorted_scoped_and_blocked():
+--- baseline/tests/test_phase2.py
++++ candidate/tests/test_phase2.py
+@@ -47,7 +47,7 @@
+     ledger.add_stage("w-3", "structure", 1, "synthetic")
+     first = ledger.claim_stage("worker-a", lease_seconds=1)
+     time.sleep(1.05)
+-    recovered = ledger.recover_expired_leases(now=time.time() + 2)
++    recovered = ledger.recover_expired_leases(now=time.time())
+     second = ledger.claim_stage("worker-b")
+     with pytest.raises(LedgerError, match="stale lease"):
+         ledger.complete_stage(first["stage_execution_id"], "worker-a", first["lease_version"], {"late": True})

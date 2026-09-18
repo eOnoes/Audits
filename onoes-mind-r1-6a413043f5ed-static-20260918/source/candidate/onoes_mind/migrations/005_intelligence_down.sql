@@ -1,0 +1,11 @@
+DROP INDEX IF EXISTS audit_stage_claim_index;
+DROP TABLE IF EXISTS handoff_artifacts;
+DROP TABLE IF EXISTS audit_stage_runs;
+DROP TABLE IF EXISTS audit_pipelines;
+DROP TABLE IF EXISTS reviewer_capabilities;
+ALTER TABLE neurons DROP COLUMN artifact_ref;
+ALTER TABLE neurons DROP COLUMN provenance_json;
+ALTER TABLE neurons DROP COLUMN freshness_at;
+ALTER TABLE neurons DROP COLUMN confidence;
+ALTER TABLE neurons DROP COLUMN importance;
+ALTER TABLE neurons DROP COLUMN project_id;

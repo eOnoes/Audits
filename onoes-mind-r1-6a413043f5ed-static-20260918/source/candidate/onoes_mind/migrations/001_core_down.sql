@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS memory_fts;
+DROP TABLE IF EXISTS audit_events;
+DROP TABLE IF EXISTS secret_incidents;
+DROP TABLE IF EXISTS evidence_refs;
+DROP TABLE IF EXISTS memory_revisions;
+DROP TABLE IF EXISTS memory_records;
+DROP TABLE IF EXISTS submission_events;
+DROP TABLE IF EXISTS scope_grants;
+DROP TABLE IF EXISTS credentials;
+DROP TABLE IF EXISTS principals;
+DROP TABLE IF EXISTS schema_migrations;
