@@ -1,0 +1,293 @@
+{
+  "derivation": "selected compile/result fields; private output/toolchain paths and unselected targets omitted; original bytes NOT supplied",
+  "original": {
+    "gitBlobOid": "9fea32ef1008f27f13d1b789b29afea912f417cd",
+    "sha256": "12eeb626ca4c7f04e2b0fc480a3970675fc6b6c3c192400ddfc8e36515b9aee9",
+    "byteLength": 44092
+  },
+  "selectedTargets": [
+    "host-report-sink.dll",
+    "host-clock-tests.exe",
+    "host-clock-context-tests.exe",
+    "retained-watchdog-tests.exe",
+    "controller-retention-tests.exe",
+    "host-code-set-tests.exe"
+  ],
+  "declaredSources": [
+    {
+      "source": "tests/probes/windows-v3-metadata-host-sink.cs",
+      "output": "host-report-sink.dll",
+      "target": "library",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-sink-read.cs",
+        "tests/probes/windows-v3-metadata-host-root.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention.cs",
+        "tests/probes/windows-v3-metadata-retained-watchdog.cs",
+        "tests/probes/windows-v3-metadata-controller-retention.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-storage.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-history-read.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-host-code-policy.cs",
+        "tests/probes/windows-v3-metadata-host-code-hold.cs",
+        "tests/probes/windows-v3-metadata-host-code-set.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-host-sink-policy.cs",
+        "tests/probes/windows-v3-metadata-host-root-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-history.cs",
+        "tests/probes/windows-v3-metadata-bootstrap-report.cs",
+        "tests/probes/windows-v3-metadata-provision-policy.cs",
+        "tests/probes/windows-v3-metadata-service-setup-policy.cs",
+        "tests/probes/windows-v3-metadata-service-start-policy.cs",
+        "tests/probes/windows-v3-metadata-image-policy.cs",
+        "tests/probes/windows-v3-metadata-case-report.cs",
+        "tests/probes/windows-v3-metadata-service-job-policy.cs",
+        "tests/probes/windows-v3-metadata-service-policy.cs",
+        "tests/probes/windows-v3-metadata-service-control-policy.cs",
+        "tests/probes/windows-v3-metadata-role-policy.cs",
+        "tests/probes/windows-v3-metadata-configuration.cs"
+      ]
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-tests.cs",
+      "output": "host-clock-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs"
+      ]
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-context-tests.cs",
+      "output": "host-clock-context-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs"
+      ]
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-retained-watchdog-tests.cs",
+      "output": "retained-watchdog-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-retained-watchdog.cs",
+        "tests/probes/windows-v3-metadata-retained-watchdog-model.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records-tests.cs"
+      ]
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-controller-retention-tests.cs",
+      "output": "controller-retention-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-controller-retention.cs",
+        "tests/probes/windows-v3-metadata-controller-retention-model.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records-tests.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-host-sink-policy.cs",
+        "tests/probes/windows-v3-metadata-host-root-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-history.cs",
+        "tests/probes/windows-v3-metadata-bootstrap-report.cs",
+        "tests/probes/windows-v3-metadata-provision-policy.cs",
+        "tests/probes/windows-v3-metadata-service-setup-policy.cs",
+        "tests/probes/windows-v3-metadata-service-start-policy.cs",
+        "tests/probes/windows-v3-metadata-image-policy.cs",
+        "tests/probes/windows-v3-metadata-case-report.cs",
+        "tests/probes/windows-v3-metadata-service-job-policy.cs",
+        "tests/probes/windows-v3-metadata-service-policy.cs",
+        "tests/probes/windows-v3-metadata-service-control-policy.cs",
+        "tests/probes/windows-v3-metadata-role-policy.cs",
+        "tests/probes/windows-v3-metadata-configuration.cs"
+      ]
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-code-set-tests.cs",
+      "output": "host-code-set-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-code-set.cs",
+        "tests/probes/windows-v3-metadata-host-code-set-model.cs",
+        "tests/probes/windows-v3-metadata-host-code-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs"
+      ]
+    }
+  ],
+  "compileResults": [
+    {
+      "source": "tests/probes/windows-v3-metadata-host-sink.cs",
+      "target": "library",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "host-report-sink.dll",
+        "byteLength": 81408,
+        "sha256": "40c018d56337b9b329979a6f707f2b2625f894c5de2b96f317d1a10abe70854d"
+      }
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-retained-watchdog-tests.cs",
+      "target": "exe",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "retained-watchdog-tests.exe",
+        "byteLength": 42496,
+        "sha256": "52665d45b3e7cfa3b43fa8ece0c7645cca525569239880e25646c93f5ead1e8b"
+      }
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-controller-retention-tests.cs",
+      "target": "exe",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "controller-retention-tests.exe",
+        "byteLength": 67584,
+        "sha256": "c2e77f3a42486d03092c8ed4e1ec86d1d97be1df6ff3bbc5812e8c30c12b9fa6"
+      }
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-code-set-tests.cs",
+      "target": "exe",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "host-code-set-tests.exe",
+        "byteLength": 16896,
+        "sha256": "1f9e30130fc84b7f385d7a45a0084a2a220a186b1deb50828b8c824b506de943"
+      }
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-tests.cs",
+      "target": "exe",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "host-clock-tests.exe",
+        "byteLength": 13312,
+        "sha256": "ab1bb43c7b2fe4d964d81fb42df30a8394c7f578e88eb47ad075cf85bbf7cb0f"
+      }
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-context-tests.cs",
+      "target": "exe",
+      "status": 0,
+      "signal": null,
+      "succeeded": true,
+      "output": {
+        "path": "host-clock-context-tests.exe",
+        "byteLength": 20992,
+        "sha256": "cbba7d170f7520e84478dbcbf54b654c4dce706e5951f1cd56dcb517d77b2cf7"
+      }
+    }
+  ],
+  "isolatedResults": [
+    {
+      "executable": {
+        "path": "host-clock-context-tests.exe",
+        "byteLength": 20992,
+        "sha256": "cbba7d170f7520e84478dbcbf54b654c4dce706e5951f1cd56dcb517d77b2cf7"
+      },
+      "result": {
+        "kind": "host-clock-context-pure-and-local-runtime-only",
+        "wireBytes": 128,
+        "byteMutations": 128,
+        "nativeCases": "NOT_RUN"
+      },
+      "stdoutPath": "host-clock-context-tests.exe.stdout",
+      "stdoutSha256": "838f1fde36720bfe766c764b6ee2ed92cdd7ac66bab158fd9e5cd1620620aa08"
+    },
+    {
+      "executable": {
+        "path": "host-clock-tests.exe",
+        "byteLength": 13312,
+        "sha256": "ab1bb43c7b2fe4d964d81fb42df30a8394c7f578e88eb47ad075cf85bbf7cb0f"
+      },
+      "result": {
+        "kind": "host-clock-arithmetic-and-local-counter-only",
+        "nativeCases": "NOT_RUN"
+      },
+      "stdoutPath": "host-clock-tests.exe.stdout",
+      "stdoutSha256": "6dfe4fd54756a1e3ec1c641fdde02438ea29f5dcdcab1502b8ef9b74596f1c5a"
+    },
+    {
+      "executable": {
+        "path": "host-code-set-tests.exe",
+        "byteLength": 16896,
+        "sha256": "1f9e30130fc84b7f385d7a45a0084a2a220a186b1deb50828b8c824b506de943"
+      },
+      "result": {
+        "kind": "host-code-set-fake-holds-only",
+        "nativeCases": "NOT_RUN"
+      },
+      "stdoutPath": "host-code-set-tests.exe.stdout",
+      "stdoutSha256": "b37256f0fee2a3d4a1bd96ce1c013d4239137ee2b5cdb601a4aedef2d116c573"
+    },
+    {
+      "executable": {
+        "path": "controller-retention-tests.exe",
+        "byteLength": 67584,
+        "sha256": "c2e77f3a42486d03092c8ed4e1ec86d1d97be1df6ff3bbc5812e8c30c12b9fa6"
+      },
+      "result": {
+        "kind": "controller-retention-fake-native-only",
+        "nativeCases": "NOT_RUN"
+      },
+      "stdoutPath": "controller-retention-tests.exe.stdout",
+      "stdoutSha256": "156caf4e80bceef8047c4d9b2fc3263f95326095ad3b42180a74d66534d9d24f"
+    },
+    {
+      "executable": {
+        "path": "retained-watchdog-tests.exe",
+        "byteLength": 42496,
+        "sha256": "52665d45b3e7cfa3b43fa8ece0c7645cca525569239880e25646c93f5ead1e8b"
+      },
+      "result": {
+        "kind": "retained-watchdog-bridge-fake-native-only",
+        "nativeCases": "NOT_RUN"
+      },
+      "stdoutPath": "retained-watchdog-tests.exe.stdout",
+      "stdoutSha256": "be5194bd1a4c908b1c782fa35b7115829d7e11ac8c5502f2446c09bc5749adf9"
+    }
+  ]
+}

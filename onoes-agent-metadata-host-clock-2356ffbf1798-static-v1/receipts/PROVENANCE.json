@@ -1,0 +1,21 @@
+{
+  "auditId": "onoes-agent-metadata-host-clock-2356ffbf1798-static-v1",
+  "publisherRevision": "2356ffbf179872f40314f84992cdfa7642aadbdf",
+  "baseline": "27f63ab3e2b504f544a453c29001e6d7ada91e88",
+  "evidenceClass": "STATIC_SOURCE_PUBLISHER_GIT_READBACK",
+  "outputContract": {
+    "repository": "eOnoes/Audits",
+    "branch": "main",
+    "path": "onoes-agent-metadata-host-clock-2356ffbf1798-static-v1/reports/AUDIT_REPORT.md",
+    "allowedWrite": "completed-sanitized-report-only-after-workflow-check",
+    "preserveInputsAndPriorReports": true,
+    "verifiedImmutableReadBackRequired": true,
+    "noWriteAccess": "BLOCKED_NO_GITHUB_WRITE_ACCESS",
+    "publicationStatus": "LOCAL_PENDING_EXACT_TRANSFER_APPROVAL"
+  },
+  "templates": {
+    "requestGitBlob": "3219b26e112287ad98bd3857fafb70b46004c41b",
+    "deliveryGitBlob": "835cd007560a765e9084021cccbf903040b1861d"
+  },
+  "subjectExecutedByPacketBuilder": false
+}

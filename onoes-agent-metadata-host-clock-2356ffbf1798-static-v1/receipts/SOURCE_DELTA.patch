@@ -1,0 +1,636 @@
+diff --git a/product/companion-v1/docs/handoff/ONOES_AGENT_V3_METADATA_NODE_CLOCK.md b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_METADATA_NODE_CLOCK.md
+new file mode 100644
+index 0000000..1c13d80
+--- /dev/null
++++ b/product/companion-v1/docs/handoff/ONOES_AGENT_V3_METADATA_NODE_CLOCK.md
+@@ -0,0 +1,107 @@
++# Original host clock in Node collectors
++
++2026-09-19. Dormant integration and LOCAL PRODUCER evidence only. No VM, native
++retention, protected runtime loading, installation, provider or approval use.
++
++## Change and scope
++
++The default synthetic ARM/session constructors measured time from construction.
++That must not be the physical launcher's contract: elapsed host preparation must
++not be added back to work or report deadlines. `MetadataNodeHostClock` receives
++exact OMK1 bytes plus separately supplied reference, host session, nonce and work
++pins. It retains the original QPC origin. New `fromHostClock` factories bind ARM,
++watchdog session and bootstrap collector to that privately branded clock, with
++start zero and original work / work+5000 deadlines. Pending timer delays subtract
++current original elapsed time. Attach, arm, claim, final decode and wire handoff
++keep their existing synchronous deadline rechecks; timers are not termination
++evidence and do not establish an atomic liveness/dispatch boundary.
++
++No callers or process-launching consumers are activated. Existing public
++clock-callback constructors remain **synthetic seams**, not alternatives for a
++protected physical composition. No caller callback/reset is accepted by the new
++clock. Copies of OMK1 are bounded before allocation; proxies, shared/detached
++buffers, mismatched pins and invalid domains deny. Binding uses a private WeakMap
++and fixed closure, not a caller-overridable method. Binding mismatch or sample
++failure/regression latches that clock unavailable, including existing bindings.
++Work expiry alone does not invalidate the later stop/retention clock.
++
++## Pinned implementation, not a general hrtime promise
++
++Supported here: Windows x64, Node **v24.14.0**, libuv **1.51.0**. Other runtime
++tuples deny. The module captures the sampler before exposing its interface.
++
++Upstream primary sources inspected:
++
++- [Node v24.14.0 process methods](https://raw.githubusercontent.com/nodejs/node/v24.14.0/src/node_process_methods.cc):
++  `HrtimeBigIntImpl` preserves the unsigned 64-bit value returned by `uv_hrtime`.
++- [The same release's Windows libuv util](https://raw.githubusercontent.com/nodejs/node/v24.14.0/deps/uv/src/win/util.c):
++  frequency comes from QueryPerformanceFrequency; `uv__hrtime` uses binary64
++  conversions/divisions of QPC and frequency before truncating to integer ns.
++
++Inference from these exact sources, conditioned on an unmodified runtime and
++valid same-host/same-boot QPC: the C# original counter and Node sample share an
++epoch. This is not portable behavior guaranteed for arbitrary Node versions.
++Version strings alone are NOT executable provenance, loader custody, proof of
++same boot, or an independent current-frequency measurement. A future protected
++launcher must establish those facts; context reference and host-session equality
++are only binding to independently trusted input, not authentication themselves.
++
++## Conservative arithmetic
++
++Supported counter/frequency values are positive signed Int64. Original scaled
++ns and Node samples must be positive and at most 2^63-1; there is no wrap support.
++Underlying QPC stability and valid, non-overflowing libuv conversion are host/OS
++assumptions. No claim is made for a broken/hooked QPC, forged frequency, restored
++boot epoch or integer-conversion overflow in a corrupted/unsupported runtime.
++
++For valid positive normal operands, the two integer-to-binary64 conversions and
++two divisions have aggregate relative error less than 2^-49 (a deliberately
++loose bound, including directed rounding). Within true scaled ns <2^64 this is
++less than 32768 ns; integer truncation adds less than 1 ns. The implementation
++uses a larger **1,000,000 ns allowance plus ceil(1e9/frequency) ns** for one QPC
++tick. It requires the sample beyond original floor-ns plus this allowance plus
++1 ns, denying too-fresh/uncertain/future origins instead of inventing a fresh
++start. A 1ms work window can therefore be conservatively unusable on reception.
++
++Elapsed is ceil((sample + allowance - floor(origin*1e9/frequency))/1e6), using
++BigInt subtraction/scaling before a bounded Number conversion. At 35000ms it
++saturates expired. This is an upper elapsed bound: it may deny early but must
++not extend an original deadline. The C# tick oracle and floating conversion
++simulation are separate arithmetic in the tests; the tests supplement, rather
++than prove, the numeric argument.
++
++## Evidence and remaining gates
++
++Focused pre-capture run: 131/131 Node tests passed, including 24 new cases.
++The new arithmetic corpus checks 2,484 exponent/frequency/rounding combinations;
++all 128 context-byte mutations and every wrong length deny. Seven isolated
++processes check sampler throw/regression/range failure and four unsupported
++runtime identifiers. Real synthetic children exercise ARM/EOF/report/close and
++one-use bootstrap handoff. Frozen-clock controls falsify timer renewal itself.
++
++`test-v3-metadata-node-clock-process.mjs` separately invokes the pinned existing
++C# clock-only executable with bounded execution. It brackets the captured
++original QPC against Node, deliberately spends 125ms, compares the live C# and
++Node elapsed values, then reconstructs a receiver without renewing time. Pins
++travel through synthetic stdout in this experiment: **not authenticated IPC**.
++
++Final capture: **492/492 metadata Node tests passed**, zero failures/skips/cancels,
++44,120.7352ms. All 40 fixed targets compiled; all 33 isolated pure/fake/clock
++suites, the C# clock transfer, joined history and Node clock join passed. Capture
++ran 2026-09-19 **07:29:12.927–07:30:06.514 UTC** on Windows x64 Node v24.14.0 /
++libuv 1.51.0. The Node/C# comparison recorded 153ms before the receiving process,
++196ms in C#, and 202ms back in Node. These are producer observations, not an
++independently executed gate.
++
++Raw output and receipt are in `docs/reports/v3-metadata-node-clock-20260919/`.
++All 200 selected source/script inputs were unchanged across capture; all ten raw
++stdout/stderr outputs and input identities were rechecked from disk. The receipt
++and raw outputs, not this narrative, are the source of final command outcomes.
++No earlier capture or immutable audit packet is rewritten.
++
++Before physical composition, obtain combined review of this pinned-runtime
++clock join alongside protected runtime/loader custody and authenticated clock
++transport. Runtime update requires reviewing the conversion again, not changing
++the version guard blindly. Protected launcher, native storage placement,
++cross-process ownership/IPC, VM tests and W1-W5 remain OPEN. None of these local
++tests grant dispatch, guest-stop proof, verification evidence or release status.
+diff --git a/product/companion-v1/scripts/capture-v3-metadata-node-clock.mjs b/product/companion-v1/scripts/capture-v3-metadata-node-clock.mjs
+new file mode 100644
+index 0000000..7b3ff98
+--- /dev/null
++++ b/product/companion-v1/scripts/capture-v3-metadata-node-clock.mjs
+@@ -0,0 +1,40 @@
++// Local producer evidence only: pure/fake suites and ordinary clock processes.
++import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
++import {readFileSync,writeFileSync,readdirSync,mkdirSync} from 'node:fs';
++import {resolve,join,dirname} from 'node:path';import {fileURLToPath} from 'node:url';import {spawnSync} from 'node:child_process';
++const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),reportPath='docs/reports/v3-metadata-node-clock-20260919';
++const hash=b=>createHash('sha256').update(b).digest('hex');
++const identity=path=>{const b=readFileSync(join(root,path));return {path,byteLength:b.length,sha256:hash(b)};};
++const paths=['scripts','scripts/tests','tests/probes','tests/helpers'].flatMap(dir=>readdirSync(join(root,dir))
++  .filter(p=>p.includes('v3-metadata')&&/\.(?:cs|mjs|ps1)$/.test(p)).map(p=>`${dir}/${p}`)).sort();
++const before=paths.map(identity),startedAt=new Date().toISOString(),outputs=[],commands=[];mkdirSync(join(root,reportPath));
++function run(name,args){
++  const r=spawnSync(process.execPath,args,{cwd:root,windowsHide:true,shell:false,encoding:'utf8',timeout:240000,maxBuffer:16*1024*1024});
++  for(const [suffix,bytes] of [['stdout',r.stdout??''],['stderr',r.stderr??'']]){
++    const path=`${reportPath}/${name}.${suffix}`;writeFileSync(join(root,path),bytes,{flag:'wx'});outputs.push(identity(path));
++  }
++  commands.push({executable:process.execPath,args,status:r.status,signal:r.signal,error:r.error?.code??null});return r;
++}
++let failure=null,purePassed=false,transferPassed=false,historyPassed=false,nodeJoinPassed=false;
++try{
++  const pure=run('pure',['scripts/test-v3-metadata-channel.mjs']);assert.equal(pure.status,0,pure.stderr);assert.equal(pure.error,undefined);
++  const lines=pure.stdout.trim().split(/\r?\n/).map(s=>JSON.parse(s));
++  assert.equal(lines.length,2);assert.equal(lines[0].results.length,40);assert.equal(lines[1].results.length,33);purePassed=true;
++  const compile=lines[0],receiptPin=hash(readFileSync(join(compile.output,'receipt.json')));
++  const transfer=run('transfer',['scripts/test-v3-metadata-clock-transfer-process.mjs',compile.output,receiptPin]);
++  assert.equal(transfer.status,0,transfer.stderr);assert.equal(transfer.error,undefined);transferPassed=true;
++  const history=run('history',['scripts/test-v3-metadata-clock-history-process.mjs',compile.output,receiptPin]);
++  assert.equal(history.status,0,history.stderr);assert.equal(history.error,undefined);historyPassed=true;
++  const nodeJoin=run('node-join',['scripts/test-v3-metadata-node-clock-process.mjs',compile.output,receiptPin]);
++  assert.equal(nodeJoin.status,0,nodeJoin.stderr);assert.equal(nodeJoin.error,undefined);nodeJoinPassed=true;
++  const files=readdirSync(join(root,'scripts/tests')).filter(p=>/^v3-metadata-.*\.test\.mjs$/.test(p)).sort().map(p=>`scripts/tests/${p}`);
++  const node=run('metadata',['--test','--test-reporter=tap',...files]);assert.equal(node.status,0,node.stderr);assert.equal(node.error,undefined);
++  assert.deepEqual(paths.map(identity),before);
++}catch(error){failure=String(error);}
++const receipt={kind:'producer-node-original-clock-synthetic-only',startedAt,finishedAt:new Date().toISOString(),node:process.version,uv:process.versions.uv,arch:process.arch,platform:process.platform,
++  before,inputsUnchanged:JSON.stringify(before)===JSON.stringify(paths.map(identity)),outputs,commands,succeeded:failure===null,failure,
++  purePassed,transferPassed,historyPassed,nodeJoinPassed,sameHostBootAssumed:true,authenticatedChannel:false,protectedRuntimeCustodyEstablished:false,
++  nativeHostLibraryLoaded:false,nativeRetentionExecuted:false,vmContact:false,privilegedSetup:false};
++writeFileSync(join(root,reportPath,'execution.json'),JSON.stringify(receipt,null,2)+'\n',{flag:'wx'});
++console.log(JSON.stringify({reportPath,succeeded:receipt.succeeded,inputs:before.length,inputsUnchanged:receipt.inputsUnchanged,failure}));
++if(failure)process.exitCode=1;
+diff --git a/product/companion-v1/scripts/test-v3-metadata-node-clock-process.mjs b/product/companion-v1/scripts/test-v3-metadata-node-clock-process.mjs
+new file mode 100644
+index 0000000..6f2b810
+--- /dev/null
++++ b/product/companion-v1/scripts/test-v3-metadata-node-clock-process.mjs
+@@ -0,0 +1,37 @@
++// Actual C# QPC -> pinned Node timer experiment, ordinary local processes ONLY.
++// Synthetic public pins over stdout are NOT an authenticated launch channel.
++import assert from 'node:assert/strict';import {join,resolve} from 'node:path';import {fileURLToPath} from 'node:url';
++import {spawnSync} from 'node:child_process';import {createHash} from 'node:crypto';import {setTimeout as delay} from 'node:timers/promises';
++import {readPinnedCompileReceipt,snapshotBuildInput,matchesBuildIdentity} from './windows-v3-metadata-build-inputs.mjs';
++import {MetadataNodeHostClock as Clock,bindMetadataNodeHostClock as bind} from './windows-v3-metadata-node-clock.mjs';
++const root=fileURLToPath(new URL('../',import.meta.url)),[directory,pin]=process.argv.slice(2);
++assert.equal(process.argv.length,4);assert.equal(process.platform,'win32');assert.equal(process.version,'v24.14.0');assert.equal(process.versions.uv,'1.51.0');assert.equal(process.arch,'x64');
++assert.match(directory.replaceAll('\\','/'),/\/v3-metadata-compile-[A-Za-z0-9]+$/);assert.equal(resolve(directory,'..'),resolve(root,'artifacts'));
++const receipt=readPinnedCompileReceipt(directory,pin),id=receipt.results.find(r=>r.output.path==='host-clock-context-tests.exe').output;
++const executable=join(directory,id.path),commands=[];
++function check(){const b=snapshotBuildInput(executable,4194304);try{assert.ok(matchesBuildIdentity(b,id));}finally{b.fill(0);}}
++function run(args){
++  check();const before=process.hrtime.bigint();
++  const r=spawnSync(executable,args,{cwd:directory,windowsHide:true,shell:false,encoding:'utf8',timeout:5000,maxBuffer:4096,
++    env:{SystemRoot:'C:\\Windows',ONOES_METADATA_CLOCK_PROBE:'1'}});
++  const after=process.hrtime.bigint();assert.equal(r.error,undefined);assert.equal(r.signal,null);assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');check();
++  const result=JSON.parse(r.stdout);commands.push({args,result,nodeBeforeNs:before.toString(),nodeAfterNs:after.toString()});return {result,before,after};
++}
++const {result:c,before,after}=run(['capture']),wire=Buffer.from(c.wire,'hex');
++assert.equal(wire.length,128);const origin=wire.readBigUInt64LE(36),frequency=wire.readBigUInt64LE(44),originNs=origin*1000000000n/frequency;
++assert.ok(originNs>=before-1000000n&&originNs<=after+1000000n);
++await delay(125);
++const args=[c.reference,'07'.repeat(32),'01'.repeat(32),25000],clock=new Clock(wire,...args),bound=bind(clock,c.reference,args[2],25000);
++assert.equal(bound.startedAtMs,0);const nodeElapsedBefore=bound.read();assert.ok(nodeElapsedBefore>=125);
++const native=run(['receive',c.wire,c.reference]).result;assert.equal(native.accepted,true);
++const nodeElapsedAfter=bound.read();assert.ok(nodeElapsedAfter>=native.elapsed);assert.ok(native.elapsed>=nodeElapsedBefore-3);
++await delay(25);const recreated=new Clock(wire,...args);assert.ok(recreated.readElapsedMilliseconds()>=nodeElapsedAfter+20);
++const h=(d,b)=>createHash('sha256').update(d+'\0','ascii').update(b).digest();
++const rehash=b=>h('onoes-metadata-host-clock-context/v1',b.subarray(0,96)).copy(b,96);
++for(const at of [4,36,44,52,64]){const b=Buffer.from(wire);b[at]^=1;rehash(b);assert.throws(()=>new Clock(b,...args),/metadata-node-clock-unavailable/);}
++for(const edit of [b=>b.writeBigUInt64LE((1n<<63n)-1n,36),b=>b.writeBigUInt64LE(origin-frequency*30n,36)]){
++  const b=Buffer.from(wire);edit(b);rehash(b);const ref=h('onoes-metadata-host-clock-reference/v1',b).toString('hex');assert.throws(()=>new Clock(b,ref,...args.slice(1)),/metadata-node-clock-unavailable/);
++}
++console.log(JSON.stringify({kind:'producer-local-csharp-node-original-clock-join',node:process.version,uv:process.versions.uv,arch:process.arch,executable:id,commands,
++  nodeElapsedBefore,nativeElapsed:native.elapsed,nodeElapsedAfter,elapsedIncludesStartup:true,recreationPreservesOrigin:true,
++  sameHostBootAssumed:true,clockAuthenticationEstablished:false,protectedRuntimeCustodyEstablished:false,nativeMetadataExecuted:false,vmContact:false,authority:'none'}));
+diff --git a/product/companion-v1/scripts/tests/v3-metadata-node-clock.test.mjs b/product/companion-v1/scripts/tests/v3-metadata-node-clock.test.mjs
+new file mode 100644
+index 0000000..81a3566
+--- /dev/null
++++ b/product/companion-v1/scripts/tests/v3-metadata-node-clock.test.mjs
+@@ -0,0 +1,157 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
++import {spawn,spawnSync} from 'node:child_process';import {once} from 'node:events';import {fileURLToPath} from 'node:url';
++import {setTimeout as delay} from 'node:timers/promises';
++import {MetadataNodeClockState as State} from '../windows-v3-metadata-node-clock-policy.mjs';
++import {MetadataNodeHostClock as Clock,bindMetadataNodeHostClock as bind} from '../windows-v3-metadata-node-clock.mjs';
++import {MetadataWatchdogArmWindow as Arm} from '../windows-v3-metadata-arm.mjs';
++import {MetadataWatchdogSession as Session} from '../windows-v3-metadata-session.mjs';
++import {MetadataBootstrapReportSession as Report} from '../windows-v3-metadata-report-session.mjs';
++const max=(1n<<63n)-1n,ms=1000000n,second=1000000000n;
++const hash=(d,b)=>createHash('sha256').update(d+'\0','ascii').update(b).digest();
++const seal=b=>{hash('onoes-metadata-host-clock-context/v1',b.subarray(0,96)).copy(b,96);return b;};
++const reference=b=>hash('onoes-metadata-host-clock-reference/v1',b).toString('hex');
++const unavailable=/^Error: metadata-node-clock-unavailable$/;
++const runtimeTest=(name,fn)=>test(name,{skip:process.platform!=='win32'||process.arch!=='x64'||process.version!=='v24.14.0'||process.versions.uv!=='1.51.0'},fn);
++// Synthetic origin/pins only; not an authenticated C# context. Actual C# output
++// is exercised separately by test-v3-metadata-node-clock-process.mjs.
++function context(age=1000,work=5000,nonce='aa'.repeat(32)){
++  const b=Buffer.alloc(128);b.write('OMK1');Buffer.from(nonce,'hex').copy(b,4);
++  b.writeBigUInt64LE(process.hrtime.bigint()-BigInt(age)*ms,36);b.writeBigUInt64LE(second,44);
++  [work,work+5000,work+10000].forEach((v,i)=>b.writeUInt32LE(v,52+i*4));b.fill(7,64,96);seal(b);
++  return {b,args:[reference(b),'07'.repeat(32),nonce,work],pins:{inventoryDigest:'1'.repeat(64),runNonce:nonce,bundleDigest:'b'.repeat(64),fixtureDigest:'33'.repeat(32),workMs:work,clockReference:reference(b),intentReference:'d'.repeat(64)}};
++}
++const receive=c=>new Clock(c.b,...c.args);
++
++test('QPC integer domain, budget and conversion range reject before sampling',()=>{
++  for(const bad of [0n,-1n,max+1n,1,NaN,null,undefined,{}]){
++    assert.throws(()=>new State(bad,second,5000),unavailable);assert.throws(()=>new State(second,bad,5000),unavailable);
++  }
++  for(const bad of [0,-1,25001,1.5,NaN,Infinity,'1'])assert.throws(()=>new State(second,second,bad),unavailable);
++  assert.throws(()=>new State(max,1n,5000),unavailable);
++});
++test('one original epoch with upward rounding and expiry leaves stop/retention available',()=>{
++  const s=new State(10n*second,second,1000);
++  assert.equal(s.observe(10n*second+100n*ms),102);
++  const elapsed=s.observe(11n*second);assert.equal(elapsed,1002);
++  assert.throws(()=>s.requireBefore(elapsed,1000),/expired/);s.requireBefore(elapsed,6000);
++  assert.equal(s.observe(12n*second),2002);assert.equal(s.observe(max),35000);
++  assert.throws(()=>s.requireBefore(35000,11000),/expired/);
++});
++test('bad, future, uncertain or regressing samples latch without recovery/reset',()=>{
++  for(const bad of [0n,-1n,max+1n,1,NaN,null,undefined,{},10n*second,10n*second+ms]){
++    const s=new State(10n*second,second,5000);assert.throws(()=>s.observe(bad),unavailable);
++    assert.throws(()=>s.observe(11n*second),unavailable);
++  }
++  const s=new State(10n*second,second,5000);s.observe(11n*second);assert.throws(()=>s.observe(11n*second-1n),unavailable);assert.throws(()=>s.observe(12n*second),unavailable);
++});
++test('invalid deadlines and explicit invalidation latch; exact deadline expires',()=>{
++  for(const bad of [0,15001,1.5,NaN,Infinity,'5000']){const s=new State(second,second,5000);assert.throws(()=>s.requireBefore(100,bad),unavailable);assert.throws(()=>s.observe(2n*second),unavailable);}
++  const s=new State(second,second,5000);s.requireBefore(4999,5000);assert.throws(()=>s.requireBefore(5000,5000),/expired/);s.invalidate();assert.throws(()=>s.observe(2n*second),unavailable);
++});
++test('conservative Node conversion dominates exact tick oracle across exponent/frequency cases',t=>{
++  let checked=0;
++  for(const frequency of [1n,3n,32768n,1000000n,10000000n,24000000n,1000000000n,3000000001n,max])
++    for(let exponent=37n;exponent<=62n;exponent++)for(const offset of [-1n,0n,1n,12345n])for(const age of [2000n,5001n,24990n]){
++      const ticks=(((1n<<exponent)+offset)*frequency)/second,origin=ticks-age*frequency/1000n;
++      if(origin<=0n||ticks>max)continue;
++      const sample=BigInt(Math.trunc(Number(ticks)/(Number(frequency)/1e9)));
++      if(sample>max)continue;
++      const exactNs=ticks*second/frequency,error=sample>exactNs?sample-exactNs:exactNs-sample;
++      assert.ok(error<ms);
++      const actual=new State(origin,frequency,25000).observe(sample),oracle=(ticks-origin+1n)*1000n/frequency;
++      assert.ok(BigInt(actual)>=oracle,`${frequency}/${exponent}/${offset}/${age}`);checked++;
++    }
++  assert.ok(checked>1500,`checked=${checked}`);t.diagnostic(`exact tick oracle cases: ${checked}`);
++});
++
++runtimeTest('runtime wire is exact, pinned, immutable and copied without calling hooks',()=>{
++  const c=context(),clock=receive(c),r=bind(clock,...[c.pins.clockReference,c.pins.runNonce,c.pins.workMs]);
++  assert.ok(Object.isFrozen(clock));assert.ok(Object.isFrozen(Clock.prototype));assert.equal(r.startedAtMs,0);
++  c.b.fill(0);assert.ok(clock.readElapsedMilliseconds()>=1000);assert.ok(r.read()>=1000);
++  assert.throws(()=>{clock.readElapsedMilliseconds=()=>0;},TypeError);
++  const d=context();Object.defineProperty(d.b,'byteLength',{get(){throw Error('hook');}});receive(d);
++  let calls=0;const p=new Proxy(context().b,{get(){calls++;throw Error('hook');}});
++  assert.throws(()=>new Clock(p,...d.args),unavailable);assert.equal(calls,0);
++});
++runtimeTest('all OMK1 byte mutations, lengths and unsupported buffers deny',()=>{
++  const c=context();for(let i=0;i<128;i++){const b=Buffer.from(c.b);b[i]^=1;assert.throws(()=>new Clock(b,...c.args),unavailable);}
++  for(let n=0;n<=129;n++)if(n!==128)assert.throws(()=>new Clock(Buffer.alloc(n),...c.args),unavailable);
++  for(const b of [new Uint8Array(new SharedArrayBuffer(128)),new DataView(c.b.buffer),{},null])assert.throws(()=>new Clock(b,...c.args),unavailable);
++  const detached=new Uint8Array(128);structuredClone(detached.buffer,{transfer:[detached.buffer]});assert.throws(()=>new Clock(detached,...c.args),unavailable);
++});
++runtimeTest('coherent rewrites do not substitute independent pins or repair invalid domains',()=>{
++  const c=context();for(const at of [4,36,44,52,56,60,64]){const b=Buffer.from(c.b);b[at]^=1;seal(b);assert.throws(()=>new Clock(b,...c.args),unavailable);}
++  for(const edit of [b=>b.writeBigUInt64LE(0n,36),b=>b.writeBigUInt64LE(max+1n,36),b=>b.writeBigUInt64LE(0n,44),b=>b.writeBigUInt64LE(max+1n,44),b=>b.writeUInt32LE(1,56),b=>b.writeUInt32LE(1,60)]){
++    const b=Buffer.from(c.b);edit(b);seal(b);assert.throws(()=>new Clock(b,reference(b),...c.args.slice(1)),unavailable);
++  }
++  for(let i=0;i<3;i++)for(const bad of [null,{},'0'.repeat(64),'A'.repeat(64),'f'.repeat(64)]){const args=[...c.args];args[i]=bad;assert.throws(()=>new Clock(c.b,...args),unavailable);}
++  assert.throws(()=>receive(context(6000,5000)),unavailable);assert.throws(()=>receive(context(-1000,5000)),unavailable);
++});
++runtimeTest('only the privately branded clock binds; mismatches poison existing bindings',()=>{
++  for(const value of [{readElapsedMilliseconds:()=>0},Object.create(Clock.prototype),null,new Proxy(receive(context()),{})])assert.throws(()=>bind(value,'c'.repeat(64),'a'.repeat(64),5000),unavailable);
++  class Fake extends Clock{}const c=context();assert.throws(()=>new Fake(c.b,...c.args),unavailable);
++  for(const field of [0,1,2]){
++    const clock=receive(c),args=[c.pins.clockReference,c.pins.runNonce,c.pins.workMs],bound=bind(clock,...args);args[field]=field===2?5001:'f'.repeat(64);
++    assert.throws(()=>bind(clock,...args),unavailable);assert.throws(()=>bound.read(),unavailable);assert.throws(()=>clock.readElapsedMilliseconds(),unavailable);
++  }
++});
++runtimeTest('binding captures sampler and does not invoke a substituted public hrtime property',()=>{
++  const c=context(),saved=process.hrtime.bigint;
++  try{process.hrtime.bigint=()=>{throw Error('caller-hook');};assert.ok(receive(c).readElapsedMilliseconds()>=1000);}finally{process.hrtime.bigint=saved;}
++});
++runtimeTest('elapsed persists across delay and constructor recreation',async()=>{
++  const c=context(),a=receive(c),first=a.readElapsedMilliseconds();await delay(25);
++  const b=receive(c);assert.ok(b.readElapsedMilliseconds()>=first+20);assert.ok(a.readElapsedMilliseconds()>=first+20);
++});
++for(const mode of ['throw','regress','range','version','platform','arch','uv'])runtimeTest(`isolated runtime ${mode} denies without diagnostic leakage`,()=>{
++  const fixture=fileURLToPath(new URL('../../tests/helpers/v3-metadata-node-clock-fault.mjs',import.meta.url));
++  const r=spawnSync(process.execPath,[fixture,mode],{windowsHide:true,shell:false,encoding:'utf8',timeout:5000,maxBuffer:4096,
++    env:{SystemRoot:process.env.SystemRoot,ONOES_METADATA_NODE_CLOCK_MOCK:'1'}});
++  assert.equal(r.error,undefined);assert.equal(r.status,0,r.stderr);assert.equal(r.stderr,'');assert.deepEqual(JSON.parse(r.stdout),{mode,denied:true,authority:'none'});
++});
++
++function child(t,leaf,args,env){
++  const p=spawn(process.execPath,[fileURLToPath(new URL('../../tests/helpers/'+leaf,import.meta.url)),...args],{windowsHide:true,shell:false,stdio:['pipe','pipe','pipe'],env:{SystemRoot:process.env.SystemRoot,...env}});
++  const closed=once(p,'close');let ended=false,stderr='';closed.then(()=>{ended=true;});p.stderr.on('data',b=>{stderr+=b;});
++  t.after(async()=>{if(!ended){p.stdin.end();const timer=setTimeout(()=>p.kill(),1000);try{await closed;}finally{clearTimeout(timer);}}assert.equal(stderr,'');});
++  return p;
++}
++runtimeTest('original host age is charged to real-child ARM and one claim',async t=>{
++  const c=context(),arm=Arm.fromHostClock(c.pins,receive(c));t.after(()=>arm.close());
++  const p=child(t,'v3-metadata-arm-child.mjs',['normal','5000',c.pins.clockReference],{ONOES_METADATA_WATCHDOG_MOCK:'1'});
++  arm.attach(p);await arm.waitForArm();const claim=arm.claimDispatch();assert.ok(claim.remainingMs<=4000&&claim.remainingMs>0);assert.equal(claim.authority,'none');
++});
++runtimeTest('original host age survives watchdog ARM, EOF, report and child close',async t=>{
++  const c=context(),session=Session.fromHostClock(c.pins,receive(c));t.after(()=>session.requestStop());
++  session.attach(child(t,'v3-metadata-report-child.mjs',['normal','5000',c.pins.clockReference],{ONOES_METADATA_WATCHDOG_MOCK:'1'}));
++  await session.waitForArm();assert.ok(session.claimDispatch().remainingMs<=4000);session.requestStop();
++  const result=await session.waitForObservation();assert.equal(result.status,'reported');assert.ok(result.elapsedMs>=1000);assert.equal(result.authority,'none');
++});
++runtimeTest('original clock bounds bootstrap report collection and exact one-use handoff',async t=>{
++  const c=context(1000,5000,'01'.repeat(32));c.pins.bundleDigest='02'.repeat(32);
++  const session=Report.fromHostClock(c.pins,receive(c),{retainReportWire:true});t.after(()=>session.cancel());
++  const p=child(t,'v3-metadata-bootstrap-report-child.mjs',['normal'],{ONOES_METADATA_BOOTSTRAP_MOCK:'1'});session.attach(p);p.stdin.write('report');
++  const result=await session.waitForObservation();assert.equal(result.status,'reported');assert.ok(result.elapsedMs>=1000);assert.equal(result.authority,'none');
++  assert.equal(session.takeCheckedReportWire().length,384);assert.throws(()=>session.takeCheckedReportWire(),/unavailable/);
++});
++test('explicit original start never adds received age back to arm or session deadlines',async()=>{
++  const pins=context().pins;
++  for(const Class of [Arm,Session])assert.throws(()=>new Class(pins,()=>5000,0),/unavailable/);
++  const session=new Session(pins,()=>1000,0);session.requestStop();const result=await session.waitForObservation();assert.equal(result.elapsedMs,1000);
++  assert.throws(()=>new Report(pins,{startedAtMs:0,observationMs:10000},()=>10000),/unavailable/);
++});
++test('original-start ARM timer uses remaining time even with a frozen synthetic clock',async()=>{
++  const pins=context().pins,arm=new Arm(pins,()=>4950,0);
++  // Timer expiry closes the gate at ~50ms, not a renewed 5000ms. attach then
++  // rejects on #closed before looking at this hostile child-shaped sentinel.
++  await delay(90);let touched=false;
++  const p=new Proxy({},{get(){touched=true;throw Error('child-hook');}});
++  assert.throws(()=>arm.attach(p),/unavailable/);assert.equal(touched,false);
++});
++test('original-start watchdog observation timer does not renew pre-constructor time',async()=>{
++  const pins=context().pins,session=new Session(pins,()=>4900,0);
++  // observation ends at original 10000: 5100ms left instead of a renewed 10000.
++  // No child is launched; do not call waitForObservation until timer fires.
++  await delay(5200);const result=await session.waitForObservation();
++  assert.equal(result.reason,'observation-timeout');assert.equal(result.rootCloseObserved,false);
++});
+diff --git a/product/companion-v1/scripts/windows-v3-metadata-arm.mjs b/product/companion-v1/scripts/windows-v3-metadata-arm.mjs
+index d604784..20bf6a6 100644
+--- a/product/companion-v1/scripts/windows-v3-metadata-arm.mjs
++++ b/product/companion-v1/scripts/windows-v3-metadata-arm.mjs
+@@ -3,23 +3,31 @@
+ // Trusted launcher supplies the ChildProcess and monotonic clock; Node process
+ // events are not retained native handles or atomic liveness/dispatch custody.
+ // V2 pins must come from the trusted launcher, NOT the incoming arm. This class
+-// compares references but does not yet join performance.now() to the host QPC.
++// fromHostClock uses the pinned original QPC clock. The default constructor is
++// a synthetic process-local seam, not the physical launcher's timing contract.
+ import {ChildProcess} from 'node:child_process';
+ import {performance} from 'node:perf_hooks';
++import {bindMetadataNodeHostClock} from './windows-v3-metadata-node-clock.mjs';
+ 
+ const invalid=()=>{throw Error('metadata-watchdog-arm-unavailable');};
+ const digest=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value)&&value!=='0'.repeat(64);
+ export class MetadataWatchdogArmWindow {
+   #clock; #last; #deadline; #expected; #child; #armed=false; #closed=false;
+   #claimed=false; #attached=false; #buffer=Buffer.alloc(0); #timer; #settle; #ready;
+-  constructor({inventoryDigest,runNonce,bundleDigest,workMs,clockReference,intentReference},clock=()=>performance.now()){
++  static fromHostClock(pins,hostClock){
++    const bound=bindMetadataNodeHostClock(hostClock,pins.clockReference,pins.runNonce,pins.workMs);
++    return new MetadataWatchdogArmWindow(pins,bound.read,bound.startedAtMs);
++  }
++  constructor({inventoryDigest,runNonce,bundleDigest,workMs,clockReference,intentReference},clock=()=>performance.now(),startedAtMs=undefined){
+     if(![inventoryDigest,runNonce,bundleDigest,clockReference,intentReference].every(digest)||!Number.isSafeInteger(workMs)||workMs<1||workMs>25000||typeof clock!=='function')invalid();
+     this.#clock=clock;this.#last=clock();if(!Number.isFinite(this.#last)||this.#last<0)invalid();
+-    this.#deadline=this.#last+workMs;
++    const start=startedAtMs===undefined?this.#last:startedAtMs;
++    if(!Number.isFinite(start)||start<0||start>this.#last)invalid();
++    this.#deadline=start+workMs;if(this.#last>=this.#deadline)invalid();
+     this.#expected=Buffer.from(JSON.stringify({kind:'metadata-watchdog-armed-v2-not-authorization',inventoryDigest,runNonce,bundleDigest,workMs,stopMs:5000,clockReference,intentReference})+'\n');
+     this.#ready=new Promise(resolve=>{this.#settle=resolve;});
+     // Created BEFORE spawning the guardian. Arm receipt never renews this budget.
+-    this.#timer=setTimeout(()=>this.close(),workMs);this.#timer.unref();
++    this.#timer=setTimeout(()=>this.close(),this.#deadline-this.#last);this.#timer.unref();
+   }
+   #remaining(){
+     try{
+diff --git a/product/companion-v1/scripts/windows-v3-metadata-node-clock-policy.mjs b/product/companion-v1/scripts/windows-v3-metadata-node-clock-policy.mjs
+new file mode 100644
+index 0000000..5f4589e
+--- /dev/null
++++ b/product/companion-v1/scripts/windows-v3-metadata-node-clock-policy.mjs
+@@ -0,0 +1,33 @@
++// Pure arithmetic for the pinned Windows libuv QPC conversion. Not a live clock,
++// authentication or permission. Runtime code never accepts this object from callers.
++const deny=()=>{throw Error('metadata-node-clock-unavailable');};
++const max=(1n<<63n)-1n,nsPerMs=1000000n,nsPerSecond=1000000000n;
++const positive=v=>typeof v==='bigint'&&v>0n&&v<=max;
++export class MetadataNodeClockState {
++  #originNs;#guard;#last=0n;#invalid=false;#work;
++  constructor(originTicks,frequency,workMs){
++    if(!positive(originTicks)||!positive(frequency)||!Number.isSafeInteger(workMs)||workMs<1||workMs>25000)deny();
++    this.#originNs=originTicks*nsPerSecond/frequency;
++    if(!positive(this.#originNs))deny();
++    // Binary64 conversions/divisions in pinned libuv have <2^-49 relative
++    // error (including integer conversions). For accepted samples <=2^63-1,
++    // true nanoseconds <2^64: <32768ns error, plus <1ns truncation. 1ms is a
++    // deliberately larger allowance. Add one QPC tick for cross-thread sampling.
++    this.#guard=nsPerMs+(nsPerSecond+frequency-1n)/frequency;
++    this.#work=workMs;Object.freeze(this);
++  }
++  invalidate(){this.#invalid=true;}
++  observe(nowNs){
++    if(this.#invalid||!positive(nowNs)||nowNs<this.#last||nowNs<this.#originNs+this.#guard+1n){this.#invalid=true;deny();}
++    this.#last=nowNs;
++    // Subtract exact BigInts before conversion; round UP, never grant later
++    // than the original deadline. Saturation preserves expiry, not renewal.
++    const upper=(nowNs+this.#guard-this.#originNs+nsPerMs-1n)/nsPerMs;
++    return Number(upper>35000n?35000n:upper);
++  }
++  requireBefore(elapsed,deadlineMs){
++    if(this.#invalid||!Number.isSafeInteger(elapsed)||elapsed<0||elapsed>35000||!Number.isSafeInteger(deadlineMs)||deadlineMs<1||deadlineMs>this.#work+10000){this.#invalid=true;deny();}
++    if(elapsed>=deadlineMs)throw Error('metadata-node-clock-expired');
++  }
++}
++Object.freeze(MetadataNodeClockState.prototype);
+diff --git a/product/companion-v1/scripts/windows-v3-metadata-node-clock.mjs b/product/companion-v1/scripts/windows-v3-metadata-node-clock.mjs
+new file mode 100644
+index 0000000..239be1f
+--- /dev/null
++++ b/product/companion-v1/scripts/windows-v3-metadata-node-clock.mjs
+@@ -0,0 +1,55 @@
++// Dormant same-host/same-boot clock join ONLY. The protected launcher must pin
++// OMK1 independently and authenticate its origin; hashes/runtime strings do not.
++// Not portable hrtime API behavior: this is pinned to the reviewed Windows Node
++// implementation. No process, native library, filesystem, VM or provider access.
++import {createHash} from 'node:crypto';
++import {types} from 'node:util';
++import {hrtime,version,versions,platform,arch} from 'node:process';
++import {MetadataNodeClockState} from './windows-v3-metadata-node-clock-policy.mjs';
++const sample=hrtime.bigint; // capture before callers can replace the public property
++const supported=platform==='win32'&&arch==='x64'&&version==='v24.14.0'&&versions.uv==='1.51.0';
++const stateByClock=new WeakMap(),deny=()=>{throw Error('metadata-node-clock-unavailable');};
++const need=ok=>{if(!ok)deny();};
++const digest=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v)&&!/^0{64}$/.test(v);
++const hash=(domain,b)=>createHash('sha256').update(domain+'\0','ascii').update(b).digest();
++const typed=Object.getPrototypeOf(Uint8Array.prototype);
++const getters=Object.fromEntries(['buffer','byteOffset','byteLength'].map(k=>[k,Object.getOwnPropertyDescriptor(typed,k).get]));
++function snapshot(wire){
++  need(!types.isProxy(wire)&&types.isUint8Array(wire));
++  const buffer=getters.buffer.call(wire),offset=getters.byteOffset.call(wire),size=getters.byteLength.call(wire);
++  need(!types.isSharedArrayBuffer(buffer)&&size===128);
++  return Buffer.from(new Uint8Array(buffer,offset,size));
++}
++function read(entry){
++  try{return entry.state.observe(sample());}catch{entry.state.invalidate();deny();}
++}
++export class MetadataNodeHostClock {
++  constructor(wire,expectedReference,expectedHostSession,expectedNonce,expectedWorkMs){
++    let bytes;
++    try{
++      need(new.target===MetadataNodeHostClock&&supported);
++      need([expectedReference,expectedHostSession,expectedNonce].every(digest));
++      need(Number.isSafeInteger(expectedWorkMs)&&expectedWorkMs>=1&&expectedWorkMs<=25000);
++      bytes=snapshot(wire);
++      need(bytes.subarray(0,4).equals(Buffer.from('OMK1','ascii'))&&bytes.subarray(96).equals(hash('onoes-metadata-host-clock-context/v1',bytes.subarray(0,96))));
++      need(hash('onoes-metadata-host-clock-reference/v1',bytes).toString('hex')===expectedReference);
++      need(bytes.subarray(4,36).toString('hex')===expectedNonce&&bytes.subarray(64,96).toString('hex')===expectedHostSession);
++      need(bytes.readUInt32LE(52)===expectedWorkMs&&bytes.readUInt32LE(56)===expectedWorkMs+5000&&bytes.readUInt32LE(60)===expectedWorkMs+10000);
++      const state=new MetadataNodeClockState(bytes.readBigUInt64LE(36),bytes.readBigUInt64LE(44),expectedWorkMs);
++      const entry=Object.freeze({state,reference:expectedReference,nonce:expectedNonce,workMs:expectedWorkMs});
++      state.requireBefore(read(entry),expectedWorkMs); // late reception cannot renew work
++      stateByClock.set(this,entry);Object.freeze(this);
++    }catch{deny();}finally{bytes?.fill(0);}
++  }
++  readElapsedMilliseconds(){const entry=stateByClock.get(this);need(entry);return read(entry);}
++}
++Object.freeze(MetadataNodeHostClock.prototype);Object.freeze(MetadataNodeHostClock);
++
++// Collectors use the private brand + fixed read closure, not caller methods.
++// Work may expire while stop/report bookkeeping continues on this SAME clock.
++export function bindMetadataNodeHostClock(clock,reference,nonce,workMs){
++  const entry=stateByClock.get(clock);need(entry);
++  if(entry.reference!==reference||entry.nonce!==nonce||entry.workMs!==workMs){entry.state.invalidate();deny();}
++  read(entry);
++  return Object.freeze({read:()=>read(entry),startedAtMs:0,workMs:entry.workMs});
++}
+diff --git a/product/companion-v1/scripts/windows-v3-metadata-report-session.mjs b/product/companion-v1/scripts/windows-v3-metadata-report-session.mjs
+index 420b38f..31bdaff 100644
+--- a/product/companion-v1/scripts/windows-v3-metadata-report-session.mjs
++++ b/product/companion-v1/scripts/windows-v3-metadata-report-session.mjs
+@@ -4,12 +4,17 @@ import {ChildProcess} from 'node:child_process';
+ import {performance} from 'node:perf_hooks';
+ import {types} from 'node:util';
+ import {decodeMetadataBootstrapReport} from './windows-v3-metadata-report.mjs';
++import {bindMetadataNodeHostClock} from './windows-v3-metadata-node-clock.mjs';
+ const invalid=()=>{throw Error('metadata-report-session-unavailable');};
+ const digest=v=>typeof v==='string'&&v.length===64&&/^[a-f0-9]{64}$/.test(v)&&v!=='0'.repeat(64);
+ export class MetadataBootstrapReportSession {
+   #pins;#clock;#start;#last;#deadline;#timer;#child;#attached=false;#ended=false;#closed=false;
+   #buffer=Buffer.alloc(384);#length=0;#chunks=0;#reason=null;#done=false;#settle;#pending;
+   #retainWire;#wireReady=false;#wireTaken=false;
++  static fromHostClock(pins,hostClock,{retainReportWire=false}={}){
++    const bound=bindMetadataNodeHostClock(hostClock,pins.clockReference,pins.runNonce,pins.workMs);
++    return new MetadataBootstrapReportSession(pins,{startedAtMs:bound.startedAtMs,observationMs:bound.workMs+5000,retainReportWire},bound.read);
++  }
+   constructor(pins,{startedAtMs,observationMs,retainReportWire=false},clock=()=>performance.now()){
+     try{
+       if(![pins.runNonce,pins.bundleDigest,pins.fixtureDigest].every(digest)||typeof clock!=='function'||
+diff --git a/product/companion-v1/scripts/windows-v3-metadata-session.mjs b/product/companion-v1/scripts/windows-v3-metadata-session.mjs
+index e19582c..9488013 100644
+--- a/product/companion-v1/scripts/windows-v3-metadata-session.mjs
++++ b/product/companion-v1/scripts/windows-v3-metadata-session.mjs
+@@ -2,6 +2,7 @@
+ // VM, protected file sink or guest dispatch. Received claims are NOT OS evidence.
+ import {performance} from 'node:perf_hooks';
+ import {MetadataWatchdogArmWindow} from './windows-v3-metadata-arm.mjs';
++import {bindMetadataNodeHostClock} from './windows-v3-metadata-node-clock.mjs';
+ const unavailable=()=>{throw Error('metadata-watchdog-session-unavailable');};
+ const booleans=['armed','stopAttempted','hostOffObserved','stopJobSettled','stopWithinBudget','controllerDispatchClosed','guestStopProven','verificationEvidence'];
+ const fields=['kind','inventoryDigest','runNonce','bundleDigest','armed','trigger','stopAttempted','hostOffObserved','stopJobSettled','stopWithinBudget','controllerDispatchClosed','guestStopProven','verificationEvidence','authority'];
+@@ -9,19 +10,25 @@ export class MetadataWatchdogSession {
+   #arm; #pins; #clock; #started; #last; #deadline; #timer; #child;
+   #bytes=Buffer.alloc(0); #chunks=0; #bad=null; #rootClosed=false; #ended=false;
+   #claimed=false; #done=false; #settle; #result; #waiting;
+-  constructor(pins,clock=()=>performance.now()){
++  static fromHostClock(pins,hostClock){
++    const bound=bindMetadataNodeHostClock(hostClock,pins.clockReference,pins.runNonce,pins.workMs);
++    return new MetadataWatchdogSession(pins,bound.read,bound.startedAtMs);
++  }
++  constructor(pins,clock=()=>performance.now(),startedAtMs=undefined){
+     // Options/clock/ChildProcess are trusted launcher inputs. Only stream bytes
+     // are hostile transport. No constructor value authenticates operator consent.
+     this.#clock=clock;
+-    try{this.#started=clock();if(!Number.isFinite(this.#started)||this.#started<0)unavailable();}
++    let now;
++    try{now=clock();this.#started=startedAtMs===undefined?now:startedAtMs;
++      if(!Number.isFinite(now)||!Number.isFinite(this.#started)||this.#started<0||now<this.#started)unavailable();}
+     catch{unavailable();}
+     let initial=true;
+-    this.#arm=new MetadataWatchdogArmWindow(pins,()=>{if(initial){initial=false;return this.#started;}return clock();});
++    this.#arm=new MetadataWatchdogArmWindow(pins,()=>{if(initial){initial=false;return now;}return clock();},this.#started);
+     this.#pins=Object.freeze({inventoryDigest:pins.inventoryDigest,runNonce:pins.runNonce,bundleDigest:pins.bundleDigest,workMs:pins.workMs,
+       clockReference:pins.clockReference,intentReference:pins.intentReference});
+-    this.#last=this.#started;this.#deadline=this.#started+pins.workMs+5000;
++    this.#last=now;this.#deadline=this.#started+pins.workMs+5000;
+     this.#waiting=new Promise(resolve=>{this.#settle=resolve;});
+-    this.#timer=setTimeout(()=>{this.#fail('observation-timeout');this.#finish(null,null);},pins.workMs+5000);this.#timer.unref();
++    this.#timer=setTimeout(()=>{this.#fail('observation-timeout');this.#finish(null,null);},this.#deadline-now);this.#timer.unref();
+   }
+   #fail(reason){if(!this.#bad)this.#bad=reason;this.#arm.close();}
+   #time(){
+diff --git a/product/companion-v1/tests/helpers/v3-metadata-arm-child.mjs b/product/companion-v1/tests/helpers/v3-metadata-arm-child.mjs
+index 2b3f82d..9e56367 100644
+--- a/product/companion-v1/tests/helpers/v3-metadata-arm-child.mjs
++++ b/product/companion-v1/tests/helpers/v3-metadata-arm-child.mjs
+@@ -1,9 +1,10 @@
+ // Synthetic arm transport only: no VM, filesystem, shell or provider effects.
+ import assert from 'node:assert/strict';
+ assert.equal(process.env.ONOES_METADATA_WATCHDOG_MOCK,'1');
+-const [mode,workMs]=process.argv.slice(2);
++const [mode,workMs,clockReference='c'.repeat(64)]=process.argv.slice(2);
++assert.match(clockReference,/^[a-f0-9]{64}$/);
+ assert.ok(['normal','fragmented','wrong-pin','wrong-budget','wrong-clock','wrong-intent','legacy','duplicate','trailing','oversized','partial','exit','terminal'].includes(mode));
+-const record={kind:'metadata-watchdog-armed-v2-not-authorization',inventoryDigest:'1'.repeat(64),runNonce:'a'.repeat(64),bundleDigest:'b'.repeat(64),workMs:Number(workMs),stopMs:5000,clockReference:'c'.repeat(64),intentReference:'d'.repeat(64)};
++const record={kind:'metadata-watchdog-armed-v2-not-authorization',inventoryDigest:'1'.repeat(64),runNonce:'a'.repeat(64),bundleDigest:'b'.repeat(64),workMs:Number(workMs),stopMs:5000,clockReference,intentReference:'d'.repeat(64)};
+ if(mode==='wrong-clock')record.clockReference='e'.repeat(64);
+ if(mode==='wrong-intent')record.intentReference='e'.repeat(64);
+ if(mode==='legacy'){record.kind='metadata-watchdog-armed-not-authorization';delete record.clockReference;delete record.intentReference;}
+diff --git a/product/companion-v1/tests/helpers/v3-metadata-node-clock-fault.mjs b/product/companion-v1/tests/helpers/v3-metadata-node-clock-fault.mjs
+new file mode 100644
+index 0000000..90b770a
+--- /dev/null
++++ b/product/companion-v1/tests/helpers/v3-metadata-node-clock-fault.mjs
+@@ -0,0 +1,25 @@
++// Test-only process: replace the sampler BEFORE module import to exercise fixed
++// runtime failure handling. This seam is not exported by the runtime module.
++import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
++assert.equal(process.env.ONOES_METADATA_NODE_CLOCK_MOCK,'1');
++const [mode]=process.argv.slice(2);assert.ok(['throw','regress','range','version','platform','arch','uv'].includes(mode));
++let now=11000000000n;
++process.hrtime.bigint=()=>{if(now===null)throw Error('private-counter-diagnostic');return now;};
++if(mode==='version')Object.defineProperty(process,'version',{value:'v0.0.0'});
++if(mode==='platform')Object.defineProperty(process,'platform',{value:'linux'});
++if(mode==='arch')Object.defineProperty(process,'arch',{value:'arm64'});
++if(mode==='uv')Object.defineProperty(process.versions,'uv',{value:'0.0.0'});
++const {MetadataNodeHostClock:Clock,bindMetadataNodeHostClock:bind}=await import('../../scripts/windows-v3-metadata-node-clock.mjs');
++const hash=(d,b)=>createHash('sha256').update(d+'\0','ascii').update(b).digest();
++const wire=Buffer.alloc(128);wire.write('OMK1');wire.fill(1,4,36);wire.writeBigUInt64LE(10000000000n,36);wire.writeBigUInt64LE(1000000000n,44);
++[5000,10000,15000].forEach((v,i)=>wire.writeUInt32LE(v,52+i*4));wire.fill(7,64,96);hash('onoes-metadata-host-clock-context/v1',wire.subarray(0,96)).copy(wire,96);
++const ref=hash('onoes-metadata-host-clock-reference/v1',wire).toString('hex'),args=[ref,'07'.repeat(32),'01'.repeat(32),5000];
++const error=/^Error: metadata-node-clock-unavailable$/;
++if(['version','platform','arch','uv'].includes(mode))assert.throws(()=>new Clock(wire,...args),error);
++else{
++  const clock=new Clock(wire,...args),bound=bind(clock,ref,args[2],5000);assert.equal(bound.read(),1002);
++  now=mode==='throw'?null:mode==='regress'?10999999999n:1n<<63n;
++  assert.throws(()=>bound.read(),error);now=12000000000n;
++  assert.throws(()=>clock.readElapsedMilliseconds(),error);assert.throws(()=>bound.read(),error);
++}
++console.log(JSON.stringify({mode,denied:true,authority:'none'}));
+diff --git a/product/companion-v1/tests/helpers/v3-metadata-report-child.mjs b/product/companion-v1/tests/helpers/v3-metadata-report-child.mjs
+index 466fb6e..81065f2 100644
+--- a/product/companion-v1/tests/helpers/v3-metadata-report-child.mjs
++++ b/product/companion-v1/tests/helpers/v3-metadata-report-child.mjs
+@@ -1,10 +1,11 @@
+ // Synthetic report/lifecycle faults only; no filesystem, VM or provider access.
+ import assert from 'node:assert/strict';
+ assert.equal(process.env.ONOES_METADATA_WATCHDOG_MOCK,'1');
+-const [mode,workMs]=process.argv.slice(2);
++const [mode,workMs,clockReference='c'.repeat(64)]=process.argv.slice(2);
++assert.match(clockReference,/^[a-f0-9]{64}$/);
+ assert.ok(['normal','hold','hang','nonzero','wrong-pin','unknown-field','false-proof','incoherent','duplicate-key','trailing','partial','oversized','stderr','bad-utf8','extra-frame'].includes(mode));
+ const pins={inventoryDigest:'1'.repeat(64),runNonce:'a'.repeat(64),bundleDigest:'b'.repeat(64)};
+-process.stdout.write(JSON.stringify({kind:'metadata-watchdog-armed-v2-not-authorization',...pins,workMs:Number(workMs),stopMs:5000,clockReference:'c'.repeat(64),intentReference:'d'.repeat(64)})+'\n');
++process.stdout.write(JSON.stringify({kind:'metadata-watchdog-armed-v2-not-authorization',...pins,workMs:Number(workMs),stopMs:5000,clockReference,intentReference:'d'.repeat(64)})+'\n');
+ process.stdin.resume();let terminalSent=false;
+ const fallback=setTimeout(()=>process.exit(91),12000);process.stdout.on('error',()=>process.exit(92));
+ function finish(){clearTimeout(fallback);process.exit(mode==='nonzero'?7:0);}

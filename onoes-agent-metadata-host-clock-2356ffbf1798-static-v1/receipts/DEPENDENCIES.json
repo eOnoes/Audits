@@ -1,0 +1,808 @@
+{
+  "method": "lexical-JavaScript-import-inventory-plus-declared-CSharp-compile-closure-not-loader-proof",
+  "imports": [
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/capture-v3-metadata-node-clock.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/compile-v3-metadata-probe.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/compile-v3-metadata-probe.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/compile-v3-metadata-probe.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/compile-v3-metadata-probe.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/compile-v3-metadata-probe.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/prepare-v3-metadata-host-package.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/prepare-v3-metadata-host-package.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/prepare-v3-metadata-host-package.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/prepare-v3-metadata-host-package.mjs",
+      "specifier": "./compile-v3-metadata-probe.mjs",
+      "resolved": "scripts/compile-v3-metadata-probe.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/prepare-v3-metadata-host-package.mjs",
+      "specifier": "./windows-v3-metadata-build-inputs.mjs",
+      "resolved": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "./windows-v3-metadata-build-inputs.mjs",
+      "resolved": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "specifier": "./windows-v3-metadata-history.mjs",
+      "resolved": "scripts/windows-v3-metadata-history.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "node:timers/promises",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "specifier": "./windows-v3-metadata-build-inputs.mjs",
+      "resolved": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "node:timers/promises",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "./windows-v3-metadata-build-inputs.mjs",
+      "resolved": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "specifier": "./windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:test",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:events",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-arm.test.mjs",
+      "specifier": "../windows-v3-metadata-arm.mjs",
+      "resolved": "scripts/windows-v3-metadata-arm.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-clock-history.test.mjs",
+      "specifier": "node:test",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-clock-history.test.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-clock-history.test.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-clock-history.test.mjs",
+      "specifier": "../windows-v3-metadata-history.mjs",
+      "resolved": "scripts/windows-v3-metadata-history.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:test",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:events",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "node:timers/promises",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "../windows-v3-metadata-node-clock-policy.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock-policy.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "../windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "../windows-v3-metadata-arm.mjs",
+      "resolved": "scripts/windows-v3-metadata-arm.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "../windows-v3-metadata-session.mjs",
+      "resolved": "scripts/windows-v3-metadata-session.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "specifier": "../windows-v3-metadata-report-session.mjs",
+      "resolved": "scripts/windows-v3-metadata-report-session.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:test",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:perf_hooks",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:events",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "specifier": "../windows-v3-metadata-report-session.mjs",
+      "resolved": "scripts/windows-v3-metadata-report-session.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:test",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:events",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/tests/v3-metadata-session.test.mjs",
+      "specifier": "../windows-v3-metadata-session.mjs",
+      "resolved": "scripts/windows-v3-metadata-session.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-arm.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-arm.mjs",
+      "specifier": "node:perf_hooks",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-arm.mjs",
+      "specifier": "./windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "specifier": "node:fs",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "specifier": "node:path",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "specifier": "node:url",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "specifier": "./compile-v3-metadata-probe.mjs",
+      "resolved": "scripts/compile-v3-metadata-probe.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-history.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-history.mjs",
+      "specifier": "node:util",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-history.mjs",
+      "specifier": "./windows-v3-metadata-report.mjs",
+      "resolved": "scripts/windows-v3-metadata-report.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-node-clock.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-node-clock.mjs",
+      "specifier": "node:util",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-node-clock.mjs",
+      "specifier": "node:process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-node-clock.mjs",
+      "specifier": "./windows-v3-metadata-node-clock-policy.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock-policy.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report-session.mjs",
+      "specifier": "node:child_process",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report-session.mjs",
+      "specifier": "node:perf_hooks",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report-session.mjs",
+      "specifier": "node:util",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report-session.mjs",
+      "specifier": "./windows-v3-metadata-report.mjs",
+      "resolved": "scripts/windows-v3-metadata-report.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report-session.mjs",
+      "specifier": "./windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-report.mjs",
+      "specifier": "node:util",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-session.mjs",
+      "specifier": "node:perf_hooks",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-session.mjs",
+      "specifier": "./windows-v3-metadata-arm.mjs",
+      "resolved": "scripts/windows-v3-metadata-arm.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "scripts/windows-v3-metadata-session.mjs",
+      "specifier": "./windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-arm-child.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-bootstrap-report-child.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-bootstrap-report-child.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-node-clock-fault.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-node-clock-fault.mjs",
+      "specifier": "node:crypto",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-node-clock-fault.mjs",
+      "specifier": "../../scripts/windows-v3-metadata-node-clock.mjs",
+      "resolved": "scripts/windows-v3-metadata-node-clock.mjs",
+      "status": "supplied"
+    },
+    {
+      "importer": "tests/helpers/v3-metadata-report-child.mjs",
+      "specifier": "node:assert/strict",
+      "resolved": null,
+      "status": "runtime-builtin-not-supplied"
+    }
+  ],
+  "csharpTargets": [
+    {
+      "source": "tests/probes/windows-v3-metadata-host-sink.cs",
+      "output": "host-report-sink.dll",
+      "target": "library",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-sink-read.cs",
+        "tests/probes/windows-v3-metadata-host-root.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention.cs",
+        "tests/probes/windows-v3-metadata-retained-watchdog.cs",
+        "tests/probes/windows-v3-metadata-controller-retention.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-storage.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-history-read.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-host-code-policy.cs",
+        "tests/probes/windows-v3-metadata-host-code-hold.cs",
+        "tests/probes/windows-v3-metadata-host-code-set.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-host-sink-policy.cs",
+        "tests/probes/windows-v3-metadata-host-root-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-history.cs",
+        "tests/probes/windows-v3-metadata-bootstrap-report.cs",
+        "tests/probes/windows-v3-metadata-provision-policy.cs",
+        "tests/probes/windows-v3-metadata-service-setup-policy.cs",
+        "tests/probes/windows-v3-metadata-service-start-policy.cs",
+        "tests/probes/windows-v3-metadata-image-policy.cs",
+        "tests/probes/windows-v3-metadata-case-report.cs",
+        "tests/probes/windows-v3-metadata-service-job-policy.cs",
+        "tests/probes/windows-v3-metadata-service-policy.cs",
+        "tests/probes/windows-v3-metadata-service-control-policy.cs",
+        "tests/probes/windows-v3-metadata-role-policy.cs",
+        "tests/probes/windows-v3-metadata-configuration.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-tests.cs",
+      "output": "host-clock-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-clock-context-tests.cs",
+      "output": "host-clock-context-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-retained-watchdog-tests.cs",
+      "output": "retained-watchdog-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-retained-watchdog.cs",
+        "tests/probes/windows-v3-metadata-retained-watchdog-model.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records-tests.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-controller-retention-tests.cs",
+      "output": "controller-retention-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-controller-retention.cs",
+        "tests/probes/windows-v3-metadata-controller-retention-model.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records.cs",
+        "tests/probes/windows-v3-metadata-controller-clock-records-tests.cs",
+        "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+        "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock-context.cs",
+        "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+        "tests/probes/windows-v3-metadata-host-sink-policy.cs",
+        "tests/probes/windows-v3-metadata-host-root-policy.cs",
+        "tests/probes/windows-v3-metadata-binding.cs",
+        "tests/probes/windows-v3-metadata-peer-pin.cs",
+        "tests/probes/windows-v3-metadata-roles.cs",
+        "tests/probes/windows-v3-metadata-fixture-policy.cs",
+        "tests/probes/windows-v3-metadata-host-history.cs",
+        "tests/probes/windows-v3-metadata-bootstrap-report.cs",
+        "tests/probes/windows-v3-metadata-provision-policy.cs",
+        "tests/probes/windows-v3-metadata-service-setup-policy.cs",
+        "tests/probes/windows-v3-metadata-service-start-policy.cs",
+        "tests/probes/windows-v3-metadata-image-policy.cs",
+        "tests/probes/windows-v3-metadata-case-report.cs",
+        "tests/probes/windows-v3-metadata-service-job-policy.cs",
+        "tests/probes/windows-v3-metadata-service-policy.cs",
+        "tests/probes/windows-v3-metadata-service-control-policy.cs",
+        "tests/probes/windows-v3-metadata-role-policy.cs",
+        "tests/probes/windows-v3-metadata-configuration.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    },
+    {
+      "source": "tests/probes/windows-v3-metadata-host-code-set-tests.cs",
+      "output": "host-code-set-tests.exe",
+      "target": "exe",
+      "additionalSources": [
+        "tests/probes/windows-v3-metadata-host-code-set.cs",
+        "tests/probes/windows-v3-metadata-host-code-set-model.cs",
+        "tests/probes/windows-v3-metadata-host-code-policy.cs",
+        "tests/probes/windows-v3-metadata-host-clock.cs",
+        "tests/probes/windows-v3-metadata-host-clock-policy.cs"
+      ],
+      "allDeclaredSourcesSupplied": true
+    }
+  ],
+  "explicitMissing": [
+    "Node v24.14.0 x64 runtime/libuv binaries and source",
+    "Windows/.NET/PowerShell/Hyper-V modules and runtime closure",
+    "compiler/framework reference binaries",
+    "protected bootstrap and authenticated host clock IPC",
+    "all other compile targets and tests outside the selected boundary"
+  ],
+  "fixtures": [
+    "tests/helpers/v3-metadata-arm-child.mjs",
+    "tests/helpers/v3-metadata-bootstrap-report-child.mjs",
+    "tests/helpers/v3-metadata-node-clock-fault.mjs",
+    "tests/helpers/v3-metadata-report-child.mjs",
+    "tests/helpers/v3-metadata-watchdog-fixture.ps1"
+  ],
+  "reconstruction": "Map each SOURCE_IDENTITIES productPath into a separate scratch root ONLY under future execution authority. source/ and tests/ are courier grouping, not a runnable tree."
+}

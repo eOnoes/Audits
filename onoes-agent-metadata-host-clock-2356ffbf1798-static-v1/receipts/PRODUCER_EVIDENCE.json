@@ -1,0 +1,524 @@
+{
+  "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+  "startedAt": "2026-09-19T07:29:12.927Z",
+  "finishedAt": "2026-09-19T07:30:06.514Z",
+  "node": "v24.14.0",
+  "uv": "1.51.0",
+  "arch": "x64",
+  "platform": "win32",
+  "originalCapture": {
+    "gitBlobOid": "327b50fe33379844fb312070f12f4e747714d593",
+    "sha256": "485529b20c8bf25150a4fa66387a7f50caab51bfe65eb75a5ce7cb8c4cdc8f17",
+    "byteLength": 44208,
+    "supplied": false,
+    "reason": "private local build paths; selected claims derived here"
+  },
+  "sourceMatchCount": 72,
+  "sourceMatches": [
+    {
+      "path": "scripts/capture-v3-metadata-node-clock.mjs",
+      "byteLength": 3942,
+      "sha256": "57a71d43f15e45ff974ef7572baca9fda06d882ca55b7c58afad617a910c1786",
+      "gitBlobOid": "7b3ff9884200df733f3546061cec9d71edbbbf70"
+    },
+    {
+      "path": "scripts/compile-v3-metadata-probe.mjs",
+      "byteLength": 24647,
+      "sha256": "a954dd03fabe9df9ebb0c93c94fc767c05f9d321aa48dbe703603545fecfca21",
+      "gitBlobOid": "64ce2eda98cf89ebb8d9bc710e0a535b6135fec6"
+    },
+    {
+      "path": "scripts/prepare-v3-metadata-host-package.mjs",
+      "byteLength": 3487,
+      "sha256": "38a81756a1e14fc93a4ac7447f2e59b966b49e90a6bbc8d0fbfbefdab5cd2049",
+      "gitBlobOid": "532804e5d91be0dfad27750b2a270d7283cd976a"
+    },
+    {
+      "path": "scripts/test-v3-metadata-clock-history-process.mjs",
+      "byteLength": 3217,
+      "sha256": "ec749fe6d5269692be8224f5ce592a395d3091b5351b2495673730cd4d6e700f",
+      "gitBlobOid": "43ab40e86d73278f7232f3350ae8fe6a8e5bdb82"
+    },
+    {
+      "path": "scripts/test-v3-metadata-clock-transfer-process.mjs",
+      "byteLength": 4669,
+      "sha256": "b516b97ce24efd1c8f16a751c04ba71936ba3f16a8111d2bfecdd292aee275f5",
+      "gitBlobOid": "6a71a80069580114a5eeabc573540bbde72f9d11"
+    },
+    {
+      "path": "scripts/test-v3-metadata-node-clock-process.mjs",
+      "byteLength": 3995,
+      "sha256": "b9d10b32630b05498ae77c3601ee3feecbee6894ed41750b059dd02036a61c6a",
+      "gitBlobOid": "6f2b81081b9ab141b8aeb6b43c316c23a2770e9d"
+    },
+    {
+      "path": "scripts/tests/v3-metadata-arm.test.mjs",
+      "byteLength": 9529,
+      "sha256": "ef1e7540565444465bc9bb6b1ea0e7733ca586da2b79a1f1b1d4856b337648f9",
+      "gitBlobOid": "7943825579444eacc654122e1092f36b75f6e181"
+    },
+    {
+      "path": "scripts/tests/v3-metadata-clock-history.test.mjs",
+      "byteLength": 8742,
+      "sha256": "1185dc27b6dfa8e49c89433856b6d135ccceb471f34ad800996f155eef8d3797",
+      "gitBlobOid": "4bd80abba5801d12302242915a97ac3ffe7451d5"
+    },
+    {
+      "path": "scripts/tests/v3-metadata-node-clock.test.mjs",
+      "byteLength": 13167,
+      "sha256": "2879054c80fe24e202a64eec531f82c37a8c7b48d163f6a59e5e52a67385af32",
+      "gitBlobOid": "81a3566dd4c726dd0289900f0e84527b9c5483b7"
+    },
+    {
+      "path": "scripts/tests/v3-metadata-report-session.test.mjs",
+      "byteLength": 11534,
+      "sha256": "52a6219062d2483116680918f0fcb5e97d706be5651787a793c226da0818a9f1",
+      "gitBlobOid": "e4cc05bacea03e3a1eaea02190031295041fbf2a"
+    },
+    {
+      "path": "scripts/tests/v3-metadata-session.test.mjs",
+      "byteLength": 8278,
+      "sha256": "b586017e3cef6f30aed399c4c458d0917749d0827920646a207b3693d11df208",
+      "gitBlobOid": "df29649de6070c1a8ecf022857fd863c9fd30ae4"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-arm.mjs",
+      "byteLength": 5485,
+      "sha256": "b1f17354619be0033b6d59ac9d5d10999a61d60bee14bb62966cc08a0d824487",
+      "gitBlobOid": "20bf6a66cc216369515b564fe594fbb176318560"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-build-inputs.mjs",
+      "byteLength": 3476,
+      "sha256": "b114dc8a0bc72746b74d216eebcef613b24ed724929773b173279ba4d258fbad",
+      "gitBlobOid": "c6b3de602df00ba4b2e721a6605c892c2cd63f9f"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-history.mjs",
+      "byteLength": 8416,
+      "sha256": "67007b7bae6e5c7677f4bbebc31fc04552068f158aa9a56fd35f37473c3158af",
+      "gitBlobOid": "98640f79f96393cc8f938c113338955b6162ea28"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-node-clock-policy.mjs",
+      "byteLength": 1939,
+      "sha256": "b9d4e3f797880fc251cc42dcf4ad338c649e7ecadcf2e157aa107d6c9900631a",
+      "gitBlobOid": "5f4589ec53d2eb9333371f51e035947943456c1e"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-node-clock.mjs",
+      "byteLength": 3682,
+      "sha256": "f7695fe492072ae3409bc03229252fda452e1e2c6e84eb9472eaed9219d92d69",
+      "gitBlobOid": "239be1f2743ba9fbec2c1b4ca0f6b821b0c450a9"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-report-session.mjs",
+      "byteLength": 6472,
+      "sha256": "f93057f94a37f6d6992c21a3f984489f92faf4b91e7e987644de69271eac2f82",
+      "gitBlobOid": "31bdaffbd5173a2a9f1f81cd27a52360f3822bd1"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-report.mjs",
+      "byteLength": 6824,
+      "sha256": "74a025649d823a9cce82417c3da888a73b812868a3a6b0416ce0d3dc67f90c0d",
+      "gitBlobOid": "e8e78d1cafd57e195d9c7a354044c71aea09ecab"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-retained-watchdog.ps1",
+      "byteLength": 5769,
+      "sha256": "3c632ae4232d1e8e15319f361a09e76f64626d3e629e939600ee5515e5ba4eed",
+      "gitBlobOid": "df388069541200e2d9d6674326906f52d762e5eb"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-session.mjs",
+      "byteLength": 7049,
+      "sha256": "94e55bd5cb9db10a1efe18ad7d2d8dd70bd797db4b804f4040ba58878d075162",
+      "gitBlobOid": "9488013a7f342158f4a3bda99bec1aab64f03c1e"
+    },
+    {
+      "path": "scripts/windows-v3-metadata-watchdog.ps1",
+      "byteLength": 13580,
+      "sha256": "ffdf0c4fd6948e526fcfeb2a06b4959fabec951724473dc304865cb27f52b400",
+      "gitBlobOid": "479159bf2c49b20f4c6a1644cd71334541e3c959"
+    },
+    {
+      "path": "tests/helpers/v3-metadata-arm-child.mjs",
+      "byteLength": 1906,
+      "sha256": "36d0d7e63f667bc8263a7aa7ebc5e0b6e710527b5ca4cf3ba264cf73fc108ef9",
+      "gitBlobOid": "9e5636736b7976a1e7609c09b5e3c46c1b4534ca"
+    },
+    {
+      "path": "tests/helpers/v3-metadata-bootstrap-report-child.mjs",
+      "byteLength": 1695,
+      "sha256": "54fa7e5079541d1a46d0389e3fc02b8dd6217086a24795508b7ab08d2575e673",
+      "gitBlobOid": "2abaa0f8013c9b0ac40d98c5017db0f1d2074d0b"
+    },
+    {
+      "path": "tests/helpers/v3-metadata-node-clock-fault.mjs",
+      "byteLength": 2060,
+      "sha256": "0c49e86db622833f5143ecbbe9c7b8ee2c70cebe80b3a89571b3bf1258ba814e",
+      "gitBlobOid": "90b770a15b122852229b6b20b49db155573aeccc"
+    },
+    {
+      "path": "tests/helpers/v3-metadata-report-child.mjs",
+      "byteLength": 2264,
+      "sha256": "b19a1ef9c7534fe06a0c2474e80336f21261a357b1cd77d0bb4f18089899c835",
+      "gitBlobOid": "81065f20d99d841d1d688e187a2fc0dfd02dc184"
+    },
+    {
+      "path": "tests/helpers/v3-metadata-watchdog-fixture.ps1",
+      "byteLength": 9074,
+      "sha256": "d6d4d52eb50dcba0140008342037f0738defa86d07cf568692105a1021e23a46",
+      "gitBlobOid": "4a5ead373d701432fe9cd1f9864a3ef1682db964"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-binding.cs",
+      "byteLength": 10531,
+      "sha256": "7e2db1770bdb25cc5daada090869b1bca0b29de0d29c4ec58fd9fc80fdc2b5ef",
+      "gitBlobOid": "5672fc8b0f56ec41a1416a9726a206f9f651ed3a"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-bootstrap-report.cs",
+      "byteLength": 5946,
+      "sha256": "7fa7ccee725be192aa22227d9693a06c2d746e5e160f203800e03884637f2ee7",
+      "gitBlobOid": "06f8de9291195ed8f5b26b3cfda393fcc8a6f51a"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-case-report.cs",
+      "byteLength": 6290,
+      "sha256": "b7c1231b2dae068407d9e82980baf827c3e91c564f54c906f85fb4cba95e7f36",
+      "gitBlobOid": "71ed356c37e75fd2d74c5ada8c2f9d10375fcf61"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-configuration.cs",
+      "byteLength": 4366,
+      "sha256": "1691fa4fb078394b3fda5235abd9f10504b329049c1a9d719f40ed198ae914ee",
+      "gitBlobOid": "26d0e4b4502bf4fd0be38450cd735ab2888f3a82"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-clock-records-tests.cs",
+      "byteLength": 4927,
+      "sha256": "7041c2cc06fc6c22095dec55933bf1a66845698fea57f14493f1086998eb1f9b",
+      "gitBlobOid": "3f016effa9d75fd952245f186635ff2be1f5bc2e"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-clock-records.cs",
+      "byteLength": 4494,
+      "sha256": "9fe83ad27e28c9292ef6d40067cd11131665a4b73483aeb398d9e96f241663d7",
+      "gitBlobOid": "c2e512b90d449ddf09faf8127458b7a8e2a05b6f"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-clock-storage.cs",
+      "byteLength": 4909,
+      "sha256": "fed9f986af2efb58140df57d2fed30129dcf329747cc8b4f011f18ab4de7a3f1",
+      "gitBlobOid": "e6e922da661536686bcea065c08f2a1e9cac9875"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-retention-model.cs",
+      "byteLength": 1874,
+      "sha256": "4cb0cc432963a8f7cd51d71aacb79f1d4a08c7351f68a6f95a1daba078bcf5ea",
+      "gitBlobOid": "57be20a1cc588ac47a5eabe86718faceed8b7453"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-retention-tests.cs",
+      "byteLength": 6620,
+      "sha256": "9cc67fc165be1a282e10e4fb6d977dbd715d1bf903fba67c0114fb4f031ae0b5",
+      "gitBlobOid": "e29cef1fa21733ac51241622e5ffcb98f7ce14fd"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-controller-retention.cs",
+      "byteLength": 5058,
+      "sha256": "ee3db03544e2542aa255a380700099dd863953ee42f013733737d3db4818c8c3",
+      "gitBlobOid": "8ed6dbe73cbe7bfb5f99e3b4a1c3039796179e29"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-fixture-policy.cs",
+      "byteLength": 6756,
+      "sha256": "8b80eebfec89d45d3732dc7217d4a47d58da7db77ff0a3d0703eddeaba3299fa",
+      "gitBlobOid": "f3baf0f7f1a7ce1d884e44f681db5bd8ada6be93"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock-context-tests.cs",
+      "byteLength": 5373,
+      "sha256": "aea01502f2a4c662fed56f896c5d1a4d796d9adf6b8c372c56fee4296f76f93a",
+      "gitBlobOid": "002e7a3f6fa924bfbf73d0aa3dc125e9506edd5c"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock-context.cs",
+      "byteLength": 3272,
+      "sha256": "f43b2d9ea69cfb72b1163a287e0382ee3ca16fb0e00aaa0818eaf4302afd3aa5",
+      "gitBlobOid": "8116dd43725e8b26ba092341b59bb22b5bae0264"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock-policy.cs",
+      "byteLength": 2535,
+      "sha256": "b4a8a01cd0391fbd60a7e9732acd3930b41efd5a451e0932337845646f147e4c",
+      "gitBlobOid": "054bdc22794ff18feb91510d19d1ac2dd9ada992"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock-tests.cs",
+      "byteLength": 5616,
+      "sha256": "5c8375b8b47cceaf817ceb6ff916424498bfb6c513339d329a5c1dffb548573b",
+      "gitBlobOid": "4eccb21a44a79d5afdda0650594e1dce49c7e562"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock-transfer.cs",
+      "byteLength": 2465,
+      "sha256": "3519f94a5bca776d7540258380118ecd12317e893f2a79009e825fa093a8939e",
+      "gitBlobOid": "cfda027778f17f69e980ff9c896c1f6794b2194b"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-clock.cs",
+      "byteLength": 2685,
+      "sha256": "61a1e63a5244473ecd4df218407f0be2775ca074e4fe53ebddddf200dae66a0e",
+      "gitBlobOid": "716d7349c8dd7c31b4aab5380c207e3e01389f85"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-code-hold.cs",
+      "byteLength": 6673,
+      "sha256": "44d8e40438b0ec37d5807c8298e247fcd8463223e2e7a19448a54261d5306fbc",
+      "gitBlobOid": "87b2be6e52e22dbcb7a0ea7fd1c100ab7f7ce068"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-code-policy.cs",
+      "byteLength": 3082,
+      "sha256": "6901a7006e9b7de8c548b125dff033b9b8648d9c52cc12a3880a9ff2125d66d7",
+      "gitBlobOid": "8e3ff1551d776ca7ba4828f3dd61d4a24e7b632c"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-code-set-model.cs",
+      "byteLength": 1871,
+      "sha256": "266901dcc0c717ccac8c04e0ca13e590d7f65ec6a09b5b653aa80dbd8beeeabe",
+      "gitBlobOid": "895d307a3e1d8dcf79de47c1ef1a42703f95c3d8"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-code-set-tests.cs",
+      "byteLength": 3993,
+      "sha256": "0307820b8904fa301e534f45dc0f87a2a9d73ab94f8e84260078356b0b00ec28",
+      "gitBlobOid": "8f6d4745b60199af5688d062d2414d4b45d5a505"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-code-set.cs",
+      "byteLength": 4001,
+      "sha256": "8c9de8127af418fcdc59c49e80eea100be358ed05a5217a9fa2ee85dd15a5c85",
+      "gitBlobOid": "c0431b3ce7ef2c20cce81f33f2e192736a320880"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-history.cs",
+      "byteLength": 1925,
+      "sha256": "1e3dcb8c19631b4c5e153351a7d3275da664cdb49a1c439a058cc95c90a6b3be",
+      "gitBlobOid": "b3e3c2db9ac9c67c163a44b3741999c80bf11207"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-root-policy.cs",
+      "byteLength": 2188,
+      "sha256": "d64fe102877bbde15f5053d4cb24ad5294b0f1509d1a5d75d923b384288df275",
+      "gitBlobOid": "6a26877fb6ebb09ed806b9cec6f4330cd7724436"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-root.cs",
+      "byteLength": 5480,
+      "sha256": "22299f0339e0abfceb5198a306741124533e33d89933c21a51e804cdbd09f727",
+      "gitBlobOid": "44c6a4f3f34c823d8c17ac64e90b33d494452783"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-sink-policy.cs",
+      "byteLength": 3782,
+      "sha256": "0d62ea553c5ac28c768dfc5fcd534379bff8838a87701b5c94b22441d9123e19",
+      "gitBlobOid": "e5ffc1b7a1825245283788d9d2a49299c9efa363"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-sink-read.cs",
+      "byteLength": 4560,
+      "sha256": "d8e88938e5c01f6932a8653ba64fb32c187a2cd293247174d8e42568825d036a",
+      "gitBlobOid": "87b43956ca2bdd3cd2f866b42b0290e18d7fe7ac"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-host-sink.cs",
+      "byteLength": 11338,
+      "sha256": "c07721a633b8dad5aafec53f47c347af2d67e5dcdbe1493e109e57c7c2d290ff",
+      "gitBlobOid": "c8ffa6ff2f8f30da80adea78875ed8c03c90d6e8"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-image-policy.cs",
+      "byteLength": 4301,
+      "sha256": "28e99581eec0eb41570c66d4bf90d4fb1a1f264ffec4228e3ccb246a6a24ea4b",
+      "gitBlobOid": "e42aa030bded585969b0539d685b3abe66cca905"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-peer-pin.cs",
+      "byteLength": 2078,
+      "sha256": "a89abfef512a415a7ac38295f943941be783da4fbe21d94cccaba99455c427c9",
+      "gitBlobOid": "d0035e3e86b6422e8735ee3834c0cd9977676078"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-provision-policy.cs",
+      "byteLength": 3870,
+      "sha256": "8fc527efc45ca91a186ea742db3f1168570522765edc6c316347b3ccf9a24b58",
+      "gitBlobOid": "716dac979c7a3ded1f64432787a806d27152dc07"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-retained-watchdog-model.cs",
+      "byteLength": 1809,
+      "sha256": "21df0944011a83a7fdcacbe3cf1f68c2f05adda4c8668f2a3dc36dc905ac5f9c",
+      "gitBlobOid": "28906fe3068d452dccec3f2936ee9c1b786e86ba"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-retained-watchdog-tests.cs",
+      "byteLength": 7660,
+      "sha256": "6901a1b1d637b70eb914eae5a21a37e51749254ef7e5ee1ce274f324794081f0",
+      "gitBlobOid": "8eba99065328c8321859e9d2dfaac726f565d234"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-retained-watchdog.cs",
+      "byteLength": 7610,
+      "sha256": "69b21dd24d144ce4f4d6b46450e64b4291c578c5c48ee0d946c7eb98cd302afd",
+      "gitBlobOid": "c64522e631707d749e41d08e0d761334bc22a1f6"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-role-policy.cs",
+      "byteLength": 2864,
+      "sha256": "bda0eb0045d79c1b7e32958ecdff1aafa79d7c9e9c6c7b4a0003b2d4d16efdc7",
+      "gitBlobOid": "b2ae78348659f9969141b04cb26f8ec6045b6feb"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-roles.cs",
+      "byteLength": 188,
+      "sha256": "af05041fa27c526b34138fbd9881adfa619a315444a993bd68e62cab402e608c",
+      "gitBlobOid": "49210d8173e2c9108529c8dea3f4c9e8a36778bf"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-service-control-policy.cs",
+      "byteLength": 5496,
+      "sha256": "d5fc06a62e668a55be775452eaa32a638c1aada46b46a109f11f8cc7f44ac112",
+      "gitBlobOid": "8098855e7979afe435087a855d88812a6b91256c"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-service-job-policy.cs",
+      "byteLength": 4338,
+      "sha256": "ced9d148acceccb0012323675fdc494e079eccd32179c5ebebd55eecd262af68",
+      "gitBlobOid": "5fc89ff0654f43c49a18e7fe4f5830966bd31886"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-service-policy.cs",
+      "byteLength": 5473,
+      "sha256": "9b9272fa034a022dd962cd4c9ce2bf30a8642d984d286ae302ae2f2c3b71c5f4",
+      "gitBlobOid": "66bb8f6bffed865edf8ca0f70223a1b8f8aff0a6"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-service-setup-policy.cs",
+      "byteLength": 2127,
+      "sha256": "1bd85ac993679aed9b28b605f50f327dd251570ae72711280d4ae7dcec907616",
+      "gitBlobOid": "1ebe9df779ed97c9883b9f76922f09c52817b985"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-service-start-policy.cs",
+      "byteLength": 2417,
+      "sha256": "60c084645d50c797deaccddc23dfa46df3cefd6a344c975c102102b6adedf09f",
+      "gitBlobOid": "346416b5d9d6d5c72e6f0edcb540eea548e2dfc2"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-watchdog-clock-history-read.cs",
+      "byteLength": 2603,
+      "sha256": "c2de064b31bb27c5a497d047b444d77606d176ba0553448742c4c0aaad882af9",
+      "gitBlobOid": "c81b102fc7d4e16206d93ab1fe4bca5c83107ffe"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-watchdog-clock-records-tests.cs",
+      "byteLength": 3928,
+      "sha256": "35c9e62dd32ae9e626e03afda5335eb6d9b0743a4897f2588b04ae49b8750497",
+      "gitBlobOid": "44a98e4fa991e5c9027548eb077ccdc169a8684b"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-watchdog-clock-records.cs",
+      "byteLength": 5326,
+      "sha256": "738f22dcea7feeab143b9c5f58232cad4ad06599077746e5fcaa8a2cfdae43c9",
+      "gitBlobOid": "386cfc82b135439c506414b1d7ab113c6c65a6a9"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-watchdog-retention-policy.cs",
+      "byteLength": 7201,
+      "sha256": "21ed1f7c2815ae7b55b1f28176b264ebda2d31b48d8eb1f76ecb61af9824db10",
+      "gitBlobOid": "b178b1253b3f4cda510b04d32d32956d216e9698"
+    },
+    {
+      "path": "tests/probes/windows-v3-metadata-watchdog-retention.cs",
+      "byteLength": 6365,
+      "sha256": "1676c1c40c866319d2613961a7d2416e1c218de0524708f20d8d8954e0b0a0a8",
+      "gitBlobOid": "c66e1f9ecaeda185202f83d0ec54daa5bcc46354"
+    }
+  ],
+  "rawOutputs": [
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/metadata.stdout",
+      "packetPath": "receipts/metadata.stdout",
+      "gitBlobOid": "b1bb10e3e71a277c6f62c3909bebb1542857c04f",
+      "sha256": "ae017a43c66ba2137940d5036663497d4268ca708bf9e97f917fff77f0d10905",
+      "byteLength": 106405
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/metadata.stderr",
+      "packetPath": "receipts/metadata.stderr",
+      "gitBlobOid": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byteLength": 0
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/node-join.stdout",
+      "packetPath": "receipts/node-join.stdout",
+      "gitBlobOid": "34ddf3e0d291941849e276c76129543fcef42709",
+      "sha256": "1b93d9323ae5997b02895b72a422241ba7888b1c803e9f5f4006f3e3866dc3c2",
+      "byteLength": 1563
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/node-join.stderr",
+      "packetPath": "receipts/node-join.stderr",
+      "gitBlobOid": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byteLength": 0
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/transfer.stdout",
+      "packetPath": "receipts/transfer.stdout",
+      "gitBlobOid": "dc1221488842b21d0a03b5a5a3a773455b6d5d8b",
+      "sha256": "331066c6b03dc17605d230648a5f9fad1449a8bae56e348a411a8b4d56423253",
+      "byteLength": 4297
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/transfer.stderr",
+      "packetPath": "receipts/transfer.stderr",
+      "gitBlobOid": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byteLength": 0
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/history.stdout",
+      "packetPath": "receipts/history.stdout",
+      "gitBlobOid": "2dca626a093191b1c5bbb7bee9d7a1c37b979d0b",
+      "sha256": "8c11963bd5fbf69b3a05e0023b9d34f13a212010c2f74f7c5a8d465daf489e51",
+      "byteLength": 4737
+    },
+    {
+      "originalPath": "docs/reports/v3-metadata-node-clock-20260919/history.stderr",
+      "packetPath": "receipts/history.stderr",
+      "gitBlobOid": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byteLength": 0
+    }
+  ],
+  "totalCapturedInputs": 200,
+  "producerClaims": {
+    "tests": 492,
+    "failed": 0,
+    "skipped": 0,
+    "compiledTargets": 40,
+    "isolatedSuites": 33
+  },
+  "nativeHostLibraryLoaded": false,
+  "nativeRetentionExecuted": false,
+  "vmContact": false,
+  "privilegedSetup": false,
+  "authenticatedChannel": false,
+  "protectedRuntimeCustodyEstablished": false,
+  "limits": "Full TAP is context, not complete test source coverage. Selected derived compile claims are not the original receipt. No tests authorized for receiving auditor."
+}

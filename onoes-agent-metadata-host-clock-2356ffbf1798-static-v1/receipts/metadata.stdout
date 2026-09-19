@@ -1,0 +1,2969 @@
+TAP version 13
+# Subtest: controller arm gate has no launcher, VM command or authority-grant surface
+ok 1 - controller arm gate has no launcher, VM command or authority-grant surface
+  ---
+  duration_ms: 1.1359
+  type: 'test'
+  ...
+# Subtest: arm denies invalid inventoryDigest: 0
+ok 2 - arm denies invalid inventoryDigest: 0
+  ---
+  duration_ms: 0.3851
+  type: 'test'
+  ...
+# Subtest: arm denies invalid inventoryDigest: A
+ok 3 - arm denies invalid inventoryDigest: A
+  ---
+  duration_ms: 0.1106
+  type: 'test'
+  ...
+# Subtest: arm denies invalid inventoryDigest: x
+ok 4 - arm denies invalid inventoryDigest: x
+  ---
+  duration_ms: 0.0802
+  type: 'test'
+  ...
+# Subtest: arm denies invalid runNonce: 0
+ok 5 - arm denies invalid runNonce: 0
+  ---
+  duration_ms: 0.1457
+  type: 'test'
+  ...
+# Subtest: arm denies invalid runNonce: A
+ok 6 - arm denies invalid runNonce: A
+  ---
+  duration_ms: 0.0828
+  type: 'test'
+  ...
+# Subtest: arm denies invalid runNonce: x
+ok 7 - arm denies invalid runNonce: x
+  ---
+  duration_ms: 0.0617
+  type: 'test'
+  ...
+# Subtest: arm denies invalid bundleDigest: 0
+ok 8 - arm denies invalid bundleDigest: 0
+  ---
+  duration_ms: 0.0508
+  type: 'test'
+  ...
+# Subtest: arm denies invalid bundleDigest: A
+ok 9 - arm denies invalid bundleDigest: A
+  ---
+  duration_ms: 0.0853
+  type: 'test'
+  ...
+# Subtest: arm denies invalid bundleDigest: x
+ok 10 - arm denies invalid bundleDigest: x
+  ---
+  duration_ms: 0.109
+  type: 'test'
+  ...
+# Subtest: arm denies invalid clockReference: 0
+ok 11 - arm denies invalid clockReference: 0
+  ---
+  duration_ms: 0.1355
+  type: 'test'
+  ...
+# Subtest: arm denies invalid clockReference: A
+ok 12 - arm denies invalid clockReference: A
+  ---
+  duration_ms: 0.0697
+  type: 'test'
+  ...
+# Subtest: arm denies invalid clockReference: x
+ok 13 - arm denies invalid clockReference: x
+  ---
+  duration_ms: 0.0369
+  type: 'test'
+  ...
+# Subtest: arm denies invalid intentReference: 0
+ok 14 - arm denies invalid intentReference: 0
+  ---
+  duration_ms: 0.0345
+  type: 'test'
+  ...
+# Subtest: arm denies invalid intentReference: A
+ok 15 - arm denies invalid intentReference: A
+  ---
+  duration_ms: 0.0327
+  type: 'test'
+  ...
+# Subtest: arm denies invalid intentReference: x
+ok 16 - arm denies invalid intentReference: x
+  ---
+  duration_ms: 0.0293
+  type: 'test'
+  ...
+# Subtest: arm denies invalid work budget 0
+ok 17 - arm denies invalid work budget 0
+  ---
+  duration_ms: 0.0725
+  type: 'test'
+  ...
+# Subtest: arm denies invalid work budget 25001
+ok 18 - arm denies invalid work budget 25001
+  ---
+  duration_ms: 0.0394
+  type: 'test'
+  ...
+# Subtest: arm denies invalid work budget 1.5
+ok 19 - arm denies invalid work budget 1.5
+  ---
+  duration_ms: 0.0278
+  type: 'test'
+  ...
+# Subtest: arm denies invalid work budget NaN
+ok 20 - arm denies invalid work budget NaN
+  ---
+  duration_ms: 0.0262
+  type: 'test'
+  ...
+# Subtest: real child arm normal yields one non-authorizing claim
+ok 21 - real child arm normal yields one non-authorizing claim
+  ---
+  duration_ms: 68.9522
+  type: 'test'
+  ...
+# Subtest: real child arm fragmented yields one non-authorizing claim
+ok 22 - real child arm fragmented yields one non-authorizing claim
+  ---
+  duration_ms: 90.1667
+  type: 'test'
+  ...
+# Subtest: real child malformed arm wrong-pin closes without claim
+ok 23 - real child malformed arm wrong-pin closes without claim
+  ---
+  duration_ms: 85.8938
+  type: 'test'
+  ...
+# Subtest: real child malformed arm wrong-budget closes without claim
+ok 24 - real child malformed arm wrong-budget closes without claim
+  ---
+  duration_ms: 123.9161
+  type: 'test'
+  ...
+# Subtest: real child malformed arm wrong-clock closes without claim
+ok 25 - real child malformed arm wrong-clock closes without claim
+  ---
+  duration_ms: 97.5413
+  type: 'test'
+  ...
+# Subtest: real child malformed arm wrong-intent closes without claim
+ok 26 - real child malformed arm wrong-intent closes without claim
+  ---
+  duration_ms: 88.6584
+  type: 'test'
+  ...
+# Subtest: real child malformed arm legacy closes without claim
+ok 27 - real child malformed arm legacy closes without claim
+  ---
+  duration_ms: 87.4693
+  type: 'test'
+  ...
+# Subtest: real child malformed arm duplicate closes without claim
+ok 28 - real child malformed arm duplicate closes without claim
+  ---
+  duration_ms: 82.7646
+  type: 'test'
+  ...
+# Subtest: real child malformed arm trailing closes without claim
+ok 29 - real child malformed arm trailing closes without claim
+  ---
+  duration_ms: 82.3917
+  type: 'test'
+  ...
+# Subtest: real child malformed arm oversized closes without claim
+ok 30 - real child malformed arm oversized closes without claim
+  ---
+  duration_ms: 80.1113
+  type: 'test'
+  ...
+# Subtest: real child malformed arm partial closes without claim
+ok 31 - real child malformed arm partial closes without claim
+  ---
+  duration_ms: 416.2517
+  type: 'test'
+  ...
+# Subtest: buffered arm cannot renew exhausted or invalid clock 2000
+ok 32 - buffered arm cannot renew exhausted or invalid clock 2000
+  ---
+  duration_ms: 65.7928
+  type: 'test'
+  ...
+# Subtest: buffered arm cannot renew exhausted or invalid clock 2500
+ok 33 - buffered arm cannot renew exhausted or invalid clock 2500
+  ---
+  duration_ms: 66.41
+  type: 'test'
+  ...
+# Subtest: buffered arm cannot renew exhausted or invalid clock NaN
+ok 34 - buffered arm cannot renew exhausted or invalid clock NaN
+  ---
+  duration_ms: 65.3081
+  type: 'test'
+  ...
+# Subtest: buffered arm cannot renew exhausted or invalid clock Infinity
+ok 35 - buffered arm cannot renew exhausted or invalid clock Infinity
+  ---
+  duration_ms: 60.3769
+  type: 'test'
+  ...
+# Subtest: buffered arm cannot renew exhausted or invalid clock -1
+ok 36 - buffered arm cannot renew exhausted or invalid clock -1
+  ---
+  duration_ms: 74.0048
+  type: 'test'
+  ...
+# Subtest: arm received after original deadline denies even while guardian remains alive
+ok 37 - arm received after original deadline denies even while guardian remains alive
+  ---
+  duration_ms: 64.242
+  type: 'test'
+  ...
+# Subtest: original process exit invalidates a buffered successful arm
+ok 38 - original process exit invalidates a buffered successful arm
+  ---
+  duration_ms: 71.0167
+  type: 'test'
+  ...
+# Subtest: terminal output after arm permanently closes forward claims
+ok 39 - terminal output after arm permanently closes forward claims
+  ---
+  duration_ms: 73.7032
+  type: 'test'
+  ...
+# Subtest: local close requests guardian EOF but does not assert stop
+ok 40 - local close requests guardian EOF but does not assert stop
+  ---
+  duration_ms: 61.6941
+  type: 'test'
+  ...
+# Subtest: claim before arm and reuse of a closed gate both permanently deny
+ok 41 - claim before arm and reuse of a closed gate both permanently deny
+  ---
+  duration_ms: 60.5966
+  type: 'test'
+  ...
+# Subtest: clock time spent before attach is charged, not renewed
+ok 42 - clock time spent before attach is charged, not renewed
+  ---
+  duration_ms: 65.1408
+  type: 'test'
+  ...
+# Subtest: clock exception latches denial even after the clock recovers
+ok 43 - clock exception latches denial even after the clock recovers
+  ---
+  duration_ms: 69.501
+  type: 'test'
+  ...
+# Subtest: closing captured arm stream invalidates claims before process exit
+ok 44 - closing captured arm stream invalidates claims before process exit
+  ---
+  duration_ms: 62.9743
+  type: 'test'
+  ...
+# Subtest: real controller stall cannot turn a buffered arm into a fresh work budget
+ok 45 - real controller stall cannot turn a buffered arm into a fresh work budget
+  ---
+  duration_ms: 326.0949
+  type: 'test'
+  ...
+# Subtest: gate cannot rebind from its original guardian to a second child
+ok 46 - gate cannot rebind from its original guardian to a second child
+  ---
+  duration_ms: 66.8205
+  type: 'test'
+  ...
+# Subtest: original child kill denies claims without adopting a replacement PID
+ok 47 - original child kill denies claims without adopting a replacement PID
+  ---
+  duration_ms: 58.0048
+  type: 'test'
+  ...
+# Subtest: controller gate accepts actual mocked PowerShell arm and EOF requests one stop
+ok 48 - controller gate accepts actual mocked PowerShell arm and EOF requests one stop
+  ---
+  duration_ms: 585.9986
+  type: 'test'
+  ...
+# Subtest: Node independently reconstructs the six C\# canonical binding goldens
+ok 49 - Node independently reconstructs the six C\# canonical binding goldens
+  ---
+  duration_ms: 1.5307
+  type: 'test'
+  ...
+# Subtest: Node independently reconstructs the fixed M04 report golden without native execution
+ok 50 - Node independently reconstructs the fixed M04 report golden without native execution
+  ---
+  duration_ms: 0.3588
+  type: 'test'
+  ...
+# Subtest: outer observer stays compile-only and pure framing target has no native dependencies
+ok 51 - outer observer stays compile-only and pure framing target has no native dependencies
+  ---
+  duration_ms: 2.9126
+  type: 'test'
+  ...
+# Subtest: outer sequence keeps the original clock and refuses uncertain setup/start before main case
+ok 52 - outer sequence keeps the original clock and refuses uncertain setup/start before main case
+  ---
+  duration_ms: 0.4032
+  type: 'test'
+  ...
+# Subtest: outer finally refreshes effect masks before disposal; first failure survives later errors
+ok 53 - outer finally refreshes effect masks before disposal; first failure survives later errors
+  ---
+  duration_ms: 0.3695
+  type: 'test'
+  ...
+# Subtest: outer framing independently replays masks, binds nested report and keeps its own fixed domain
+ok 54 - outer framing independently replays masks, binds nested report and keeps its own fixed domain
+  ---
+  duration_ms: 0.3318
+  type: 'test'
+  ...
+# Subtest: fixed role inputs reproduce OMP1 vector and create/read-back exactly two non-authorizing artifacts
+ok 55 - fixed role inputs reproduce OMP1 vector and create/read-back exactly two non-authorizing artifacts
+  ---
+  duration_ms: 50.1963
+  type: 'test'
+  ...
+# Subtest: returned snapshot does not re-open changed source images
+ok 56 - returned snapshot does not re-open changed source images
+  ---
+  duration_ms: 33.9003
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: missing-pin
+ok 57 - receipt rejection precedes output creation: missing-pin
+  ---
+  duration_ms: 9.8617
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: wrong-pin
+ok 58 - receipt rejection precedes output creation: wrong-pin
+  ---
+  duration_ms: 19.2125
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: failed-compile
+ok 59 - receipt rejection precedes output creation: failed-compile
+  ---
+  duration_ms: 32.0493
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: signal
+ok 60 - receipt rejection precedes output creation: signal
+  ---
+  duration_ms: 38.1403
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: wrong-kind
+ok 61 - receipt rejection precedes output creation: wrong-kind
+  ---
+  duration_ms: 19.2249
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: executed
+ok 62 - receipt rejection precedes output creation: executed
+  ---
+  duration_ms: 24.8416
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: changed-source
+ok 63 - receipt rejection precedes output creation: changed-source
+  ---
+  duration_ms: 26.5433
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: changed-toolchain
+ok 64 - receipt rejection precedes output creation: changed-toolchain
+  ---
+  duration_ms: 29.8197
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: compiler-script
+ok 65 - receipt rejection precedes output creation: compiler-script
+  ---
+  duration_ms: 21.4861
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: source-count
+ok 66 - receipt rejection precedes output creation: source-count
+  ---
+  duration_ms: 22.427
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: source-path
+ok 67 - receipt rejection precedes output creation: source-path
+  ---
+  duration_ms: 24.685
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: source-hash
+ok 68 - receipt rejection precedes output creation: source-hash
+  ---
+  duration_ms: 27.4801
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: result-count
+ok 69 - receipt rejection precedes output creation: result-count
+  ---
+  duration_ms: 28.1205
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: role-path
+ok 70 - receipt rejection precedes output creation: role-path
+  ---
+  duration_ms: 40.0307
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: target
+ok 71 - receipt rejection precedes output creation: target
+  ---
+  duration_ms: 36.7324
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: missing-config
+ok 72 - receipt rejection precedes output creation: missing-config
+  ---
+  duration_ms: 37.4628
+  type: 'test'
+  ...
+# Subtest: receipt rejection precedes output creation: profile-pin
+ok 73 - receipt rejection precedes output creation: profile-pin
+  ---
+  duration_ms: 41.0314
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: image
+ok 74 - input denial leaves no output: image
+  ---
+  duration_ms: 32.0595
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: profile
+ok 75 - input denial leaves no output: profile
+  ---
+  duration_ms: 29.9125
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: empty-image
+ok 76 - input denial leaves no output: empty-image
+  ---
+  duration_ms: 26.6856
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: oversize-image
+ok 77 - input denial leaves no output: oversize-image
+  ---
+  duration_ms: 33.2984
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: oversize-receipt
+ok 78 - input denial leaves no output: oversize-receipt
+  ---
+  duration_ms: 12.3854
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: duplicate-image
+ok 79 - input denial leaves no output: duplicate-image
+  ---
+  duration_ms: 39.1758
+  type: 'test'
+  ...
+# Subtest: input denial leaves no output: invalid-sid
+ok 80 - input denial leaves no output: invalid-sid
+  ---
+  duration_ms: 31.5419
+  type: 'test'
+  ...
+# Subtest: existing destination is preserved, never adopted or repaired
+ok 81 - existing destination is preserved, never adopted or repaired
+  ---
+  duration_ms: 33.9867
+  type: 'test'
+  ...
+# Subtest: failure after payload write preserves partial output and denies a repair retry
+ok 82 - failure after payload write preserves partial output and denies a repair retry
+  ---
+  duration_ms: 51.8185
+  type: 'test'
+  ...
+# Subtest: hard-linked image and receipt are rejected without changing either alias
+ok 83 - hard-linked image and receipt are rejected without changing either alias
+  ---
+  duration_ms: 47.0067
+  type: 'test'
+  ...
+# Subtest: module has no process launcher, VM command, service operation or CLI entry
+ok 84 - module has no process launcher, VM command, service operation or CLI entry
+  ---
+  duration_ms: 0.3812
+  type: 'test'
+  ...
+# Subtest: receiver is linked only into observer library and explicit isolated memory-test target
+ok 85 - receiver is linked only into observer library and explicit isolated memory-test target
+  ---
+  duration_ms: 2.1976
+  type: 'test'
+  ...
+# Subtest: receipt bounds header before body allocation and requires EOF before payload decoding
+ok 86 - receipt bounds header before body allocation and requires EOF before payload decoding
+  ---
+  duration_ms: 0.3575
+  type: 'test'
+  ...
+# Subtest: compile-only guest composition receives and checks time before provisioning with the original stopwatch
+ok 87 - compile-only guest composition receives and checks time before provisioning with the original stopwatch
+  ---
+  duration_ms: 0.2855
+  type: 'test'
+  ...
+# Subtest: fixed OMP1 vector and independently computed per-role identities match the C\# vector
+ok 88 - fixed OMP1 vector and independently computed per-role identities match the C\# vector
+  ---
+  duration_ms: 1.7052
+  type: 'test'
+  ...
+# Subtest: input byte views are copied without invoking user properties or methods
+ok 89 - input byte views are copied without invoking user properties or methods
+  ---
+  duration_ms: 1.2621
+  type: 'test'
+  ...
+# Subtest: proxies, shared/detached/non-byte views and invalid lengths fail before caller reflection
+ok 90 - proxies, shared/detached/non-byte views and invalid lengths fail before caller reflection
+  ---
+  duration_ms: 0.682
+  type: 'test'
+  ...
+# Subtest: nonzero-offset views preserve only their actual bounded bytes
+ok 91 - nonzero-offset views preserve only their actual bounded bytes
+  ---
+  duration_ms: 0.3062
+  type: 'test'
+  ...
+# Subtest: service IDs and role aliases are rejected before delivery
+ok 92 - service IDs and role aliases are rejected before delivery
+  ---
+  duration_ms: 0.2997
+  type: 'test'
+  ...
+# Subtest: four maximum images reach exactly the advertised whole-wire bound
+ok 93 - four maximum images reach exactly the advertised whole-wire bound
+  ---
+  duration_ms: 6.1866
+  type: 'test'
+  ...
+# Subtest: wire mutations cannot retain the original pin; pins include role and service ordering
+ok 94 - wire mutations cannot retain the original pin; pins include role and service ordering
+  ---
+  duration_ms: 0.5472
+  type: 'test'
+  ...
+# Subtest: guest decoder remains pure, isolated from all executable native entry points
+ok 95 - guest decoder remains pure, isolated from all executable native entry points
+  ---
+  duration_ms: 1.6605
+  type: 'test'
+  ...
+# Subtest: V2 shared root/clock is structural agreement, never reconciliation or stop proof
+ok 96 - V2 shared root/clock is structural agreement, never reconciliation or stop proof
+  ---
+  duration_ms: 2.4491
+  type: 'test'
+  ...
+# Subtest: V2 optional reports b=false t=false do not create missing evidence
+ok 97 - V2 optional reports b=false t=false do not create missing evidence
+  ---
+  duration_ms: 1.3229
+  type: 'test'
+  ...
+# Subtest: V2 optional reports b=false t=true do not create missing evidence
+ok 98 - V2 optional reports b=false t=true do not create missing evidence
+  ---
+  duration_ms: 0.4018
+  type: 'test'
+  ...
+# Subtest: V2 optional reports b=true t=false do not create missing evidence
+ok 99 - V2 optional reports b=true t=false do not create missing evidence
+  ---
+  duration_ms: 0.4705
+  type: 'test'
+  ...
+# Subtest: V2 optional reports b=true t=true do not create missing evidence
+ok 100 - V2 optional reports b=true t=true do not create missing evidence
+  ---
+  duration_ms: 0.4359
+  type: 'test'
+  ...
+# Subtest: all 1108 byte mutations and every short/oversized record deny
+ok 101 - all 1108 byte mutations and every short/oversized record deny
+  ---
+  duration_ms: 191.3151
+  type: 'test'
+  ...
+# Subtest: V2 independent pins and budget are mandatory, primitive, nonzero and exact
+ok 102 - V2 independent pins and budget are mandatory, primitive, nonzero and exact
+  ---
+  duration_ms: 6.6082
+  type: 'test'
+  ...
+# Subtest: coherent record rewrites and clock substitutions cannot defeat independent pins
+ok 103 - coherent record rewrites and clock substitutions cannot defeat independent pins
+  ---
+  duration_ms: 3.3556
+  type: 'test'
+  ...
+# Subtest: even independently repinned clock framing requires positive signed counters and exact deadlines
+ok 104 - even independently repinned clock framing requires positive signed counters and exact deadlines
+  ---
+  duration_ms: 1.2404
+  type: 'test'
+  ...
+# Subtest: role swap, legacy framing, missing required intents and non-null report sentinels deny
+ok 105 - role swap, legacy framing, missing required intents and non-null report sentinels deny
+  ---
+  duration_ms: 2.2142
+  type: 'test'
+  ...
+# Subtest: V2 shared/exotic/detached/proxy views deny without executing property hooks
+ok 106 - V2 shared/exotic/detached/proxy views deny without executing property hooks
+  ---
+  duration_ms: 5.0666
+  type: 'test'
+  ...
+# Subtest: V2 terminal claim combinations remain claims and rehashed malformed envelopes fail
+ok 107 - V2 terminal claim combinations remain claims and rehashed malformed envelopes fail
+  ---
+  duration_ms: 35.167
+  type: 'test'
+  ...
+# Subtest: narrow historical budgets require repinned exact context and never sample present time
+ok 108 - narrow historical budgets require repinned exact context and never sample present time
+  ---
+  duration_ms: 1.2531
+  type: 'test'
+  ...
+# Subtest: rehashing nested bootstrap bindings cannot launder a different run or artifact
+ok 109 - rehashing nested bootstrap bindings cannot launder a different run or artifact
+  ---
+  duration_ms: 0.5669
+  type: 'test'
+  ...
+# Subtest: serialized Stopwatch is not the original live timing object
+ok 110 - serialized Stopwatch is not the original live timing object
+  ---
+  duration_ms: 392.2102
+  type: 'test'
+  ...
+# Subtest: separate host process accounts for startup delay from the original counter origin
+ok 111 - separate host process accounts for startup delay from the original counter origin
+  ---
+  duration_ms: 819.757
+  type: 'test'
+  ...
+# {"kind":"same-host-two-process-clock-observation","originalElapsedCeilingMs":"470","newLocalElapsedMs":8,"serializedClockRejected":true,"vmContact":false,"authority":"none"}
+# Subtest: clock-origin probe refuses changed frequency and future origin
+ok 112 - clock-origin probe refuses changed frequency and future origin
+  ---
+  duration_ms: 839.9084
+  type: 'test'
+  ...
+# Subtest: same-run mocked watchdog and bootstrap reports compose without promoting partial failure
+ok 113 - same-run mocked watchdog and bootstrap reports compose without promoting partial failure
+  ---
+  duration_ms: 900.1916
+  type: 'test'
+  ...
+# Subtest: exact controller handoff preserves separate watchdog claims and never grants another dispatch
+ok 114 - exact controller handoff preserves separate watchdog claims and never grants another dispatch
+  ---
+  duration_ms: 710.4989
+  type: 'test'
+  ...
+# Subtest: bootstrap bytes plus injected EOF do not trigger early owner EOF or joined completion
+ok 115 - bootstrap bytes plus injected EOF do not trigger early owner EOF or joined completion
+  ---
+  duration_ms: 1277.6354
+  type: 'test'
+  ...
+# Subtest: bad bootstrap (stderr) remains unconfirmed despite mocked bounded Off
+ok 116 - bad bootstrap (stderr) remains unconfirmed despite mocked bounded Off
+  ---
+  duration_ms: 620.1413
+  type: 'test'
+  ...
+# Subtest: bad bootstrap (wrong-pin) remains unconfirmed despite mocked bounded Off
+ok 117 - bad bootstrap (wrong-pin) remains unconfirmed despite mocked bounded Off
+  ---
+  duration_ms: 578.576
+  type: 'test'
+  ...
+# Subtest: bad bootstrap (partial) remains unconfirmed despite mocked bounded Off
+ok 118 - bad bootstrap (partial) remains unconfirmed despite mocked bounded Off
+  ---
+  duration_ms: 559.8646
+  type: 'test'
+  ...
+# Subtest: watchdog loss before local dispatch denies synthetic launch
+ok 119 - watchdog loss before local dispatch denies synthetic launch
+  ---
+  duration_ms: 497.5403
+  type: 'test'
+  ...
+# Subtest: watchdog loss after dispatch cannot be erased by a valid bootstrap report
+ok 120 - watchdog loss after dispatch cannot be erased by a valid bootstrap report
+  ---
+  duration_ms: 1171.6849
+  type: 'test'
+  ...
+# Subtest: mocked stop failure remains false even after valid bootstrap transport closure
+ok 121 - mocked stop failure remains false even after valid bootstrap transport closure
+  ---
+  duration_ms: 549.3238
+  type: 'test'
+  ...
+# Subtest: report cancellation neither stops its child nor turns later bytes into observations
+ok 122 - report cancellation neither stops its child nor turns later bytes into observations
+  ---
+  duration_ms: 508.228
+  type: 'test'
+  ...
+# Subtest: OMH2 reference agrees with an independently encoded Node golden vector
+ok 123 - OMH2 reference agrees with an independently encoded Node golden vector
+  ---
+  duration_ms: 1.8055
+  type: 'test'
+  ...
+# Subtest: V2 clock storage is native-library-only; record tests use fake storage and real codecs
+ok 124 - V2 clock storage is native-library-only; record tests use fake storage and real codecs
+  ---
+  duration_ms: 0.9079
+  type: 'test'
+  ...
+# Subtest: controller has mandatory independent context pins and joins existing origin before native reserve
+ok 125 - controller has mandatory independent context pins and joins existing origin before native reserve
+  ---
+  duration_ms: 0.3964
+  type: 'test'
+  ...
+# Subtest: new writers cannot create legacy controller files; V2 history cannot reserve or restart
+ok 126 - new writers cannot create legacy controller files; V2 history cannot reserve or restart
+  ---
+  duration_ms: 0.4
+  type: 'test'
+  ...
+# Subtest: framing bounds precede clone and historical results remain non-authorizing
+ok 127 - framing bounds precede clone and historical results remain non-authorizing
+  ---
+  duration_ms: 1.1281
+  type: 'test'
+  ...
+# Subtest: controller bridge uses separate native and fake-native link closures
+ok 128 - controller bridge uses separate native and fake-native link closures
+  ---
+  duration_ms: 4.9089
+  type: 'test'
+  ...
+# Subtest: controller retention is one attempted write and always closes before returning a snapshot
+ok 129 - controller retention is one attempted write and always closes before returning a snapshot
+  ---
+  duration_ms: 0.1719
+  type: 'test'
+  ...
+# Subtest: controller snapshot is historical local accounting and never execution permission
+ok 130 - controller snapshot is historical local accounting and never execution permission
+  ---
+  duration_ms: 0.1384
+  type: 'test'
+  ...
+# Subtest: matching C\# golden watchdog frames join a controller failure without erasing it or granting authority
+ok 131 - matching C\# golden watchdog frames join a controller failure without erasing it or granting authority
+  ---
+  duration_ms: 2.7398
+  type: 'test'
+  ...
+# Subtest: optional reports preserve uncertainty: bootstrap=false terminal=false
+ok 132 - optional reports preserve uncertainty: bootstrap=false terminal=false
+  ---
+  duration_ms: 0.8612
+  type: 'test'
+  ...
+# Subtest: optional reports preserve uncertainty: bootstrap=false terminal=true
+ok 133 - optional reports preserve uncertainty: bootstrap=false terminal=true
+  ---
+  duration_ms: 0.2353
+  type: 'test'
+  ...
+# Subtest: optional reports preserve uncertainty: bootstrap=true terminal=false
+ok 134 - optional reports preserve uncertainty: bootstrap=true terminal=false
+  ---
+  duration_ms: 0.2293
+  type: 'test'
+  ...
+# Subtest: optional reports preserve uncertainty: bootstrap=true terminal=true
+ok 135 - optional reports preserve uncertainty: bootstrap=true terminal=true
+  ---
+  duration_ms: 0.1876
+  type: 'test'
+  ...
+# Subtest: missing intents and non-null unavailable report sentinels deny, never erase the other history
+ok 136 - missing intents and non-null unavailable report sentinels deny, never erase the other history
+  ---
+  duration_ms: 1.1772
+  type: 'test'
+  ...
+# Subtest: all 828 byte mutations and every short or oversize frame deny
+ok 137 - all 828 byte mutations and every short or oversize frame deny
+  ---
+  duration_ms: 123.9199
+  type: 'test'
+  ...
+# Subtest: root/run/inventory/bundle/fixture/budget pins are independent, mandatory and exact
+ok 138 - root/run/inventory/bundle/fixture/budget pins are independent, mandatory and exact
+  ---
+  duration_ms: 2.3903
+  type: 'test'
+  ...
+# Subtest: coherently rehashed cross-run/controller/watchdog frames and changed budgets still deny
+ok 139 - coherently rehashed cross-run/controller/watchdog frames and changed budgets still deny
+  ---
+  duration_ms: 2.1777
+  type: 'test'
+  ...
+# Subtest: watchdog trigger/flag combinations obey the C\# wire rules without treating Off as stop proof
+ok 140 - watchdog trigger/flag combinations obey the C\# wire rules without treating Off as stop proof
+  ---
+  duration_ms: 33.4077
+  type: 'test'
+  ...
+# Subtest: hostile byte wrappers cannot invoke hooks and shared/detached/exotic views deny
+ok 141 - hostile byte wrappers cannot invoke hooks and shared/detached/exotic views deny
+  ---
+  duration_ms: 4.5927
+  type: 'test'
+  ...
+# Subtest: complete bootstrap success cannot repair a missing watchdog terminal or authorize a repeated run
+ok 142 - complete bootstrap success cannot repair a missing watchdog terminal or authorize a repeated run
+  ---
+  duration_ms: 1.3456
+  type: 'test'
+  ...
+# Subtest: narrow budgets require exact new intent binding and swapped record roles fail
+ok 143 - narrow budgets require exact new intent binding and swapped record roles fail
+  ---
+  duration_ms: 0.9198
+  type: 'test'
+  ...
+# Subtest: history comparator has no I/O, process, approval or production consumer
+ok 144 - history comparator has no I/O, process, approval or production consumer
+  ---
+  duration_ms: 0.4332
+  type: 'test'
+  ...
+# Subtest: clock-context runtime links only into host library and isolated counter tests
+ok 145 - clock-context runtime links only into host library and isolated counter tests
+  ---
+  duration_ms: 2.7832
+  type: 'test'
+  ...
+# Subtest: clock transfer checks independent binding before constructing receiver clock
+ok 146 - clock transfer checks independent binding before constructing receiver clock
+  ---
+  duration_ms: 0.3667
+  type: 'test'
+  ...
+# Subtest: clock wire is versioned and bounded before copying; old retention framing stays distinct
+ok 147 - clock wire is versioned and bounded before copying; old retention framing stays distinct
+  ---
+  duration_ms: 0.4037
+  type: 'test'
+  ...
+# Subtest: host clock arithmetic suite has only the fixed clock sources, no native closure
+ok 148 - host clock arithmetic suite has only the fixed clock sources, no native closure
+  ---
+  duration_ms: 2.0222
+  type: 'test'
+  ...
+# Subtest: runtime clock is sealed, uses current counter and cannot publicly reset or inject time
+ok 149 - runtime clock is sealed, uses current counter and cannot publicly reset or inject time
+  ---
+  duration_ms: 0.5117
+  type: 'test'
+  ...
+# Subtest: code custody owners require the bound original clock and no legacy Stopwatch overload
+ok 150 - code custody owners require the bound original clock and no legacy Stopwatch overload
+  ---
+  duration_ms: 0.7695
+  type: 'test'
+  ...
+# Subtest: host startup set links real holds only in native DLL and uses separate fake-hold tests
+ok 151 - host startup set links real holds only in native DLL and uses separate fake-hold tests
+  ---
+  duration_ms: 2.4965
+  type: 'test'
+  ...
+# Subtest: startup set acquires every hold before reads and returns no partial owner
+ok 152 - startup set acquires every hold before reads and returns no partial owner
+  ---
+  duration_ms: 0.2109
+  type: 'test'
+  ...
+# Subtest: startup-set handoff rechecks all custody after copying and retains holds on later failure
+ok 153 - startup-set handoff rechecks all custody after copying and retains holds on later failure
+  ---
+  duration_ms: 0.1971
+  type: 'test'
+  ...
+# Subtest: host code read hold links only the native library; memory test has no native closure
+ok 154 - host code read hold links only the native library; memory test has no native closure
+  ---
+  duration_ms: 1.8906
+  type: 'test'
+  ...
+# Subtest: host code native opener is fixed existing read-only with no loader or repair
+ok 155 - host code native opener is fixed existing read-only with no loader or repair
+  ---
+  duration_ms: 0.2461
+  type: 'test'
+  ...
+# Subtest: host code handoff validates exact bytes once and preserves independent handle lifetime
+ok 156 - host code handoff validates exact bytes once and preserves independent handle lifetime
+  ---
+  duration_ms: 0.4457
+  type: 'test'
+  ...
+# Subtest: native historical reader is linked only into the host library, with no executable consumer
+ok 157 - native historical reader is linked only into the host library, with no executable consumer
+  ---
+  duration_ms: 1.5206
+  type: 'test'
+  ...
+# Subtest: historical opens use read access, share-read and OPEN_EXISTING, not a writable reservation
+ok 158 - historical opens use read access, share-read and OPEN_EXISTING, not a writable reservation
+  ---
+  duration_ms: 0.2371
+  type: 'test'
+  ...
+# Subtest: only explicit file-not-found permits intent-only output; other errors are not collapsed into absence
+ok 159 - only explicit file-not-found permits intent-only output; other errors are not collapsed into absence
+  ---
+  duration_ms: 0.1843
+  type: 'test'
+  ...
+# Subtest: historical read checks exact shape before allocation, EOF, identity and write-time stability after read
+ok 160 - historical read checks exact shape before allocation, EOF, identity and write-time stability after read
+  ---
+  duration_ms: 0.238
+  type: 'test'
+  ...
+# Subtest: intent binding precedes report open and all retained data is rechecked before disclosure
+ok 161 - intent binding precedes report open and all retained data is rechecked before disclosure
+  ---
+  duration_ms: 0.9125
+  type: 'test'
+  ...
+# Subtest: read has one five-second clock through cleanup, with no renewed effect deadline
+ok 162 - read has one five-second clock through cleanup, with no renewed effect deadline
+  ---
+  duration_ms: 0.2138
+  type: 'test'
+  ...
+# Subtest: pure history snapshot is bounded and has no dispatch, stop or reconciliation-success claim
+ok 163 - pure history snapshot is bounded and has no dispatch, stop or reconciliation-success claim
+  ---
+  duration_ms: 0.3495
+  type: 'test'
+  ...
+# Subtest: host package emits exactly three pinned inputs and non-authorizing manifest
+ok 164 - host package emits exactly three pinned inputs and non-authorizing manifest
+  ---
+  duration_ms: 57.4867
+  type: 'test'
+  ...
+# Subtest: host assembly snapshots are detached and mutable caller bytes are not authority
+ok 165 - host assembly snapshots are detached and mutable caller bytes are not authority
+  ---
+  duration_ms: 29.3285
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: receipt-pin
+ok 166 - host package denies before creating output: receipt-pin
+  ---
+  duration_ms: 14.8566
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: core-pin
+ok 167 - host package denies before creating output: core-pin
+  ---
+  duration_ms: 27.5713
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: wrapper-pin
+ok 168 - host package denies before creating output: wrapper-pin
+  ---
+  duration_ms: 29.9071
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: missing-pin
+ok 169 - host package denies before creating output: missing-pin
+  ---
+  duration_ms: 5.6826
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: empty-library
+ok 170 - host package denies before creating output: empty-library
+  ---
+  duration_ms: 28.8318
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: oversize-library
+ok 171 - host package denies before creating output: oversize-library
+  ---
+  duration_ms: 25.8698
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: wrong-library
+ok 172 - host package denies before creating output: wrong-library
+  ---
+  duration_ms: 25.2926
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: source-hash
+ok 173 - host package denies before creating output: source-hash
+  ---
+  duration_ms: 21.6897
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: source-path
+ok 174 - host package denies before creating output: source-path
+  ---
+  duration_ms: 19.1767
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: script-hash
+ok 175 - host package denies before creating output: script-hash
+  ---
+  duration_ms: 21.0135
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: failed-compile
+ok 176 - host package denies before creating output: failed-compile
+  ---
+  duration_ms: 31.4645
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: wrong-target
+ok 177 - host package denies before creating output: wrong-target
+  ---
+  duration_ms: 27.0966
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: wrong-output
+ok 178 - host package denies before creating output: wrong-output
+  ---
+  duration_ms: 34.2163
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: executed
+ok 179 - host package denies before creating output: executed
+  ---
+  duration_ms: 19.9809
+  type: 'test'
+  ...
+# Subtest: host package denies before creating output: invalid-utf8
+ok 180 - host package denies before creating output: invalid-utf8
+  ---
+  duration_ms: 5.773
+  type: 'test'
+  ...
+# Subtest: host inputs reject hardlinked host-report-sink.dll
+ok 181 - host inputs reject hardlinked host-report-sink.dll
+  ---
+  duration_ms: 26.1121
+  type: 'test'
+  ...
+# Subtest: host inputs reject hardlinked receipt.json
+ok 182 - host inputs reject hardlinked receipt.json
+  ---
+  duration_ms: 6.6493
+  type: 'test'
+  ...
+# Subtest: host package refuses an existing directory without overwriting it
+ok 183 - host package refuses an existing directory without overwriting it
+  ---
+  duration_ms: 24.1563
+  type: 'test'
+  ...
+# Subtest: partial host package is preserved and cannot be repaired by retry; snapshots cleared
+ok 184 - partial host package is preserved and cannot be repaired by retry; snapshots cleared
+  ---
+  duration_ms: 42.6232
+  type: 'test'
+  ...
+# Subtest: host package detects incorrect destination bytes on readback
+ok 185 - host package detects incorrect destination bytes on readback
+  ---
+  duration_ms: 31.4372
+  type: 'test'
+  ...
+# Subtest: host package module has no execution, installation, credential or CLI path
+ok 186 - host package module has no execution, installation, credential or CLI path
+  ---
+  duration_ms: 0.4637
+  type: 'test'
+  ...
+# Subtest: host root preparation links only into the compile-only host library
+ok 187 - host root preparation links only into the compile-only host library
+  ---
+  duration_ms: 1.3733
+  type: 'test'
+  ...
+# Subtest: pinned parent, SYSTEM identity and creation-time private descriptor precede the sole directory effect
+ok 188 - pinned parent, SYSTEM identity and creation-time private descriptor precede the sole directory effect
+  ---
+  duration_ms: 0.3048
+  type: 'test'
+  ...
+# Subtest: successful proposal requires repeated physical checks followed by independent cleanup and original deadline
+ok 189 - successful proposal requires repeated physical checks followed by independent cleanup and original deadline
+  ---
+  duration_ms: 0.1339
+  type: 'test'
+  ...
+# Subtest: pure root accounting preserves late effects, denies ordering/reuse, and never authorizes execution
+ok 190 - pure root accounting preserves late effects, denies ordering/reuse, and never authorizes execution
+  ---
+  duration_ms: 0.3226
+  type: 'test'
+  ...
+# Subtest: writer cleanup retains a pending return until descriptor cleanup and attempts all owned releases
+ok 191 - writer cleanup retains a pending return until descriptor cleanup and attempts all owned releases
+  ---
+  duration_ms: 1.2275
+  type: 'test'
+  ...
+# Subtest: host report writer is a separate compile-only library, never a guest role or pure execution target
+ok 192 - host report writer is a separate compile-only library, never a guest role or pure execution target
+  ---
+  duration_ms: 3.4384
+  type: 'test'
+  ...
+# Subtest: root selection requires caller pins, exact existing root, private ACL and retained no-delete parents before intent creation
+ok 193 - root selection requires caller pins, exact existing root, private ACL and retained no-delete parents before intent creation
+  ---
+  duration_ms: 0.3069
+  type: 'test'
+  ...
+# Subtest: new leaves have security at creation and same-handle flush, full read-back, identity and stream checks
+ok 194 - new leaves have security at creation and same-handle flush, full read-back, identity and stream checks
+  ---
+  duration_ms: 0.2248
+  type: 'test'
+  ...
+# Subtest: report is one-attempt, revalidates exact intent and bounds claims before report creation
+ok 195 - report is one-attempt, revalidates exact intent and bounds claims before report creation
+  ---
+  duration_ms: 0.1979
+  type: 'test'
+  ...
+# Subtest: intent binds all four caller pins with its own framing domain and exact bound
+ok 196 - intent binds all four caller pins with its own framing domain and exact bound
+  ---
+  duration_ms: 0.2894
+  type: 'test'
+  ...
+# Subtest: intent golden bytes are independently derived in Node and pinned by the pure C\# test
+ok 197 - intent golden bytes are independently derived in Node and pinned by the pure C\# test
+  ---
+  duration_ms: 0.6927
+  type: 'test'
+  ...
+# Subtest: cleanup attempts both ancestors even after a close failure and emits only the fixed failure
+ok 198 - cleanup attempts both ancestors even after a close failure and emits only the fixed failure
+  ---
+  duration_ms: 0.1484
+  type: 'test'
+  ...
+# Subtest: discovery has no stop path; verifier and discovery use the same snapshot
+ok 199 - discovery has no stop path; verifier and discovery use the same snapshot
+  ---
+  duration_ms: 1.3467
+  type: 'test'
+  ...
+# Subtest: read-only discovery normal reproduces the existing inventory pin
+ok 200 - read-only discovery normal reproduces the existing inventory pin
+  ---
+  duration_ms: 716.4435
+  type: 'test'
+  ...
+# Subtest: read-only discovery initially-off reproduces the existing inventory pin
+ok 201 - read-only discovery initially-off reproduces the existing inventory pin
+  ---
+  duration_ms: 576.424
+  type: 'test'
+  ...
+# Subtest: missing approval or identity denies before a management read: unapproved
+ok 202 - missing approval or identity denies before a management read: unapproved
+  ---
+  duration_ms: 484.6557
+  type: 'test'
+  ...
+# Subtest: missing approval or identity denies before a management read: empty-id
+ok 203 - missing approval or identity denies before a management read: empty-id
+  ---
+  duration_ms: 428.1088
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: inventory-error
+ok 204 - discovery rejects unsupported configuration without a stop: inventory-error
+  ---
+  duration_ms: 458.4981
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: inventory-late
+ok 205 - discovery rejects unsupported configuration without a stop: inventory-late
+  ---
+  duration_ms: 10583.4312
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: initially-saved
+ok 206 - discovery rejects unsupported configuration without a stop: initially-saved
+  ---
+  duration_ms: 450.8439
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: network
+ok 207 - discovery rejects unsupported configuration without a stop: network
+  ---
+  duration_ms: 437.8092
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: gpu
+ok 208 - discovery rejects unsupported configuration without a stop: gpu
+  ---
+  duration_ms: 429.0902
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: device
+ok 209 - discovery rejects unsupported configuration without a stop: device
+  ---
+  duration_ms: 482.8532
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: dvd
+ok 210 - discovery rejects unsupported configuration without a stop: dvd
+  ---
+  duration_ms: 416.6151
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: com-port
+ok 211 - discovery rejects unsupported configuration without a stop: com-port
+  ---
+  duration_ms: 423.1553
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: cpu
+ok 212 - discovery rejects unsupported configuration without a stop: cpu
+  ---
+  duration_ms: 413.0333
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: memory
+ok 213 - discovery rejects unsupported configuration without a stop: memory
+  ---
+  duration_ms: 417.8063
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: dynamic
+ok 214 - discovery rejects unsupported configuration without a stop: dynamic
+  ---
+  duration_ms: 414.0254
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: auto-start
+ok 215 - discovery rejects unsupported configuration without a stop: auto-start
+  ---
+  duration_ms: 414.8448
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: checkpoint
+ok 216 - discovery rejects unsupported configuration without a stop: checkpoint
+  ---
+  duration_ms: 401.5926
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: passthrough
+ok 217 - discovery rejects unsupported configuration without a stop: passthrough
+  ---
+  duration_ms: 417.1263
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: differencing
+ok 218 - discovery rejects unsupported configuration without a stop: differencing
+  ---
+  duration_ms: 412.5828
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: secureboot
+ok 219 - discovery rejects unsupported configuration without a stop: secureboot
+  ---
+  duration_ms: 408.9224
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: duplicate-integration
+ok 220 - discovery rejects unsupported configuration without a stop: duplicate-integration
+  ---
+  duration_ms: 436.1555
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: invalid-integration
+ok 221 - discovery rejects unsupported configuration without a stop: invalid-integration
+  ---
+  duration_ms: 411.958
+  type: 'test'
+  ...
+# Subtest: discovery rejects unsupported configuration without a stop: untyped-integration
+ok 222 - discovery rejects unsupported configuration without a stop: untyped-integration
+  ---
+  duration_ms: 404.6007
+  type: 'test'
+  ...
+# Subtest: a changed disk identity is visible discovery, not silent acceptance against the old pin
+ok 223 - a changed disk identity is visible discovery, not silent acceptance against the old pin
+  ---
+  duration_ms: 428.9726
+  type: 'test'
+  ...
+# Subtest: QPC integer domain, budget and conversion range reject before sampling
+ok 224 - QPC integer domain, budget and conversion range reject before sampling
+  ---
+  duration_ms: 1.5036
+  type: 'test'
+  ...
+# Subtest: one original epoch with upward rounding and expiry leaves stop/retention available
+ok 225 - one original epoch with upward rounding and expiry leaves stop/retention available
+  ---
+  duration_ms: 0.3016
+  type: 'test'
+  ...
+# Subtest: bad, future, uncertain or regressing samples latch without recovery/reset
+ok 226 - bad, future, uncertain or regressing samples latch without recovery/reset
+  ---
+  duration_ms: 0.3356
+  type: 'test'
+  ...
+# Subtest: invalid deadlines and explicit invalidation latch; exact deadline expires
+ok 227 - invalid deadlines and explicit invalidation latch; exact deadline expires
+  ---
+  duration_ms: 0.241
+  type: 'test'
+  ...
+# Subtest: conservative Node conversion dominates exact tick oracle across exponent/frequency cases
+ok 228 - conservative Node conversion dominates exact tick oracle across exponent/frequency cases
+  ---
+  duration_ms: 5.6801
+  type: 'test'
+  ...
+# exact tick oracle cases: 2484
+# Subtest: runtime wire is exact, pinned, immutable and copied without calling hooks
+ok 229 - runtime wire is exact, pinned, immutable and copied without calling hooks
+  ---
+  duration_ms: 1.529
+  type: 'test'
+  ...
+# Subtest: all OMK1 byte mutations, lengths and unsupported buffers deny
+ok 230 - all OMK1 byte mutations, lengths and unsupported buffers deny
+  ---
+  duration_ms: 5.2961
+  type: 'test'
+  ...
+# Subtest: coherent rewrites do not substitute independent pins or repair invalid domains
+ok 231 - coherent rewrites do not substitute independent pins or repair invalid domains
+  ---
+  duration_ms: 1.6053
+  type: 'test'
+  ...
+# Subtest: only the privately branded clock binds; mismatches poison existing bindings
+ok 232 - only the privately branded clock binds; mismatches poison existing bindings
+  ---
+  duration_ms: 0.6832
+  type: 'test'
+  ...
+# Subtest: binding captures sampler and does not invoke a substituted public hrtime property
+ok 233 - binding captures sampler and does not invoke a substituted public hrtime property
+  ---
+  duration_ms: 0.3079
+  type: 'test'
+  ...
+# Subtest: elapsed persists across delay and constructor recreation
+ok 234 - elapsed persists across delay and constructor recreation
+  ---
+  duration_ms: 33.7047
+  type: 'test'
+  ...
+# Subtest: isolated runtime throw denies without diagnostic leakage
+ok 235 - isolated runtime throw denies without diagnostic leakage
+  ---
+  duration_ms: 98.8717
+  type: 'test'
+  ...
+# Subtest: isolated runtime regress denies without diagnostic leakage
+ok 236 - isolated runtime regress denies without diagnostic leakage
+  ---
+  duration_ms: 102.1124
+  type: 'test'
+  ...
+# Subtest: isolated runtime range denies without diagnostic leakage
+ok 237 - isolated runtime range denies without diagnostic leakage
+  ---
+  duration_ms: 112.9461
+  type: 'test'
+  ...
+# Subtest: isolated runtime version denies without diagnostic leakage
+ok 238 - isolated runtime version denies without diagnostic leakage
+  ---
+  duration_ms: 88.5703
+  type: 'test'
+  ...
+# Subtest: isolated runtime platform denies without diagnostic leakage
+ok 239 - isolated runtime platform denies without diagnostic leakage
+  ---
+  duration_ms: 82.5526
+  type: 'test'
+  ...
+# Subtest: isolated runtime arch denies without diagnostic leakage
+ok 240 - isolated runtime arch denies without diagnostic leakage
+  ---
+  duration_ms: 86.1632
+  type: 'test'
+  ...
+# Subtest: isolated runtime uv denies without diagnostic leakage
+ok 241 - isolated runtime uv denies without diagnostic leakage
+  ---
+  duration_ms: 83.2649
+  type: 'test'
+  ...
+# Subtest: original host age is charged to real-child ARM and one claim
+ok 242 - original host age is charged to real-child ARM and one claim
+  ---
+  duration_ms: 74.4051
+  type: 'test'
+  ...
+# Subtest: original host age survives watchdog ARM, EOF, report and child close
+ok 243 - original host age survives watchdog ARM, EOF, report and child close
+  ---
+  duration_ms: 76.4119
+  type: 'test'
+  ...
+# Subtest: original clock bounds bootstrap report collection and exact one-use handoff
+ok 244 - original clock bounds bootstrap report collection and exact one-use handoff
+  ---
+  duration_ms: 74.862
+  type: 'test'
+  ...
+# Subtest: explicit original start never adds received age back to arm or session deadlines
+ok 245 - explicit original start never adds received age back to arm or session deadlines
+  ---
+  duration_ms: 0.3499
+  type: 'test'
+  ...
+# Subtest: original-start ARM timer uses remaining time even with a frozen synthetic clock
+ok 246 - original-start ARM timer uses remaining time even with a frozen synthetic clock
+  ---
+  duration_ms: 101.9279
+  type: 'test'
+  ...
+# Subtest: original-start watchdog observation timer does not renew pre-constructor time
+ok 247 - original-start watchdog observation timer does not renew pre-constructor time
+  ---
+  duration_ms: 5211.8355
+  type: 'test'
+  ...
+# Subtest: startup policy executes only pure transitions and native startup remains observer-only
+ok 248 - startup policy executes only pure transitions and native startup remains observer-only
+  ---
+  duration_ms: 2.2697
+  type: 'test'
+  ...
+# Subtest: owned setup requires preexisting image custody and keeps a private constructed definition set
+ok 249 - owned setup requires preexisting image custody and keeps a private constructed definition set
+  ---
+  duration_ms: 0.4704
+  type: 'test'
+  ...
+# Subtest: startup records possible effects before fixed enable and zero-argument start without retry or repair
+ok 250 - startup records possible effects before fixed enable and zero-argument start without retry or repair
+  ---
+  duration_ms: 0.3959
+  type: 'test'
+  ...
+# Subtest: all startup polling shares five seconds and running roots are captured before observed state
+ok 251 - all startup polling shares five seconds and running roots are captured before observed state
+  ---
+  duration_ms: 0.299
+  type: 'test'
+  ...
+# Subtest: handoff consumes the actual started observations once and startup roots survive cleanup uncertainty
+ok 252 - handoff consumes the actual started observations once and startup roots survive cleanup uncertainty
+  ---
+  duration_ms: 0.5194
+  type: 'test'
+  ...
+# Subtest: image pin tests are pure and native four-image custody is observer-only
+ok 253 - image pin tests are pure and native four-image custody is observer-only
+  ---
+  duration_ms: 0.7283
+  type: 'test'
+  ...
+# Subtest: observer custody uses one attempt, aggregate preparation budget and retained fixed-leaf measurements
+ok 254 - observer custody uses one attempt, aggregate preparation budget and retained fixed-leaf measurements
+  ---
+  duration_ms: 0.5171
+  type: 'test'
+  ...
+# Subtest: handoff requires the same pinned image owner and original clock before observations and rechecks before work
+ok 255 - handoff requires the same pinned image owner and original clock before observations and rechecks before work
+  ---
+  duration_ms: 0.5044
+  type: 'test'
+  ...
+# Subtest: work-grant policies run without native code and issuer stays out of every role executable
+ok 256 - work-grant policies run without native code and issuer stays out of every role executable
+  ---
+  duration_ms: 1.0477
+  type: 'test'
+  ...
+# Subtest: receiver can only open exact grant and observe it once immediately, never create/signal/reset
+ok 257 - receiver can only open exact grant and observe it once immediately, never create/signal/reset
+  ---
+  duration_ms: 0.6454
+  type: 'test'
+  ...
+# Subtest: issuer creates private initially-clear events before config and latches before signal
+ok 258 - issuer creates private initially-clear events before config and latches before signal
+  ---
+  duration_ms: 0.4996
+  type: 'test'
+  ...
+# Subtest: grant checks gate both actual service stages and possible work is accounted before signal
+ok 259 - grant checks gate both actual service stages and possible work is accounted before signal
+  ---
+  duration_ms: 0.4057
+  type: 'test'
+  ...
+# Subtest: disabled-definition tests are pure; native setup exists only in observer library
+ok 260 - disabled-definition tests are pure; native setup exists only in observer library
+  ---
+  duration_ms: 1.1761
+  type: 'test'
+  ...
+# Subtest: setup consumes before create, uses fixed disabled virtual services and has no adoption or launch API
+ok 261 - setup consumes before create, uses fixed disabled virtual services and has no adoption or launch API
+  ---
+  duration_ms: 0.4202
+  type: 'test'
+  ...
+# Subtest: disabled setup readback uses protected handle-bound descriptor, fixed minimal privileges and no fabricated run pins
+ok 262 - disabled setup readback uses protected handle-bound descriptor, fixed minimal privileges and no fabricated run pins
+  ---
+  duration_ms: 0.3445
+  type: 'test'
+  ...
+# Subtest: running-observer and disabled-setup start modes stay distinct; setup is not called from the case runner
+ok 263 - running-observer and disabled-setup start modes stay distinct; setup is not called from the case runner
+  ---
+  duration_ms: 0.3925
+  type: 'test'
+  ...
+# Subtest: compile plan has fixed subjects, library launcher, and no execution command
+ok 264 - compile plan has fixed subjects, library launcher, and no execution command
+  ---
+  duration_ms: 3.5663
+  type: 'test'
+  ...
+# Subtest: pure policy test target excludes all native collector/launcher sources
+ok 265 - pure policy test target excludes all native collector/launcher sources
+  ---
+  duration_ms: 0.6017
+  type: 'test'
+  ...
+# Subtest: handshake executable has only bounded in-memory state, no OS/effect authority
+ok 266 - handshake executable has only bounded in-memory state, no OS/effect authority
+  ---
+  duration_ms: 1.9873
+  type: 'test'
+  ...
+# Subtest: native peer queries are minimal and read-only, recheck lifetime and poison on failure
+ok 267 - native peer queries are minimal and read-only, recheck lifetime and poison on failure
+  ---
+  duration_ms: 0.385
+  type: 'test'
+  ...
+# Subtest: completion policy test target cannot invoke native pipe code
+ok 268 - completion policy test target cannot invoke native pipe code
+  ---
+  duration_ms: 0.3884
+  type: 'test'
+  ...
+# Subtest: native I/O roots one bounded slot and never frees uncertain pending storage
+ok 269 - native I/O roots one bounded slot and never frees uncertain pending storage
+  ---
+  duration_ms: 0.4082
+  type: 'test'
+  ...
+# Subtest: channel-budget executable contains only pure bounded accounting and tests
+ok 270 - channel-budget executable contains only pure bounded accounting and tests
+  ---
+  duration_ms: 0.3378
+  type: 'test'
+  ...
+# Subtest: channel creates only fixed first-instance local pipes with explicit client rights
+ok 271 - channel creates only fixed first-instance local pipes with explicit client rights
+  ---
+  duration_ms: 0.3594
+  type: 'test'
+  ...
+# Subtest: channel shares one deadline and checks retained peers before and after each frame
+ok 272 - channel shares one deadline and checks retained peers before and after each frame
+  ---
+  duration_ms: 0.3893
+  type: 'test'
+  ...
+# Subtest: launcher has one guarded resume call, no shell, process lookup or entry point
+ok 273 - launcher has one guarded resume call, no shell, process lookup or entry point
+  ---
+  duration_ms: 0.2588
+  type: 'test'
+  ...
+# Subtest: binding executable excludes native sources and bounds copied wire inputs
+ok 274 - binding executable excludes native sources and bounds copied wire inputs
+  ---
+  duration_ms: 1.0941
+  type: 'test'
+  ...
+# Subtest: channel context is typed; custody ACK precedes a separate owned resume transition
+ok 275 - channel context is typed; custody ACK precedes a separate owned resume transition
+  ---
+  duration_ms: 0.5266
+  type: 'test'
+  ...
+# Subtest: supervisor pull has fixed downward rights and verifies source and object identities
+ok 276 - supervisor pull has fixed downward rights and verifies source and object identities
+  ---
+  duration_ms: 0.3811
+  type: 'test'
+  ...
+# Subtest: offer leases retain source handles, require owned construction and stop before releasing
+ok 277 - offer leases retain source handles, require owned construction and stop before releasing
+  ---
+  duration_ms: 0.209
+  type: 'test'
+  ...
+# Subtest: resume policy executable contains only fabricated sequence and exit observations
+ok 278 - resume policy executable contains only fabricated sequence and exit observations
+  ---
+  duration_ms: 0.3959
+  type: 'test'
+  ...
+# Subtest: live channel owns resume permit; final stop requires both local evidence and bound final messages
+ok 279 - live channel owns resume permit; final stop requires both local evidence and bound final messages
+  ---
+  duration_ms: 0.4206
+  type: 'test'
+  ...
+# Subtest: custody ordering executable has no native or process authority
+ok 280 - custody ordering executable has no native or process authority
+  ---
+  duration_ms: 0.3475
+  type: 'test'
+  ...
+# Subtest: job-at-creation assignment and read-back precede any returned offer
+ok 281 - job-at-creation assignment and read-back precede any returned offer
+  ---
+  duration_ms: 0.1362
+  type: 'test'
+  ...
+# Subtest: fixed CPU/memory/process limits are set and read back
+ok 282 - fixed CPU/memory/process limits are set and read back
+  ---
+  duration_ms: 0.1315
+  type: 'test'
+  ...
+# Subtest: stop attempts latch; root signal plus zero job membership is required
+ok 283 - stop attempts latch; root signal plus zero job membership is required
+  ---
+  duration_ms: 0.1325
+  type: 'test'
+  ...
+# Subtest: prepare failure preserves cause and reports cleanup uncertainty
+ok 284 - prepare failure preserves cause and reports cleanup uncertainty
+  ---
+  duration_ms: 0.1142
+  type: 'test'
+  ...
+# Subtest: watchdog never closes observation handles or resumes; fixture hold outlives prepare
+ok 285 - watchdog never closes observation handles or resumes; fixture hold outlives prepare
+  ---
+  duration_ms: 0.1876
+  type: 'test'
+  ...
+# Subtest: fixture policy executable excludes native custody, file reads and launch
+ok 286 - fixture policy executable excludes native custody, file reads and launch
+  ---
+  duration_ms: 0.5519
+  type: 'test'
+  ...
+# Subtest: fixed fixture custody opens only retained existing objects and measures bounded bytes
+ok 287 - fixed fixture custody opens only retained existing objects and measures bounded bytes
+  ---
+  duration_ms: 0.4478
+  type: 'test'
+  ...
+# Subtest: launcher uses the measured volume path and keeps custody on uncertain stop
+ok 288 - launcher uses the measured volume path and keeps custody on uncertain stop
+  ---
+  duration_ms: 0.2957
+  type: 'test'
+  ...
+# Subtest: inert child has only a fixed argument-denial/exit marker, no effects
+ok 289 - inert child has only a fixed argument-denial/exit marker, no effects
+  ---
+  duration_ms: 0.0903
+  type: 'test'
+  ...
+# Subtest: prepared server creates once before connect, retains its original clock and transfers once
+ok 290 - prepared server creates once before connect, retains its original clock and transfers once
+  ---
+  duration_ms: 0.3671
+  type: 'test'
+  ...
+# Subtest: role lifecycle executable is pure data/clock logic, not the guest runner
+ok 291 - role lifecycle executable is pure data/clock logic, not the guest runner
+  ---
+  duration_ms: 0.3466
+  type: 'test'
+  ...
+# Subtest: role runner has only a fixed positive custody sequence with no service/task entry point
+ok 292 - role runner has only a fixed positive custody sequence with no service/task entry point
+  ---
+  duration_ms: 0.4299
+  type: 'test'
+  ...
+# Subtest: role stop cancels active calls but does not claim process or timer settlement
+ok 293 - role stop cancels active calls but does not claim process or timer settlement
+  ---
+  duration_ms: 0.4289
+  type: 'test'
+  ...
+# Subtest: post-release close checks cover modeled stop-versus-return orderings
+ok 294 - post-release close checks cover modeled stop-versus-return orderings
+  ---
+  duration_ms: 0.4888
+  type: 'test'
+  ...
+# Subtest: service framework reference stays native-only and pure service tests exclude effects
+ok 295 - service framework reference stays native-only and pure service tests exclude effects
+  ---
+  duration_ms: 1.3053
+  type: 'test'
+  ...
+# Subtest: SCM shell measures first then separately prepares and dispatches with fixed controls
+ok 296 - SCM shell measures first then separately prepares and dispatches with fixed controls
+  ---
+  duration_ms: 0.4971
+  type: 'test'
+  ...
+# Subtest: SCM callback stop joins fixed workers with a single nonrenewing remaining budget
+ok 297 - SCM callback stop joins fixed workers with a single nonrenewing remaining budget
+  ---
+  duration_ms: 0.4173
+  type: 'test'
+  ...
+# Subtest: configuration codec stays pure and the fixed wire golden reconstructs independently
+ok 298 - configuration codec stays pure and the fixed wire golden reconstructs independently
+  ---
+  duration_ms: 2.7463
+  type: 'test'
+  ...
+# Subtest: fixed config custody cannot create, mutate, return pins before ACL checks or reset its hold
+ok 299 - fixed config custody cannot create, mutate, return pins before ACL checks or reset its hold
+  ---
+  duration_ms: 0.7583
+  type: 'test'
+  ...
+# Subtest: three fixed SCM entry outputs have no interactive mode and are excluded from the pure runner
+ok 300 - three fixed SCM entry outputs have no interactive mode and are excluded from the pure runner
+  ---
+  duration_ms: 1.6149
+  type: 'test'
+  ...
+# Subtest: service observation policy executable is isolated from the native observer and pipes
+ok 301 - service observation policy executable is isolated from the native observer and pipes
+  ---
+  duration_ms: 1.2266
+  type: 'test'
+  ...
+# Subtest: native service discovery retains query-only root and checks real SCM configuration twice
+ok 302 - native service discovery retains query-only root and checks real SCM configuration twice
+  ---
+  duration_ms: 0.4815
+  type: 'test'
+  ...
+# Subtest: observed pin requires a fresh retained recheck and stop diagnostic is root-only
+ok 303 - observed pin requires a fresh retained recheck and stop diagnostic is root-only
+  ---
+  duration_ms: 0.3092
+  type: 'test'
+  ...
+# Subtest: configuration creation and handoff are compile-only observer additions, never role code
+ok 304 - configuration creation and handoff are compile-only observer additions, never role code
+  ---
+  duration_ms: 0.365
+  type: 'test'
+  ...
+# Subtest: fixed create-only writer verifies creation-handle bytes then exact read-only reacquisition
+ok 305 - fixed create-only writer verifies creation-handle bytes then exact read-only reacquisition
+  ---
+  duration_ms: 0.31
+  type: 'test'
+  ...
+# Subtest: owned handoff rechecks all retained roots around the single write and has no raw native entry point
+ok 306 - owned handoff rechecks all retained roots around the single write and has no raw native entry point
+  ---
+  duration_ms: 0.4341
+  type: 'test'
+  ...
+# Subtest: readiness policy executable is pure; only observer library can create ready events
+ok 307 - readiness policy executable is pure; only observer library can create ready events
+  ---
+  duration_ms: 1.1401
+  type: 'test'
+  ...
+# Subtest: service readiness is open-only and signals after preparation before dispatch eligibility
+ok 308 - service readiness is open-only and signals after preparation before dispatch eligibility
+  ---
+  duration_ms: 0.7689
+  type: 'test'
+  ...
+# Subtest: readiness objects precede configuration delivery and all waits share one five-second bound
+ok 309 - readiness objects precede configuration delivery and all waits share one five-second bound
+  ---
+  duration_ms: 0.4428
+  type: 'test'
+  ...
+# Subtest: protocol completion has separate names/claims and cannot be confused with prepared state
+ok 310 - protocol completion has separate names/claims and cannot be confused with prepared state
+  ---
+  duration_ms: 0.3373
+  type: 'test'
+  ...
+# Subtest: shell zero exit requires reported protocol AND joined cleanup, not clean cancellation alone
+ok 311 - shell zero exit requires reported protocol AND joined cleanup, not clean cancellation alone
+  ---
+  duration_ms: 0.316
+  type: 'test'
+  ...
+# Subtest: completion wait shares original case cutoff and original-root status preserves uncertainty
+ok 312 - completion wait shares original case cutoff and original-root status preserves uncertainty
+  ---
+  duration_ms: 0.6094
+  type: 'test'
+  ...
+# Subtest: outer-job native sources are observer-only and the job suite is pure
+ok 313 - outer-job native sources are observer-only and the job suite is pure
+  ---
+  duration_ms: 0.5484
+  type: 'test'
+  ...
+# Subtest: outer-job assignment uses separately opened exact retained lifetimes, never caller PIDs
+ok 314 - outer-job assignment uses separately opened exact retained lifetimes, never caller PIDs
+  ---
+  duration_ms: 0.5008
+  type: 'test'
+  ...
+# Subtest: outer job is fresh, private and read back before assignment; handoff waits for it before pin delivery
+ok 315 - outer job is fresh, private and read back before assignment; handoff waits for it before pin delivery
+  ---
+  duration_ms: 0.6235
+  type: 'test'
+  ...
+# Subtest: outer stop never equates kill return, root exit or dispose with zero job members
+ok 316 - outer stop never equates kill return, root exit or dispose with zero job members
+  ---
+  duration_ms: 0.4938
+  type: 'test'
+  ...
+# Subtest: SCM controller is observer-only; its policy tests cannot control a service
+ok 317 - SCM controller is observer-only; its policy tests cannot control a service
+  ---
+  duration_ms: 1.0526
+  type: 'test'
+  ...
+# Subtest: controller uses fixed retained SCM identity and exact descriptor, not generic commands or installation
+ok 318 - controller uses fixed retained SCM identity and exact descriptor, not generic commands or installation
+  ---
+  duration_ms: 0.4665
+  type: 'test'
+  ...
+# Subtest: control attempts are consumed before native contact, and acceptance is not a completion signal
+ok 319 - control attempts are consumed before native contact, and acceptance is not a completion signal
+  ---
+  duration_ms: 0.3997
+  type: 'test'
+  ...
+# Subtest: three-role handoff binds prepare, readiness, dispatch and completion in order
+ok 320 - three-role handoff binds prepare, readiness, dispatch and completion in order
+  ---
+  duration_ms: 0.3805
+  type: 'test'
+  ...
+# Subtest: graceful stop reserves forced-observation time without resetting the original job deadline
+ok 321 - graceful stop reserves forced-observation time without resetting the original job deadline
+  ---
+  duration_ms: 0.33
+  type: 'test'
+  ...
+# Subtest: positive case runner compiles only in observer; report suite excludes every native port
+ok 322 - positive case runner compiles only in observer; report suite excludes every native port
+  ---
+  duration_ms: 1.6826
+  type: 'test'
+  ...
+# Subtest: report wire is fixed, run-bound, copied and cannot express raw native diagnostics
+ok 323 - report wire is fixed, run-bound, copied and cannot express raw native diagnostics
+  ---
+  duration_ms: 0.3635
+  type: 'test'
+  ...
+# Subtest: positive composition never retries and attempts all cleanup observations before report encoding
+ok 324 - positive composition never retries and attempts all cleanup observations before report encoding
+  ---
+  duration_ms: 0.4068
+  type: 'test'
+  ...
+# Subtest: provision regression executes only pure data dependencies
+ok 325 - provision regression executes only pure data dependencies
+  ---
+  duration_ms: 2.7625
+  type: 'test'
+  ...
+# Subtest: creation is fixed-name create-only with explicit descriptors, before-call accounting and no repair
+ok 326 - creation is fixed-name create-only with explicit descriptors, before-call accounting and no repair
+  ---
+  duration_ms: 0.4167
+  type: 'test'
+  ...
+# Subtest: final image owner is marked provisioned only after complete readback and original-root match
+ok 327 - final image owner is marked provisioned only after complete readback and original-root match
+  ---
+  duration_ms: 0.4133
+  type: 'test'
+  ...
+# Subtest: payload is copied and hashed before any provisioning and disposition cannot reset
+ok 328 - payload is copied and hashed before any provisioning and disposition cannot reset
+  ---
+  duration_ms: 0.2303
+  type: 'test'
+  ...
+# Subtest: collector has fixed byte/chunk caps and no process/VM/file effects
+ok 329 - collector has fixed byte/chunk caps and no process/VM/file effects
+  ---
+  duration_ms: 1.0819
+  type: 'test'
+  ...
+# Subtest: opt-in handoff returns exact observed bytes once without promoting evidence
+ok 330 - opt-in handoff returns exact observed bytes once without promoting evidence
+  ---
+  duration_ms: 284.3462
+  type: 'test'
+  ...
+# Subtest: wire handoff is disabled by default
+ok 331 - wire handoff is disabled by default
+  ---
+  duration_ms: 88.5975
+  type: 'test'
+  ...
+# Subtest: premature wire request cannot retry after transport close
+ok 332 - premature wire request cannot retry after transport close
+  ---
+  duration_ms: 77.5003
+  type: 'test'
+  ...
+# Subtest: failed report has no retained wire: stderr
+ok 333 - failed report has no retained wire: stderr
+  ---
+  duration_ms: 84.1999
+  type: 'test'
+  ...
+# Subtest: failed report has no retained wire: corrupt
+ok 334 - failed report has no retained wire: corrupt
+  ---
+  duration_ms: 89.3747
+  type: 'test'
+  ...
+# Subtest: failed report has no retained wire: partial
+ok 335 - failed report has no retained wire: partial
+  ---
+  duration_ms: 78.0427
+  type: 'test'
+  ...
+# Subtest: post-close deadline withholds wire without rewriting historical observation
+ok 336 - post-close deadline withholds wire without rewriting historical observation
+  ---
+  duration_ms: 76.3925
+  type: 'test'
+  ...
+# Subtest: post-close regression withholds wire without rewriting historical observation
+ok 337 - post-close regression withholds wire without rewriting historical observation
+  ---
+  duration_ms: 78.1219
+  type: 'test'
+  ...
+# Subtest: post-close throw withholds wire without rewriting historical observation
+ok 338 - post-close throw withholds wire without rewriting historical observation
+  ---
+  duration_ms: 64.0555
+  type: 'test'
+  ...
+# Subtest: post-close cancel withholds wire without rewriting historical observation
+ok 339 - post-close cancel withholds wire without rewriting historical observation
+  ---
+  duration_ms: 78.2187
+  type: 'test'
+  ...
+# Subtest: deadline crossed during wire copy withholds the copied bytes
+ok 340 - deadline crossed during wire copy withholds the copied bytes
+  ---
+  duration_ms: 83.744
+  type: 'test'
+  ...
+# Subtest: retention timer expires even when the injected clock does not advance
+ok 341 - retention timer expires even when the injected clock does not advance
+  ---
+  duration_ms: 626.7185
+  type: 'test'
+  ...
+# Subtest: retention option must be a boolean
+ok 342 - retention option must be a boolean
+  ---
+  duration_ms: 0.3463
+  type: 'test'
+  ...
+# Subtest: close does not renew the original retention timer with a frozen injected clock
+ok 343 - close does not renew the original retention timer with a frozen injected clock
+  ---
+  duration_ms: 2216.9128
+  type: 'test'
+  ...
+# Subtest: exact synthetic report requires EOF and original transport close: normal
+ok 344 - exact synthetic report requires EOF and original transport close: normal
+  ---
+  duration_ms: 61.2442
+  type: 'test'
+  ...
+# Subtest: exact synthetic report requires EOF and original transport close: fragmented
+ok 345 - exact synthetic report requires EOF and original transport close: fragmented
+  ---
+  duration_ms: 237.8019
+  type: 'test'
+  ...
+# Subtest: complete bytes do not settle while transport lives
+ok 346 - complete bytes do not settle while transport lives
+  ---
+  duration_ms: 672.343
+  type: 'test'
+  ...
+# Subtest: complete bytes plus injected EOF notification do not settle while transport lives
+ok 347 - complete bytes plus injected EOF notification do not settle while transport lives
+  ---
+  duration_ms: 668.4137
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: nonzero
+ok 348 - invalid synthetic report withholds claims: nonzero
+  ---
+  duration_ms: 59.3272
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: stderr
+ok 349 - invalid synthetic report withholds claims: stderr
+  ---
+  duration_ms: 55.8677
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: partial
+ok 350 - invalid synthetic report withholds claims: partial
+  ---
+  duration_ms: 61.1656
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: extra
+ok 351 - invalid synthetic report withholds claims: extra
+  ---
+  duration_ms: 64.6431
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: oversized
+ok 352 - invalid synthetic report withholds claims: oversized
+  ---
+  duration_ms: 58.3967
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: corrupt
+ok 353 - invalid synthetic report withholds claims: corrupt
+  ---
+  duration_ms: 61.4475
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: wrong-pin
+ok 354 - invalid synthetic report withholds claims: wrong-pin
+  ---
+  duration_ms: 59.4299
+  type: 'test'
+  ...
+# Subtest: invalid synthetic report withholds claims: empty
+ok 355 - invalid synthetic report withholds claims: empty
+  ---
+  duration_ms: 59.6076
+  type: 'test'
+  ...
+# Subtest: real deadline returns uncertainty while child lives; later close cannot upgrade it
+ok 356 - real deadline returns uncertainty while child lives; later close cannot upgrade it
+  ---
+  duration_ms: 806.8504
+  type: 'test'
+  ...
+# Subtest: cancel is not termination and permanently withholds even a later valid report
+ok 357 - cancel is not termination and permanently withholds even a later valid report
+  ---
+  duration_ms: 56.8657
+  type: 'test'
+  ...
+# Subtest: 129 injected data events hit the independent chunk cap before 384 bytes
+ok 358 - 129 injected data events hit the independent chunk cap before 384 bytes
+  ---
+  duration_ms: 56.4395
+  type: 'test'
+  ...
+# Subtest: clock regression cannot disclose claims
+ok 359 - clock regression cannot disclose claims
+  ---
+  duration_ms: 62.5859
+  type: 'test'
+  ...
+# Subtest: clock throw cannot disclose claims
+ok 360 - clock throw cannot disclose claims
+  ---
+  duration_ms: 54.6269
+  type: 'test'
+  ...
+# Subtest: clock late cannot disclose claims
+ok 361 - clock late cannot disclose claims
+  ---
+  duration_ms: 57.3311
+  type: 'test'
+  ...
+# Subtest: post-decode clock check rejects a deadline crossed during final decoding
+ok 362 - post-decode clock check rejects a deadline crossed during final decoding
+  ---
+  duration_ms: 56.6422
+  type: 'test'
+  ...
+# Subtest: attach cannot renew an old start or substitute another child
+ok 363 - attach cannot renew an old start or substitute another child
+  ---
+  duration_ms: 4.9291
+  type: 'test'
+  ...
+# Subtest: old-start remaining duration, not full allowance, controls real timer
+ok 364 - old-start remaining duration, not full allowance, controls real timer
+  ---
+  duration_ms: 812.2499
+  type: 'test'
+  ...
+# Subtest: no child, invalid pins/budgets and invalid original times fail closed
+ok 365 - no child, invalid pins/budgets and invalid original times fail closed
+  ---
+  duration_ms: 0.5038
+  type: 'test'
+  ...
+# Subtest: independently encoded Node success and all 54 prefixes match C\# pinned corpus hashes
+ok 366 - independently encoded Node success and all 54 prefixes match C\# pinned corpus hashes
+  ---
+  duration_ms: 7.8745
+  type: 'test'
+  ...
+# Subtest: coherent fabricated success exposes frozen claims but no proof, authority or raw nonce
+ok 367 - coherent fabricated success exposes frozen claims but no proof, authority or raw nonce
+  ---
+  duration_ms: 0.9951
+  type: 'test'
+  ...
+# Subtest: all 384 byte corruptions and short/long frames deny
+ok 368 - all 384 byte corruptions and short/long frames deny
+  ---
+  duration_ms: 30.4056
+  type: 'test'
+  ...
+# Subtest: pins are mandatory nonzero lowercase primitive digests and are never adopted
+ok 369 - pins are mandatory nonzero lowercase primitive digests and are never adopted
+  ---
+  duration_ms: 1.2526
+  type: 'test'
+  ...
+# Subtest: byte snapshot ignores shadowed getters, iterators and species; proxy/shared/detached inputs deny
+ok 370 - byte snapshot ignores shadowed getters, iterators and species; proxy/shared/detached inputs deny
+  ---
+  duration_ms: 1.3083
+  type: 'test'
+  ...
+# Subtest: rehashed invalid outer bytes, phase holes and absent-payload claims deny
+ok 371 - rehashed invalid outer bytes, phase holes and absent-payload claims deny
+  ---
+  duration_ms: 1.7974
+  type: 'test'
+  ...
+# Subtest: every nested reserved byte and wrong bound pin denies even with both checksums recomputed
+ok 372 - every nested reserved byte and wrong bound pin denies even with both checksums recomputed
+  ---
+  duration_ms: 5.0337
+  type: 'test'
+  ...
+# Subtest: nested flag/job/root/control constraints match the existing C\# contract
+ok 373 - nested flag/job/root/control constraints match the existing C\# contract
+  ---
+  duration_ms: 36.6493
+  type: 'test'
+  ...
+# Subtest: elapsed saturation, first failure and missing observations stay distinct
+ok 374 - elapsed saturation, first failure and missing observations stay distinct
+  ---
+  duration_ms: 1.0715
+  type: 'test'
+  ...
+# Subtest: host decoder has no transport or effect consumer
+ok 375 - host decoder has no transport or effect consumer
+  ---
+  duration_ms: 0.6794
+  type: 'test'
+  ...
+# Subtest: real bridge has separate native and fake-native compile closures
+ok 376 - real bridge has separate native and fake-native compile closures
+  ---
+  duration_ms: 4.3743
+  type: 'test'
+  ...
+# Subtest: bridge checks retained reservation before output and never forwards caller-owned arm bytes
+ok 377 - bridge checks retained reservation before output and never forwards caller-owned arm bytes
+  ---
+  duration_ms: 0.3625
+  type: 'test'
+  ...
+# Subtest: wrapper reserves before core watchdog and records only after core stop observation
+ok 378 - wrapper reserves before core watchdog and records only after core stop observation
+  ---
+  duration_ms: 0.2203
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: normal
+ok 379 - retained watchdog mock ordering and disclosure: normal
+  ---
+  duration_ms: 666.9011
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: no-approval
+ok 380 - retained watchdog mock ordering and disclosure: no-approval
+  ---
+  duration_ms: 500.0854
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: reserve-fail
+ok 381 - retained watchdog mock ordering and disclosure: reserve-fail
+  ---
+  duration_ms: 503.8649
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: core-fail
+ok 382 - retained watchdog mock ordering and disclosure: core-fail
+  ---
+  duration_ms: 472.7241
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: record-fail
+ok 383 - retained watchdog mock ordering and disclosure: record-fail
+  ---
+  duration_ms: 478.6161
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: dispose-fail
+ok 384 - retained watchdog mock ordering and disclosure: dispose-fail
+  ---
+  duration_ms: 478.8046
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: wrong-pin
+ok 385 - retained watchdog mock ordering and disclosure: wrong-pin
+  ---
+  duration_ms: 448.1403
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: untyped
+ok 386 - retained watchdog mock ordering and disclosure: untyped
+  ---
+  duration_ms: 437.9086
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: overclaim
+ok 387 - retained watchdog mock ordering and disclosure: overclaim
+  ---
+  duration_ms: 436.7636
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: wrong-trigger
+ok 388 - retained watchdog mock ordering and disclosure: wrong-trigger
+  ---
+  duration_ms: 439.1181
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: record-and-dispose-fail
+ok 389 - retained watchdog mock ordering and disclosure: record-and-dispose-fail
+  ---
+  duration_ms: 464.5405
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: clock-stop-record
+ok 390 - retained watchdog mock ordering and disclosure: clock-stop-record
+  ---
+  duration_ms: 468.5112
+  type: 'test'
+  ...
+# Subtest: retained watchdog mock ordering and disclosure: clock-stop-dispose
+ok 391 - retained watchdog mock ordering and disclosure: clock-stop-dispose
+  ---
+  duration_ms: 458.8182
+  type: 'test'
+  ...
+# Subtest: synthetic retention experiment cannot invoke VM or protected host sink operations
+ok 392 - synthetic retention experiment cannot invoke VM or protected host sink operations
+  ---
+  duration_ms: 0.9818
+  type: 'test'
+  ...
+# Subtest: independent watchdog reservation and terminal do not wait for an exclusive controller intent
+ok 393 - independent watchdog reservation and terminal do not wait for an exclusive controller intent
+  ---
+  duration_ms: 459.3959
+  type: 'test'
+  ...
+# {"kind":"synthetic-retention-lock-observation","sharedIntentDenied":true,"sharingError":32,"duplicateReservationDenied":true,"duplicateError":80,"independentTerminalWhileOwnersOpen":true,"historicalIntentsUnchanged":true,"handlesClosed":true,"vmContact":false,"protectedStorageTested":false,"durableEvidenceEstablished":false,"guestStopProven":false,"authority":"none"}
+# Subtest: root inventory test executable contains only pure bounded data dependencies
+ok 394 - root inventory test executable contains only pure bounded data dependencies
+  ---
+  duration_ms: 2.3445
+  type: 'test'
+  ...
+# Subtest: native listing opens only the retained root and checks exact identity around enumeration
+ok 395 - native listing opens only the retained root and checks exact identity around enumeration
+  ---
+  duration_ms: 0.4801
+  type: 'test'
+  ...
+# Subtest: pre-start inventory is mandatory before retention and every owned startup check
+ok 396 - pre-start inventory is mandatory before retention and every owned startup check
+  ---
+  duration_ms: 0.3554
+  type: 'test'
+  ...
+# Subtest: directory wire parser bounds offsets, counts, names, duplicates and EOF before acceptance
+ok 397 - directory wire parser bounds offsets, counts, names, duplicates and EOF before acceptance
+  ---
+  duration_ms: 0.2547
+  type: 'test'
+  ...
+# Subtest: compiler and C\# define the exact same nonextensible runtime configuration bytes
+ok 398 - compiler and C\# define the exact same nonextensible runtime configuration bytes
+  ---
+  duration_ms: 2.0141
+  type: 'test'
+  ...
+# Subtest: runtime profile targets only the four nonexecuted subjects, not test executables
+ok 399 - runtime profile targets only the four nonexecuted subjects, not test executables
+  ---
+  duration_ms: 0.9687
+  type: 'test'
+  ...
+# Subtest: all eight image/config holds are checked and failure cleanup covers every slot
+ok 400 - all eight image/config holds are checked and failure cleanup covers every slot
+  ---
+  duration_ms: 0.5276
+  type: 'test'
+  ...
+# Subtest: runtime config validators stay pure and cannot claim loader or physical custody
+ok 401 - runtime config validators stay pure and cannot claim loader or physical custody
+  ---
+  duration_ms: 1.0953
+  type: 'test'
+  ...
+# Subtest: collection definitions do not spawn, invoke a guest or write a report file
+ok 402 - collection definitions do not spawn, invoke a guest or write a report file
+  ---
+  duration_ms: 1.2168
+  type: 'test'
+  ...
+# Subtest: one arm, one local claim, EOF stop, bounded report and confirmed root close compose
+ok 403 - one arm, one local claim, EOF stop, bounded report and confirmed root close compose
+  ---
+  duration_ms: 114.9914
+  type: 'test'
+  ...
+# Subtest: complete report bytes do not settle while the original process stays live
+ok 404 - complete report bytes do not settle while the original process stays live
+  ---
+  duration_ms: 703.5208
+  type: 'test'
+  ...
+# Subtest: watchdog deadline crossed during final decoding withholds the report
+ok 405 - watchdog deadline crossed during final decoding withholds the report
+  ---
+  duration_ms: 75.8643
+  type: 'test'
+  ...
+# Subtest: observation deadline returns unconfirmed without pretending a live process stopped
+ok 406 - observation deadline returns unconfirmed without pretending a live process stopped
+  ---
+  duration_ms: 7020.5284
+  type: 'test'
+  ...
+# Subtest: independent chunk ceiling rejects small fragments before aggregate byte ceiling
+ok 407 - independent chunk ceiling rejects small fragments before aggregate byte ceiling
+  ---
+  duration_ms: 53.5489
+  type: 'test'
+  ...
+# Subtest: malformed/failed report nonzero remains unconfirmed and redacted
+ok 408 - malformed/failed report nonzero remains unconfirmed and redacted
+  ---
+  duration_ms: 53.7578
+  type: 'test'
+  ...
+# Subtest: malformed/failed report wrong-pin remains unconfirmed and redacted
+ok 409 - malformed/failed report wrong-pin remains unconfirmed and redacted
+  ---
+  duration_ms: 58.8298
+  type: 'test'
+  ...
+# Subtest: malformed/failed report unknown-field remains unconfirmed and redacted
+ok 410 - malformed/failed report unknown-field remains unconfirmed and redacted
+  ---
+  duration_ms: 56.7681
+  type: 'test'
+  ...
+# Subtest: malformed/failed report false-proof remains unconfirmed and redacted
+ok 411 - malformed/failed report false-proof remains unconfirmed and redacted
+  ---
+  duration_ms: 50.9267
+  type: 'test'
+  ...
+# Subtest: malformed/failed report incoherent remains unconfirmed and redacted
+ok 412 - malformed/failed report incoherent remains unconfirmed and redacted
+  ---
+  duration_ms: 52.4607
+  type: 'test'
+  ...
+# Subtest: malformed/failed report duplicate-key remains unconfirmed and redacted
+ok 413 - malformed/failed report duplicate-key remains unconfirmed and redacted
+  ---
+  duration_ms: 52.1889
+  type: 'test'
+  ...
+# Subtest: malformed/failed report trailing remains unconfirmed and redacted
+ok 414 - malformed/failed report trailing remains unconfirmed and redacted
+  ---
+  duration_ms: 50.7543
+  type: 'test'
+  ...
+# Subtest: malformed/failed report partial remains unconfirmed and redacted
+ok 415 - malformed/failed report partial remains unconfirmed and redacted
+  ---
+  duration_ms: 53.9599
+  type: 'test'
+  ...
+# Subtest: malformed/failed report oversized remains unconfirmed and redacted
+ok 416 - malformed/failed report oversized remains unconfirmed and redacted
+  ---
+  duration_ms: 52.8432
+  type: 'test'
+  ...
+# Subtest: malformed/failed report stderr remains unconfirmed and redacted
+ok 417 - malformed/failed report stderr remains unconfirmed and redacted
+  ---
+  duration_ms: 51.8079
+  type: 'test'
+  ...
+# Subtest: malformed/failed report bad-utf8 remains unconfirmed and redacted
+ok 418 - malformed/failed report bad-utf8 remains unconfirmed and redacted
+  ---
+  duration_ms: 61.5295
+  type: 'test'
+  ...
+# Subtest: malformed/failed report extra-frame remains unconfirmed and redacted
+ok 419 - malformed/failed report extra-frame remains unconfirmed and redacted
+  ---
+  duration_ms: 50.4655
+  type: 'test'
+  ...
+# Subtest: report after the original stop deadline is not upgraded by clean exit
+ok 420 - report after the original stop deadline is not upgraded by clean exit
+  ---
+  duration_ms: 50.8341
+  type: 'test'
+  ...
+# Subtest: clock regression during collection permanently denies even a coherent report
+ok 421 - clock regression during collection permanently denies even a coherent report
+  ---
+  duration_ms: 49.8537
+  type: 'test'
+  ...
+# Subtest: missing child is immediately unconfirmed without claiming any exit
+ok 422 - missing child is immediately unconfirmed without claiming any exit
+  ---
+  duration_ms: 0.1572
+  type: 'test'
+  ...
+# Subtest: actual PowerShell watchdog report composes under mock-only management
+ok 423 - actual PowerShell watchdog report composes under mock-only management
+  ---
+  duration_ms: 497.4539
+  type: 'test'
+  ...
+# Subtest: OMW2 and ARM references agree with independent encoding and executing C\# golden checks
+ok 424 - OMW2 and ARM references agree with independent encoding and executing C\# golden checks
+  ---
+  duration_ms: 1.9707
+  type: 'test'
+  ...
+# Subtest: native V2 reader is library-only, matches intent before terminal and closes before disclosure
+ok 425 - native V2 reader is library-only, matches intent before terminal and closes before disclosure
+  ---
+  duration_ms: 1.0959
+  type: 'test'
+  ...
+# Subtest: bridge and native reservation validate clock identity before possible writes; no legacy writer
+ok 426 - bridge and native reservation validate clock identity before possible writes; no legacy writer
+  ---
+  duration_ms: 0.508
+  type: 'test'
+  ...
+# Subtest: lifetime harness has a mock guard and retains handles before owner loss
+ok 427 - lifetime harness has a mock guard and retains handles before owner loss
+  ---
+  duration_ms: 1.1996
+  type: 'test'
+  ...
+# Subtest: metadata watchdog owner lifetime: attached-exit
+ok 428 - metadata watchdog owner lifetime: attached-exit
+  ---
+  duration_ms: 992.0585
+  type: 'test'
+  ...
+# {"mode":"attached-exit","guardExited":true,"guardExitCode":0,"ownerAliveWhenGuardExited":false,"guardReport":null,"retainedHandle":true,"mockOnly":true}
+# Subtest: metadata watchdog owner lifetime: detached-exit
+ok 429 - metadata watchdog owner lifetime: detached-exit
+  ---
+  duration_ms: 968.9651
+  type: 'test'
+  ...
+# {"mode":"detached-exit","guardExited":true,"guardExitCode":0,"ownerAliveWhenGuardExited":false,"guardReport":{"mockOnly":true,"denied":false,"report":{"kind":"metadata-watchdog-observation-not-verification","inventoryDigest":"90aa390a454b9046b558fed7b55284f31675e72a57d99e07ab6a5b2203acfe64","runNonce":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","bundleDigest":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","armed":true,"trigger":"owner-eof","stopAttempted":true,"hostOffObserved":true,"stopJobSettled":true,"stopWithinBudget":true,"controllerDispatchClosed":false,"guestStopProven":false,"verificationEvidence":false,"authority":"none"},"trace":["get-vm","get-vm","stop","remove","get-vm"],"armedText":"","originalElapsedMs":169},"retainedHandle":true,"mockOnly":true}
+# Subtest: metadata watchdog owner lifetime: detached-kill
+ok 430 - metadata watchdog owner lifetime: detached-kill
+  ---
+  duration_ms: 925.8803
+  type: 'test'
+  ...
+# {"mode":"detached-kill","guardExited":true,"guardExitCode":0,"ownerAliveWhenGuardExited":false,"guardReport":{"mockOnly":true,"denied":false,"report":{"kind":"metadata-watchdog-observation-not-verification","inventoryDigest":"90aa390a454b9046b558fed7b55284f31675e72a57d99e07ab6a5b2203acfe64","runNonce":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","bundleDigest":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","armed":true,"trigger":"owner-eof","stopAttempted":true,"hostOffObserved":true,"stopJobSettled":true,"stopWithinBudget":true,"controllerDispatchClosed":false,"guestStopProven":false,"verificationEvidence":false,"authority":"none"},"trace":["get-vm","get-vm","stop","remove","get-vm"],"armedText":"","originalElapsedMs":179},"retainedHandle":true,"mockOnly":true}
+# Subtest: metadata watchdog owner lifetime: detached-stall
+ok 431 - metadata watchdog owner lifetime: detached-stall
+  ---
+  duration_ms: 2757.798
+  type: 'test'
+  ...
+# {"mode":"detached-stall","guardExited":true,"guardExitCode":0,"ownerAliveWhenGuardExited":true,"guardReport":{"mockOnly":true,"denied":false,"report":{"kind":"metadata-watchdog-observation-not-verification","inventoryDigest":"90aa390a454b9046b558fed7b55284f31675e72a57d99e07ab6a5b2203acfe64","runNonce":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","bundleDigest":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","armed":true,"trigger":"deadline","stopAttempted":true,"hostOffObserved":true,"stopJobSettled":true,"stopWithinBudget":true,"controllerDispatchClosed":false,"guestStopProven":false,"verificationEvidence":false,"authority":"none"},"trace":["get-vm","get-vm","stop","remove","get-vm"],"armedText":"","originalElapsedMs":2047},"retainedHandle":true,"mockOnly":true}
+# Subtest: watchdog retention native code is host-library-only and fabricated tests link no native implementation
+ok 432 - watchdog retention native code is host-library-only and fabricated tests link no native implementation
+  ---
+  duration_ms: 3.1191
+  type: 'test'
+  ...
+# Subtest: watchdog owns distinct slots and never opens or adopts the controller reservation
+ok 433 - watchdog owns distinct slots and never opens or adopts the controller reservation
+  ---
+  duration_ms: 0.3061
+  type: 'test'
+  ...
+# Subtest: reservation and terminal preserve their original clocks and validate before writes
+ok 434 - reservation and terminal preserve their original clocks and validate before writes
+  ---
+  duration_ms: 0.2525
+  type: 'test'
+  ...
+# Subtest: historical watchdog read is exact-bound, separately timed and checked after every close
+ok 435 - historical watchdog read is exact-bound, separately timed and checked after every close
+  ---
+  duration_ms: 0.3533
+  type: 'test'
+  ...
+# Subtest: watchdog historical data remains bounded defensive claims, never a stop or dispatch decision
+ok 436 - watchdog historical data remains bounded defensive claims, never a stop or dispatch decision
+  ---
+  duration_ms: 0.2694
+  type: 'test'
+  ...
+# Subtest: watchdog golden wires reconstruct independently of the C\# encoder
+ok 437 - watchdog golden wires reconstruct independently of the C\# encoder
+  ---
+  duration_ms: 0.9019
+  type: 'test'
+  ...
+# Subtest: new watchdog has no historical target, start/configuration/guest/credential/cleanup authority
+ok 438 - new watchdog has no historical target, start/configuration/guest/credential/cleanup authority
+  ---
+  duration_ms: 1.8288
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: unapproved
+ok 439 - no arm or stop on rejected preflight: unapproved
+  ---
+  duration_ms: 582.8977
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: wrong-disk
+ok 440 - no arm or stop on rejected preflight: wrong-disk
+  ---
+  duration_ms: 601.0375
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: network
+ok 441 - no arm or stop on rejected preflight: network
+  ---
+  duration_ms: 545.9352
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: gpu
+ok 442 - no arm or stop on rejected preflight: gpu
+  ---
+  duration_ms: 495.6422
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: device
+ok 443 - no arm or stop on rejected preflight: device
+  ---
+  duration_ms: 497.5053
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: dvd
+ok 444 - no arm or stop on rejected preflight: dvd
+  ---
+  duration_ms: 493.4208
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: com-port
+ok 445 - no arm or stop on rejected preflight: com-port
+  ---
+  duration_ms: 465.9287
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: cpu
+ok 446 - no arm or stop on rejected preflight: cpu
+  ---
+  duration_ms: 446.3431
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: memory
+ok 447 - no arm or stop on rejected preflight: memory
+  ---
+  duration_ms: 455.6265
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: dynamic
+ok 448 - no arm or stop on rejected preflight: dynamic
+  ---
+  duration_ms: 486.274
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: auto-start
+ok 449 - no arm or stop on rejected preflight: auto-start
+  ---
+  duration_ms: 469.2861
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: checkpoint
+ok 450 - no arm or stop on rejected preflight: checkpoint
+  ---
+  duration_ms: 482.7015
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: passthrough
+ok 451 - no arm or stop on rejected preflight: passthrough
+  ---
+  duration_ms: 435.3785
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: differencing
+ok 452 - no arm or stop on rejected preflight: differencing
+  ---
+  duration_ms: 440.5864
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: secureboot
+ok 453 - no arm or stop on rejected preflight: secureboot
+  ---
+  duration_ms: 440.8536
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: initially-off
+ok 454 - no arm or stop on rejected preflight: initially-off
+  ---
+  duration_ms: 450.0979
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: duplicate-integration
+ok 455 - no arm or stop on rejected preflight: duplicate-integration
+  ---
+  duration_ms: 451.2257
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: invalid-integration
+ok 456 - no arm or stop on rejected preflight: invalid-integration
+  ---
+  duration_ms: 443.2894
+  type: 'test'
+  ...
+# Subtest: no arm or stop on rejected preflight: untyped-integration
+ok 457 - no arm or stop on rejected preflight: untyped-integration
+  ---
+  duration_ms: 439.6052
+  type: 'test'
+  ...
+# Subtest: independently pinned inventory mismatch/shape denied: 0000/64
+ok 458 - independently pinned inventory mismatch/shape denied: 0000/64
+  ---
+  duration_ms: 386.177
+  type: 'test'
+  ...
+# Subtest: independently pinned inventory mismatch/shape denied: CCCC/64
+ok 459 - independently pinned inventory mismatch/shape denied: CCCC/64
+  ---
+  duration_ms: 386.7688
+  type: 'test'
+  ...
+# Subtest: independently pinned inventory mismatch/shape denied: cccc/63
+ok 460 - independently pinned inventory mismatch/shape denied: cccc/63
+  ---
+  duration_ms: 380.6646
+  type: 'test'
+  ...
+# Subtest: independently pinned inventory mismatch/shape denied: cccc/64
+ok 461 - independently pinned inventory mismatch/shape denied: cccc/64
+  ---
+  duration_ms: 452.9903
+  type: 'test'
+  ...
+# Subtest: work budget cannot widen: -1
+ok 462 - work budget cannot widen: -1
+  ---
+  duration_ms: 386.2059
+  type: 'test'
+  ...
+# Subtest: work budget cannot widen: 0
+ok 463 - work budget cannot widen: 0
+  ---
+  duration_ms: 372.0451
+  type: 'test'
+  ...
+# Subtest: work budget cannot widen: 25001
+ok 464 - work budget cannot widen: 25001
+  ---
+  duration_ms: 376.2668
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: clock-missing
+ok 465 - original clock denies before any management read: clock-missing
+  ---
+  duration_ms: 392.662
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: clock-stopped
+ok 466 - original clock denies before any management read: clock-stopped
+  ---
+  duration_ms: 393.3713
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: clock-expired
+ok 467 - original clock denies before any management read: clock-expired
+  ---
+  duration_ms: 638.3683
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: clock-wrong-nonce
+ok 468 - original clock denies before any management read: clock-wrong-nonce
+  ---
+  duration_ms: 424.8882
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: clock-wrong-budget
+ok 469 - original clock denies before any management read: clock-wrong-budget
+  ---
+  duration_ms: 425.4641
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: missing-clock-reference
+ok 470 - original clock denies before any management read: missing-clock-reference
+  ---
+  duration_ms: 411.8419
+  type: 'test'
+  ...
+# Subtest: original clock denies before any management read: missing-intent-reference
+ok 471 - original clock denies before any management read: missing-intent-reference
+  ---
+  duration_ms: 448.1867
+  type: 'test'
+  ...
+# Subtest: clock failure after arming still attempts the exact mocked stop without a timely claim
+ok 472 - clock failure after arming still attempts the exact mocked stop without a timely claim
+  ---
+  duration_ms: 490.9803
+  type: 'test'
+  ...
+# Subtest: emergency stop and redacted non-authority report: normal
+ok 473 - emergency stop and redacted non-authority report: normal
+  ---
+  duration_ms: 505.5286
+  type: 'test'
+  ...
+# Subtest: emergency stop and redacted non-authority report: unexpected-input
+ok 474 - emergency stop and redacted non-authority report: unexpected-input
+  ---
+  duration_ms: 510.8353
+  type: 'test'
+  ...
+# Subtest: emergency stop and redacted non-authority report: lifeline-error
+ok 475 - emergency stop and redacted non-authority report: lifeline-error
+  ---
+  duration_ms: 502.747
+  type: 'test'
+  ...
+# Subtest: emergency stop and redacted non-authority report: arm-failed
+ok 476 - emergency stop and redacted non-authority report: arm-failed
+  ---
+  duration_ms: 495.1394
+  type: 'test'
+  ...
+# Subtest: emergency stop and redacted non-authority report: already-off
+ok 477 - emergency stop and redacted non-authority report: already-off
+  ---
+  duration_ms: 493.6161
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: stop-error
+ok 478 - withhold bounded stop evidence on uncertainty: stop-error
+  ---
+  duration_ms: 494.4859
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: stop-failed
+ok 479 - withhold bounded stop evidence on uncertainty: stop-failed
+  ---
+  duration_ms: 495.5249
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: stop-timeout
+ok 480 - withhold bounded stop evidence on uncertainty: stop-timeout
+  ---
+  duration_ms: 5507.6655
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: stop-late
+ok 481 - withhold bounded stop evidence on uncertainty: stop-late
+  ---
+  duration_ms: 5599.0595
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: missing-target
+ok 482 - withhold bounded stop evidence on uncertainty: missing-target
+  ---
+  duration_ms: 531.9731
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: saved
+ok 483 - withhold bounded stop evidence on uncertainty: saved
+  ---
+  duration_ms: 484.3844
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: drift
+ok 484 - withhold bounded stop evidence on uncertainty: drift
+  ---
+  duration_ms: 513.8769
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: restart
+ok 485 - withhold bounded stop evidence on uncertainty: restart
+  ---
+  duration_ms: 480.9696
+  type: 'test'
+  ...
+# Subtest: withhold bounded stop evidence on uncertainty: remove-error
+ok 486 - withhold bounded stop evidence on uncertainty: remove-error
+  ---
+  duration_ms: 488.6626
+  type: 'test'
+  ...
+# Subtest: lifeline cleanup cannot preserve bounded stop claim: dispose-late
+ok 487 - lifeline cleanup cannot preserve bounded stop claim: dispose-late
+  ---
+  duration_ms: 5688.215
+  type: 'test'
+  ...
+# Subtest: lifeline cleanup cannot preserve bounded stop claim: dispose-error
+ok 488 - lifeline cleanup cannot preserve bounded stop claim: dispose-error
+  ---
+  duration_ms: 582.2187
+  type: 'test'
+  ...
+# Subtest: real child pipe triggers only mocked stop: eof
+ok 489 - real child pipe triggers only mocked stop: eof
+  ---
+  duration_ms: 480.5768
+  type: 'test'
+  ...
+# Subtest: real child pipe triggers only mocked stop: deadline
+ok 490 - real child pipe triggers only mocked stop: deadline
+  ---
+  duration_ms: 1380.7692
+  type: 'test'
+  ...
+# Subtest: real child pipe triggers only mocked stop: input
+ok 491 - real child pipe triggers only mocked stop: input
+  ---
+  duration_ms: 480.8968
+  type: 'test'
+  ...
+# Subtest: real child pipe triggers only mocked stop: clock-partly-spent
+ok 492 - real child pipe triggers only mocked stop: clock-partly-spent
+  ---
+  duration_ms: 2377.3262
+  type: 'test'
+  ...
+1..492
+# tests 492
+# suites 0
+# pass 492
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 44120.7352
