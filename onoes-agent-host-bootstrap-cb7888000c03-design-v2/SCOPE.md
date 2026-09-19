@@ -1,0 +1,7 @@
+# Scope
+
+STATIC_SOURCE design/implementation review, publisher source cb7888000c038d5cf42f5036b3c9fedd96fe1554. Only the manifest members are in scope; 38 source/doc members are exact Git blobs. Tests are source evidence, NOT RUN by the reviewer. Native checks at an older revision are historical producer evidence, not current-source acceptance. The latest local child composition compiled only after a preserved initial CS0165 failure.
+
+No full app, dependencies, binaries, private logs, installation or credentials are included. Framework APIs are external dependencies. The extract is not runnable; do not reconstruct/install missing inputs. Source/docs retain product paths under source/; test sources under tests/. SOURCE_IDENTITIES maps exact originals.
+
+Report repository eOnoes/Audits; branch main; exact output onoes-agent-host-bootstrap-cb7888000c03-design-v2/reports/AUDIT_REPORT.md. Only the completed sanitized report may be added after checking workflows and activation state. If Actions could run or status is unknown, ask Eddie for specific authorization. No source/test/receipt/manifest edits, branches, PRs, force pushes, deletions, builds, installs, providers or charges. Preserve existing reports with numbered addenda. Read back committed bytes and return an immutable report link distinct from the input commit. Without write access return complete Markdown and REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS. Publication of this LOCAL packet is not yet authorized.

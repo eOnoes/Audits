@@ -1,0 +1,158 @@
+{
+  "evidenceClass": "AUTHOR_REPORTED_NOT_INDEPENDENT",
+  "sanitization": "Selected non-path fields only; original receipts omitted because they contain local paths. Original hashes identify omitted bytes, not reproducible evidence.",
+  "evidence": [
+    {
+      "sourceReceipt": "v3-metadata-host-suspended-native-20260919/execution.json",
+      "sourceReceiptSha256": "378dc738ea07604372595d2cc252b7947769dba78e326bffaadb8c6544b2403d",
+      "rawReceiptSupplied": false,
+      "head": "4d0655865efe0b512421ae2e85532b1585571f3b",
+      "kind": "producer-local-inert-suspended-creation",
+      "passed": true,
+      "failure": null,
+      "status": null,
+      "results": [
+        {
+          "mode": "dispose",
+          "passed": true,
+          "reason": null,
+          "childCloseObserved": true,
+          "terminationUnconfirmed": false,
+          "killAttempted": false,
+          "killReturn": null,
+          "bytes": 139,
+          "stdoutBytes": 139,
+          "code": 0,
+          "signal": null,
+          "diagnostic": null,
+          "authority": "none",
+          "processTreeSettlement": false,
+          "descendantStop": "reported-by-native-fixture"
+        },
+        {
+          "mode": "deadline",
+          "passed": true,
+          "reason": null,
+          "childCloseObserved": true,
+          "terminationUnconfirmed": false,
+          "killAttempted": false,
+          "killReturn": null,
+          "bytes": 140,
+          "stdoutBytes": 140,
+          "code": 0,
+          "signal": null,
+          "diagnostic": null,
+          "authority": "none",
+          "processTreeSettlement": false,
+          "descendantStop": "reported-by-native-fixture"
+        },
+        {
+          "mode": "duplicate-create",
+          "passed": true,
+          "reason": null,
+          "childCloseObserved": true,
+          "terminationUnconfirmed": false,
+          "killAttempted": false,
+          "killReturn": null,
+          "bytes": 148,
+          "stdoutBytes": 148,
+          "code": 0,
+          "signal": null,
+          "diagnostic": null,
+          "authority": "none",
+          "processTreeSettlement": false,
+          "descendantStop": "reported-by-native-fixture"
+        }
+      ],
+      "nativeApisExecuted": null,
+      "nativeExecutionAttempted": true,
+      "independentExecution": false,
+      "inputsUnchanged": true,
+      "startedAt": "2026-09-19T20:24:47.590Z",
+      "finishedAt": "2026-09-19T20:24:52.181Z"
+    },
+    {
+      "sourceReceipt": "v3-metadata-host-child-policy-20260919-access/execution.json",
+      "sourceReceiptSha256": "d3769316047739d56f588175b00a1783a75f896f53676ded4f7731d5a47ee57d",
+      "rawReceiptSupplied": false,
+      "head": "cf0ccb75935708a4794d40d26ccccaa9a46c0018",
+      "kind": "producer-host-child-pure-policy",
+      "passed": null,
+      "failure": null,
+      "status": null,
+      "results": {
+        "kind": "host-child-channel-pure-policy",
+        "checks": 1313,
+        "nativeCases": "NOT_RUN"
+      },
+      "nativeApisExecuted": false,
+      "nativeExecutionAttempted": false,
+      "independentExecution": false,
+      "inputsUnchanged": true,
+      "startedAt": "2026-09-19T20:40:50.258Z",
+      "finishedAt": "2026-09-19T20:40:50.512Z"
+    },
+    {
+      "sourceReceipt": "v3-metadata-child-local-20260919-composition/execution.json",
+      "sourceReceiptSha256": "2a9ddf5dec1f510fa32cfa8a21f6554146f34eb8024816bc579c4b96128cd205",
+      "rawReceiptSupplied": false,
+      "head": "49d474f2ec83dcd2cff0f83832008f87215780e4",
+      "kind": "producer-child-local-compile-only",
+      "passed": false,
+      "failure": null,
+      "status": 1,
+      "results": null,
+      "nativeApisExecuted": false,
+      "nativeExecutionAttempted": false,
+      "independentExecution": false,
+      "inputsUnchanged": true,
+      "startedAt": "2026-09-19T20:44:34.533Z",
+      "finishedAt": "2026-09-19T20:44:34.605Z"
+    },
+    {
+      "sourceReceipt": "v3-metadata-child-local-20260919-composition-final/execution.json",
+      "sourceReceiptSha256": "5783be94eeba0b7d0a8f08ce261025dbaee9ad9a49cf1fce61d9906e80ab192a",
+      "rawReceiptSupplied": false,
+      "head": "49d474f2ec83dcd2cff0f83832008f87215780e4",
+      "kind": "producer-child-local-compile-only",
+      "passed": true,
+      "failure": null,
+      "status": 0,
+      "results": null,
+      "nativeApisExecuted": false,
+      "nativeExecutionAttempted": false,
+      "independentExecution": false,
+      "inputsUnchanged": true,
+      "startedAt": "2026-09-19T20:45:17.020Z",
+      "finishedAt": "2026-09-19T20:45:17.111Z"
+    },
+    {
+      "sourceReceipt": "v3-metadata-host-suspended-20260919-access/execution.json",
+      "sourceReceiptSha256": "6f6031af523a581b48904cb6dcd66f1da613d207626ea60884c30290494ef953",
+      "rawReceiptSupplied": false,
+      "head": "cf0ccb75935708a4794d40d26ccccaa9a46c0018",
+      "kind": "producer-host-suspended-pure-and-compile-only",
+      "passed": null,
+      "failure": null,
+      "status": null,
+      "results": {
+        "inheritance": {
+          "kind": "host-inheritance-pure-policy",
+          "checks": 428,
+          "nativeCases": "NOT_RUN"
+        },
+        "suspended": {
+          "kind": "host-suspended-pure-policy",
+          "checks": 160,
+          "nativeCases": "NOT_RUN"
+        }
+      },
+      "nativeApisExecuted": false,
+      "nativeExecutionAttempted": false,
+      "independentExecution": false,
+      "inputsUnchanged": true,
+      "startedAt": "2026-09-19T20:40:51.000Z",
+      "finishedAt": "2026-09-19T20:40:51.765Z"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# Report delivery
+
+Report repository eOnoes/Audits; branch main; exact output onoes-agent-host-bootstrap-cb7888000c03-design-v2/reports/AUDIT_REPORT.md. Only the completed sanitized report may be added after checking workflows and activation state. If Actions could run or status is unknown, ask Eddie for specific authorization. No source/test/receipt/manifest edits, branches, PRs, force pushes, deletions, builds, installs, providers or charges. Preserve existing reports with numbered addenda. Read back committed bytes and return an immutable report link distinct from the input commit. Without write access return complete Markdown and REPORT_DELIVERY: BLOCKED_NO_GITHUB_WRITE_ACCESS. Publication of this LOCAL packet is not yet authorized.

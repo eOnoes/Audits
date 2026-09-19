@@ -1,0 +1,3 @@
+# Dependencies and omissions
+
+These C# sources use the Windows/.NET Framework APIs. No framework binaries, compiler, package/runtime dependencies, protected launcher, enrollment, or product tree are supplied. Host clock bindings depend on supplied binding/peer-pin/roles sources; native pipe cores use the supplied I/O policy and clock. Completeness is not a runnable-build claim: identify any additional load-bearing reference as missing, do not fetch it. Raw local receipts, generator scripts and compiled binaries are excluded; sanitized producer summaries are not reproducible execution evidence.
